@@ -1,0 +1,13 @@
+{
+  "name": "crypto-signals-arabic-ui-tests",
+  "version": "2.0.0",
+  "private": true,
+  "description": "اختبارات لوحة نبض السوق في DOM حقيقي عبر jsdom",
+  "type": "module",
+  "scripts": {
+    "test": "node dashboard.test.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "27.0.0"
+  }
+}
