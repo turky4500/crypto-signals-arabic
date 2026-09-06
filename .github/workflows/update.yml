@@ -1,0 +1,119 @@
+name: فحص اللوحة ونشرها
+
+# سير عمل واحد يجمع الفحص والنشر معاً.
+#
+# لماذا دُمج السيرلان السابقان (scanner.yml + pages.yml)؟
+#   * الإصدار القديم كان يعمل commit إلى main كل ساعة → نحو 8,760 commit سنوياً،
+#     وكل واحد منها يُشغّل نشر Pages من جديد.
+#   * الآن لا يُلتزم signals.json إطلاقاً: يُنشَر ضمن artifact مباشرة، فيبقى
+#     تاريخ main نظيفاً ويختفي تعارض الدفع بين السيرين.
+#   * الحالة السابقة (لعمر الإشارة والإشارات الجديدة) تُقرأ من النسخة المنشورة
+#     نفسها عبر SIGNALS_STATE_URL بدل تخزينها في المستودع.
+
+on:
+  schedule:
+    # الدقيقة الخامسة من كل ساعة، بعد إغلاق شمعة الساعة بخمس دقائق
+    - cron: '5 * * * *'
+  push:
+    branches: [main]
+    # تغييرات الكود تُعيد الفحص والنشر فوراً فتبقى البيانات طازجة
+  workflow_dispatch:
+    inputs:
+      as_of:
+        description: 'ثبّت المسح على ساعة محددة بصيغة ISO (فارغ = الساعة الحالية)'
+        required: false
+        default: ''
+      top:
+        description: 'أقصى عدد إشارات يُنشر'
+        required: false
+        default: '40'
+      min_confirmations:
+        description: 'أدنى عدد استراتيجيات متحققة معاً (0 = بلا فلتر)'
+        required: false
+        default: '0'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# منع تراكب دورتين: لو تأخر فحص لا يُلغى بل يُنتظر
+concurrency:
+  group: scan-and-deploy
+  cancel-in-progress: false
+
+jobs:
+  scan-and-deploy:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: جلب المستودع
+        uses: actions/checkout@v7
+
+      - name: إعداد Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: تثبيت المتطلبات
+        run: pip install -r requirements.txt
+
+      - name: تشغيل الماسح
+        env:
+          SIGNALS_STATE_URL: ${{ vars.SIGNALS_STATE_URL || 'https://turky4500.github.io/crypto-signals-arabic/signals.json' }}
+          NOTIFY_WEBHOOK: ${{ secrets.NOTIFY_WEBHOOK }}
+        run: |
+          set -euo pipefail
+          ARGS=(--top "${{ github.event.inputs.top || '40' }}")
+          ARGS+=(--min-confirmations "${{ github.event.inputs.min_confirmations || '0' }}")
+          AS_OF="${{ github.event.inputs.as_of || '' }}"
+          if [ -n "$AS_OF" ]; then ARGS+=(--as-of "$AS_OF"); fi
+          echo "تشغيل: python scanner.py ${ARGS[*]}"
+          python scanner.py "${ARGS[@]}"
+
+      - name: ملخص الدورة
+        if: always()
+        run: |
+          {
+            echo "## نتيجة الفحص"
+            echo
+            if [ -f signals.json ]; then
+              python - <<'PY'
+          import json
+          d = json.load(open("signals.json", encoding="utf-8"))
+          s = d.get("stats", {})
+          print(f"- **الشمعة المرجعية:** `{d.get('as_of', '—')}` ({d.get('candle_state', '—')})")
+          print(f"- **الأزواج المفحوصة:** {d.get('scanned', 0)} / {d.get('candidate_pairs', 0)}")
+          print(f"- **إشارات الدخول:** {s.get('total_entries', 0)} (الطبقة الأولى: {s.get('tier1_entries', 0)})")
+          print(f"- **تحذيرات الخروج:** {s.get('total_exits', 0)}")
+          print(f"- **إشارات جديدة:** {s.get('new_entries', 0)}")
+          top = d.get("signals", [])[:5]
+          if top:
+              print()
+              print("| الزوج | النتيجة | الاستراتيجيات | وقف الخسارة | الهدف |")
+              print("|---|---|---|---|---|")
+              for x in top:
+                  print(f"| {x['pair']} | {x['score']} | {'+'.join(x['strategies'])} "
+                        f"| {x['stop_loss']} | {x['take_profit']} |")
+          PY
+            else
+              echo "لم يُنتَج signals.json — فشل الماسح ولم يُنشر أي تغيير."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: إعداد Pages
+        uses: actions/configure-pages@v6
+
+      - name: رفع ملفات الموقع
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
+
+      - name: نشر الموقع
+        id: deployment
+        uses: actions/deploy-pages@v5

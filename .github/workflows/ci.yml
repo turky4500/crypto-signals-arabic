@@ -1,0 +1,105 @@
+name: الفحص الآلي
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: التنسيق والثغرات
+    timeout-minutes: 8
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - name: ruff format
+        run: ruff format --check .
+      - name: ruff check
+        run: ruff check .
+
+  ui:
+    name: اختبارات الواجهة (jsdom)
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tests/ui
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: تثبيت jsdom
+        run: npm install --no-audit --no-fund
+
+      # ينفّذ الصفحة كاملة في DOM حقيقي ويحاكي كل تفاعلات المستخدم:
+      # التبويبات، التصفية، البحث، الترتيب، توسيع التفاصيل، التحديث، وفشل الشبكة.
+      # يتحقق أيضاً من حفظ التركيز (وصولية) ومن عدم وجود موارد خارجية حاجبة.
+      - name: تشغيل اختبارات اللوحة
+        run: node dashboard.test.mjs
+
+  tests:
+    name: الاختبارات (Python ${{ matrix.python-version }})
+    timeout-minutes: 12
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+
+      - name: pytest
+        run: pytest -v --maxfail=1
+
+      # لا نختبر الاتصال بـ Binance في CI: الحظر الجغرافي (HTTP 451) وتغيّر
+      # بيانات السوق يجعلان النتيجة غير حتمية. الاختبارات كلها على بيانات صناعية.
+      - name: تحقق من أن الوحدات تُستورد بلا شبكة
+        run: python -c "import scanner, backtest; print('✓ الاستيراد سليم')"
+
+      - name: تحقق من سلامة الواجهة
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, re, sys
+          html = pathlib.Path("index.html").read_text(encoding="utf-8")
+          js = re.findall(r"<script>(.*?)</script>", html, re.S)
+          css = re.findall(r"<style>(.*?)</style>", html, re.S)
+          assert js and css, "الصفحة يجب أن تحوي JS وCSS مضمّنين"
+          assert css[0].count("{") == css[0].count("}"), "أقواس CSS غير متوازنة"
+
+          # لا اعتماد على CDN أو خطوط خارجية — يجب أن تعمل الصفحة دون شبكة
+          external = re.findall(r'(?:src|href)="(https?://[^"]+)"', html)
+          allowed = ("github.com",)  # روابط يفتحها المستخدم بنفسه فقط
+          blocking = [u for u in external if not any(a in u for a in allowed)]
+          assert not blocking, f"الصفحة تحمّل موارد خارجية حاجبة: {blocking}"
+
+          data = json.loads(pathlib.Path("signals.json").read_text(encoding="utf-8"))
+          for key in ("schema_version", "as_of", "candle_state", "signals", "exits", "stats"):
+              assert key in data, f"signals.json ينقصه المفتاح: {key}"
+          assert data["candle_state"] == "closed", "يجب أن تكون الشموع مغلقة"
+          for s in data["signals"]:
+              for key in ("stop_loss", "take_profit", "score", "tier", "strategies"):
+                  assert key in s, f"الإشارة {s.get('symbol')} ينقصها {key}"
+          print("✓ الواجهة والبيانات سليمتان")
+          PY
