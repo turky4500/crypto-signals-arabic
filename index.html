@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="لوحة إشارات Binance الفورية على إطار الساعة" />
+  <title>نبض السوق | إشارات Binance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Cairo','sans-serif']},colors:{ink:'#070b15',panel:'#0e1422',line:'#1b2940',mint:'#26e3a2',blue:'#6d8cff'}}}}</script>
+  <style>
+    :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#070b15;color:#edf3ff;font-family:Cairo,sans-serif;background-image:radial-gradient(circle at 10% 0%,rgba(38,227,162,.08),transparent 28%),radial-gradient(circle at 92% 12%,rgba(109,140,255,.12),transparent 25%)}
+    .glass{background:rgba(14,20,34,.82);border:1px solid rgba(115,145,196,.16);box-shadow:0 18px 55px rgba(0,0,0,.2);backdrop-filter:blur(14px)}.chip{transition:all .18s cubic-bezier(.23,1,.32,1)}.chip:active{transform:scale(.97)}.chip.active{background:#26e3a2;color:#07110f;border-color:#26e3a2}.row{transition:background .18s ease,transform .18s ease}.row:hover{background:rgba(109,140,255,.07);transform:translateY(-1px)}.pulse{animation:pulse 2s infinite}@keyframes pulse{50%{opacity:.45}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+    <header class="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+      <div><div class="mb-3 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-mint text-lg font-extrabold text-ink">ن</span><span class="text-sm font-semibold tracking-wide text-mint">مراقبة السوق الفورية</span></div><h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">نبض السوق <span class="text-slate-500">/</span> إشارات Binance</h1><p class="mt-2 max-w-2xl text-sm leading-7 text-slate-400">ماسح تقني يلتقط فرص الشراء على أزواج USDT النشطة، باستخدام بيانات الساعة ومؤشرات الاتجاه والزخم والسيولة.</p></div>
+      <div class="glass rounded-2xl px-4 py-3 text-sm text-slate-300"><div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-mint pulse"></span><span>النظام يعمل</span><span class="text-slate-600">•</span><span id="countdown">التحديث القادم —</span></div></div>
+    </header>
+    <section class="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="glass rounded-2xl p-5"><p class="text-xs text-slate-500">آخر تحديث</p><p id="updated" class="mt-2 text-lg font-bold">جارٍ التحميل...</p></div>
+      <div class="glass rounded-2xl p-5"><p class="text-xs text-slate-500">إجمالي العملات المفحوصة</p><p id="scanned" class="mt-2 text-2xl font-extrabold">—</p></div>
+      <div class="glass rounded-2xl p-5"><p class="text-xs text-slate-500">الفرص المتاحة الآن</p><p id="total" class="mt-2 text-2xl font-extrabold text-mint">—</p></div>
+      <div class="glass rounded-2xl p-5"><p class="text-xs text-slate-500">الإطار الزمني</p><p class="mt-2 text-2xl font-extrabold text-blue">1H</p></div>
+    </section>
+    <section class="glass rounded-3xl p-4 sm:p-6">
+      <div class="mb-5 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between"><div><h2 class="text-xl font-bold">فرص الشراء النشطة</h2><p class="mt-1 text-xs text-slate-500">تظهر النتائج التي حققت شروط إحدى الاستراتيجيات بالكامل.</p></div><div class="relative w-full xl:w-72"><input id="search" aria-label="ابحث عن رمز العملة" placeholder="ابحث عن رمز العملة..." class="w-full rounded-xl border border-line bg-ink px-4 py-3 text-sm text-white outline-none transition focus:border-mint" /></div></div>
+      <div id="filters" class="mb-5 flex flex-wrap gap-2"><button data-filter="all" class="chip active rounded-xl border border-line px-4 py-2 text-xs font-semibold">كل الاستراتيجيات</button><button data-filter="A" class="chip rounded-xl border border-line px-4 py-2 text-xs font-semibold text-slate-300">استمرار الاتجاه</button><button data-filter="B" class="chip rounded-xl border border-line px-4 py-2 text-xs font-semibold text-slate-300">تقاطع الزخم</button><button data-filter="C" class="chip rounded-xl border border-line px-4 py-2 text-xs font-semibold text-slate-300">انعكاس MACD</button></div>
+      <div class="overflow-x-auto"><table class="w-full min-w-[760px] text-right"><thead><tr class="border-b border-line text-xs text-slate-500"><th class="pb-4 pr-3 font-medium">اسم العملة</th><th class="pb-4 font-medium">السعر الحالي</th><th class="pb-4 font-medium">الاستراتيجية</th><th class="pb-4 font-medium">RSI</th><th class="pb-4 font-medium">السيولة</th><th class="pb-4 pl-3 font-medium">الشارت</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <div id="empty" class="hidden py-16 text-center"><div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800 text-2xl">⌁</div><h3 class="font-bold">لا توجد إشارات دخول متحققة حالياً</h3><p class="mt-2 text-sm text-slate-500">جاري مراقبة السوق وتحليل الشموع الجديدة...</p></div>
+      <div id="loading" class="py-16 text-center text-sm text-slate-500">جاري تحميل أحدث البيانات...</div>
+    </section>
+    <footer class="mt-6 flex flex-col gap-2 text-xs text-slate-600 sm:flex-row sm:justify-between"><span>البيانات عامة من Binance • ليست نصيحة مالية</span><span>تحديث تلقائي كل ساعة</span></footer>
+  </main>
+<script>
+  let allSignals=[], active='all', nextUpdate=Date.now()+3600000;
+  const $=id=>document.getElementById(id);
+  const fmtPrice=n=>Number(n).toLocaleString('en-US',{maximumSignificantDigits:8});
+  const badge=(code,name)=>({A:'bg-emerald-400/10 text-mint border-emerald-400/20',B:'bg-blue-400/10 text-blue-300 border-blue-400/20',C:'bg-violet-400/10 text-violet-300 border-violet-400/20'}[code]||'bg-slate-700 text-slate-300');
+  function render(){const query=$('search').value.trim().toUpperCase();const list=allSignals.filter(s=>(active==='all'||s.strategy_code===active)&&(!query||s.symbol.includes(query)||s.pair.includes(query)));$('total').textContent=allSignals.length.toLocaleString('ar');$('rows').innerHTML=list.map(s=>`<tr class="row border-b border-line/70"><td class="py-4 pr-3"><div class="flex items-center gap-3"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-800 text-[10px] font-bold text-slate-300">${s.symbol.slice(0,3)}</span><div><div class="font-bold">${s.pair}</div><div class="text-[10px] text-slate-500">Spot • 1H</div></div></div></td><td class="font-mono text-sm">${fmtPrice(s.price)}</td><td><span class="rounded-lg border px-3 py-1.5 text-xs font-semibold ${badge(s.strategy_code,s.strategy)}">${s.strategy}</span></td><td><span class="font-mono text-sm ${s.rsi>=45&&s.rsi<=65?'text-mint':'text-slate-300'}">${s.rsi}</span></td><td><div class="flex items-center gap-2"><span class="h-1.5 w-16 overflow-hidden rounded-full bg-slate-800"><span class="block h-full rounded-full bg-mint" style="width:${Math.min(100,s.volume_ratio/3*100)}%"></span></span><span class="font-mono text-xs text-slate-400">${s.volume_ratio}x</span></div></td><td class="pl-3"><a target="_blank" rel="noopener" href="https://www.tradingview.com/chart/?symbol=BINANCE%3A${s.symbol}&interval=60" class="inline-flex rounded-lg border border-line px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-mint hover:text-mint">فتح في TradingView ↗</a></td></tr>`).join('');$('empty').classList.toggle('hidden',list.length>0);$('rows').classList.toggle('hidden',list.length===0)}
+  async function load(){try{const r=await fetch('./signals.json?ts='+Date.now());if(!r.ok)throw Error('load');const d=await r.json();allSignals=d.signals||[];$('scanned').textContent=(d.scanned||0).toLocaleString('ar');$('updated').textContent=new Date(d.timestamp).toLocaleString('ar',{dateStyle:'short',timeStyle:'short'});nextUpdate=Date.now()+3600000;render()}catch(e){$('updated').textContent='في انتظار أول فحص';$('empty').classList.remove('hidden')}finally{$('loading').classList.add('hidden')}}
+  $('filters').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;active=b.dataset.filter;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));render()});$('search').addEventListener('input',render);load();setInterval(load,3600000);setInterval(()=>{const m=Math.max(0,Math.ceil((nextUpdate-Date.now())/60000));$('countdown').textContent=m?`التحديث القادم خلال ${m} دقيقة`:'جاري التحديث...'},1000);
+</script>
+</body></html>
