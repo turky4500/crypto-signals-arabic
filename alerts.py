@@ -58,25 +58,25 @@ class AlertConfig:
     # --- شروط التأكيد ---
     require_strategy_A: bool = True
     min_confirmations: int = 2
-    min_score: float = 62.0
-    require_trend_stack: bool = True
+    min_score: float = 55.0
+    require_trend_stack: bool = False
     forbid_exit_signals: bool = True
 
     # --- السيولة والزخم ---
-    min_vol_ratio: float = 1.8
-    min_quote_volume_24h: float = 10_000_000.0
-    min_roc_24h: float = 2.0
-    max_roc_24h: float = 7.0
+    min_vol_ratio: float = 1.5
+    min_quote_volume_24h: float = 1_000_000.0
+    min_roc_24h: float = 1.0
+    max_roc_24h: float = 10.0
 
     # --- المؤشرات ---
-    rsi_min: float = 53.0
-    rsi_max: float = 65.0
-    atr_pct_min: float = 1.0
-    atr_pct_max: float = 3.2
+    rsi_min: float = 45.0
+    rsi_max: float = 70.0
+    atr_pct_min: float = 0.5
+    atr_pct_max: float = 4.0
 
     # --- تجنّب الشراء من القمة أو من وضع ممتد ---
-    max_dist_ema20_pct: float = 2.5
-    min_dist_high_pct: float = 1.5
+    max_dist_ema20_pct: float = 5.0
+    min_dist_high_pct: float = -1.0
 
     # --- التنفيذ: سبوت، شراء فقط ---
     take_profit_pct: float = 3.0
@@ -106,7 +106,7 @@ class GateVerdict:
 
 #: شروط تُفحص بالترتيب. كل شرط: (الاسم، الدالة، الوصف العربي)
 def _checks(cfg: AlertConfig) -> list[tuple[str, Any, str]]:
-    return [
+    checks = [
         (
             "require_A",
             lambda s: "A" in (s.get("strategies") or []),
@@ -122,11 +122,16 @@ def _checks(cfg: AlertConfig) -> list[tuple[str, Any, str]]:
             lambda s: (s.get("score") or 0) >= cfg.min_score,
             f"النتيجة ≥ {cfg.min_score} (المحقق: {{score}})",
         ),
-        (
-            "trend_stack",
-            lambda s: bool(s.get("trend_stack")),
-            "ترتيب صاعد سليم: السعر > EMA20 > EMA50 > EMA200",
-        ),
+    ]
+    if cfg.require_trend_stack:
+        checks.append(
+            (
+                "trend_stack",
+                lambda s: bool(s.get("trend_stack")),
+                "ترتيب صاعد سليم: السعر > EMA20 > EMA50 > EMA200",
+            )
+        )
+    checks += [
         (
             "forbid_exits",
             lambda s: not (s.get("exits") or []),
@@ -168,6 +173,7 @@ def _checks(cfg: AlertConfig) -> list[tuple[str, Any, str]]:
             f"يبعد عن قمة 24س ≥ {cfg.min_dist_high_pct}% (المحقق: {{dh}}%)",
         ),
     ]
+    return checks
 
 
 def evaluate_gate(signal: dict[str, Any], cfg: AlertConfig = DEFAULT_ALERT_CONFIG) -> GateVerdict:
