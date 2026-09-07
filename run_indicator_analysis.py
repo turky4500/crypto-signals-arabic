@@ -47,13 +47,13 @@ def run_indicator_analysis(
 
     يُرجع ملخصاً: {symbol: {indicator_name: result, ...}, ...}
     """
-    from indicators_smc import analyze_smc
-    from indicators_confluence import analyze_confluence
-    from indicators_momentum import analyze_momentum
-    from indicators_liquidity import analyze_liquidity
     from indicators_adaptive import analyze_adaptive
-    from indicators_volume import analyze_volume
+    from indicators_confluence import analyze_confluence
+    from indicators_liquidity import analyze_liquidity
+    from indicators_momentum import analyze_momentum
+    from indicators_smc import analyze_smc
     from indicators_unified import analyze_unified
+    from indicators_volume import analyze_volume
 
     targets = list(symbols)[:max_symbols] if max_symbols else list(symbols)
     started = time.time()
@@ -94,7 +94,7 @@ def run_indicator_analysis(
             vol_profile = analyze_volume(df_4h, "4h")
             unified = analyze_unified(tf_data)
 
-            def _make_entry(analysis: dict, timeframe: str = "4h") -> dict:
+            def _make_entry(analysis: dict, timeframe: str = "4h", symbol=symbol) -> dict:
                 bias = analysis.get("bias", "NEUTRAL")
                 strength = analysis.get("strength", analysis.get("score", analysis.get("confidence", 50)))
                 return {

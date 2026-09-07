@@ -1,16 +1,17 @@
-# -*- coding: utf-8 -*-
 """
 AI Adaptive indicator — inspired by Quantzee & Lorentzian Classification.
 Uses KNN-based classification, adaptive EMAs, and multi-timeframe confirmation.
 """
+
 import numpy as np
 import pandas as pd
-from indicators import ema, rsi, macd, atr, supertrend
+
+from indicators import supertrend
 
 
 def _adaptive_ema(df, period=20):
     """Adaptive EMA that adjusts its smoothing based on volatility."""
-    c = df['c']
+    c = df["c"]
     # Calculate efficiency ratio (ER)
     change = (c - c.shift(period)).abs()
     volatility = c.diff().abs().rolling(period).sum()
@@ -76,13 +77,12 @@ def _build_features(df, idx):
         return None
 
     try:
-        c = df['c'].values
-        rsi_val = float(df['rsi'].iloc[idx]) if 'rsi' in df else 50.0
-        macd_h = float(df['macd_h'].iloc[idx]) if 'macd_h' in df else 0.0
-        ema20 = float(df['ema20'].iloc[idx]) if 'ema20' in df else c[idx]
-        ema50 = float(df['ema50'].iloc[idx]) if 'ema50' in df else c[idx]
-        atr_val = float(df['atr'].iloc[idx]) if 'atr' in df else 1.0
-        vol_ratio = float(df['vol_ratio'].iloc[idx]) if 'vol_ratio' in df else 1.0
+        c = df["c"].values
+        rsi_val = float(df["rsi"].iloc[idx]) if "rsi" in df else 50.0
+        macd_h = float(df["macd_h"].iloc[idx]) if "macd_h" in df else 0.0
+        ema20 = float(df["ema20"].iloc[idx]) if "ema20" in df else c[idx]
+        atr_val = float(df["atr"].iloc[idx]) if "atr" in df else 1.0
+        vol_ratio = float(df["vol_ratio"].iloc[idx]) if "vol_ratio" in df else 1.0
 
         # Derived features
         ema_position = (c[idx] - ema20) / (ema20 + 1e-10)  # relative to EMA20
@@ -99,8 +99,7 @@ def _build_labels(df, forward_bars=5):
     1 = price went up significantly, -1 = price went down, 0 = neutral."""
     n = len(df)
     labels = np.zeros(n)
-    c = df['c'].values
-    atr_val = float(df['atr'].iloc[-1]) if 'atr' in df else 1.0
+    c = df["c"].values
 
     for i in range(n - forward_bars):
         future_return = (c[i + forward_bars] - c[i]) / (c[i] + 1e-10)
@@ -114,28 +113,27 @@ def _build_labels(df, forward_bars=5):
     return labels
 
 
-def analyze_adaptive(df, timeframe='4h'):
+def analyze_adaptive(df, timeframe="4h"):
     """Full AI adaptive analysis for a single timeframe."""
     n = len(df)
     if n < 200:
-        return {'timeframe': timeframe, 'score': 0, 'bias': 'NEUTRAL', 'confidence': 0}
+        return {"timeframe": timeframe, "score": 0, "bias": "NEUTRAL", "confidence": 0}
 
     # 1. Adaptive EMA
     ada_ema = _adaptive_ema(df, 20)
     ada_ema_val = float(ada_ema.iloc[-1])
     ada_ema_prev = float(ada_ema.iloc[-2])
-    close = float(df['c'].iloc[-1])
+    close = float(df["c"].iloc[-1])
 
     # 2. KNN Classification
     features = []
-    labels_list = []
     for i in range(200, n):
         feat = _build_features(df, i)
         if feat is not None:
             features.append(feat)
 
     if len(features) < 50:
-        return {'timeframe': timeframe, 'score': 0, 'bias': 'NEUTRAL', 'confidence': 20}
+        return {"timeframe": timeframe, "score": 0, "bias": "NEUTRAL", "confidence": 20}
 
     features = np.array(features)
     labels_arr = _build_labels(df)
@@ -151,10 +149,10 @@ def analyze_adaptive(df, timeframe='4h'):
 
     # 3. Multi-confirmation score
     score = 0
-    rsi_val = float(df['rsi'].iloc[-1])
-    macd_h = float(df['macd_h'].iloc[-1])
-    macd_h_prev = float(df['macd_h'].iloc[-2]) if n > 1 else 0
-    st_line, st_dir = supertrend(df)
+    rsi_val = float(df["rsi"].iloc[-1])
+    macd_h = float(df["macd_h"].iloc[-1])
+    macd_h_prev = float(df["macd_h"].iloc[-2]) if n > 1 else 0
+    _st_line, st_dir = supertrend(df)
     st_direction = int(st_dir.iloc[-1])
 
     # Adaptive EMA direction: +15
@@ -204,9 +202,9 @@ def analyze_adaptive(df, timeframe='4h'):
         score += 2
 
     # EMA alignment: +10
-    ema20 = float(df['ema20'].iloc[-1])
-    ema50 = float(df['ema50'].iloc[-1])
-    ema200 = float(df['ema200'].iloc[-1])
+    ema20 = float(df["ema20"].iloc[-1])
+    ema50 = float(df["ema50"].iloc[-1])
+    ema200 = float(df["ema200"].iloc[-1])
     if close > ema20 > ema50 > ema200:
         score += 10
     elif close < ema20 < ema50 < ema200:
@@ -215,7 +213,7 @@ def analyze_adaptive(df, timeframe='4h'):
         score += 5
 
     # Volume: +10
-    vol_ratio = float(df['vol_ratio'].iloc[-1])
+    vol_ratio = float(df["vol_ratio"].iloc[-1])
     if vol_ratio >= 1.5:
         score += 10
     elif vol_ratio >= 1.0:
@@ -225,21 +223,21 @@ def analyze_adaptive(df, timeframe='4h'):
 
     # Determine bias
     if score >= 60:
-        bias = 'BULLISH'
+        bias = "BULLISH"
     elif score <= 40:
-        bias = 'BEARISH'
+        bias = "BEARISH"
     else:
-        bias = 'NEUTRAL'
+        bias = "NEUTRAL"
 
     return {
-        'timeframe': timeframe,
-        'score': min(100, score),
-        'bias': bias,
-        'confidence': knn_confidence,
-        'adaptive_ema': round(ada_ema_val, 8),
-        'knn_class': knn_class,
-        'knn_confidence': knn_confidence,
-        'knn_vote': 'LONG' if knn_class == 1 else ('SHORT' if knn_class == -1 else 'NEUTRAL'),
+        "timeframe": timeframe,
+        "score": min(100, score),
+        "bias": bias,
+        "confidence": knn_confidence,
+        "adaptive_ema": round(ada_ema_val, 8),
+        "knn_class": knn_class,
+        "knn_confidence": knn_confidence,
+        "knn_vote": "LONG" if knn_class == 1 else ("SHORT" if knn_class == -1 else "NEUTRAL"),
     }
 
 
@@ -252,33 +250,33 @@ def analyze_adaptive_multi(tf_dict):
     for tf_name, df in tf_dict.items():
         r = analyze_adaptive(df, tf_name)
         results[tf_name] = r
-        total_score += r['score']
+        total_score += r["score"]
         count += 1
 
     avg_score = total_score // count if count else 0
 
     # Weighted bias
-    weights = {'15m': 1, '1h': 2, '4h': 3, '1d': 4}
+    weights = {"15m": 1, "1h": 2, "4h": 3, "1d": 4}
     weighted_long = 0
     weighted_short = 0
     total_weight = 0
     for tf_name, r in results.items():
         w = weights.get(tf_name, 1)
         total_weight += w
-        if r['bias'] == 'BULLISH':
+        if r["bias"] == "BULLISH":
             weighted_long += w
-        elif r['bias'] == 'BEARISH':
+        elif r["bias"] == "BEARISH":
             weighted_short += w
 
     if weighted_long > weighted_short:
-        overall_bias = 'BULLISH'
+        overall_bias = "BULLISH"
     elif weighted_short > weighted_long:
-        overall_bias = 'BEARISH'
+        overall_bias = "BEARISH"
     else:
-        overall_bias = 'NEUTRAL'
+        overall_bias = "NEUTRAL"
 
     return {
-        'overall_bias': overall_bias,
-        'overall_score': avg_score,
-        'per_timeframe': results,
+        "overall_bias": overall_bias,
+        "overall_score": avg_score,
+        "per_timeframe": results,
     }

@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Deterministic technical indicators — pure pandas/numpy, no LLM involved.
 Every number on the dashboard is computed from real Binance market data.
 """
+
 import numpy as np
 import pandas as pd
 
 
 def klines_to_df(k):
-    cols = ['t', 'o', 'h', 'l', 'c', 'v', 'ct', 'qv', 'n', 'tb', 'tq', 'ig']
+    cols = ["t", "o", "h", "l", "c", "v", "ct", "qv", "n", "tb", "tq", "ig"]
     df = pd.DataFrame(k)
-    df.columns = cols[:df.shape[1]]  # accept 6-field (minimal) or 12-field (Binance) rows
-    for col in ['o', 'h', 'l', 'c', 'v']:
+    df.columns = cols[: df.shape[1]]  # accept 6-field (minimal) or 12-field (Binance) rows
+    for col in ["o", "h", "l", "c", "v"]:
         df[col] = df[col].astype(float)
-    if 'qv' in df.columns:
-        df['qv'] = df['qv'].astype(float)
-    df['t'] = pd.to_datetime(df['t'], unit='ms', utc=True)
+    if "qv" in df.columns:
+        df["qv"] = df["qv"].astype(float)
+    df["t"] = pd.to_datetime(df["t"], unit="ms", utc=True)
     return df
 
 
@@ -42,42 +42,42 @@ def macd(s, f=12, sl=26, sg=9):
 
 
 def atr(df, n=14):
-    h, l, c = df['h'], df['l'], df['c']
+    h, low, c = df["h"], df["l"], df["c"]
     pc = c.shift(1)
-    tr = pd.concat([h - l, (h - pc).abs(), (l - pc).abs()], axis=1).max(axis=1)
+    tr = pd.concat([h - low, (h - pc).abs(), (low - pc).abs()], axis=1).max(axis=1)
     return tr.ewm(alpha=1 / n, adjust=False).mean()
 
 
 def enrich(df):
     """Add EMA20/50/200, RSI(14), MACD, ATR(14), session VWAP, volume ratios."""
     d = df.copy()
-    d['ema20'] = ema(d['c'], 20)
-    d['ema50'] = ema(d['c'], 50)
-    d['ema200'] = ema(d['c'], 200)
-    d['rsi'] = rsi(d['c'])
-    d['macd'], d['macd_s'], d['macd_h'] = macd(d['c'])
-    d['atr'] = atr(d)
-    d['vma20'] = d['v'].rolling(20).mean()
-    d['vol_ratio'] = (d['v'] / d['vma20']).fillna(1.0)
-    day = d['t'].dt.floor('D')
-    tp = (d['h'] + d['l'] + d['c']) / 3
-    cumv = d.groupby(day)['v'].cumsum()
-    cumtpv = (tp * d['v']).groupby(day).cumsum()
-    d['vwap'] = cumtpv / cumv.replace(0, np.nan)
+    d["ema20"] = ema(d["c"], 20)
+    d["ema50"] = ema(d["c"], 50)
+    d["ema200"] = ema(d["c"], 200)
+    d["rsi"] = rsi(d["c"])
+    d["macd"], d["macd_s"], d["macd_h"] = macd(d["c"])
+    d["atr"] = atr(d)
+    d["vma20"] = d["v"].rolling(20).mean()
+    d["vol_ratio"] = (d["v"] / d["vma20"]).fillna(1.0)
+    day = d["t"].dt.floor("D")
+    tp = (d["h"] + d["l"] + d["c"]) / 3
+    cumv = d.groupby(day)["v"].cumsum()
+    cumtpv = (tp * d["v"]).groupby(day).cumsum()
+    d["vwap"] = cumtpv / cumv.replace(0, np.nan)
     return d
 
 
 def swings(df, k=3):
     """Fractal swing highs/lows: [list of (index, price, timestamp)]."""
-    h = df['h'].values
-    l = df['l'].values
+    h = df["h"].values
+    low = df["l"].values
     n = len(df)
     highs, lows = [], []
     for i in range(k, n - k):
-        if h[i] == max(h[i - k:i + k + 1]):
-            highs.append((int(i), float(h[i]), df['t'].iloc[i]))
-        if l[i] == min(l[i - k:i + k + 1]):
-            lows.append((int(i), float(l[i]), df['t'].iloc[i]))
+        if h[i] == max(h[i - k : i + k + 1]):
+            highs.append((int(i), float(h[i]), df["t"].iloc[i]))
+        if low[i] == min(low[i - k : i + k + 1]):
+            lows.append((int(i), float(low[i]), df["t"].iloc[i]))
     return highs, lows
 
 
@@ -125,7 +125,7 @@ def supertrend(df, period=10, multiplier=3.0):
     """SuperTrend indicator: returns (supertrend_series, direction_series).
     direction: 1 = up (bullish), -1 = down (bearish)."""
     a = atr(df, period)
-    hl2 = (df['h'] + df['l']) / 2
+    hl2 = (df["h"] + df["l"]) / 2
     upper = hl2 + multiplier * a
     lower = hl2 - multiplier * a
 
@@ -135,9 +135,9 @@ def supertrend(df, period=10, multiplier=3.0):
     for i in range(period, len(df)):
         if pd.isna(upper.iloc[i]):
             continue
-        if df['c'].iloc[i] > upper.iloc[i - 1]:
+        if df["c"].iloc[i] > upper.iloc[i - 1]:
             direction.iloc[i] = 1
-        elif df['c'].iloc[i] < lower.iloc[i - 1]:
+        elif df["c"].iloc[i] < lower.iloc[i - 1]:
             direction.iloc[i] = -1
         else:
             direction.iloc[i] = direction.iloc[i - 1]
