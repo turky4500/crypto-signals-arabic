@@ -296,9 +296,7 @@ class FakeSession:
 
 def test_notifier_sends_correct_payload():
     session = FakeSession()
-    n = alerts.WhatsAppNotifier(
-        "https://example.invalid/api/v1/send", "TOK", "966500000000", session=session
-    )
+    n = alerts.WhatsAppNotifier("https://example.invalid/api/v1/send", "TOK", "966500000000", session=session)
     assert n.send("نص التجربة") is True
     call = session.calls[0]
     assert call["url"] == "https://example.invalid/api/v1/send"

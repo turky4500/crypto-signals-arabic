@@ -120,43 +120,31 @@ jobs:
           print(f"- **إشارات الدخول:** {s.get('total_entries', 0)} (الطبقة الأولى: {s.get('tier1_entries', 0)})")
           print(f"- **تحذيرات الخروج:** {s.get('total_exits', 0)}")
           print(f"- **إشارات جديدة:** {s.get('new_entries', 0)}")
-            cfg = d.get("alert_config", {})
-            st = d.get("alert_stats", {})
-            alog = d.get("alert_log", [])
-            print(f"- **تنبيهات واتساب هذه الدورة:** {d.get('alerts_sent_now', 0)}")
-            if cfg:
-                print(
-                    f"- **بوابة التنبيه:** هدف {cfg.get('take_profit_pct')}% / "
-                    f"وقف {cfg.get('stop_loss_pct')}% · "
-                    f"أدنى نتيجة {cfg.get('min_score')} · "
-                    f"تبريد {cfg.get('cooldown_hours')} ساعة · "
-                    f"حد {cfg.get('max_per_cycle')} لكل دورة"
-                )
-            if st:
-                print(
-                    f"- **الاحتمال التاريخي المقاس:** إصابة الهدف "
-                    f"{st.get('hit_rate_pct')}% مقابل نقطة تعادل "
-                    f"{st.get('break_even_win_rate_pct')}% "
-                    f"(عامل ربح {st.get('profit_factor')} — أقل من 1)"
-                )
-            if alog:
-                print()
-                print("| الزوج | آخر إرسال | سعر الدخول | الهدف | الوقف | الحالة |")
-                print("|---|---|---|---|---|---|")
-                for a in alog[:10]:
-                    print(
-                        f"| {a.get('pair', a.get('symbol'))} | {str(a.get('sent_at', ''))[:16]} "
-                        f"| {a.get('entry_price')} | {a.get('take_profit')} "
-                        f"| {a.get('stop_loss')} | {'✅' if a.get('delivered') else '⚠️'} |"
-                    )
-          top = d.get("signals", [])[:5]
-          if top:
+          cfg = d.get("alert_config", {})
+          st = d.get("alert_stats", {})
+          alog = d.get("alert_log", [])
+          print(f"- **تنبيهات واتساب هذه الدورة:** {d.get('alerts_sent_now', 0)}")
+          if cfg:
+              print(f"- **بوابة التنبيه:** هدف {cfg.get('take_profit_pct')}% / وقف {cfg.get('stop_loss_pct')}% · أدنى نتيجة {cfg.get('min_score')} · تبريد {cfg.get('cooldown_hours')} ساعة · حد {cfg.get('max_per_cycle')} لكل دورة")
+          if st:
+              print(f"- **الاحتمال التاريخي المقاس:** إصابة الهدف {st.get('hit_rate_pct')}% مقابل نقطة تعادل {st.get('break_even_win_rate_pct')}% (عامل ربح {st.get('profit_factor')} — أقل من 1)")
+          if alog:
               print()
-              print("| الزوج | النتيجة | الاستراتيجيات | وقف الخسارة | الهدف |")
-              print("|---|---|---|---|---|")
-              for x in top:
-                  print(f"| {x['pair']} | {x['score']} | {'+'.join(x['strategies'])} "
-                        f"| {x['stop_loss']} | {x['take_profit']} |")
+              print("| الزوج | آخر إرسال | سعر الدخول | الهدف | الوقف | الحالة |")
+              print("|---|---|---|---|---|---|")
+              def px(v):
+                  # الأسعار الصغيرة جداً تظهر بالصيغة العلمية — نحوّلها لرقم مقروء
+                  try:
+                      f = float(v)
+                  except (TypeError, ValueError):
+                      return '—'
+                  digits = '.10f' if abs(f) < 0.01 else '.4f'
+                  return f"{f:{digits}}".rstrip('0').rstrip('.')
+
+              for a in alog[:10]:
+                  ok = '✅' if a.get('delivered') else '⚠️'
+                  when = str(a.get('sent_at', ''))[:16].replace('T', ' ')
+                  print(f"| {a.get('pair', a.get('symbol'))} | {when} | {px(a.get('entry_price'))} | {px(a.get('take_profit'))} | {px(a.get('stop_loss'))} | {ok} |")
           PY
             else
               echo "لم يُنتَج signals.json — فشل الماسح ولم يُنشر أي تغيير."
