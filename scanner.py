@@ -31,6 +31,7 @@ import pandas as pd
 import requests
 
 import alerts
+from run_indicator_analysis import run_indicator_analysis
 
 # --------------------------------------------------------------------------------------
 # الثوابت
@@ -1155,6 +1156,18 @@ def main(argv: Iterable[str] | None = None) -> int:
         for line in failures[:5]:
             log.error("  %s", line)
         return 3
+
+    # --- تحليل المؤشرات المتقدمة ---
+    indicator_output = args.output.parent / "data"
+    try:
+        run_indicator_analysis(
+            client,
+            candidates,
+            output_dir=indicator_output,
+            max_symbols=min(50, args.max_symbols or 50),
+        )
+    except Exception as exc:
+        log.warning("فشل تحليل المؤشرات: %s", exc)
 
     previous_payload = load_previous_state(args.state_url or None)
     previous = signals_by_symbol(previous_payload)
