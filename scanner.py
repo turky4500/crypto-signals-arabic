@@ -30,6 +30,8 @@ import numpy as np
 import pandas as pd
 import requests
 
+import alerts
+
 # --------------------------------------------------------------------------------------
 # الثوابت
 # --------------------------------------------------------------------------------------
@@ -448,6 +450,14 @@ def enrich(frame: pd.DataFrame, cfg: Config = DEFAULT_CONFIG) -> pd.DataFrame:
     distance = (out["low"] - out["ema20"]).abs()
     out["touched_ema20"] = distance.rolling(3, min_periods=3).min() <= 0.5 * out["atr"]
 
+    # مقاييس إضافية تحتاجها بوابة التنبيه عالي القناعة (والواجهة)
+    out["atr_pct"] = out["atr"] / close * 100.0
+    out["high_24"] = out["high"].rolling(24, min_periods=24).max()
+    out["low_24"] = out["low"].rolling(24, min_periods=24).min()
+    out["dist_high_pct"] = (out["high_24"] - close) / close * 100.0
+    out["dist_ema20_pct"] = (close - out["ema20"]) / out["ema20"] * 100.0
+    out["dist_ema200_pct"] = (close - out["ema200"]) / out["ema200"] * 100.0
+
     out["ema_cross"] = rolling_cross(out["ema20"], out["ema50"], cfg.ema_cross_lookback)
     out["macd_cross"] = rolling_cross(out["macd"], out["macd_signal"], cfg.macd_cross_lookback)
 
@@ -514,6 +524,10 @@ class BarMetrics:
     roc_24: float
     quote_volume_24h: float
     change_24h: float
+    atr_pct: float = 0.0
+    dist_high_pct: float = 0.0
+    dist_ema20_pct: float = 0.0
+    dist_ema200_pct: float = 0.0
     spark: list[float] = field(default_factory=list)
     bar_time: str = ""
     signals: dict[str, bool] = field(default_factory=dict)
@@ -548,6 +562,16 @@ def metrics_from_row(enriched: pd.DataFrame, index: int = -1) -> BarMetrics | No
         atr=float(row["atr"]),
         vol_ratio=float(row["vol_ratio"]),
         roc_24=float(row["roc_24"]),
+        atr_pct=float(row["atr_pct"]) if "atr_pct" in enriched and pd.notna(row["atr_pct"]) else 0.0,
+        dist_high_pct=float(row["dist_high_pct"])
+        if "dist_high_pct" in enriched and pd.notna(row["dist_high_pct"])
+        else 0.0,
+        dist_ema20_pct=float(row["dist_ema20_pct"])
+        if "dist_ema20_pct" in enriched and pd.notna(row["dist_ema20_pct"])
+        else 0.0,
+        dist_ema200_pct=float(row["dist_ema200_pct"])
+        if "dist_ema200_pct" in enriched and pd.notna(row["dist_ema200_pct"])
+        else 0.0,
         quote_volume_24h=float(enriched["quote_volume"].tail(24).sum()),
         change_24h=float(row["roc_24"]),
         spark=[round(float(v), 10) for v in closes[max(0, position - 23) : position + 1]],
@@ -711,6 +735,12 @@ def analyze_symbol(symbol: str, frame: pd.DataFrame, cfg: Config = DEFAULT_CONFI
         "ema20": _round_sig(metrics.ema20),
         "ema50": _round_sig(metrics.ema50),
         "ema200": _round_sig(metrics.ema200),
+        # تحتاجها بوابة التنبيه عالي القناعة وتعرضها الواجهة
+        "trend_stack": metrics.trend_stack,
+        "atr_pct": round(metrics.atr_pct, 3),
+        "dist_high_pct": round(metrics.dist_high_pct, 2),
+        "dist_ema20_pct": round(metrics.dist_ema20_pct, 2),
+        "dist_ema200_pct": round(metrics.dist_ema200_pct, 2),
     }
 
 
@@ -766,7 +796,10 @@ def select_candidates(client: BinanceClient, min_quote_volume: float) -> list[st
 
 
 def load_previous_state(url: str | None, timeout: int = 15) -> dict[str, Any]:
-    """يقرأ آخر نسخة منشورة من ``signals.json`` لحساب ``first_seen`` بدون تخزين في المستودع.
+    """يقرأ آخر نسخة منشورة من ``signals.json`` بدون تخزين حالة في المستودع.
+
+    يعيد **الحمولة الخام** لأن أكثر من جزء يعتمد عليها: الإشارات السابقة
+    (لحساب ``first_seen``) وسجل التنبيهات (لفترة تبريد واتساب).
 
     الفشل هنا ليس خطأً قاتلاً — نبدأ ببساطة بلا تاريخ.
     """
@@ -780,10 +813,21 @@ def load_previous_state(url: str | None, timeout: int = 15) -> dict[str, Any]:
         )
         response.raise_for_status()
         payload = response.json()
-        return {item["symbol"]: item for item in payload.get("signals", []) if "symbol" in item}
+        return payload if isinstance(payload, dict) else {}
     except (requests.RequestException, ValueError, KeyError) as exc:
         log.warning("تعذّرت قراءة الحالة السابقة (%s) — البدء بلا تاريخ", exc)
         return {}
+
+
+def signals_by_symbol(payload: dict[str, Any] | None) -> dict[str, Any]:
+    """يفهرس إشارات حمولة سابقة برمز الزوج."""
+    if not payload:
+        return {}
+    return {
+        item["symbol"]: item
+        for item in payload.get("signals", [])
+        if isinstance(item, dict) and "symbol" in item
+    }
 
 
 def apply_history(signals: list[dict[str, Any]], previous: dict[str, Any], reference: datetime) -> None:
@@ -1031,6 +1075,9 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         "--as-of", default="", help="ثبّت المسح على ساعة محددة بصيغة ISO (الافتراضي: الساعة الحالية)"
     )
 
+    # وسائط تنبيهات واتساب (معرّفة في alerts.py للحفاظ على تماسك الوحدة)
+    alerts.add_cli_arguments(parser)
+
     return parser.parse_args(list(argv) if argv is not None else None)
 
 
@@ -1109,7 +1156,8 @@ def main(argv: Iterable[str] | None = None) -> int:
             log.error("  %s", line)
         return 3
 
-    previous = load_previous_state(args.state_url or None)
+    previous_payload = load_previous_state(args.state_url or None)
+    previous = signals_by_symbol(previous_payload)
     apply_history(signals, previous, as_of)
 
     payload = build_payload(
@@ -1134,6 +1182,27 @@ def main(argv: Iterable[str] | None = None) -> int:
         cfg=cfg,
     )
 
+    # --- تنبيهات واتساب على الفرص عالية القناعة (سبوت، شراء فقط) ---
+    alert_cfg = alerts.config_from_args(args)
+    notifier = alerts.notifier_from_env(args)
+    if notifier is None:
+        log.info("تنبيهات واتساب معطّلة: لم تُضبط WHATSAPP_API_URL / TOKEN / TO")
+    alert_records = alerts.dispatch(
+        payload["signals"],
+        cfg=alert_cfg,
+        notifier=notifier,
+        alert_log=alerts.load_alert_log(previous_payload),
+        now=as_of,
+        price_base_url=getattr(client, "base_url", "") or "",
+    )
+
+    # سجل التنبيهات يُحفظ داخل الملف نفسه فتقرؤه الدورة القادمة —
+    # بلا أي تخزين حالة في المستودع.
+    payload["alert_config"] = alerts.export_config(alert_cfg)
+    payload["alert_stats"] = alerts.MEASURED
+    payload["alert_log"] = (alert_records + alerts.load_alert_log(previous_payload))[:200]
+    payload["alerts_sent_now"] = len(alert_records)
+
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -1154,6 +1223,13 @@ def main(argv: Iterable[str] | None = None) -> int:
     )
     if failures:
         log.warning("فشل %d زوجاً (أول 3): %s", len(failures), "; ".join(failures[:3]))
+    if alert_records:
+        log.info(
+            "أُرسلت %d تنبيهاً (نجح %d): %s",
+            len(alert_records),
+            sum(1 for r in alert_records if r["delivered"]),
+            ", ".join(r["pair"] for r in alert_records),
+        )
 
     return 0
 
