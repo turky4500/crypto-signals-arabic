@@ -239,6 +239,73 @@ function check(name, cond, extra = "") {
   check("CSS مضمّن", (html.match(/<style>/g) || []).length === 1);
   check("favicon مضمّن كـ data URI", html.includes('rel="icon" href="data:image/svg+xml'));
 
+  console.log("\n=== 11. بوابة تنبيه واتساب ===");
+  const gate = $(".gate");
+  check("قسم البوابة موجود", !!gate);
+  check("قسم البوابة ظاهر", gate && gate.hidden === false);
+  check("يعلن سبوت وشراء فقط", /سبوت/.test(gate.textContent) && /شراء فقط/.test(gate.textContent));
+  check("الشروط الاثنا عشر معروضة", $$("#gateCrit li").length === 12, String($$("#gateCrit li").length));
+  check("الهدف مُعبّأ من الإعداد", txt("gateTp").trim() === "+" + signals.alert_config.take_profit_pct + "%", txt("gateTp"));
+  check("الوقف مُعبّأ من الإعداد", txt("gateSl").trim() === "−" + signals.alert_config.stop_loss_pct + "%", txt("gateSl"));
+  check("التبريد مُعبّأ", /ساعة/.test(txt("gateCd")), txt("gateCd"));
+  check("إصابة الهدف = الرقم المقاس",
+    txt("gHit").trim() === signals.alert_stats.hit_rate_pct + "%", txt("gHit"));
+  check("نقطة التعادل معروضة", txt("gBe").trim() === signals.alert_stats.break_even_win_rate_pct + "%", txt("gBe"));
+  check("صافي العائد سالب ومعروض بصدق", txt("gNet").trim().startsWith("-"), txt("gNet"));
+  check("عامل الربح أقل من 1", parseFloat(txt("gPf")) < 1, txt("gPf"));
+  check("حجم العيّنة معروض", /شمعة/.test(txt("gSample")), txt("gSample"));
+  check("تفاصيل العيّنة معروضة", /توليفة/.test(txt("gSampleN")), txt("gSampleN"));
+  check("أرقام هدف 1% المذكورة", /47\.4%/.test(txt("gHitN")), txt("gHitN"));
+  check("تحذير النتيجة السالبة ظاهر",
+    /لم تحقق أي توليفة/.test(gate.textContent) && /غير قابل للتحقيق بنيوياً/.test(gate.textContent));
+  check("رابط دراسة القياس", !!gate.querySelector('a[href="docs/alert-gate-study.md"]'));
+  check("إخلاء المسؤولية المالية", /ليست نصيحة مالية|لا نظام تداول/.test(gate.textContent));
+  // نبني النمطين دون كتابة القيم حرفياً، كي لا يصبح ملف الاختبار نفسه مصدراً للتسريب
+  check("لا توكن ولا رقم هاتف في الصفحة",
+    !/\bsau[0-9a-z]{16,}\b/i.test(html) && !/\b966\d{9}\b/.test(html) &&
+    !/\bghp_[A-Za-z0-9]{36}\b/.test(html) && !/Bearer\s+[A-Za-z0-9_-]{16,}/.test(html));
+
+  // زر الإظهار/الإخراء: يجب أن يبدّل الحالة و aria-expanded معاً
+  const toggle = $("#gateToggle"), body = $("#gateBody");
+  check("مفتاح التبديل موصول بـ aria-controls", toggle.getAttribute("aria-controls") === "gateBody");
+  check("مفتوح مبدئياً", body.hidden === false && toggle.getAttribute("aria-expanded") === "true");
+  // jsdom لا ينقل التركيز عند النقر البرمجي كما يفعل المتصفح،
+  // فنضعه صراحةً ثم نتحقق أنه *يبقى* بعد تغيير DOM — وهذا هو جوهر الوصولية.
+  toggle.focus();
+  check("الزر قابل للتركيز", doc.activeElement === toggle, doc.activeElement.id || doc.activeElement.tagName);
+  toggle.click();
+  check("يُخفي عند النقر", body.hidden === true && toggle.getAttribute("aria-expanded") === "false");
+  check("نص الزر يتحدّث", /إظهار/.test(toggle.textContent), toggle.textContent.trim());
+  check("التركيز يبقى على الزر بعد التبديل", doc.activeElement === toggle,
+    doc.activeElement && (doc.activeElement.id || doc.activeElement.tagName));
+  check("الزر نفسه لم يُستبدل (لا إعادة بناء)", $("#gateToggle") === toggle);
+  toggle.click();
+  check("يعود ظاهراً عند النقر ثانية", body.hidden === false && toggle.getAttribute("aria-expanded") === "true");
+
+  console.log("\n=== 12. التدهور الآمن بلا بيانات تنبيهات ===");
+  // نسخة أقدم من signals.json بلا alert_config — يجب أن يختفي القسم لا أن ينهار
+  const legacy = JSON.parse(JSON.stringify(signals));
+  delete legacy.alert_config; delete legacy.alert_stats; delete legacy.alert_log;
+  const domLegacy = new JSDOM(html, {
+    runScripts: "dangerously", pretendToBeVisual: true, url: "http://localhost:8000/",
+    beforeParse(w) {
+      w.fetch = (u) => String(u).includes("signals.json")
+        ? Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(legacy) })
+        : Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve({}) });
+      w.CSS = w.CSS || {}; w.CSS.escape = (s) => String(s).replace(/[^a-zA-Z0-9_-]/g, (c) => "\\" + c);
+      w.addEventListener("error", (e) => errors.push("legacy window.onerror: " + (e.error?.stack || e.message)));
+    },
+  });
+  await new Promise((r) => setTimeout(r, 900));
+  const docLegacy = domLegacy.window.document;
+  check("لا أخطاء JS مع بيانات قديمة", !errors.some(e => e.startsWith("legacy")),
+    errors.filter(e => e.startsWith("legacy")).slice(0, 2).join(" | "));
+  check("قسم البوابة يختفي بأمان", docLegacy.querySelector(".gate").hidden === true);
+  check("الجدول ما زال يعمل", docLegacy.querySelectorAll("tbody tr[data-row]").length === legacy.signals.length);
+  check("الإحصاءات ما زالت تُعبّأ",
+    docLegacy.getElementById("statScanned").textContent.trim() === String(legacy.scanned));
+  domLegacy.window.close();
+
   const failed = results.filter(r => !r.ok);
   console.log(`\n${"=".repeat(58)}`);
   console.log(`النتيجة: ${results.length - failed.length}/${results.length} نجحت`);

@@ -91,6 +91,36 @@ h1 .sep{color:#3d4c68;font-weight:400}
 .honesty h2{margin:0 0 4px;font-size:14px;color:var(--amber)}
 .honesty p{margin:0;font-size:13px;color:var(--muted)}
 
+  /* بوابة تنبيه واتساب */
+  .gate{margin:18px 0;padding:18px 20px;border-radius:var(--r-lg);
+    background:linear-gradient(160deg,rgba(38,227,162,.07),rgba(110,140,255,.05));
+    border:1px solid var(--line-soft);position:relative}
+  .gate h2{margin:0 0 2px;font-size:15px;display:flex;align-items:center;gap:8px}
+  .gate .sub{margin:0 0 14px;font-size:12.5px;color:var(--muted)}
+  .gate .sub b{color:var(--text);font-weight:600}
+  .gateGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+  .gstat{padding:10px 12px;border-radius:var(--r-sm);background:rgba(7,11,21,.5);border:1px solid var(--line-soft)}
+  .gstat .k{margin:0;font-size:11px;color:var(--dim);letter-spacing:.02em}
+  .gstat .v{margin:3px 0 0;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+  .gstat .n{margin:2px 0 0;font-size:10.5px;color:var(--dim)}
+  .crit{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;padding:0;list-style:none}
+  .crit li{font-size:11.5px;padding:4px 9px;border-radius:999px;
+    background:rgba(38,227,162,.09);border:1px solid rgba(38,227,162,.22);color:var(--mint)}
+  .gateWarn{margin:0;padding:11px 13px;border-radius:var(--r-sm);font-size:12.5px;line-height:1.65;
+    background:rgba(255,122,138,.08);border:1px solid rgba(255,122,138,.24);color:var(--text)}
+  .gateWarn b{color:var(--red)}
+  .gateWarn a{color:var(--blue)}
+  .alog{margin:12px 0 0;width:100%;border-collapse:collapse;font-size:12px}
+  .alog caption{text-align:right;font-size:11.5px;color:var(--dim);padding-bottom:6px}
+  .alog th,.alog td{padding:6px 8px;border-bottom:1px solid var(--line-soft);text-align:right;
+    font-variant-numeric:tabular-nums}
+  .alog th{color:var(--dim);font-weight:600;font-size:11px}
+  .alog td.ok{color:var(--mint)} .alog td.no{color:var(--amber)}
+  .gate .toggle{background:none;border:1px solid var(--line-soft);color:var(--muted);
+    font:inherit;font-size:11.5px;padding:4px 10px;border-radius:999px;cursor:pointer}
+  .gate .toggle:hover{color:var(--text);border-color:var(--blue)}
+  [hidden]{display:none!important}
+
 /* --- التبويبات وأدوات التحكم ---------------------------------------------- */
 .panel{padding:18px}
 @media(min-width:640px){.panel{padding:24px}}
@@ -253,6 +283,52 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     </p>
   </div>
 </div>
+
+<section class="gate" aria-labelledby="gateTitle">
+  <h2 id="gateTitle">
+    <span aria-hidden="true">📲</span> بوابة تنبيه واتساب
+    <button class="toggle" id="gateToggle" type="button" aria-expanded="true" aria-controls="gateBody">
+      إخفاء الشروط
+    </button>
+  </h2>
+  <p class="sub">
+    <b>سبوت · شراء فقط</b> — لا يُرسل تنبيه إلا إذا تحققت <b>الشروط الاثنا عشر</b> معاً.
+    الهدف <b id="gateTp">—</b> والوقف <b id="gateSl">—</b> · تبريد <b id="gateCd">—</b>.
+  </p>
+
+  <div id="gateBody">
+    <div class="gateGrid" id="gateGrid">
+      <div class="gstat"><p class="k">إصابة الهدف تاريخياً</p><p class="v amber" id="gHit">—</p>
+        <p class="n" id="gHitN">—</p></div>
+      <div class="gstat"><p class="k">نقطة التعادل المطلوبة</p><p class="v red" id="gBe">—</p>
+        <p class="n">نسبة النجاح لكسب صفر</p></div>
+      <div class="gstat"><p class="k">صافي العائد لكل صفقة</p><p class="v red" id="gNet">—</p>
+        <p class="n">بعد رسوم 0.2% ذهاباً وإياباً</p></div>
+      <div class="gstat"><p class="k">عامل الربح</p><p class="v red" id="gPf">—</p>
+        <p class="n">أقل من 1 = خاسر</p></div>
+      <div class="gstat"><p class="k">حجم عيّنة القياس</p><p class="v blue" id="gSample">—</p>
+        <p class="n" id="gSampleN">—</p></div>
+    </div>
+
+    <ul class="crit" id="gateCrit"></ul>
+
+    <p class="gateWarn">
+      <b>لم تحقق أي توليفة من الـ120 توقعاً إيجابياً.</b>
+      قِيست 6 مستويات تشدّد × 4 أهداف × 5 وقفات على بيانات فعلية برسوم حقيقية.
+      الأعلى كان عامل ربح <b>0.865</b>. وعند هدف 1% تحديداً تبتلع الرسوم
+      <b>20%</b> من الهدف الإجمالي فترتفع نقطة التعادل إلى <b>62.5%</b> بينما أعلى
+      ما قِيس <b>47.4%</b> — أي أن هدف 1% غير قابل للتحقيق بنيوياً بهذه الإشارات.
+      هذه <b>أداة فرز ومراقبة</b>، لا نظام تداول ولا نصيحة مالية.
+      <a href="docs/alert-gate-study.md">دراسة القياس الكاملة</a>.
+    </p>
+
+    <table class="alog" id="gateLog" hidden>
+      <caption>آخر التنبيهات المرسلة</caption>
+      <thead><tr><th>الزوج</th><th>أُرسل</th><th>الدخول</th><th>الهدف</th><th>الوقف</th><th>الحالة</th></tr></thead>
+      <tbody id="gateLogBody"></tbody>
+    </table>
+  </div>
+</section>
 
 <section class="glass panel">
   <div class="tabs" role="tablist" aria-label="نوع الإشارات">
@@ -624,6 +700,71 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     $("statTier1").textContent = nf(st.tier1_entries !== undefined ? st.tier1_entries : (data.signals || []).filter(function (s) { return s.tier === 1; }).length);
     $("metaInfo").textContent = "مخطط v" + (data.schema_version || 1) + " · " + nf(data.candidate_pairs) + " زوجاً مرشحاً" +
       (data.failed_pairs ? " · " + nf(data.failed_pairs) + " فشل" : "");
+    renderGate();
+  }
+
+  // الشروط الاثنا عشر — نص ثابت يطابق AlertConfig الافتراضي في alerts.py
+  var GATE_CRITERIA = [
+    "استراتيجية A", "تأكيدان فأكثر", "نتيجة ≥ 62", "ترتيب متوسطات صاعد",
+    "بلا تحذيرات خروج", "سيولة نسبية ≥ 1.8x", "حجم 24س ≥ 10M",
+    "تغيّر 24س بين 2% و7%", "RSI بين 53 و65", "ATR بين 1.0% و3.2%",
+    "بُعد عن EMA20 ≤ 2.5%", "بُعد عن قمة 24س ≥ 1.5%"
+  ];
+
+  function renderGate() {
+    var cfg = data.alert_config || {}, st = data.alert_stats || {};
+    if (!cfg.take_profit_pct) {
+      // نسخة signals.json أقدم من ميزة التنبيهات — أخفِ القسم بدل عرض أصفار
+      var sec = document.querySelector(".gate");
+      if (sec) sec.hidden = true;
+      return;
+    }
+    $("gateTp").textContent = "+" + cfg.take_profit_pct + "%";
+    $("gateSl").textContent = "−" + cfg.stop_loss_pct + "%";
+    $("gateCd").textContent = (cfg.cooldown_hours || 24) + " ساعة لكل زوج";
+
+    if (st.hit_rate_pct !== undefined) {
+      $("gHit").textContent = st.hit_rate_pct + "%";
+      $("gBe").textContent = st.break_even_win_rate_pct + "%";
+      $("gNet").textContent = st.net_per_trade_pct + "%";
+      $("gPf").textContent = st.profit_factor;
+      $("gSample").textContent = nf(st.candles) + " شمعة";
+      $("gSampleN").textContent = st.symbols + " زوجاً × " + st.days + " يوماً × " +
+        st.combinations_tested + " توليفة";
+      $("gHitN").textContent = st.tp_1pct_hit_rate_pct + "% فقط عند هدف 1%";
+    }
+
+    var ul = $("gateCrit");
+    if (!ul.children.length) {
+      GATE_CRITERIA.forEach(function (c) {
+        var li = document.createElement("li");
+        li.textContent = c;
+        ul.appendChild(li);
+      });
+    }
+
+    var log = data.alert_log || [];
+    var tbl = $("gateLog"), tb = $("gateLogBody");
+    if (log.length) {
+      tb.textContent = "";
+      log.slice(0, 8).forEach(function (a) {
+        var tr = document.createElement("tr");
+        [a.pair || a.symbol, String(a.sent_at || "").slice(5, 16).replace("T", " "),
+         a.entry_price, a.take_profit, a.stop_loss].forEach(function (v) {
+          var td = document.createElement("td");
+          td.textContent = v === undefined || v === null ? "—" : v;
+          tr.appendChild(td);
+        });
+        var st2 = document.createElement("td");
+        st2.className = a.delivered ? "ok" : "no";
+        st2.textContent = a.delivered ? "✅ وصل" : "⚠️ لم يصل";
+        tr.appendChild(st2);
+        tb.appendChild(tr);
+      });
+      tbl.hidden = false;
+    } else {
+      tbl.hidden = true;
+    }
   }
 
   function statusFromAge(ageMs) {
@@ -639,6 +780,13 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
       txt.textContent = "النظام يعمل";
     }
   }
+
+  $("gateToggle").addEventListener("click", function () {
+    var body = $("gateBody"), open = body.hidden;
+    body.hidden = !open;
+    this.setAttribute("aria-expanded", String(open));
+    this.textContent = open ? "إخفاء الشروط" : "إظهار الشروط";
+  });
 
   var nextCycle = null;
   function tick() {
