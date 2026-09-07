@@ -1154,11 +1154,50 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
   function indCardHtml(item) {
     var bCls = biasCls(item.bias);
     var sVal = Math.min(100, Math.max(0, Number(item.strength) || 0));
-    var details = item.details || [];
+    var det = item.details || {};
+    var chips = [];
+    if (det.order_blocks && det.order_blocks.length) {
+      chips.push("Order Blocks: " + det.order_blocks.length);
+    }
+    if (det.fvg && det.fvg.length) {
+      chips.push("FVG: " + det.fvg.length);
+    }
+    if (det.bos && det.bos.length) {
+      chips.push("BOS: " + det.bos.length);
+    }
+    if (det.choch && det.choch.length) {
+      chips.push("CHoCH: " + det.choch.length);
+    }
+    if (det.sweeps && det.sweeps.length) {
+      chips.push("Sweeps: " + det.sweeps.length);
+    }
+    if (det.indicators && typeof det.indicators === "object") {
+      Object.keys(det.indicators).forEach(function (k) {
+        var v = det.indicators[k];
+        var vote = v.vote || "";
+        chips.push(k + ": " + vote);
+      });
+    }
+    if (det.signals && det.signals.length) {
+      det.signals.forEach(function (s) {
+        chips.push(s.indicator + ": " + s.detail);
+      });
+    }
+    if (det.top_signals && det.top_signals.length) {
+      det.top_signals.forEach(function (s) {
+        chips.push((s.source || "") + ": " + (s.detail || s.type || ""));
+      });
+    }
+    if (det.long_signals !== undefined || det.short_signals !== undefined) {
+      chips.push("Long: " + (det.long_signals || 0) + " | Short: " + (det.short_signals || 0));
+    }
+    if (det.score !== undefined) {
+      chips.push("Score: " + det.score);
+    }
     var detHtml = "";
-    if (details.length) {
-      detHtml = '<div class="ind-detail">' + details.map(function (d) {
-        return '<span class="signal-chip">' + esc(d) + '</span>';
+    if (chips.length) {
+      detHtml = '<div class="ind-detail">' + chips.map(function (c) {
+        return '<span class="signal-chip">' + esc(c) + '</span>';
       }).join("") + '</div>';
     }
     return '<div class="ind-card">' +
