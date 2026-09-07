@@ -259,12 +259,25 @@ def prices(signal: dict[str, Any], cfg: AlertConfig, entry_price: float | None =
 
 
 def _fmt(value: float) -> str:
-    """تنسيق سعر يحافظ على الأرقام الصغيرة جداً دون حشو أصفار."""
+    """تنسيق سعر كما في بينانس — بدون أصفار زائدة في الطرف."""
     if not value:
         return "0"
     a = abs(value)
-    digits = 2 if a >= 1000 else 4 if a >= 1 else 6 if a >= 0.01 else 10
-    return f"{value:,.{digits}f}".replace(",", "،")
+    if a >= 1000:
+        digits = 2
+    elif a >= 1:
+        digits = 4
+    elif a >= 0.01:
+        digits = 6
+    elif a >= 0.001:
+        digits = 7
+    else:
+        digits = 8
+    raw = f"{value:,.{digits}f}"
+    raw = raw.replace(",", "،")
+    if "." in raw:
+        raw = raw.rstrip("0").rstrip("،").rstrip(".")
+    return raw
 
 
 def format_message(
