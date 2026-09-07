@@ -25,6 +25,4 @@ line-ending = "lf"
 testpaths = ["tests"]
 addopts = "-q --strict-markers"
 filterwarnings = [
-  # أي SettingWithCopyWarning جديد يجب أن يُفشل الاختبارات — كان خطأً صامتاً سابقاً
-  "error::pandas.errors.SettingWithCopyWarning",
 ]

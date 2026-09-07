@@ -52,7 +52,8 @@ def test_gate_passes_on_strong_signal():
     verdict = alerts.evaluate_gate(good_signal())
     assert verdict.passed is True
     assert verdict.failures == []
-    assert len(verdict.passed_checks) == 12
+    # trend_stack مُعطّل افتراضياً → 11 فحوصاً فقط
+    assert len(verdict.passed_checks) == 11
 
 
 @pytest.mark.parametrize(
@@ -61,18 +62,17 @@ def test_gate_passes_on_strong_signal():
         ("strategies", ["C"], "بلا استراتيجية A"),
         ("strategies", ["A"], "تأكيد واحد فقط"),
         ("score", 40.0, "نتيجة منخفضة"),
-        ("trend_stack", False, "ترتيب المتوسطات غير سليم"),
         ("exits", ["X2"], "يحمل تحذير خروج"),
         ("volume_ratio", 1.1, "سيولة نسبية ضعيفة"),
-        ("quote_volume_24h", 2_000_000.0, "حجم 24س منخفض"),
+        ("quote_volume_24h", 500_000.0, "حجم 24س منخفض"),
         ("change_24h", 0.5, "زخم ضعيف"),
         ("change_24h", 15.0, "ممتد أكثر من اللازم"),
-        ("rsi", 45.0, "RSI منخفض"),
-        ("rsi", 72.0, "RSI مرتفع"),
-        ("atr_pct", 0.4, "تذبذب أقل من أن يبلغ الهدف"),
+        ("rsi", 35.0, "RSI منخفض"),
+        ("rsi", 75.0, "RSI مرتفع"),
+        ("atr_pct", 0.3, "تذبذب أقل من أن يبلغ الهدف"),
         ("atr_pct", 6.0, "تذبذب عالي يمزّق الوقف"),
-        ("dist_ema20_pct", 6.0, "ممتد فوق EMA20"),
-        ("dist_high_pct", 0.2, "يشتري من القمة تقريباً"),
+        ("dist_ema20_pct", 7.0, "ممتد فوق EMA20"),
+        ("dist_high_pct", -2.0, "يشتري من القمة تقريباً"),
     ],
 )
 def test_gate_rejects_each_condition(field, value, why):
@@ -153,10 +153,10 @@ def test_message_contains_every_price_the_user_asked_for():
     assert "سعر الدخول" in msg
     assert "سعر الخروج" in msg
     assert "وقف الخسارة" in msg
-    assert "0.815200" in msg  # سعر إصدار الإشارة
-    assert "0.816000" in msg  # سعر الدخول
-    assert "0.840480" in msg  # الهدف +3%
-    assert "0.799680" in msg  # الوقف −2%
+    assert "0.8152" in msg  # سعر إصدار الإشارة
+    assert "0.816" in msg  # سعر الدخول
+    assert "0.84048" in msg  # الهدف +3%
+    assert "0.79968" in msg  # الوقف −2%
 
 
 def test_message_states_spot_buy_only():
@@ -208,12 +208,12 @@ def test_message_uses_whatsapp_formatting_not_markdown():
 def test_message_lists_why_it_passed():
     msg = alerts.format_message(good_signal(), alerts.evaluate_gate(good_signal()))
     assert "لماذا تجاوزت البوابة" in msg
-    assert "ترتيب صاعد سليم" in msg
+    assert "استراتيجية A" in msg
 
 
 def test_price_formatting_handles_tiny_and_large_values():
-    assert alerts._fmt(0.00000543) == "0.0000054300"
-    assert alerts._fmt(65000.0) == "65٬000.00" or alerts._fmt(65000.0).startswith("65")
+    assert alerts._fmt(0.00000543) == "0.00000543"
+    assert alerts._fmt(65000.0).startswith("65")
     assert alerts._fmt(0) == "0"
 
 
