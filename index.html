@@ -452,6 +452,7 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     <button class="tab" role="tab" id="tab-adaptive" aria-selected="false" aria-controls="ind-view" data-view="adaptive">🧠 ذكاء اصطناعي</button>
     <button class="tab" role="tab" id="tab-volume" aria-selected="false" aria-controls="ind-view" data-view="volume">📊 الحجم</button>
     <button class="tab" role="tab" id="tab-unified" aria-selected="false" aria-controls="ind-view" data-view="unified">🎯 إشارة موحدة</button>
+    <button class="tab" role="tab" id="tab-abu_rashid" aria-selected="false" aria-controls="ind-view" data-view="abu_rashid">🤖 مؤشر ابو راشد</button>
   </div>
 
   <div class="toolbar">
@@ -1111,8 +1112,8 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
   }
   applyTheme(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark", false);
 
-  /* ── المؤشرات السبعة ───────────────────────────────────────────────────── */
-  var IND_VIEW_LIST = ["smc","confluence","momentum","liquidity","adaptive","volume","unified"];
+  /* ── المؤشرات الثمانية ───────────────────────────────────────────────────── */
+  var IND_VIEW_LIST = ["smc","confluence","momentum","liquidity","adaptive","volume","unified","abu_rashid"];
   var IND_URLS = {
     smc:         "./data/signals_smc.json",
     confluence:  "./data/signals_confluence.json",
@@ -1120,7 +1121,8 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     liquidity:   "./data/signals_liquidity.json",
     adaptive:    "./data/signals_adaptive.json",
     volume:      "./data/signals_volume.json",
-    unified:     "./data/signals_unified.json"
+    unified:     "./data/signals_unified.json",
+    abu_rashid:  "./data/signals_abu_rashid.json"
   };
   var IND_LABELS = {
     smc:         "أموال ذكية",
@@ -1129,7 +1131,8 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     liquidity:   "السيولة",
     adaptive:    "ذكاء اصطناعي",
     volume:      "الحجم",
-    unified:     "إشارة موحدة"
+    unified:     "إشارة موحدة",
+    abu_rashid:  "مؤشر ابو راشد"
   };
   var indDataCache = {};
   var indLoading = {};

@@ -227,6 +227,17 @@ def qualify(
     for signal in signals:
         if not isinstance(signal, dict) or signal.get("side") != "buy":
             continue
+        # إشارات ابو راشد تمر مباشرة بدون بوابة صارمة
+        if "ABU_RASHID" in (signal.get("strategies") or []):
+            verdict = GateVerdict(
+                passed=True,
+                passed_checks=[
+                    f"مؤشر ابو راشد — إشارة شراء على فريم {signal.get('timeframe', '?')}",
+                    f"ثقة الذكاء الاصطناعي: {signal.get('ai_prob', 0) * 100:.0f}%",
+                ],
+            )
+            out.append((signal, verdict))
+            continue
         verdict = evaluate_gate(signal, cfg)
         if verdict.passed:
             out.append((signal, verdict))
@@ -293,6 +304,11 @@ def format_message(
     واتساب يدعم *غامق* و_مائل_ و~مشطوب~ و```رمادي``` فقط — لا Markdown كامل.
     """
     now = now or datetime.now(timezone.utc)
+
+    # رسالة ابو راشد
+    if "ABU_RASHID" in (signal.get("strategies") or []):
+        return _format_abu_rashid_message(signal, verdict, now)
+
     p = prices(signal, cfg, entry_price)
     names = " + ".join(signal.get("strategy_names") or [signal.get("strategy") or "—"])
     bar = (signal.get("bar_time") or "")[:16].replace("T", " ")
@@ -357,6 +373,61 @@ def format_message(
     lines += [
         "━━━━━━━━━━━━━━━━",
         f"⏱ {now.strftime('%Y-%m-%d %H:%M')} UTC · نبض السوق",
+    ]
+    return "\n".join(lines)
+
+
+def _format_abu_rashid_message(
+    signal: dict[str, Any],
+    verdict: GateVerdict,
+    now: datetime,
+) -> str:
+    """يصيغ رسالة إشارة ابو راشد."""
+    tf = signal.get("timeframe", "—")
+    pair = signal.get("pair", signal.get("symbol", "—"))
+    price = signal.get("price", 0)
+    ai_prob = signal.get("ai_prob", 0) * 100
+    sl_price = signal.get("sl_price", 0)
+    tp_price = signal.get("tp_price", 0)
+
+    lines = [
+        "🤖 *إشارة شراء — مؤشر ابو راشد*",
+        "━━━━━━━━━━━━━━━━",
+        f"*الزوج:* {pair}",
+        f"*الفريم:* {tf}",
+        f"*الثقة:* {ai_prob:.0f}%",
+        "",
+        f"💰 *سعر الإشارة:* {_fmt(price)}",
+        f"📥 *سعر الدخول:* {_fmt(price)}",
+    ]
+
+    if tp_price and tp_price > 0:
+        lines.append(f"🎯 *الهدف:* {_fmt(tp_price)}")
+    if sl_price and sl_price > 0:
+        lines.append(f"🛑 *وقف الخسارة:* {_fmt(sl_price)}")
+
+    if tp_price and sl_price and price and sl_price > 0 and tp_price > 0:
+        risk = abs(price - sl_price)
+        reward = abs(tp_price - price)
+        rr = reward / risk if risk > 0 else 0
+        lines.append(f"📊 *المخاطرة/العائد:* 1 : {rr:.1f}")
+
+    lines += [
+        "",
+        "🔎 *تفاصيل الإشارة:*",
+    ]
+    for check in verdict.passed_checks:
+        lines.append(f"• {check}")
+
+    lines += [
+        "",
+        "📈 *.CriteriaAI:*",
+        "• 8 ميزات: RSI, CCI, ROC, Volume, EMA, MACD, Bollinger, ATR",
+        "• k-NN classifier مع 8 جيران",
+        "• فلتر EMA + فلتر الحجم",
+        "",
+        "━━━━━━━━━━━━━━━━",
+        f"⏱ {now.strftime('%Y-%m-%d %H:%M')} UTC · مؤشر ابو راشد",
     ]
     return "\n".join(lines)
 

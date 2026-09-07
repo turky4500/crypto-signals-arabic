@@ -1169,12 +1169,69 @@ def main(argv: Iterable[str] | None = None) -> int:
     except Exception as exc:
         log.warning("فشل تحليل المؤشرات: %s", exc)
 
+    # --- إشارات مؤشر ابو راشد (15m + 1h) ---
+    abu_rashid_signals = []
+    abu_rashid_path = indicator_output / "signals_abu_rashid.json"
+    if abu_rashid_path.exists():
+        try:
+            ar_data = json.loads(abu_rashid_path.read_text(encoding="utf-8"))
+            for entry in ar_data:
+                if entry.get("buy_signal"):
+                    pair = entry.get("symbol", "")
+                    tf_list = entry.get("buy_tfs", [])
+                    details = entry.get("details", {})
+                    per_tf = details.get("per_timeframe", {})
+                    for tf_key in tf_list:
+                        tf_info = per_tf.get(tf_key, {})
+                        ar_signal = {
+                            "pair": pair,
+                            "symbol": pair.replace("/", ""),
+                            "side": "buy",
+                            "strategies": ["ABU_RASHID"],
+                            "strategy_names": [f"ابو راشد ({tf_key})"],
+                            "strategy_code": "ABU_RASHID",
+                            "strategy": f"ابو راشد ({tf_key})",
+                            "reasons": [
+                                f"إشارة شراء ابو راشد على فريم {tf_key} — ثقة {tf_info.get('ai_prob', 0) * 100:.0f}%"
+                            ],
+                            "reason": f"إشارة شراء ابو راشد على فريم {tf_key}",
+                            "score": 85.0,
+                            "tier": 1,
+                            "price": tf_info.get("price", 0),
+                            "volume_ratio": 1.0,
+                            "quote_volume_24h": 10_000_000.0,
+                            "change_24h": 0.0,
+                            "rsi": 55.0,
+                            "atr_pct": 2.0,
+                            "atr": 0.0,
+                            "dist_high_pct": 2.0,
+                            "dist_ema20_pct": 1.0,
+                            "dist_ema200_pct": 5.0,
+                            "trend_stack": True,
+                            "exits": [],
+                            "exit_reasons": [],
+                            "bar_time": "",
+                            "spark": [],
+                            "is_new": True,
+                            "timeframe": tf_key,
+                            "ai_prob": tf_info.get("ai_prob", 0),
+                            "sl_price": tf_info.get("sl", 0),
+                            "tp_price": tf_info.get("tp", 0),
+                        }
+                        abu_rashid_signals.append(ar_signal)
+            log.info("مؤشر ابو راشد: %d إشارة شراء على 15m+1h", len(abu_rashid_signals))
+        except Exception as exc:
+            log.warning("قراءة إشارات ابو راشد: %s", exc)
+
     previous_payload = load_previous_state(args.state_url or None)
     previous = signals_by_symbol(previous_payload)
     apply_history(signals, previous, as_of)
 
+    # إضافة إشارات ابو راشد إلى قائمة الإشارات الرئيسية
+    all_signals = signals + abu_rashid_signals
+
     payload = build_payload(
-        signals,
+        all_signals,
         scanned=scanned,
         candidates=len(candidates),
         top=args.top,

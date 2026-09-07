@@ -13,7 +13,8 @@ import pandas as pd
 log = logging.getLogger(__name__)
 
 TIMEFRAMES = {
-    "1h": 100,
+    "15m": 400,
+    "1h": 400,
     "4h": 200,
     "1d": 200,
 }
@@ -47,6 +48,7 @@ def run_indicator_analysis(
 
     يُرجع ملخصاً: {symbol: {indicator_name: result, ...}, ...}
     """
+    from indicators_abu_rashid import analyze_abu_rashid
     from indicators_adaptive import analyze_adaptive
     from indicators_confluence import analyze_confluence
     from indicators_liquidity import analyze_liquidity
@@ -66,6 +68,7 @@ def run_indicator_analysis(
     adaptive_results: list[dict] = []
     volume_results: list[dict] = []
     unified_results: list[dict] = []
+    abu_rashid_results: list[dict] = []
 
     for symbol in targets:
         try:
@@ -94,6 +97,23 @@ def run_indicator_analysis(
             vol_profile = analyze_volume(df_4h, "4h")
             unified = analyze_unified(tf_data)
 
+            # مؤشر ابو راشد — 15m + 1h
+            abu_rashid_buy_tfs = []
+            abu_rashid_tf_results = {}
+            for tf_key in ["15m", "1h"]:
+                if tf_key in tf_data and len(tf_data[tf_key]) >= 50:
+                    ar = analyze_abu_rashid(tf_data[tf_key], tf_key)
+                    abu_rashid_tf_results[tf_key] = ar
+                    if ar.get("buy_signal"):
+                        abu_rashid_buy_tfs.append(tf_key)
+
+            abu_rashid = {
+                "overall_bias": "BULLISH" if abu_rashid_buy_tfs else "NEUTRAL",
+                "buy_signal": len(abu_rashid_buy_tfs) > 0,
+                "buy_tfs": abu_rashid_buy_tfs,
+                "per_timeframe": abu_rashid_tf_results,
+            }
+
             def _make_entry(analysis: dict, timeframe: str = "4h", symbol=symbol) -> dict:
                 bias = analysis.get("bias", "NEUTRAL")
                 strength = analysis.get("strength", analysis.get("score", analysis.get("confidence", 50)))
@@ -119,6 +139,16 @@ def run_indicator_analysis(
                 "details": unified,
             }
 
+            abu_rashid_entry = {
+                "symbol": symbol,
+                "timeframe": "15m+1h",
+                "bias": abu_rashid.get("overall_bias", "NEUTRAL"),
+                "strength": 100 if abu_rashid.get("buy_signal") else 50,
+                "buy_signal": abu_rashid.get("buy_signal", False),
+                "buy_tfs": abu_rashid.get("buy_tfs", []),
+                "details": abu_rashid,
+            }
+
             smc_results.append(smc_entry)
             confluence_results.append(confluence_entry)
             momentum_results.append(momentum_entry)
@@ -126,6 +156,7 @@ def run_indicator_analysis(
             adaptive_results.append(adaptive_entry)
             volume_results.append(vol_entry)
             unified_results.append(unified_entry)
+            abu_rashid_results.append(abu_rashid_entry)
 
             all_results[symbol] = {
                 "smc": smc_entry,
@@ -135,6 +166,7 @@ def run_indicator_analysis(
                 "adaptive": adaptive_entry,
                 "volume": vol_entry,
                 "unified": unified_entry,
+                "abu_rashid": abu_rashid_entry,
             }
 
             time.sleep(0.05)
@@ -163,6 +195,7 @@ def run_indicator_analysis(
     _save("adaptive", adaptive_results)
     _save("volume", volume_results)
     _save("unified", unified_results)
+    _save("abu_rashid", abu_rashid_results)
 
     elapsed = time.time() - started
     log.info(
