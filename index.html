@@ -308,6 +308,33 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important}
 }
+
+/* --- مؤشرات الدعم ------------------------------------------------------- */
+.ind-grid{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:640px){.ind-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1100px){.ind-grid{grid-template-columns:repeat(3,1fr)}}
+.ind-card{
+  padding:18px;border-radius:var(--r-md);border:1px solid var(--line);
+  background:var(--panel-2);transition:border-color .18s,box-shadow .18s;
+}
+.ind-card:hover{border-color:var(--line-hover);box-shadow:0 6px 24px var(--shadow)}
+.ind-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+.ind-header .pair{font-weight:800;font-size:14.5px}
+.ind-header .tf{font-size:11px;color:var(--dim)}
+.ind-badge{
+  display:inline-block;padding:4px 12px;border-radius:8px;font-size:11.5px;font-weight:700;
+  border:1px solid;white-space:nowrap;
+}
+.ind-badge.bullish{background:var(--mint-bg);border-color:var(--mint-bd);color:var(--mint)}
+.ind-badge.bearish{background:var(--red-bg);border-color:var(--red-bd);color:var(--red)}
+.ind-badge.neutral{background:var(--dim-bg);border-color:var(--dim-bd);color:var(--dim)}
+.signal-chip{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700;background:var(--sunk);color:var(--muted);margin-inline-start:4px}
+.ind-detail{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+.ind-strength{
+  width:100%;height:6px;border-radius:99px;background:var(--sunk);overflow:hidden;margin-top:8px;
+}
+.ind-strength-fill{display:block;height:100%;border-radius:99px;transition:width .3s}
+.ind-empty{padding:48px 16px;text-align:center;color:var(--dim);font-size:13px}
 </style>
 </head>
 <body>
@@ -418,6 +445,13 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     <button class="tab" role="tab" id="tab-exits" aria-selected="false" aria-controls="view" data-view="exits">
       تحذيرات الخروج <span class="n" id="tabCountExits">0</span>
     </button>
+    <button class="tab" role="tab" id="tab-smc" aria-selected="false" aria-controls="ind-view" data-view="smc">🏛️ أموال ذكية</button>
+    <button class="tab" role="tab" id="tab-confluence" aria-selected="false" aria-controls="ind-view" data-view="confluence">📈 ترند</button>
+    <button class="tab" role="tab" id="tab-momentum" aria-selected="false" aria-controls="ind-view" data-view="momentum">⚡ الزخم</button>
+    <button class="tab" role="tab" id="tab-liquidity" aria-selected="false" aria-controls="ind-view" data-view="liquidity">💧 السيولة</button>
+    <button class="tab" role="tab" id="tab-adaptive" aria-selected="false" aria-controls="ind-view" data-view="adaptive">🧠 ذكاء اصطناعي</button>
+    <button class="tab" role="tab" id="tab-volume" aria-selected="false" aria-controls="ind-view" data-view="volume">📊 الحجم</button>
+    <button class="tab" role="tab" id="tab-unified" aria-selected="false" aria-controls="ind-view" data-view="unified">🎯 إشارة موحدة</button>
   </div>
 
   <div class="toolbar">
@@ -462,6 +496,25 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
       <h3>تعذّر تحميل البيانات</h3>
       <p id="errorText">لم نتمكن من قراءة ملف الإشارات. قد يكون النشر جارياً أو أن الاتصال مقطوع.</p>
       <button class="btn" id="retry" type="button">إعادة المحاولة</button>
+    </div>
+  </div>
+
+  <div id="ind-view" role="tabpanel" aria-labelledby="tab-smc" hidden>
+    <div class="ind-grid" id="ind-grid"></div>
+    <div class="state" id="ind-loading">
+      <div class="ic" aria-hidden="true"><span class="spinner"></span></div>
+      <h3>جارٍ تحميل بيانات المؤشرات…</h3>
+      <p>تُقرأ ملفات JSON من مجلد data/.</p>
+    </div>
+    <div class="state" id="ind-empty" hidden>
+      <div class="ic" aria-hidden="true">📭</div>
+      <h3 id="ind-empty-title">لا توجد بيانات متاحة لهذا المؤشر</h3>
+      <p id="ind-empty-text">لم يتم إنشاء ملف البيانات بعد. قد يكون السير العمل لم يُشغَّل بعد.</p>
+    </div>
+    <div class="state error" id="ind-error" hidden>
+      <div class="ic" aria-hidden="true">⚠</div>
+      <h3>تعذّر تحميل بيانات المؤشر</h3>
+      <p id="ind-error-text">لم نتمكن من قراءة ملف المؤشر.</p>
     </div>
   </div>
 </section>
@@ -1058,6 +1111,120 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
   }
   applyTheme(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark", false);
 
+  /* ── المؤشرات السبعة ───────────────────────────────────────────────────── */
+  var IND_VIEW_LIST = ["smc","confluence","momentum","liquidity","adaptive","volume","unified"];
+  var IND_URLS = {
+    smc:         "./data/signals_smc.json",
+    confluence:  "./data/signals_confluence.json",
+    momentum:    "./data/signals_momentum.json",
+    liquidity:   "./data/signals_liquidity.json",
+    adaptive:    "./data/signals_adaptive.json",
+    volume:      "./data/signals_volume.json",
+    unified:     "./data/signals_unified.json"
+  };
+  var IND_LABELS = {
+    smc:         "أموال ذكية",
+    confluence:  "ترند",
+    momentum:    "الزخم",
+    liquidity:   "السيولة",
+    adaptive:    "ذكاء اصطناعي",
+    volume:      "الحجم",
+    unified:     "إشارة موحدة"
+  };
+  var indDataCache = {};
+  var indLoading = {};
+
+  function isIndView(v) { return IND_VIEW_LIST.indexOf(v) >= 0; }
+
+  function biasLabel(b) {
+    var map = { BULLISH: "صاعد", BEARISH: "هابط", NEUTRAL: "محايد" };
+    return map[b] || b || "محايد";
+  }
+  function biasCls(b) {
+    var map = { BULLISH: "bullish", BEARISH: "bearish" };
+    return map[b] || "neutral";
+  }
+
+  function strengthColor(pct) {
+    if (pct >= 70) return "var(--mint)";
+    if (pct >= 40) return "var(--amber)";
+    return "var(--red)";
+  }
+
+  function indCardHtml(item) {
+    var bCls = biasCls(item.bias);
+    var sVal = Math.min(100, Math.max(0, Number(item.strength) || 0));
+    var details = item.details || [];
+    var detHtml = "";
+    if (details.length) {
+      detHtml = '<div class="ind-detail">' + details.map(function (d) {
+        return '<span class="signal-chip">' + esc(d) + '</span>';
+      }).join("") + '</div>';
+    }
+    return '<div class="ind-card">' +
+      '<div class="ind-header">' +
+        '<div><span class="pair">' + esc(item.symbol || item.pair || "") + '</span> ' +
+        '<span class="tf">' + esc(item.timeframe || "") + '</span></div>' +
+        '<span class="ind-badge ' + bCls + '">' + biasLabel(item.bias) + '</span>' +
+      '</div>' +
+      '<div class="ind-strength"><span class="ind-strength-fill" style="width:' + sVal + '%;background:' + strengthColor(sVal) + '"></span></div>' +
+      '<div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11.5px;color:var(--muted)"><span>القوة</span><span class="mono">' + sVal.toFixed(0) + '%</span></div>' +
+      detHtml +
+    '</div>';
+  }
+
+  function renderIndicators(key) {
+    var grid = $("ind-grid"), loading = $("ind-loading"), empty = $("ind-empty"), err = $("ind-error");
+    grid.innerHTML = "";
+    loading.hidden = true; err.hidden = true; empty.hidden = true;
+
+    var items = indDataCache[key];
+    if (!items && !indLoading[key]) {
+      empty.hidden = false;
+      return;
+    }
+    if (indLoading[key]) {
+      loading.hidden = false;
+      return;
+    }
+    if (!items || !items.length) {
+      empty.hidden = false;
+      return;
+    }
+    items.sort(function (a, b) { return (Number(b.strength) || 0) - (Number(a.strength) || 0); });
+    grid.innerHTML = items.map(indCardHtml).join("");
+  }
+
+  function loadIndicator(key) {
+    if (indDataCache[key] || indLoading[key]) {
+      renderIndicators(key);
+      return;
+    }
+    indLoading[key] = true;
+    renderIndicators(key);
+    fetch(IND_URLS[key] + "?cb=" + Date.now(), { cache: "no-store" })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (d) {
+        indLoading[key] = false;
+        var list = Array.isArray(d) ? d : (d && d.signals) ? d.signals : [];
+        indDataCache[key] = list;
+        renderIndicators(key);
+      })
+      .catch(function () {
+        indLoading[key] = false;
+        $("ind-loading").hidden = true;
+        $("ind-empty").hidden = true;
+        $("ind-error").hidden = false;
+      });
+  }
+
+  function refreshAllIndicators() {
+    IND_VIEW_LIST.forEach(function (k) { delete indDataCache[k]; delete indLoading[k]; });
+  }
+
   /* ---------- الأحداث ---------- */
   document.querySelector(".tabs").addEventListener("click", function (e) {
     var b = e.target.closest(".tab"); if (!b) return;
@@ -1067,9 +1234,17 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
       var on = t === b;
       t.setAttribute("aria-selected", on ? "true" : "false");
     });
-    $("view").setAttribute("aria-labelledby", "tab-" + view);
+    var isIndicator = isIndView(view);
+    $("view").hidden = isIndicator;
+    $("ind-view").hidden = !isIndicator;
+    if (isIndicator) {
+      $("ind-view").setAttribute("aria-labelledby", "tab-" + view);
+      loadIndicator(view);
+    } else {
+      $("view").setAttribute("aria-labelledby", "tab-" + view);
+    }
     expanded = {};
-    renderFilters(true); render(true);
+    if (!isIndicator) { renderFilters(true); render(true); }
   });
 
   $("filters").addEventListener("click", function (e) {
@@ -1106,7 +1281,7 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
   });
 
   $("sort").addEventListener("change", function (e) { sortKey = e.target.value; render(false); });
-  $("refresh").addEventListener("click", function () { load(true); });
+  $("refresh").addEventListener("click", function () { load(true); refreshAllIndicators(); if (isIndView(view)) loadIndicator(view); });
   $("retry").addEventListener("click", function () {
     $("error").hidden = true; $("loading").hidden = false; load(true);
   });
