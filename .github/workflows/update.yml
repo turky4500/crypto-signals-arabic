@@ -31,6 +31,18 @@ on:
         description: 'أدنى عدد استراتيجيات متحققة معاً (0 = بلا فلتر)'
         required: false
         default: '0'
+      alert_tp_pct:
+        description: 'هدف الربح % لتنبيهات واتساب — الافتراضي 3 (انظر docs/alert-gate-study.md)'
+        required: false
+        default: ''
+      alert_sl_pct:
+        description: 'وقف الخسارة % لتنبيهات واتساب — الافتراضي 2'
+        required: false
+        default: ''
+      whatsapp_dry_run:
+        description: 'اصنع رسائل واتساب دون إرسالها (true للتجربة الآمنة)'
+        required: false
+        default: 'false'
 
 permissions:
   contents: read
@@ -67,12 +79,28 @@ jobs:
         env:
           SIGNALS_STATE_URL: ${{ vars.SIGNALS_STATE_URL || 'https://turky4500.github.io/crypto-signals-arabic/signals.json' }}
           NOTIFY_WEBHOOK: ${{ secrets.NOTIFY_WEBHOOK }}
+          # تنبيهات واتساب — تُفعَّل تلقائياً متى ضُبطت الأسرار الثلاثة،
+          # وتبقى معطّلة بأمان إن نقص أحدها. لا تُطبع قيمها في السجل.
+          WHATSAPP_API_URL: ${{ secrets.WHATSAPP_API_URL }}
+          WHATSAPP_API_TOKEN: ${{ secrets.WHATSAPP_API_TOKEN }}
+          WHATSAPP_TO: ${{ secrets.WHATSAPP_TO }}
         run: |
           set -euo pipefail
           ARGS=(--top "${{ github.event.inputs.top || '40' }}")
           ARGS+=(--min-confirmations "${{ github.event.inputs.min_confirmations || '0' }}")
           AS_OF="${{ github.event.inputs.as_of || '' }}"
           if [ -n "$AS_OF" ]; then ARGS+=(--as-of "$AS_OF"); fi
+          TP="${{ github.event.inputs.alert_tp_pct || '' }}"
+          SL="${{ github.event.inputs.alert_sl_pct || '' }}"
+          if [ -n "$TP" ]; then ARGS+=(--alert-tp-pct "$TP"); fi
+          if [ -n "$SL" ]; then ARGS+=(--alert-sl-pct "$SL"); fi
+          if [ "${{ github.event.inputs.whatsapp_dry_run || 'false' }}" = "true" ]; then
+            ARGS+=(--whatsapp-dry-run --whatsapp-url https://dry-run.invalid --whatsapp-token dry --whatsapp-to 000)
+          fi
+          # طباعة وجود الأسرار لا قيمها — للتحقق من الضبط دون تسريب
+          for V in WHATSAPP_API_URL WHATSAPP_API_TOKEN WHATSAPP_TO; do
+            if [ -n "${!V:-}" ]; then echo "  ✓ $V مضبوط"; else echo "  ✗ $V غير مضبوط"; fi
+          done
           echo "تشغيل: python scanner.py ${ARGS[*]}"
           python scanner.py "${ARGS[@]}"
 
@@ -92,6 +120,35 @@ jobs:
           print(f"- **إشارات الدخول:** {s.get('total_entries', 0)} (الطبقة الأولى: {s.get('tier1_entries', 0)})")
           print(f"- **تحذيرات الخروج:** {s.get('total_exits', 0)}")
           print(f"- **إشارات جديدة:** {s.get('new_entries', 0)}")
+            cfg = d.get("alert_config", {})
+            st = d.get("alert_stats", {})
+            alog = d.get("alert_log", [])
+            print(f"- **تنبيهات واتساب هذه الدورة:** {d.get('alerts_sent_now', 0)}")
+            if cfg:
+                print(
+                    f"- **بوابة التنبيه:** هدف {cfg.get('take_profit_pct')}% / "
+                    f"وقف {cfg.get('stop_loss_pct')}% · "
+                    f"أدنى نتيجة {cfg.get('min_score')} · "
+                    f"تبريد {cfg.get('cooldown_hours')} ساعة · "
+                    f"حد {cfg.get('max_per_cycle')} لكل دورة"
+                )
+            if st:
+                print(
+                    f"- **الاحتمال التاريخي المقاس:** إصابة الهدف "
+                    f"{st.get('hit_rate_pct')}% مقابل نقطة تعادل "
+                    f"{st.get('break_even_win_rate_pct')}% "
+                    f"(عامل ربح {st.get('profit_factor')} — أقل من 1)"
+                )
+            if alog:
+                print()
+                print("| الزوج | آخر إرسال | سعر الدخول | الهدف | الوقف | الحالة |")
+                print("|---|---|---|---|---|---|")
+                for a in alog[:10]:
+                    print(
+                        f"| {a.get('pair', a.get('symbol'))} | {str(a.get('sent_at', ''))[:16]} "
+                        f"| {a.get('entry_price')} | {a.get('take_profit')} "
+                        f"| {a.get('stop_loss')} | {'✅' if a.get('delivered') else '⚠️'} |"
+                    )
           top = d.get("signals", [])[:5]
           if top:
               print()
