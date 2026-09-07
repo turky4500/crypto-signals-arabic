@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>نبض السوق | إشارات Binance الفنية</title>
 <meta name="description" content="لوحة عربية لإشارات Binance الفنية على إطار الساعة، محسوبة على شموع مغلقة فقط، مع وقف خسارة وهدف ربح ونتيجة مرجّحة لكل إشارة.">
-<meta name="theme-color" content="#070b15">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#070b15" id="themeColor">
+<meta name="color-scheme" content="dark light">
 <meta property="og:type" content="website">
 <meta property="og:title" content="نبض السوق | إشارات Binance الفنية">
 <meta property="og:description" content="إشارات فنية على شموع مغلقة فقط، مع وقف خسارة وهدف ربح ونتيجة مرجّحة.">
@@ -14,6 +14,19 @@
 <meta property="og:locale" content="ar_SA">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070b15'/%3E%3Cpath d='M6 21l5-7 4 4 5-9 6 12' fill='none' stroke='%2326e3a2' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>
+  /* يُضبط الوضع قبل أول رسم حتى لا يومض اللون الخاطئ عند الفتح.
+     الأولوية: اختيار المستخدم المحفوظ ← ثم تفضيل النظام ← ثم الليلي. */
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("nebula-theme"); } catch (e) { t = null; }
+    if (t !== "light" && t !== "dark") {
+      t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches)
+        ? "light" : "dark";
+    }
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 <style>
 /* ============================================================================
    كل التنسيقات محلية — لا CDN ولا خطوط خارجية ولا أي طلب لشبكة ثالثة.
@@ -21,9 +34,66 @@
 :root{
   --ink:#070b15; --panel:#0e1422; --panel-2:#121a2b; --line:#1b2940;
   --line-soft:rgba(115,145,196,.16); --text:#edf3ff; --muted:#8fa3c4;
-  --dim:#5d708f; --mint:#26e3a2; --blue:#6d8cff; --violet:#b98cff;
+  --dim:#7384a0; --mint:#26e3a2; --blue:#6d8cff; --violet:#b98cff;
   --amber:#ffc46b; --red:#ff7a8a;
   --r-sm:10px; --r-md:16px; --r-lg:24px;
+
+  /* رموز مشتقة — كل لون مكتوب يدوياً صار رمزاً كي يتبدّل الوضع دفعة واحدة */
+  --on-accent:#07110f;
+  --line-hover:#2d4266; --sep:#3d4c68; --sepdot:#33415c;
+  --sunk:#1a2438; --inset:rgba(7,11,21,.5);
+  --glass-1:rgba(18,26,43,.9); --glass-2:rgba(14,20,34,.86);
+  --shadow:rgba(0,0,0,.28);
+  --glow-1:rgba(38,227,162,.09); --glow-2:rgba(109,140,255,.13);
+  --row-line:rgba(27,41,64,.55); --row-hover:rgba(109,140,255,.06);
+  --detail-bg:rgba(109,140,255,.045);
+  --gate-bg-1:rgba(38,227,162,.07); --gate-bg-2:rgba(110,140,255,.05);
+  --mint-bg:rgba(38,227,162,.11); --mint-bd:rgba(38,227,162,.28);
+  --mint-press:rgba(38,227,162,.14); --mint-bd-strong:rgba(38,227,162,.45);
+  --mint-spin:rgba(38,227,162,.25);
+  --blue-bg:rgba(109,140,255,.11); --blue-bd:rgba(109,140,255,.28);
+  --violet-bg:rgba(185,140,255,.11); --violet-bd:rgba(185,140,255,.28);
+  --amber-bg:rgba(255,196,107,.11); --amber-bd:rgba(255,196,107,.28);
+  --amber-bg-1:rgba(255,196,107,.09); --amber-bg-2:rgba(255,196,107,.03);
+  --red-bg:rgba(255,122,138,.11); --red-bd:rgba(255,122,138,.26);
+  --dim-bg:rgba(93,112,143,.13); --dim-bd:rgba(93,112,143,.35);
+  color-scheme:dark;
+}
+
+/* ── الوضع النهاري ─────────────────────────────────────────────────────────
+   الألوان المشددة مُعتَّمة عمداً لتتجاوز نسبة تباين 4.5:1 على خلفية فاتحة
+   (النص الصغير بالذات: --dim و--mint كانا يفشلان لو اكتفينا بعكس القيم). */
+:root[data-theme="light"]{
+  --ink:#eef1f8; --panel:#ffffff; --panel-2:#f5f7fc; --line:#d5dcea;
+  --line-soft:rgba(28,48,88,.14); --text:#101a2e; --muted:#4c5c7a;
+  --dim:#5f6f87; --mint:#0a7d59; --blue:#2f56d6; --violet:#7438d8;
+  --amber:#96600a; --red:#c92a42;
+
+  --on-accent:#ffffff;
+  --line-hover:#a9b7d0; --sep:#c2cbdc; --sepdot:#ccd4e2;
+  --sunk:#e3e9f4; --inset:rgba(255,255,255,.72);
+  --glass-1:rgba(255,255,255,.94); --glass-2:rgba(247,249,253,.9);
+  --shadow:rgba(24,42,84,.12);
+  --glow-1:rgba(10,125,89,.10); --glow-2:rgba(47,86,214,.10);
+  --row-line:rgba(190,202,224,.75); --row-hover:rgba(47,86,214,.055);
+  --detail-bg:rgba(47,86,214,.045);
+  --gate-bg-1:rgba(10,125,89,.07); --gate-bg-2:rgba(47,86,214,.05);
+  --mint-bg:rgba(10,125,89,.10); --mint-bd:rgba(10,125,89,.30);
+  --mint-press:rgba(10,125,89,.14); --mint-bd-strong:rgba(10,125,89,.45);
+  --mint-spin:rgba(10,125,89,.28);
+  --blue-bg:rgba(47,86,214,.10); --blue-bd:rgba(47,86,214,.28);
+  --violet-bg:rgba(116,56,216,.10); --violet-bd:rgba(116,56,216,.28);
+  --amber-bg:rgba(150,96,10,.10); --amber-bd:rgba(150,96,10,.30);
+  --amber-bg-1:rgba(150,96,10,.09); --amber-bg-2:rgba(150,96,10,.03);
+  --red-bg:rgba(201,42,66,.09); --red-bd:rgba(201,42,66,.28);
+  --dim-bg:rgba(102,118,143,.14); --dim-bd:rgba(102,118,143,.38);
+  color-scheme:light;
+}
+
+/* انتقال ناعم بين الوضعين — يُعطَّل تلقائياً مع prefers-reduced-motion */
+html.theming,html.theming *,html.theming *::before,html.theming *::after{
+  transition:background-color .22s ease,border-color .22s ease,color .22s ease,
+             box-shadow .22s ease,fill .22s ease !important;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -32,8 +102,8 @@ body{
   font-family:"Segoe UI",Tahoma,"Noto Sans Arabic","Noto Kufi Arabic","Cairo",system-ui,-apple-system,sans-serif;
   font-size:15px; line-height:1.65;
   background-image:
-    radial-gradient(circle at 8% -2%,rgba(38,227,162,.09),transparent 30%),
-    radial-gradient(circle at 94% 10%,rgba(109,140,255,.13),transparent 28%);
+    radial-gradient(circle at 8% -2%,var(--glow-1),transparent 30%),
+    radial-gradient(circle at 94% 10%,var(--glow-2),transparent 28%);
   background-attachment:fixed;
 }
 main{max-width:1440px;margin:0 auto;padding:24px 16px 48px}
@@ -45,10 +115,10 @@ button{font:inherit;cursor:pointer}
 
 /* --- البطاقات ------------------------------------------------------------ */
 .glass{
-  background:linear-gradient(180deg,rgba(18,26,43,.9),rgba(14,20,34,.86));
+  background:linear-gradient(180deg,var(--glass-1),var(--glass-2));
   border:1px solid var(--line-soft);
   border-radius:var(--r-lg);
-  box-shadow:0 18px 55px rgba(0,0,0,.28);
+  box-shadow:0 18px 55px var(--shadow);
 }
 
 /* --- الترويسة ------------------------------------------------------------- */
@@ -57,11 +127,11 @@ header.top{display:flex;flex-direction:column;gap:20px;margin-bottom:24px}
 .brand{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .logo{
   width:42px;height:42px;flex:0 0 42px;border-radius:14px;display:grid;place-items:center;
-  background:var(--mint);color:#07110f;font-weight:800;font-size:20px;
+  background:var(--mint);color:var(--on-accent);font-weight:800;font-size:20px;
 }
 .brand-tag{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--mint)}
 h1{margin:0;font-size:clamp(26px,4.4vw,38px);font-weight:800;letter-spacing:-.02em;line-height:1.2}
-h1 .sep{color:#3d4c68;font-weight:400}
+h1 .sep{color:var(--sep);font-weight:400}
 .lede{margin:10px 0 0;max-width:74ch;color:var(--muted);font-size:14px}
 
 .status{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--r-md);font-size:13px;color:var(--muted)}
@@ -70,7 +140,7 @@ h1 .sep{color:#3d4c68;font-weight:400}
 .dot.stale{background:var(--amber)}
 .dot.dead{background:var(--red);animation:none}
 @keyframes pulse{50%{opacity:.35}}
-.status .sepdot{color:#33415c}
+.status .sepdot{color:var(--sepdot)}
 
 /* --- بطاقات الإحصاء ------------------------------------------------------ */
 .stats{display:grid;gap:12px;grid-template-columns:repeat(2,1fr);margin-bottom:20px}
@@ -84,8 +154,8 @@ h1 .sep{color:#3d4c68;font-weight:400}
 /* --- شريط الصدق ----------------------------------------------------------- */
 .honesty{
   display:flex;gap:14px;align-items:flex-start;padding:16px 18px;margin-bottom:20px;
-  border-radius:var(--r-md);border:1px solid rgba(255,196,107,.28);
-  background:linear-gradient(180deg,rgba(255,196,107,.09),rgba(255,196,107,.03));
+  border-radius:var(--r-md);border:1px solid var(--amber-bd);
+  background:linear-gradient(180deg,var(--amber-bg-1),var(--amber-bg-2));
 }
 .honesty .ic{font-size:20px;line-height:1.2}
 .honesty h2{margin:0 0 4px;font-size:14px;color:var(--amber)}
@@ -93,21 +163,21 @@ h1 .sep{color:#3d4c68;font-weight:400}
 
   /* بوابة تنبيه واتساب */
   .gate{margin:18px 0;padding:18px 20px;border-radius:var(--r-lg);
-    background:linear-gradient(160deg,rgba(38,227,162,.07),rgba(110,140,255,.05));
+    background:linear-gradient(160deg,var(--gate-bg-1),var(--gate-bg-2));
     border:1px solid var(--line-soft);position:relative}
   .gate h2{margin:0 0 2px;font-size:15px;display:flex;align-items:center;gap:8px}
   .gate .sub{margin:0 0 14px;font-size:12.5px;color:var(--muted)}
   .gate .sub b{color:var(--text);font-weight:600}
   .gateGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
-  .gstat{padding:10px 12px;border-radius:var(--r-sm);background:rgba(7,11,21,.5);border:1px solid var(--line-soft)}
+  .gstat{padding:10px 12px;border-radius:var(--r-sm);background:var(--inset);border:1px solid var(--line-soft)}
   .gstat .k{margin:0;font-size:11px;color:var(--dim);letter-spacing:.02em}
   .gstat .v{margin:3px 0 0;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
   .gstat .n{margin:2px 0 0;font-size:10.5px;color:var(--dim)}
   .crit{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;padding:0;list-style:none}
   .crit li{font-size:11.5px;padding:4px 9px;border-radius:999px;
-    background:rgba(38,227,162,.09);border:1px solid rgba(38,227,162,.22);color:var(--mint)}
+    background:var(--mint-bg);border:1px solid var(--mint-bd);color:var(--mint)}
   .gateWarn{margin:0;padding:11px 13px;border-radius:var(--r-sm);font-size:12.5px;line-height:1.65;
-    background:rgba(255,122,138,.08);border:1px solid rgba(255,122,138,.24);color:var(--text)}
+    background:var(--red-bg);border:1px solid var(--red-bd);color:var(--text)}
   .gateWarn b{color:var(--red)}
   .gateWarn a{color:var(--blue)}
   .alog{margin:12px 0 0;width:100%;border-collapse:collapse;font-size:12px}
@@ -119,6 +189,10 @@ h1 .sep{color:#3d4c68;font-weight:400}
   .gate .toggle{background:none;border:1px solid var(--line-soft);color:var(--muted);
     font:inherit;font-size:11.5px;padding:4px 10px;border-radius:999px;cursor:pointer}
   .gate .toggle:hover{color:var(--text);border-color:var(--blue)}
+  .status .themebtn{margin-inline-start:auto;padding:6px 13px;font-size:12px;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:6px}
+  @media(max-width:560px){.status .themebtn{margin-inline-start:0}}
+  .status .lastcheck{font-size:11.5px;color:var(--dim);white-space:nowrap}
   [hidden]{display:none!important}
 
 /* --- التبويبات وأدوات التحكم ---------------------------------------------- */
@@ -129,8 +203,8 @@ h1 .sep{color:#3d4c68;font-weight:400}
   padding:9px 18px;border-radius:var(--r-sm);border:1px solid var(--line);
   background:transparent;color:var(--muted);font-size:13px;font-weight:700;transition:.16s;
 }
-.tab:hover{border-color:#2d4266;color:var(--text)}
-.tab[aria-selected="true"]{background:var(--mint);border-color:var(--mint);color:#07110f}
+.tab:hover{border-color:var(--line-hover);color:var(--text)}
+.tab[aria-selected="true"]{background:var(--mint);border-color:var(--mint);color:var(--on-accent)}
 .tab .n{opacity:.7;font-weight:600;margin-inline-start:6px}
 
 .toolbar{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
@@ -140,8 +214,8 @@ h1 .sep{color:#3d4c68;font-weight:400}
   padding:7px 14px;border-radius:999px;border:1px solid var(--line);
   background:transparent;color:var(--muted);font-size:12px;font-weight:700;transition:.16s;
 }
-.chip:hover{border-color:#2d4266;color:var(--text)}
-.chip[aria-pressed="true"]{background:rgba(38,227,162,.14);border-color:rgba(38,227,162,.5);color:var(--mint)}
+.chip:hover{border-color:var(--line-hover);color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--mint-press);border-color:var(--mint-bd-strong);color:var(--mint)}
 .tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 input[type="search"],select{
   padding:9px 14px;border-radius:var(--r-sm);border:1px solid var(--line);
@@ -169,34 +243,34 @@ thead th.sortable{cursor:pointer}
 thead th.sortable:hover{color:var(--text)}
 thead th .arw{opacity:.35;margin-inline-start:4px;font-size:9px}
 thead th[aria-sort] .arw{opacity:1;color:var(--mint)}
-tbody td{padding:12px;border-bottom:1px solid rgba(27,41,64,.55);vertical-align:middle;white-space:nowrap}
+tbody td{padding:12px;border-bottom:1px solid var(--row-line);vertical-align:middle;white-space:nowrap}
 tbody tr{transition:background .15s}
-tbody tr:hover{background:rgba(109,140,255,.06)}
+tbody tr:hover{background:var(--row-hover)}
 tbody tr:last-child td{border-bottom:none}
 .coin{display:flex;align-items:center;gap:11px}
 .avatar{
   width:36px;height:36px;flex:0 0 36px;border-radius:12px;display:grid;place-items:center;
-  background:#1a2438;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.02em;
+  background:var(--sunk);color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.02em;
 }
 .coin .nm{font-weight:800;font-size:13.5px}
 .coin .sub{font-size:10.5px;color:var(--dim)}
 .up{color:var(--mint)} .down{color:var(--red)} .flat{color:var(--muted)}
 
 .badge{display:inline-block;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;border:1px solid;white-space:nowrap}
-.b-A{background:rgba(38,227,162,.11);border-color:rgba(38,227,162,.28);color:var(--mint)}
-.b-B{background:rgba(109,140,255,.11);border-color:rgba(109,140,255,.28);color:var(--blue)}
-.b-C{background:rgba(185,140,255,.11);border-color:rgba(185,140,255,.28);color:var(--violet)}
-.b-D{background:rgba(255,196,107,.11);border-color:rgba(255,196,107,.28);color:var(--amber)}
-.b-X{background:rgba(255,122,138,.11);border-color:rgba(255,122,138,.28);color:var(--red)}
+.b-A{background:var(--mint-bg);border-color:var(--mint-bd);color:var(--mint)}
+.b-B{background:var(--blue-bg);border-color:var(--blue-bd);color:var(--blue)}
+.b-C{background:var(--violet-bg);border-color:var(--violet-bd);color:var(--violet)}
+.b-D{background:var(--amber-bg);border-color:var(--amber-bd);color:var(--amber)}
+.b-X{background:var(--red-bg);border-color:var(--red-bd);color:var(--red)}
 .tier{display:inline-block;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:800;border:1px solid}
-.tier-1{background:rgba(38,227,162,.13);border-color:rgba(38,227,162,.4);color:var(--mint)}
-.tier-2{background:rgba(93,112,143,.13);border-color:rgba(93,112,143,.35);color:var(--dim)}
-.new{display:inline-block;padding:2px 7px;border-radius:6px;font-size:9.5px;font-weight:800;background:var(--mint);color:#07110f;margin-inline-start:6px}
+.tier-1{background:var(--mint-bg);border-color:var(--mint-bd-strong);color:var(--mint)}
+.tier-2{background:var(--dim-bg);border-color:var(--dim-bd);color:var(--dim)}
+.new{display:inline-block;padding:2px 7px;border-radius:6px;font-size:9.5px;font-weight:800;background:var(--mint);color:var(--on-accent);margin-inline-start:6px}
 
 .score{display:flex;align-items:center;gap:8px}
-.score .bar{width:54px;height:5px;border-radius:99px;background:#1a2438;overflow:hidden;flex:0 0 54px}
+.score .bar{width:54px;height:5px;border-radius:99px;background:var(--sunk);overflow:hidden;flex:0 0 54px}
 .score .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--mint))}
-.volbar{width:56px;height:5px;border-radius:99px;background:#1a2438;overflow:hidden;display:inline-block;vertical-align:middle;flex:0 0 56px}
+.volbar{width:56px;height:5px;border-radius:99px;background:var(--sunk);overflow:hidden;display:inline-block;vertical-align:middle;flex:0 0 56px}
 .spark{display:block;width:82px;height:26px}
 
 .expand{width:28px}
@@ -206,7 +280,7 @@ tbody tr:last-child td{border-bottom:none}
 }
 .expander:hover{color:var(--mint)}
 .expander[aria-expanded="true"]{transform:rotate(180deg);color:var(--mint)}
-tr.detail td{background:rgba(109,140,255,.045);padding:0;border-bottom:1px solid rgba(27,41,64,.55)}
+tr.detail td{background:var(--detail-bg);padding:0;border-bottom:1px solid var(--row-line)}
 tr.detail[hidden]{display:none}
 .detail-inner{padding:16px 18px;display:grid;gap:14px;grid-template-columns:1fr}
 @media(min-width:820px){.detail-inner{grid-template-columns:1.4fr 1fr}}
@@ -217,14 +291,14 @@ tr.detail[hidden]{display:none}
 
 /* --- الحالات -------------------------------------------------------------- */
 .state{padding:56px 20px;text-align:center}
-.state .ic{width:56px;height:56px;margin:0 auto 16px;border-radius:18px;display:grid;place-items:center;font-size:24px;background:#1a2438}
+.state .ic{width:56px;height:56px;margin:0 auto 16px;border-radius:18px;display:grid;place-items:center;font-size:24px;background:var(--sunk)}
 .state h3{margin:0 0 8px;font-size:16px}
 .state p{margin:0 auto;max-width:52ch;font-size:13px;color:var(--dim)}
-.state.error .ic{background:rgba(255,122,138,.13);color:var(--red)}
+.state.error .ic{background:var(--red-bg);color:var(--red)}
 .state.error h3{color:var(--red)}
 .state .btn{margin-top:18px}
 [hidden]{display:none !important}
-.spinner{width:16px;height:16px;border:2px solid rgba(38,227,162,.25);border-top-color:var(--mint);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:-3px;margin-inline-end:8px}
+.spinner{width:16px;height:16px;border:2px solid var(--mint-spin);border-top-color:var(--mint);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:-3px;margin-inline-end:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 footer{margin-top:22px;display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--dim)}
@@ -257,6 +331,12 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     <span id="statusText">جارٍ الاتصال…</span>
     <span class="sepdot" aria-hidden="true">•</span>
     <span id="countdown">—</span>
+    <span class="sepdot" aria-hidden="true">•</span>
+    <span class="lastcheck" id="lastCheck">لم يُتحقق بعد</span>
+    <button class="btn themebtn" id="themeToggle" type="button" aria-pressed="false"
+            aria-label="التبديل إلى الوضع النهاري" title="التبديل إلى الوضع النهاري">
+      <span aria-hidden="true" id="themeIcon">☀️</span><span id="themeLabel">نهاري</span>
+    </button>
   </div>
 </header>
 
@@ -402,9 +482,14 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
 (function () {
   "use strict";
 
-  var REFRESH_MS = 5 * 60 * 1000;      // نتحقق من بيانات جديدة كل 5 دقائق
-  var CYCLE_MS   = 60 * 60 * 1000;     // دورة الفحص ساعة
-  var STALE_MS   = 90 * 60 * 1000;     // بعد 90 دقيقة تعدّ البيانات قديمة
+  /* ── ضبط التحديث المستمر ─────────────────────────────────────────────────
+     سير العمل يعمل عند الدقائق 5 و25 و45 من كل ساعة (توقيت UTC)، فتصل البيانات
+     الجديدة خلال ≤20 دقيقة من إغلاق أي شمعة بدل ساعة كاملة. */
+  var POLL_MS     = 60 * 1000;         // نتحقق كل دقيقة ما دامت النافذة مرئية
+  var POLL_MAX_MS = 10 * 60 * 1000;    // أقصى تباعد عند تكرار الفشل (تراجع أُسّي)
+  var CRON_MIN    = [5, 25, 45];       // دقائق تشغيل سير العمل بالتوقيت العالمي
+  var GRACE_MS    = 7 * 60 * 1000;     // مهلة التشغيل والنشر قبل عدّ الدورة متأخرة
+  var DEAD_MS     = 55 * 60 * 1000;    // بعدها يُرجّح فعلاً أن سير العمل متوقف
 
   var data = null;
   var view = "entries";
@@ -767,17 +852,59 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     }
   }
 
-  function statusFromAge(ageMs) {
+  /* بداية الساعة الحالية بالتوقيت العالمي = أحدث شمعة مغلقة يفترض أن تكون محلَّلة */
+  function floorHour(ms) {
+    var d = new Date(ms);
+    return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), 0, 0, 0);
+  }
+
+  /* أول فتحة تشغيل لسير العمل بعد لحظة معيّنة */
+  function nextCron(ms) {
+    var d = new Date(ms), day = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    for (var i = 0; i < CRON_MIN.length; i++) {
+      var c = day + d.getUTCHours() * 3600000 + CRON_MIN[i] * 60000;
+      if (c > ms) return c;
+    }
+    return day + (d.getUTCHours() + 1) * 3600000 + CRON_MIN[0] * 60000;
+  }
+
+  function mins(ms) { return Math.max(0, Math.round(ms / 60000)); }
+
+  /* يحدّد صحة البيانات من سؤالين منفصلين بدل عمر واحد غامض:
+       1) هل الشمعة المحلَّلة هي أحدث شمعة مغلقة؟          ← دقة المحتوى
+       2) كم تأخرنا عن أول فتحة تشغيل بعد إغلاقها؟          ← صحة سير العمل
+     وكان القياس السابق يُحسب من as_of (وقت إغلاق الشمعة) لا من وقت الفحص
+     الفعلي، فيُعلن "البيانات قديمة" في كل دورة تقريباً رغم أن النظام سليم. */
+  function healthState(now, asOf) {
+    var latestCandle = floorHour(now);
+    /* كم شمعة ساعة مغلقة فاتتنا؟ هذا هو المقياس الحاسم — لا "كم دقيقة مضت".
+       (اعتماد التأخير وحده جعل حالة "متوقف" مستحيلة رياضياً: أقصى تأخير داخل
+       الساعة الواحدة ~48 دقيقة وهو دون العتبة دائماً.) */
+    var behind = Math.round((latestCandle - asOf) / 3600000);
+    if (behind <= 0) return { level: "live", overdue: 0, latest: true, behind: 0 };
+    var overdue = Math.max(0, now - (nextCron(latestCandle - 1) + GRACE_MS));
+    if (behind >= 2 || overdue > DEAD_MS) {
+      return { level: "dead", overdue: overdue, latest: false, behind: behind };
+    }
+    if (overdue > 0) return { level: "stale", overdue: overdue, latest: false, behind: behind };
+    return { level: "live", overdue: 0, latest: false, behind: behind };
+  }
+
+  function statusFrom(state, genAge) {
     var dot = $("statusDot"), txt = $("statusText");
-    if (ageMs > STALE_MS) {
+    if (state.level === "dead") {
       dot.className = "dot dead";
-      txt.textContent = "البيانات قديمة — قد يكون سير العمل متوقفاً";
-    } else if (ageMs > CYCLE_MS) {
+      txt.textContent = "البيانات قديمة — فاتتنا " + state.behind +
+        (state.behind === 1 ? " شمعة ساعة" : " شموع ساعة") +
+        " وسير العمل متأخر " + mins(genAge) + " دقيقة، قد يكون متوقفاً";
+    } else if (state.level === "stale") {
       dot.className = "dot stale";
-      txt.textContent = "البيانات متأخرة عن الدورة الأخيرة";
+      txt.textContent = "الدورة متأخرة " + mins(state.overdue) + " دقيقة — يُعاد المحاولة تلقائياً";
     } else {
       dot.className = "dot live";
-      txt.textContent = "النظام يعمل";
+      txt.textContent = state.latest
+        ? "النظام يعمل — بيانات محدَّثة"
+        : "النظام يعمل — بانتظار شمعة الساعة الجديدة";
     }
   }
 
@@ -788,40 +915,68 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
     this.textContent = open ? "إخفاء الشروط" : "إظهار الشروط";
   });
 
-  var nextCycle = null;
+  var backoff = POLL_MS, lastCheckAt = null, lastSig = null;
+
   function tick() {
     if (!data) return;
+    var now = Date.now();
     var ref = new Date(data.as_of || data.timestamp || data.generated_at).getTime();
+    var gen = new Date(data.generated_at || data.timestamp || data.as_of).getTime();
     if (isNaN(ref)) { $("countdown").textContent = "—"; return; }
-    var ageMs = Date.now() - ref;
-    statusFromAge(ageMs);
-    var next = ref + CYCLE_MS;
-    nextCycle = next;
-    var diff = next - Date.now();
-    if (diff <= 0) {
-      $("countdown").textContent = "الدورة الجديدة مستحقة — يُتحقق تلقائياً";
-    } else {
-      var m = Math.floor(diff / 60000);
-      $("countdown").textContent = m >= 60
+    if (isNaN(gen)) gen = ref;
+
+    var state = healthState(now, ref);
+    statusFrom(state, now - gen);
+
+    /* العدّاد يشير إلى فتحة التشغيل الفعلية القادمة، لا إلى "as_of + ساعة"
+       التي كانت تجعل الرسالة معلَّقة على "الدورة الجديدة مستحقة" أبداً. */
+    var diff = nextCron(now) - now;
+    var m = Math.floor(diff / 60000);
+    $("countdown").textContent = state.overdue > 0
+      ? "التحقق القادم بعد " + Math.max(1, Math.round(backoff / 1000)) + " ثانية"
+      : (m >= 60
         ? "الفحص القادم بعد " + Math.floor(m / 60) + " س " + (m % 60) + " د"
-        : "الفحص القادم بعد " + m + " دقيقة";
-    }
-    var upd = new Date(ref);
-    $("statUpdated").textContent = upd.toLocaleString(AR, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+        : "الفحص القادم بعد " + m + " دقيقة");
+
+    var tf = { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" };
+    $("statUpdated").textContent = new Date(gen).toLocaleString(AR, tf);
+    renderLastCheck(now);
+  }
+
+  /* "آخر تحقق" يثبت أن الصفحة نفسها حيّة حتى حين لا تتغيّر البيانات —
+     وهذا ما كان ينقص المستخدم ليميّز بين "الصفحة جامدة" و"لا جديد بعد". */
+  function renderLastCheck(now) {
+    var el = $("lastCheck");
+    if (!el) return;
+    if (!lastCheckAt) { el.textContent = "لم يُتحقق بعد"; return; }
+    var s = Math.max(0, Math.round((now - lastCheckAt) / 1000));
+    el.textContent = s < 5 ? "آخر تحقق: الآن"
+      : s < 60 ? "آخر تحقق: قبل " + s + " ثانية"
+      : "آخر تحقق: قبل " + Math.round(s / 60) + " دقيقة";
   }
 
   function load(isManual) {
-    if (isManual) { $("refresh").disabled = true; }
+    if (isManual) { $("refresh").disabled = true; backoff = POLL_MS; }
     return fetch("./signals.json?cb=" + Date.now(), { cache: "no-store" })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
       .then(function (d) {
         if (!d || typeof d !== "object") throw new Error("ملف غير صالح");
         var firstLoad = !data;
+        /* لا نُعيد الرسم إلا إذا تغيّرت البيانات فعلاً: يحافظ على تركيز لوحة
+           المفاتيح وموضع التمرير، ويجنب المتصفح عملاً بلا فائدة كل دقيقة. */
+        var sig = (d.generated_at || "") + "|" + (d.as_of || "");
         data = d;
-        renderStats(); renderFilters(true); render(true); tick();
+        if (firstLoad || sig !== lastSig) {
+          lastSig = sig;
+          renderStats(); renderFilters(true); render(true);
+        }
+        tick();
         if (firstLoad) $("loading").hidden = true;
+        backoff = POLL_MS;                 // نجاح ⇒ أعد التباعد إلى دقيقة
       })
       .catch(function (err) {
+        backoff = Math.min(backoff * 2, POLL_MAX_MS);   // فشل ⇒ تباعد أُسّي
+        lastCheckAt = Date.now();
         if (!data) {
           $("loading").hidden = true;
           $("tablewrap").hidden = true;
@@ -831,13 +986,77 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
             "). قد يكون النشر جارياً أو أن الاتصال مقطوع.";
           $("statusDot").className = "dot dead";
           $("statusText").textContent = "تعذّر الاتصال بالبيانات";
+        } else if (!navigator.onLine) {
+          $("statusDot").className = "dot dead";
+          $("statusText").textContent = "لا يوجد اتصال بالإنترنت — تُعرض آخر بيانات متاحة";
         } else {
           $("statusDot").className = "dot stale";
-          $("statusText").textContent = "تعذّر التحديث — تُعرض آخر بيانات متاحة";
+          $("statusText").textContent = "تعذّر التحديث (" + err.message + ") — إعادة المحاولة بعد " +
+            Math.round(backoff / 1000) + " ثانية";
         }
       })
-      .then(function () { $("refresh").disabled = false; });
+      .then(function () {
+        lastCheckAt = Date.now();
+        $("refresh").disabled = false;
+        renderLastCheck(Date.now());
+        schedulePoll();                    // جدولة التحقق التالي دائماً
+      });
   }
+
+  /* الجدولة تتوقف والنافذة مخفية (توفير للشبكة والبطارية) وتستأنف فوراً عند الظهور */
+  var pollTimer = null;
+  function schedulePoll() {
+    clearTimeout(pollTimer);
+    if (typeof document !== "undefined" && document.hidden) return;
+    pollTimer = setTimeout(function () { load(false); }, backoff);
+  }
+
+  /* ---------- الوضع النهاري والليلي ---------- */
+  var THEME_KEY = "nebula-theme";
+  var mqLight = window.matchMedia ? window.matchMedia("(prefers-color-scheme: light)") : null;
+
+  function storedTheme() {
+    try {
+      var v = localStorage.getItem(THEME_KEY);
+      return (v === "light" || v === "dark") ? v : null;
+    } catch (e) { return null; }
+  }
+  function systemTheme() { return (mqLight && mqLight.matches) ? "light" : "dark"; }
+
+  function applyTheme(name, animate) {
+    var root = document.documentElement;
+    if (animate) {
+      root.classList.add("theming");
+      setTimeout(function () { root.classList.remove("theming"); }, 300);
+    }
+    root.setAttribute("data-theme", name);
+    var light = name === "light";
+    var meta = $("themeColor");
+    if (meta) meta.setAttribute("content", light ? "#eef1f8" : "#070b15");
+    var btn = $("themeToggle");
+    if (btn) {
+      btn.setAttribute("aria-pressed", String(light));
+      var label = light ? "التبديل إلى الوضع الليلي" : "التبديل إلى الوضع النهاري";
+      btn.setAttribute("aria-label", label);
+      btn.title = label;
+      $("themeIcon").textContent = light ? "🌙" : "☀️";
+      $("themeLabel").textContent = light ? "ليلي" : "نهاري";
+    }
+  }
+
+  $("themeToggle").addEventListener("click", function () {
+    var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    applyTheme(next, true);
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* وضع خاص — يبقى التبديل لهذه الجلسة */ }
+  });
+
+  /* من لم يختر صراحةً يتبع نظامه، ويتحدّث فوراً لو غيّر تفضيله أثناء التصفح */
+  if (mqLight) {
+    var onScheme = function () { if (!storedTheme()) applyTheme(systemTheme(), true); };
+    if (mqLight.addEventListener) mqLight.addEventListener("change", onScheme);
+    else if (mqLight.addListener) mqLight.addListener(onScheme);
+  }
+  applyTheme(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark", false);
 
   /* ---------- الأحداث ---------- */
   document.querySelector(".tabs").addEventListener("click", function (e) {
@@ -900,8 +1119,22 @@ footer .links{display:flex;gap:16px;flex-wrap:wrap}
   renderHead(true);
   renderFilters(true);
   load(false);
-  setInterval(function () { load(false); }, REFRESH_MS);
   setInterval(tick, 1000);
+
+  /* عند العودة إلى التبويب يُتحقق فوراً بدل انتظار نهاية التباعد */
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { clearTimeout(pollTimer); return; }
+    backoff = POLL_MS;
+    load(false);
+  });
+  window.addEventListener("online", function () { backoff = POLL_MS; load(false); });
+  window.addEventListener("offline", function () {
+    clearTimeout(pollTimer);
+    if (data) {
+      $("statusDot").className = "dot dead";
+      $("statusText").textContent = "انقطع الاتصال — تُعرض آخر بيانات متاحة";
+    }
+  });
 })();
 </script>
 </body>

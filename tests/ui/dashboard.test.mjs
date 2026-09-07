@@ -68,8 +68,14 @@ function check(name, cond, extra = "") {
   check("عدّاد تحذيرات الخروج", txt("statExits").trim().length > 0, txt("statExits"));
   check("آخر فحص مُعبّأ", txt("statUpdated").trim() !== "—", txt("statUpdated"));
   check("معلومات المخطط في التذييل", /مخطط v2/.test(txt("metaInfo")), txt("metaInfo"));
-  check("العدّاد التنازلي محسوب", /الفحص القادم/.test(txt("countdown")), txt("countdown"));
-  check("الحالة = النظام يعمل", txt("statusText").includes("يعمل"), txt("statusText"));
+  check("العدّاد محسوب لا عالق على «—»",
+    /الفحص القادم|التحقق القادم/.test(txt("countdown")), txt("countdown"));
+  check("الحالة محسوبة لا عالقة على «جارٍ الاتصال»",
+    /النظام يعمل|متأخرة|قديمة|تعذّر/.test(txt("statusText")) && !/جارٍ الاتصال/.test(txt("statusText")),
+    txt("statusText"));
+  check("«آخر تحقق» معروض", /آخر تحقق/.test(txt("lastCheck")), txt("lastCheck"));
+  check("لا رسالة «الدورة الجديدة مستحقة» الغامضة",
+    !/مستحقة/.test(txt("countdown")), txt("countdown"));
 
   console.log("\n=== 2. محتويات الجدول ===");
   const firstRow = $("tbody tr[data-row]");
@@ -305,6 +311,128 @@ function check(name, cond, extra = "") {
   check("الإحصاءات ما زالت تُعبّأ",
     docLegacy.getElementById("statScanned").textContent.trim() === String(legacy.scanned));
   domLegacy.window.close();
+
+  /* ---------- مُقلِّد وقت: يجمّد الساعة داخل صفحة jsdom ---------- */
+  // الحالة تُحسب من الزمن، فاختبارها يتطلب التحكّم بالوقت لا الاعتماد على لحظة التشغيل.
+  async function bootFrozen(nowMs, mutate, preset) {
+    const errs = [];
+    const payload = JSON.parse(JSON.stringify(signals));
+    if (mutate) mutate(payload);
+    const d = new JSDOM(html, {
+      runScripts: "dangerously", pretendToBeVisual: true, url: "http://localhost:8000/",
+      beforeParse(w) {
+        const Real = w.Date, FIXED = nowMs;
+        function FakeDate(...a) {
+          if (!(this instanceof FakeDate)) return new Real(FIXED).toString();
+          return a.length === 0 ? new Real(FIXED) : new Real(...a);
+        }
+        FakeDate.prototype = Real.prototype;
+        FakeDate.now = () => FIXED;
+        FakeDate.UTC = Real.UTC.bind(Real);
+        FakeDate.parse = Real.parse.bind(Real);
+        w.Date = FakeDate;
+        w.fetch = (u) => String(u).includes("signals.json")
+          ? Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(payload) })
+          : Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve({}) });
+        w.CSS = w.CSS || {}; w.CSS.escape = (s) => String(s).replace(/[^a-zA-Z0-9_-]/g, (c) => "\\" + c);
+        if (preset) { try { w.localStorage.setItem("nebula-theme", preset); } catch (e) {} }
+        w.addEventListener("error", (e) => errs.push(String(e.error?.stack || e.message)));
+      },
+    });
+    await new Promise((r) => setTimeout(r, 900));
+    return { doc: d.window.document, win: d.window, errs };
+  }
+
+  const H = 3600000;
+  // 01:30 UTC ⇒ أحدث شمعة مغلقة 01:00، وأول فتحة تشغيل 01:05 + مهلة 7د = 01:12
+  const T_0130 = Date.UTC(2026, 8, 7, 1, 30, 0);
+  const T_0108 = Date.UTC(2026, 8, 7, 1, 8, 0);
+  const CANDLE_0100 = new Date(Date.UTC(2026, 8, 7, 1, 0, 0)).toISOString();
+  const CANDLE_0000 = new Date(Date.UTC(2026, 8, 7, 0, 0, 0)).toISOString();
+  const CANDLE_2300 = new Date(Date.UTC(2026, 8, 6, 23, 0, 0)).toISOString();
+
+  console.log("\n=== 13. حالات طزاجة البيانات (ساعة مجمّدة) ===");
+  {
+    const { doc, errs } = await bootFrozen(T_0130, (d) => { d.as_of = CANDLE_0100; d.generated_at = CANDLE_0100; });
+    const st = doc.getElementById("statusText").textContent;
+    check("شمعة الساعة ذاتها ⇒ النظام يعمل", /النظام يعمل — بيانات محدَّثة/.test(st), st);
+    check("النقطة خضراء", doc.getElementById("statusDot").className.includes("live"));
+    check("العدّاد لفتحة التشغيل القادمة", /الفحص القادم/.test(doc.getElementById("countdown").textContent),
+      doc.getElementById("countdown").textContent);
+    check("بلا أخطاء", errs.length === 0, errs.slice(0, 2).join(" | "));
+    doc.defaultView.close();
+  }
+  {
+    // قبل انتهاء المهلة (01:08 < 01:12): طبيعي تماماً، لا إنذار
+    const { doc } = await bootFrozen(T_0108, (d) => { d.as_of = CANDLE_0000; d.generated_at = CANDLE_0000; });
+    const st = doc.getElementById("statusText").textContent;
+    check("ضمن مهلة النشر ⇒ لا إنذار كاذب", /بانتظار شمعة الساعة الجديدة/.test(st), st);
+    check("النقطة تبقى خضراء", doc.getElementById("statusDot").className.includes("live"));
+    doc.defaultView.close();
+  }
+  {
+    const { doc } = await bootFrozen(T_0130, (d) => { d.as_of = CANDLE_0000; d.generated_at = CANDLE_0000; });
+    const st = doc.getElementById("statusText").textContent;
+    const cd = doc.getElementById("countdown").textContent;
+    check("شمعة فائتة بعد المهلة ⇒ متأخرة", /الدورة متأخرة 18 دقيقة/.test(st), st);
+    check("النقطة كهرمانية", doc.getElementById("statusDot").className.includes("stale"));
+    check("العدّاد يتحول إلى إعادة المحاولة", /التحقق القادم بعد \d+ ثانية/.test(cd), cd);
+    doc.defaultView.close();
+  }
+  {
+    const { doc } = await bootFrozen(T_0130, (d) => { d.as_of = CANDLE_2300; d.generated_at = CANDLE_2300; });
+    const st = doc.getElementById("statusText").textContent;
+    check("شمعتان فائتتان ⇒ قديمة/متوقف", /البيانات قديمة/.test(st) && /فاتتنا 2 شموع ساعة/.test(st), st);
+    check("النقطة حمراء", doc.getElementById("statusDot").className.includes("dead"));
+    doc.defaultView.close();
+  }
+
+  console.log("\n=== 14. الوضع النهاري والليلي ===");
+  {
+    const { doc, win, errs } = await bootFrozen(T_0130, null, null);
+    const root = doc.documentElement, btn = doc.getElementById("themeToggle");
+    check("يقلع بوضع محدّد لا فارغ", ["dark", "light"].includes(root.getAttribute("data-theme")),
+      root.getAttribute("data-theme"));
+    check("بلا أخطاء إقلاع", errs.length === 0, errs.slice(0, 2).join(" | "));
+    check("الزر موجود ومعنون", !!btn && /الوضع (النهاري|الليلي)/.test(btn.getAttribute("aria-label")),
+      btn && btn.getAttribute("aria-label"));
+    check("الزر يملك aria-pressed", btn.hasAttribute("aria-pressed"));
+    const before = root.getAttribute("data-theme");
+    btn.focus(); btn.click();
+    const after = root.getAttribute("data-theme");
+    check("النقر يقلب الوضع", before !== after, `${before} → ${after}`);
+    check("aria-pressed يتحدّث", btn.getAttribute("aria-pressed") === String(after === "light"));
+    check("التسمية تتحدّث", /ليلي|نهاري/.test(doc.getElementById("themeLabel").textContent),
+      doc.getElementById("themeLabel").textContent);
+    check("الأيقونة تتحدّث", ["🌙", "☀️"].includes(doc.getElementById("themeIcon").textContent),
+      doc.getElementById("themeIcon").textContent);
+    check("theme-color يتحدّث", ["#eef1f8", "#070b15"].includes(doc.getElementById("themeColor").getAttribute("content")),
+      doc.getElementById("themeColor").getAttribute("content"));
+    check("الاختيار يُحفظ", win.localStorage.getItem("nebula-theme") === after,
+      win.localStorage.getItem("nebula-theme"));
+    check("التركيز يبقى على الزر بعد التقليب", doc.activeElement === btn,
+      doc.activeElement && (doc.activeElement.id || doc.activeElement.tagName));
+    btn.click();
+    check("النقر ثانية يعيد الوضع", root.getAttribute("data-theme") === before,
+      root.getAttribute("data-theme"));
+    doc.defaultView.close();
+  }
+  {
+    // اختيار محفوظ ⇒ يُحترم عند الإقلاع (بلا وميض)
+    const { doc, win } = await bootFrozen(T_0130, null, "light");
+    check("الاختيار المحفوظ يُحترم نهاري", doc.documentElement.getAttribute("data-theme") === "light",
+      doc.documentElement.getAttribute("data-theme"));
+    check("الزر يعكس المحفوظ", doc.getElementById("themeToggle").getAttribute("aria-pressed") === "true");
+    check("theme-color نهاري", doc.getElementById("themeColor").getAttribute("content") === "#eef1f8");
+    doc.defaultView.close();
+  }
+  {
+    const { doc } = await bootFrozen(T_0130, null, "dark");
+    check("الاختيار المحفوظ يُحترم ليلي", doc.documentElement.getAttribute("data-theme") === "dark");
+    check("زر النهاري معروض", /نهاري/.test(doc.getElementById("themeLabel").textContent),
+      doc.getElementById("themeLabel").textContent);
+    doc.defaultView.close();
+  }
 
   const failed = results.filter(r => !r.ok);
   console.log(`\n${"=".repeat(58)}`);
