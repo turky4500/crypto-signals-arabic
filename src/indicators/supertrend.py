@@ -1,4 +1,13 @@
-"""Supertrend — الحساب القياسي للمؤشر (Upper/Lower عبر ATR Factor/Down)."""
+"""Supertrend — النقل القياسي الصحيح وفق pandas-ta (الانعكاس من الباند المقابل).
+
+المنطق القياسي:
+- ub = hl2 + factor*ATR (باند علوي أساسي), lb = hl2 - factor*ATR (باند سفلي أساسي).
+- إغلاق فوق ub السابق -> اتجاه صاعد (+1) ويتبع الباند السفلي.
+- إغلاق تحت lb السابق -> اتجاه هابط (-1) ويتبع الباند العلوي.
+- وإلا نُبقي الاتجاه: مع الصعود يربط lb للأعلى (max)، ومع الهبوط يربط ub للأسفل (min).
+- supertrend = الباند المتبع للاتجاه الحالي.
+- BUY عند الانتقال من -1 إلى +1 فقط (انتهاء الهبوط ودخول اختراق صاعد).
+"""
 
 import numpy as np
 
@@ -7,14 +16,7 @@ from .helpers import _as_arr
 
 
 def compute(high, low, close, atr_period: int = 10, factor: float = 3.0):
-    """إرجاع قيم supertrend + direction + إشارات BUY (انعكاس من -1 إلى +1).
-
-    المنطق القياسي:
-    - fup = الباند العلوي المتبع (hl2 + factor*ATR) يهبط تدريجيًا مع الاتجاه الهابط.
-    - fdn = الباند السفلي المتبع (hl2 - factor*ATR) يرتفع تدريجيًا مع الاتجاه الصاعد.
-    - supertrend = fup في الاتجاه الهابط (عند close <= fup) وإلا fdn.
-    - BUY عند الانتقال من -1 إلى +1 فقط.
-    """
+    """إرجاع قيم supertrend + direction + إشارات BUY (انعكاس من -1 إلى +1)."""
     h = _as_arr(high)
     l = _as_arr(low)
     c = _as_arr(close)
@@ -22,41 +24,33 @@ def compute(high, low, close, atr_period: int = 10, factor: float = 3.0):
 
     atr_v = atr_series(h, l, c, atr_period)
     hl2 = (h + l) / 2.0
+    ub = hl2 + factor * atr_v
+    lb = hl2 - factor * atr_v
 
-    fup = np.full(n, np.nan)
-    fdn = np.full(n, np.nan)
     st = np.full(n, np.nan)
-    direction = np.zeros(n, dtype=int)
+    direction = np.ones(n, dtype=int)
 
-    for i in range(n):
-        if np.isnan(atr_v[i]):
+    for i in range(1, n):
+        u_prev = ub[i - 1]
+        l_prev = lb[i - 1]
+        if np.isnan(u_prev) or np.isnan(l_prev):
             continue
-        upper = hl2[i] + factor * atr_v[i]
-        lower = hl2[i] - factor * atr_v[i]
-
-        prev_fup = fup[i - 1]
-        prev_fdn = fdn[i - 1]
-
-        if np.isnan(prev_fup):
-            fup[i] = upper
+        if c[i] > u_prev:
+            direction[i] = 1
+        elif c[i] < l_prev:
+            direction[i] = -1
         else:
-            fup[i] = upper if (upper < prev_fup or c[i - 1] < prev_fup) else prev_fup
+            direction[i] = direction[i - 1]
+            if direction[i] > 0 and lb[i] < lb[i - 1]:
+                lb[i] = lb[i - 1]
+            if direction[i] < 0 and ub[i] > ub[i - 1]:
+                ub[i] = ub[i - 1]
 
-        if np.isnan(prev_fdn):
-            fdn[i] = lower
-        else:
-            fdn[i] = lower if (lower > prev_fdn or c[i - 1] > prev_fdn) else prev_fdn
+        st[i] = lb[i] if direction[i] > 0 else ub[i]
 
-        if np.isnan(st[i - 1]):
-            st[i] = fup[i] if c[i] <= fup[i] else fdn[i]
-        elif st[i - 1] == fup[i - 1]:
-            st[i] = fup[i] if c[i] <= fup[i] else fdn[i]
-        else:
-            st[i] = fdn[i] if c[i] >= fdn[i] else fup[i]
+    n_warm = min(max(atr_period, 0), n)
+    direction[:n_warm] = 0
 
-        direction[i] = -1 if st[i] == fup[i] else 1
-
-    # إشارة شراء: الانتقال من الاتجاه الهابط إلى الصاعد
     buy = np.zeros(n, dtype=bool)
     for i in range(1, n):
         if direction[i] == 1 and direction[i - 1] == -1:
