@@ -2,8 +2,8 @@ name: Crypto Monitor
 
 on:
   schedule:
-    # كل ساعة عند الدقيقة 3 (بعد إغلاق شمعة 1H بـ 3 دقائق لضمان ثبات البيانات)
-    - cron: '3 * * * *'
+    # كل ساعة عند الدقيقة 5 (UTC) بعد إغلاق شمعة 1H لضمان ثبات البيانات
+    - cron: '5 * * * *'
   workflow_dispatch:
     inputs:
       limit_symbols:
