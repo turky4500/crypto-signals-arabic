@@ -19,6 +19,7 @@ class WhatsAppClient:
         api_url: str,
         token: str,
         receiver: str,
+        receivers: list[str] | None = None,
         timeout: float = 25.0,
         max_retries: int = 3,
         backoff: float = 3.0,
@@ -28,14 +29,35 @@ class WhatsAppClient:
         self.api_url = api_url
         self.token = token
         self.receiver = receiver
+        self.receivers = list(receivers or [])
         self.timeout = timeout
         self.max_retries = max_retries
         self.backoff = backoff
         self.session = requests.Session()
 
     def send(self, message: str) -> dict:
-        """إرسال رسالة مع Retry محدود — يمنع الإرسال المتكرر لنفس الفشل."""
-        payload = {"to": self.receiver, "message": message}
+        """إرسال رسالة لكل رقم مسجل (رقم واحد أو أكثر). يستمر في المحاولة لبقية الأرقام حتى لو فشل أحدها."""
+        targets = list(self.receivers) if self.receivers else [self.receiver]
+        results = [self._send_one(t, message) for t in targets]
+        ok = any(r.get("ok") for r in results)
+        summary = {
+            "ok": ok,
+            "attempts": max((r.get("attempts", 0) for r in results), default=self.max_retries),
+            "sent_count": sum(1 for r in results if r.get("ok")),
+            "total": len(targets),
+        }
+        failures = [r["error"] for r in results if not r.get("ok") and r.get("error")]
+        if failures:
+            summary["error"] = "; ".join(failures)
+        first_ok = next((r for r in results if r.get("ok")), None)
+        if first_ok:
+            summary["code"] = first_ok.get("code")
+            summary["body"] = first_ok.get("body")
+        return summary
+
+    def _send_one(self, receiver: str, message: str) -> dict:
+        """إرسال رسالة لرقم واحد مع Retry محدود — يمنع الإرسال المتكرر لنفس الفشل."""
+        payload = {"to": receiver, "message": message}
         headers = {
             "Authorization": f"Bearer {self.token}",
             "Content-Type": "application/json",

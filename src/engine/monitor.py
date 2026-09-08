@@ -23,6 +23,25 @@ logger = logging.getLogger("monitor")
 MIN_HISTORY = 100  # حد أدنى من الشموع المغلقة لإجراء الحساب
 
 
+def _load_receivers(data_dir: str) -> list:
+    """قراءة أرقام الاستقبال من data/receivers.json (أرقام مفردة أو {receivers:[...]})."""
+    path = os.path.join(data_dir, "receivers.json")
+    try:
+        data = load_json(path, None) or []
+    except Exception:
+        logger.warning("تعذر قراءة receivers.json: %s", path)
+        return []
+    if isinstance(data, dict):
+        data = data.get("receivers") or []
+    out = []
+    for item in data:
+        if isinstance(item, str) and item.strip():
+            out.append(item.strip())
+        elif isinstance(item, dict) and item.get("phone"):
+            out.append(str(item["phone"]).strip())
+    return out
+
+
 def _empty_status():
     return {
         "binance_connected": False,
@@ -66,10 +85,13 @@ class Monitor:
             return None
         url = env.get("WHATSAPP_API_URL")
         token = env.get("WHATSAPP_TOKEN")
-        recv = env.get("WHATSAPP_RECEIVER")
-        if url and token and recv:
-            return WhatsAppClient(url, token, recv)
-        return None
+        if not (url and token):
+            return None
+        receivers = _load_receivers(self.data_dir)
+        primary = receivers[0] if receivers else env.get("WHATSAPP_RECEIVER")
+        if not primary:
+            return None
+        return WhatsAppClient(url, token, primary, receivers=receivers)
 
     # ------------------------------------------------------------------ #
     def _build_row(self, symbol_info, candle, st_res, ai_res, price_str, entry_values) -> dict:

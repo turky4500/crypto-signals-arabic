@@ -82,3 +82,32 @@ def test_missing_config_raises():
         assert False, "يجب أن يُرمى خطأ"
     except Exception as exc:
         assert "ناقصة" in str(exc)
+
+
+def test_multiple_receivers_each_gets_message(monkeypatch):
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    sess = FakeSession([FakeResponse(200, "ok"), FakeResponse(200, "ok")])
+    c = WhatsAppClient(
+        api_url="https://x/api/v1/send", token="tok", receiver="966533170332",
+        receivers=["966533170332", "966512345678"], max_retries=3, backoff=0.001,
+    )
+    c.session = sess
+    res = c.send("msg")
+    assert res["ok"] is True
+    assert res["sent_count"] == 2
+    assert res["total"] == 2
+    assert [json_["to"] for _, json_, _ in sess.calls] == ["966533170332", "966512345678"]
+
+
+def test_partial_failure_keeps_ok_and_reports_error(monkeypatch):
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    sess = FakeSession([FakeResponse(500, "err"), FakeResponse(500, "err"), FakeResponse(200, "ok")])
+    c = WhatsAppClient(
+        api_url="https://x/api/v1/send", token="tok", receiver="966533170332",
+        receivers=["966533170332", "966512345678"], max_retries=2, backoff=0.001,
+    )
+    c.session = sess
+    res = c.send("msg")
+    assert res["ok"] is True
+    assert res["sent_count"] == 1
+    assert "HTTP 500" in res["error"]
