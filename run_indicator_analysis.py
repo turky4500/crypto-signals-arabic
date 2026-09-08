@@ -48,6 +48,7 @@ def run_indicator_analysis(
 
     يُرجع ملخصاً: {symbol: {indicator_name: result, ...}, ...}
     """
+    from indicators import enrich
     from indicators_abu_rashid import analyze_abu_rashid
     from indicators_adaptive import analyze_adaptive
     from indicators_confluence import analyze_confluence
@@ -82,7 +83,7 @@ def run_indicator_analysis(
                     from scanner import prepare_frame
 
                     frame = prepare_frame(raw, drop_live_candle=True)
-                    tf_data[tf] = _rename_columns(frame)
+                    tf_data[tf] = enrich(_rename_columns(frame))
 
             if "4h" not in tf_data or len(tf_data["4h"]) < 50:
                 continue
