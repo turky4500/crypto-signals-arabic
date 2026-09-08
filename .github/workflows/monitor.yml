@@ -17,6 +17,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: monitor
@@ -58,3 +60,19 @@ jobs:
           git add data/
           git diff --cached --quiet && echo "no data changes" || git commit -m "chore(data): تحديث بيانات المراقبة والإشارات"
           git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:main
+
+      - name: Assemble static site (web + data)
+        run: |
+          mkdir -p _site
+          cp -r web/* _site/
+          mkdir -p _site/data
+          if [ -d data ]; then cp -r data/* _site/data/; fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
