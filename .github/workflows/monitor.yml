@@ -44,8 +44,8 @@ jobs:
       - name: Run monitor
         env:
           WHATSAPP_API_URL: ${{ secrets.WHATSAPP_API_URL }}
-          WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_TOKEN }}
-          WHATSAPP_RECEIVER: ${{ secrets.WHATSAPP_RECEIVER }}
+          WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_API_TOKEN }}
+          WHATSAPP_RECEIVER: ${{ secrets.WHATSAPP_TO }}
           LIMIT_SYMBOLS: ${{ inputs.limit_symbols }}
           NO_WHATSAPP: ${{ inputs.no_whatsapp }}
           RUN_ID: ${{ github.run_number }}
