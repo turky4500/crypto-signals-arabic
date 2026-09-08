@@ -6,7 +6,7 @@
 import json
 import os
 
-from src.engine.monitor import Monitor
+from src.engine.monitor import Monitor, _load_receivers
 
 # ------------------------- Fakes ------------------------- #
 class FakeBinance:
@@ -169,3 +169,20 @@ def test_stats_and_status_files(tmp_path):
     assert status["whatsapp_connected"] is False  # بدون بيانات env
     assert status["run_id"] == "42"
     assert status["last_update"] is not None
+
+
+def test_receivers_read_from_txt(tmp_path):
+    (tmp_path / "receivers.txt").write_text(
+        "\n966533170332\n  966512345678  \n# تعليق لا يُقرأ\n\n  \n",
+        encoding="utf-8",
+    )
+    assert _load_receivers(str(tmp_path)) == ["966533170332", "966512345678"]
+
+
+def test_receivers_fallback_to_json(tmp_path):
+    (tmp_path / "receivers.json").write_text('["966511122233"]', encoding="utf-8")
+    assert _load_receivers(str(tmp_path)) == ["966511122233"]
+
+
+def test_receivers_empty_returns_list(tmp_path):
+    assert _load_receivers(str(tmp_path)) == []

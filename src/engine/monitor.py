@@ -24,7 +24,23 @@ MIN_HISTORY = 100  # حد أدنى من الشموع المغلقة لإجراء
 
 
 def _load_receivers(data_dir: str) -> list:
-    """قراءة أرقام الاستقبال من data/receivers.json (أرقام مفردة أو {receivers:[...]})."""
+    """قراءة أرقام الاستقبال من data/receivers.txt — كل رقم في سطر.
+    يتجاهل الأسطر الفارغة، المسافات، وأي سطر يبدأ بـ # (تعليق).
+    ارتجاعًا: صيغة receivers.json القديمة إن وُجدت."""
+    txt = os.path.join(data_dir, "receivers.txt")
+    if os.path.exists(txt):
+        out = []
+        try:
+            with open(txt, "r", encoding="utf-8") as fh:
+                for line in fh:
+                    line = line.strip()
+                    if not line or line.startswith("#"):
+                        continue
+                    out.append(line)
+        except Exception:
+            logger.warning("تعذر قراءة receivers.txt: %s", txt)
+        return out
+
     path = os.path.join(data_dir, "receivers.json")
     try:
         data = load_json(path, None) or []
