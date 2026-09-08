@@ -504,13 +504,20 @@ class WhatsAppNotifier:
 # --------------------------------------------------------------------------------------
 
 
+def _is_abu_rashid(signal: dict[str, Any]) -> bool:
+    return "ABU_RASHID" in (signal.get("strategies") or [])
+
+
 def filter_recent(
     qualified: list[tuple[dict[str, Any], GateVerdict]],
     alert_log: Sequence[dict[str, Any]],
     cfg: AlertConfig,
     now: datetime,
 ) -> list[tuple[dict[str, Any], GateVerdict]]:
-    """يستبعد الأزواج التي أُرسل تنبيه عنها خلال فترة التبريد."""
+    """يستبعد الأزواج التي أُرسل تنبيه عنها خلال فترة التبريد.
+
+    إشارات ابو راشد معفاة من التبريد والحد الأقصى: كل إشارة شراء تُرسل مباشرة.
+    """
     cutoff = now - timedelta(hours=cfg.cooldown_hours)
     recent: set[str] = set()
     for entry in alert_log:
@@ -526,11 +533,12 @@ def filter_recent(
         except ValueError:
             continue
 
-    kept = [(s, v) for s, v in qualified if s["symbol"] not in recent]
+    ar_kept = [(s, v) for s, v in qualified if _is_abu_rashid(s)]
+    kept = ar_kept + [(s, v) for s, v in qualified if not _is_abu_rashid(s) and s["symbol"] not in recent]
     dropped = len(qualified) - len(kept)
     if dropped:
         log.info("استُبعد %d زوجاً أُرسل تنبيه عنه خلال %d ساعة", dropped, cfg.cooldown_hours)
-    return kept[: cfg.max_per_cycle]
+    return kept[: cfg.max_per_cycle + len(ar_kept)]
 
 
 # --------------------------------------------------------------------------------------

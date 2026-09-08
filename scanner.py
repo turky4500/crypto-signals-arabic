@@ -941,11 +941,17 @@ def build_payload(
     entries = [s for s in signals if s["side"] == "buy"]
     exits = [s for s in signals if s["side"] == "exit"]
 
+    # إشارات ابو راشد معفاة من شروط المؤشرات الأخرى — تمر كما هي.
+    ar_entries = [s for s in entries if "ABU_RASHID" in (s.get("strategies") or [])]
+    other_entries = [s for s in entries if "ABU_RASHID" not in (s.get("strategies") or [])]
+
     if cfg.min_confirmations > 1:
-        entries = [s for s in entries if len(s["strategies"]) >= cfg.min_confirmations]
+        other_entries = [s for s in other_entries if len(s["strategies"]) >= cfg.min_confirmations]
     if cfg.require_strategy:
         wanted = cfg.require_strategy.upper()
-        entries = [s for s in entries if wanted in s["strategies"]]
+        other_entries = [s for s in other_entries if wanted in s["strategies"]]
+
+    entries = other_entries + ar_entries
 
     entries.sort(key=lambda s: (-s["score"], -s["volume_ratio"], s["symbol"]))
     exits.sort(key=lambda s: (-s["score"], s["symbol"]))
@@ -961,7 +967,7 @@ def build_payload(
         "scanned": scanned,
         "candidate_pairs": candidates,
         "failed_pairs": len(failures),
-        "signals": entries[:top],
+        "signals": ar_entries + [e for e in entries[: top + len(ar_entries)] if e not in ar_entries],
         "exits": exits[:top],
         "stats": {
             "total_entries": len(entries),
