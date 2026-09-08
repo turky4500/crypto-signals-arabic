@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الإعدادات</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="logo">⚙️</span>
+        <div>
+          <h1>الإعدادات</h1>
+          <span class="sub">إعدادات المراقبة والمؤشرات</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="btn primary">← العودة للوحة</a>
+      </div>
+    </header>
+
+    <section class="status-bar" style="justify-content:flex-start;">
+      <div>حالة WhatsApp: <span id="waStatus"><span class="badge badge-gray">—</span></span></div>
+    </section>
+
+    <div class="notice warn" style="margin-bottom:14px;">
+      ⚠️ GitHub Pages يعرض الملفات فقط، لذلك تُعدَّل الإعدادات من ملف
+      <code class="dir-ltr">data/settings.json</code> في المستودع، ثم يعيد فحص المراقبة قراءتها تلقائيًا في كل تشغيل.
+    </div>
+
+    <div id="settingsBox"></div>
+
+    <section class="setting-card">
+      <h3>🔐 متغيرات البيئة (Secrets)</h3>
+      <p class="env-note">لا تُخزَّن في المستودع — تُضبط عبر GitHub Actions Secrets ولا تظهر في الواجهة.</p>
+      <div id="envBox"></div>
+      <button class="btn primary" id="editLink" style="margin-top:12px;">✏️ تعديل data/settings.json عبر GitHub</button>
+    </section>
+
+    <footer>تُدار البيانات عبر GitHub Actions · توقيت السعودية</footer>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>

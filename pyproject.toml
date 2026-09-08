@@ -1,28 +1,14 @@
-[tool.ruff]
-line-length = 110
-target-version = "py311"
-extend-exclude = [".venv", "build", "dist"]
-
-[tool.ruff.lint]
-# E/W: pycodestyle، F: pyflakes، I: isort، B: bugbear (أخطاء منطقية شائعة)،
-# UP: pyupgrade، SIM: تبسيط، C4: comprehensions، RUF: قواعد ruff الخاصة
-select = ["E", "W", "F", "I", "B", "UP", "SIM", "C4", "RUF"]
-ignore = [
-  "E501",  # طول السطر — يتكفّل به ruff format
-  "B008",  # استدعاء دالة في قيمة افتراضية (مقصود في argparse)
-  "UP017", # timezone.utc تعمل على 3.9+ بينما datetime.UTC تتطلب 3.11+
-  "RUF001", "RUF002", "RUF003",  # أحرف عربية تبدو كعلامات ترقيم غامضة — مقصود
+[project]
+name = "crypto-signals-arabic"
+version = "2.0.0"
+description = "منصة مراقبة إشارات البيع والشراء للعملات الرقمية (Spot / USDT / 1H) مع إشعارات WhatsApp"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "numpy>=1.26",
+    "python-dotenv>=1.0",
 ]
-
-[tool.ruff.lint.per-file-ignores]
-"tests/*" = ["B011"]
-
-[tool.ruff.format]
-quote-style = "double"
-line-ending = "lf"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q --strict-markers"
-filterwarnings = [
-]
+addopts = "-q"

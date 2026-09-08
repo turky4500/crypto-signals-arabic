@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="منصة مراقبة إشارات الشراء للعملات الرقمية — Binance Spot / USDT / فريم 1H — إشعارات WhatsApp" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>مراقب إشارات العملات الرقمية</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="logo">📈</span>
+        <div>
+          <h1>مراقب الإشارات</h1>
+          <span class="sub">Spot · USDT · فريم 1H · BUY / Long فقط</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="history.html" class="btn btn-ghost">📜 سجل الإشارات</a>
+        <a href="settings.html" class="btn btn-ghost">⚙️ الإعدادات</a>
+      </div>
+    </header>
+
+    <section class="status-bar" id="statusBar">
+      <div class="status-wrap">
+        <span class="pill"><span class="dot"></span>جارٍ التحميل...</span>
+      </div>
+    </section>
+
+    <section class="stats-grid" id="statsGrid"></section>
+
+    <section class="filters">
+      <input id="searchInput" type="search" placeholder="🔍 ابحث عن عملة... (مثال: BTC)" autocomplete="off" />
+      <div class="filter-btns" id="filterBtns">
+        <button data-filter="all" class="active">جميع العملات</button>
+        <button data-filter="supertrend">Supertrend BUY</button>
+        <button data-filter="ai">AI BUY</button>
+        <button data-filter="strong">Strong BUY</button>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <div class="table-head">
+        <h2>جدول العملات</h2>
+        <span class="table-count" id="tableCount">— عملة</span>
+      </div>
+      <div class="table-scroll">
+        <table id="coinsTable">
+          <thead>
+            <tr>
+              <th>العملة</th>
+              <th>السعر</th>
+              <th>Supertrend</th>
+              <th>AI Reader</th>
+              <th>الإشارة</th>
+              <th>الدخول</th>
+              <th>SL</th>
+              <th>TP</th>
+              <th>وقت الإشارة</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>تُدار البيانات عبر GitHub Actions وتُعرض مباشرة من Binance Public API · توقيت السعودية · BUY / Long فقط</footer>
+  </div>
+
+  <!-- نافذة تفاصيل العملة -->
+  <div class="modal" id="detailModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modalTitle">—</h3>
+        <button class="modal-close" aria-label="إغلاق">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

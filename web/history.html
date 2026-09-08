@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="سجل إشارات الشراء للعملات الرقمية" />
+  <title>سجل الإشارات</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📜</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="logo">📜</span>
+        <div>
+          <h1>سجل الإشارات</h1>
+          <span class="sub">جميع إشارات BUY الصادرة</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="btn primary">← العودة للوحة</a>
+      </div>
+    </header>
+
+    <section class="toolbar">
+      <input id="search" type="search" placeholder="🔍 ابحث عن عملة..." autocomplete="off" />
+      <div class="filter-btns" id="ind-filter">
+        <button data-filter="all" class="active">الكل</button>
+        <button data-filter="supertrend">Supertrend</button>
+        <button data-filter="ai">AI Reader</button>
+        <button data-filter="strong">Strong</button>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <div class="table-head">
+        <h2>الإشارات المسجّلة</h2>
+        <span class="table-count">BUY فقط · Long فقط</span>
+      </div>
+      <div class="table-scroll">
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>العملة</th>
+              <th>المؤشر</th>
+              <th>النوع</th>
+              <th>وقت الإشارة</th>
+              <th>سعر الإشارة</th>
+              <th>الدخول</th>
+              <th>SL</th>
+              <th>TP</th>
+              <th>حالة WhatsApp</th>
+              <th>وقت الإرسال</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <button id="loadMore">عرض المزيد</button>
+
+    <footer>تُدار البيانات عبر GitHub Actions · توقيت السعودية</footer>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>
