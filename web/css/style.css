@@ -225,7 +225,7 @@ td.price { font-weight: 700; }
   margin-bottom: 14px;
 }
 .setting-card h3 { font-size: .98rem; margin-bottom: 8px; }
-.kv-table { width: 100%; border-collapse: collapse; }
+.kv-table { width: 100%; border-collapse: collapse; min-width: 0; }
 .kv-table th, .kv-table td {
   text-align: right; padding: 7px 4px; font-size: .84rem;
   border-bottom: 1px solid #f0f3f8;
@@ -246,6 +246,21 @@ footer {
 }
 
 /* ---------- التجاوب ---------- */
+@media (max-width: 480px) {
+  .kv-table, .kv-table tbody, .kv-table tr { display: block; width: 100%; }
+  .kv-table tr {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 10px 0; border-bottom: 1px solid #f0f3f8;
+  }
+  .kv-table tr:last-child { border-bottom: none; }
+  .kv-table th { width: 100%; padding: 0; font-size: .78rem; }
+  .kv-table td { width: 100%; padding: 0; font-size: .92rem; font-weight: 700; }
+  .env-note { font-size: .76rem; }
+  .brand h1 { font-size: 1rem; }
+  .setting-card { padding: 12px; }
+  code { font-size: .72rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .kv { flex-direction: column; align-items: flex-start; gap: 2px; }
+}
 @media (min-width: 640px) {
   .stats-grid { grid-template-columns: repeat(4, 1fr); }
   .filters { flex-direction: row; align-items: center; }
