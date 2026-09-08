@@ -4,11 +4,13 @@
 - إعادة المحاولة عند فشل الشبكة / Rate Limit (429، 418، -1003) مع تأخير تصاعدي.
 - Throttle بسيط بين الطلبات لتفادي استهلاك الحصة.
 - يُستخدم فقط في بيانات تبادل المعلومات العامة (Spot / USDT أساس).
+- المصدر الافتراضي data-api.binance.vision (بيانات عامة بدون حجب جغرافي من خوادم GitHub).
 """
 from __future__ import annotations
 
 import json
 import logging
+import os
 import time
 
 import requests
@@ -17,7 +19,7 @@ from .models import Kline, SymbolInfo
 
 logger = logging.getLogger(__name__)
 
-BINANCE_REST = "https://api.binance.com"
+BINANCE_REST = "https://data-api.binance.vision"
 INTERVAL_1H = "1h"
 
 
@@ -28,12 +30,14 @@ class BinanceAPIError(RuntimeError):
 class BinanceClient:
     def __init__(
         self,
-        base_url: str = BINANCE_REST,
+        base_url: str | None = None,
         timeout: float = 20.0,
         max_retries: int = 5,
         request_delay: float = 0.12,
     ):
-        self.base_url = base_url.rstrip("/")
+        self.base_url = (
+            (base_url or os.environ.get("BINANCE_BASE_URL", BINANCE_REST)).rstrip("/")
+        )
         self.timeout = timeout
         self.max_retries = max_retries
         self.request_delay = request_delay

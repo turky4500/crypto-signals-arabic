@@ -85,8 +85,8 @@ def main(argv=None) -> int:
 
     logging.info("الملخص: %s", summary)
 
-    # داخل GitHub Actions: التزام البيانات
-    if os.environ.get("GITHUB_ACTIONS") == "true" or args.commit:
+    # داخل GitHub Actions: الالتزام تتم عبر خطوة workflow منفصلة (تحمل git identity)
+    if args.commit:
         _commit_data(base_dir)
 
     return 0 if summary["ok"] else 1

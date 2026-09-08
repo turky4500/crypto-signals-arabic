@@ -10,7 +10,7 @@ const state = {
   lastStatus: null,
 };
 
-const BINANCE_API = "https://api.binance.com";
+const BINANCE_API = "https://data-api.binance.vision";
 const INTERVALS = { static: 60000, live: 30000 };
 
 /* ============================================================ */
