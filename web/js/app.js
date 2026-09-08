@@ -51,7 +51,22 @@ function renderStatus(status) {
     <div class="last-update">
       آخر تحديث: <strong>${status.last_update ? formatTime12h(status.last_update) + " بتوقيت السعودية" : "—"}</strong>
       ${status.last_error ? `<span class="err">· خطأ: ${esc(status.last_error)}</span>` : ""}
-    </div>`;
+    </div>
+    ${staleNotice(status.last_update)}`;
+
+function staleNotice(lastUpdateMs) {
+  if (!lastUpdateMs) return "";
+  const elapsed = Date.now() - lastUpdateMs;
+  if (elapsed <= 90 * 60000) return "";
+  return `<div class="notice warn">
+    ⚠️ بيانات قديمة (لم تُحدَّث منذ أكثر من ساعة ونصف). جدول GitHub قد يتأخر —
+    فعّل تحديثًا فوريًا من هنا:
+    <a class="run-link" target="_blank" rel="noopener"
+       href="https://github.com/turky4500/crypto-signals-arabic/actions/workflows/monitor.yml">
+       Run workflow ▶
+    </a>
+  </div>`;
+}
 }
 
 /* ---------- الإحصاءات ---------- */

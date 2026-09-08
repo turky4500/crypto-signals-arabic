@@ -2,8 +2,11 @@ name: Crypto Monitor
 
 on:
   schedule:
-    # كل ساعة عند الدقيقة 5 (UTC) بعد إغلاق شمعة 1H لضمان ثبات البيانات
-    - cron: '5 * * * *'
+    # موعدان كل ساعة (7 و37) — الموال خارج ذروة الضغط (:00) التي تُسقط GitHub مهامها
+    - cron: '7 * * * *'
+    - cron: '37 * * * *'
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       limit_symbols:
@@ -43,7 +46,21 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Skip if already fresh (توفير المواعيد والتغذية)
+        id: freshness
+        run: |
+          LAST=$(python -c "import json;print(json.load(open('data/status.json')).get('last_update') or 0)" 2>/dev/null || echo 0)
+          NOW=$(( $(date +%s) * 1000 ))
+          DIFF=$(( (NOW - LAST) / 1000 ))
+          echo "diff_seconds=$DIFF"
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$DIFF" -lt 1800 ]; then
+            echo "STILL_FRESH=true"
+          else
+            echo "STILL_FRESH=false"
+          fi
+
       - name: Run monitor
+        if: steps.freshness.outputs.STILL_FRESH != 'true'
         env:
           WHATSAPP_API_URL: ${{ secrets.WHATSAPP_API_URL }}
           WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_API_TOKEN }}
@@ -54,6 +71,7 @@ jobs:
         run: python -m src.main
 
       - name: Commit data updates
+        if: steps.freshness.outputs.STILL_FRESH != 'true'
         run: |
           git config user.name "crypto-monitor[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -62,6 +80,7 @@ jobs:
           git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:main
 
       - name: Assemble static site (web + data)
+        if: steps.freshness.outputs.STILL_FRESH != 'true'
         run: |
           mkdir -p _site
           cp -r web/* _site/
@@ -69,10 +88,12 @@ jobs:
           if [ -d data ]; then cp -r data/* _site/data/; fi
 
       - name: Upload Pages artifact
+        if: steps.freshness.outputs.STILL_FRESH != 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
       - name: Deploy to GitHub Pages
+        if: steps.freshness.outputs.STILL_FRESH != 'true'
         id: deployment
         uses: actions/deploy-pages@v4
