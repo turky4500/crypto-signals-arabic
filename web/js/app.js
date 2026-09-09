@@ -30,6 +30,7 @@ async function fetchStatic() {
     connectLiveStream();
     renderStatus(status);
     renderStats(stats);
+    applyLiveTargets(false);
     renderPerf();
   } catch (err) {
     console.warn("بيانات ثابتة غير متوفرة بعد", err);
@@ -103,6 +104,50 @@ const PERF_STATUS = {
 
 function perfChip(value, label, tone = "") {
   return `<div class="perf-chip"><span class="perf-v ${tone}">${esc(value)}</span><span class="perf-l">${esc(label)}</span></div>`;
+}
+
+/* ---------- حسم الهدف لحظيًا من السعر الحي ----------
+   بمجرد بلوغ السعر الحي مستوى TP تُعرض النتيجة في اللوحة فورًا،
+   بدون انتظار دورة المراقبة القادمة (كل 5 دقائق).
+   الخلفية (monitor.py) تبقى هي المصدر الرسمي — وهنا فقط تعجيل للعرض. */
+const liveTpHits = new Map(); // signature -> resolved_at_ms
+
+function perfKey(r) {
+  return r.signature || `${r.symbol}|${r.signal_open_ms}`;
+}
+
+function applyLiveTargets(rerender = true) {
+  let changed = false;
+  for (const r of state.perf) {
+    if (r.status !== "pending") continue; // قرار الخلفية المحسوم لا يُمَس
+
+    const key = perfKey(r);
+    const known = liveTpHits.get(key);
+    if (known) {
+      // حُسم محليًا من قبل — نُثبّته حتى لا يرتد إلى "في الانتظار" عند تحديث البيانات
+      r.status = "tp_hit";
+      r.hit_price = parseFloat(r.tp);
+      r.resolved_at_ms = known;
+      changed = true;
+      continue;
+    }
+
+    const price = state.prices[r.symbol];
+    if (price === null || price === undefined) continue;
+    const tp = parseFloat(r.tp);
+    if (!isFinite(tp)) continue;
+
+    if (price >= tp) {
+      const now = Date.now();
+      liveTpHits.set(key, now);
+      r.status = "tp_hit";
+      r.hit_price = tp;
+      r.resolved_at_ms = now;
+      changed = true;
+    }
+  }
+  if (changed && rerender) renderPerf();
+  return changed;
 }
 
 function renderPerf() {
@@ -280,7 +325,7 @@ function connectLiveStream() {
       if (d && typeof d.s === "string" && typeof d.c === "string") {
         state.prices[d.s] = parseFloat(d.c);
         lastWsTick = Date.now();
-        if (Date.now() - lastRenderTs > 1000) { lastRenderTs = Date.now(); renderTable(); }
+        if (Date.now() - lastRenderTs > 1000) { lastRenderTs = Date.now(); renderTable(); applyLiveTargets(); }
       }
     } catch (_) {}
   };
@@ -331,6 +376,7 @@ async function updateLivePrices() {
 
     state.prices = out;
     renderTable();
+    applyLiveTargets();
   } catch (err) {
     console.warn("فشل التحديث اللحظي", err);
   }
