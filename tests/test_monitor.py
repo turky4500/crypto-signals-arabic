@@ -323,6 +323,30 @@ def test_perf_seed_from_existing_signals(tmp_path):
     assert perf[0]["status"] == "pending"
 
 
+def test_perf_tp_hit_on_live_price_without_closed_candle(tmp_path):
+    """بلوغ السعر اللحظي مستوى الهدف يحسم فورًا حتى دون غلق شمعة (الشمعة ما زالت مفتوحة)."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"])
+    mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    sig = _first_signal(data_dir)
+    assert _rec_for(data_dir, sig["signature"])["status"] == "pending"
+
+    tp = float(sig["tp"])
+    prev = candles[sig["symbol"]][-1]
+    # شمعة جديدة ما زالت مفتوحة (close_time في المستقبل) لكن سعرها الحدّي فوق الهدف
+    touch = _candle_at(prev, high=tp * 1.02, low=prev["close"] * 0.99, close=tp * 1.01)
+    candles[sig["symbol"]].append(touch)
+
+    # server = إغلاق الشمعة السابقة فقط => شمعة touch غير مغلقة بعد
+    mon2, data_dir2 = _make_monitor(tmp_path, candles, server=prev["close_time"])
+    mon2.run(env={}, limit_symbols=1, no_whatsapp=True)
+
+    rec = _rec_for(data_dir2, sig["signature"])
+    assert rec["status"] == "tp_hit"
+    assert rec["hit_price"] == tp
+    assert rec["resolved_at_ms"] == prev["close_time"]
+
+
 def test_perf_status_metrics(tmp_path):
     """status.json يحمل إحصاءات الأداء بعد التشغيل."""
     candles = {"BTCUSDT": make_flip_candles()}

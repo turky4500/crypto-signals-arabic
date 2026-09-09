@@ -105,20 +105,14 @@ function perfChip(value, label, tone = "") {
 }
 
 function renderPerf() {
-  const card = qs("#perfCard");
-  if (!state.perf.length) {
-    card.hidden = true;
-    return;
-  }
-  card.hidden = false;
   const sorted = [...state.perf].sort((a, b) => (b.signal_open_ms ?? 0) - (a.signal_open_ms ?? 0));
 
-  let total = 0, tp = 0, sl = 0, pending = 0;
+  let total = 0, tp = 0, sl = 0, pending = 0, expired = 0;
   sorted.forEach((r) => {
     total++;
     if (r.status === "tp_hit") tp++;
     else if (r.status === "sl_hit") sl++;
-    else if (r.status === "pending") pending++;
+    else if (r.status === "expired" || r.status === "pending") (r.status === "expired" ? expired++ : pending++);
   });
   const resolved = tp + sl;
   const winRate = resolved ? (tp / resolved) * 100 : null;
@@ -130,14 +124,14 @@ function renderPerf() {
     perfChip(total, "إجمالي"),
     perfChip(tp, "تحقق الهدف", "green"),
     perfChip(sl, "ضرب الوقف", "red"),
-    perfChip(pending, "معلق", "blue"),
+    perfChip(pending, "لم يبلغ هدفًا ولا وقفًا", "blue"),
+    perfChip(expired, "انتهت المهلة", "gray"),
     perfChip(winRate === null ? "—" : winRate.toFixed(1) + "%", "نسبة التحقق", winRate !== null && winRate >= 50 ? "green" : ""),
     perfChip(evTxt, "القيمة المتوقعة (EV)", evTone),
   ].join("");
 
-  const top = sorted.slice(0, 20);
-  qs("#perfTable tbody").innerHTML = top.length
-    ? top.map((r) => {
+  qs("#perfTable tbody").innerHTML = sorted.length
+    ? sorted.map((r) => {
         const st = PERF_STATUS[r.status] || PERF_STATUS.pending;
         return `<tr>
           <td class="coin"><span class="coin-sym">${esc((r.symbol || "").replace("USDT", ""))}</span><span class="coin-base">${esc(r.symbol || "—")}</span></td>
@@ -149,7 +143,7 @@ function renderPerf() {
           <td class="time">${r.resolved_at_ms ? formatTime12h(r.resolved_at_ms) : "—"}</td>
         </tr>`;
       }).join("")
-    : `<tr><td colspan="7" class="dim" style="text-align:center;padding:2rem;">لا توجد نتائج بعد</td></tr>`;
+    : `<tr><td colspan="7" class="dim" style="text-align:center;padding:2rem;">لا توجد إشارات مرسلة بعد</td></tr>`;
 }
 
 /* ---------- الفلاتر ---------- */
@@ -291,8 +285,20 @@ async function updateLivePrices() {
   }
 }
 
+/* ---------- التبويبات ---------- */
+function setupTabs() {
+  qsa(".tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      qsa(".tab").forEach((b) => b.classList.toggle("active", b === btn));
+      const name = btn.dataset.view;
+      qsa(".view").forEach((v) => (v.hidden = v.id !== `view-${name}`));
+    });
+  });
+}
+
 /* ---------- الصفحة ---------- */
 function init() {
+  setupTabs();
   setupFilters();
   qs(".modal-close").addEventListener("click", () => qs("#detailModal").classList.remove("open"));
   qs("#detailModal").addEventListener("click", (e) => {

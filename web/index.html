@@ -25,72 +25,81 @@
       </div>
     </header>
 
-    <section class="status-bar" id="statusBar">
-      <div class="status-wrap">
-        <span class="pill"><span class="dot"></span>جارٍ التحميل...</span>
-      </div>
-    </section>
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-view="live">📡 المراقبة الحية</button>
+      <button class="tab" data-view="results">🏆 النتائج</button>
+    </nav>
 
-    <section class="stats-grid" id="statsGrid"></section>
+    <div class="view" id="view-live">
+      <section class="status-bar" id="statusBar">
+        <div class="status-wrap">
+          <span class="pill"><span class="dot"></span>جارٍ التحميل...</span>
+        </div>
+      </section>
 
-    <section class="table-card perf-card" id="perfCard" hidden>
-      <div class="table-head">
-        <h2>نتائج الإشارات (تحقق الهدف / ضرب الوقف)</h2>
-        <span class="table-count" id="perfCount">—</span>
-      </div>
-      <div class="perf-chips" id="perfChips"></div>
-      <div class="table-scroll">
-        <table id="perfTable">
-          <thead>
-            <tr>
-              <th>العملة</th>
-              <th>المؤشر</th>
-              <th>الدخول</th>
-              <th>SL</th>
-              <th>TP</th>
-              <th>النتيجة</th>
-              <th>وقت الحسم</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+      <section class="stats-grid" id="statsGrid"></section>
 
-    <section class="filters">
-      <input id="searchInput" type="search" placeholder="🔍 ابحث عن عملة... (مثال: BTC)" autocomplete="off" />
-      <div class="filter-btns" id="filterBtns">
-        <button data-filter="all" class="active">جميع العملات</button>
-        <button data-filter="supertrend">Supertrend BUY</button>
-        <button data-filter="ai">AI BUY</button>
-        <button data-filter="strong">Strong BUY</button>
-      </div>
-    </section>
+      <section class="filters">
+        <input id="searchInput" type="search" placeholder="🔍 ابحث عن عملة... (مثال: BTC)" autocomplete="off" />
+        <div class="filter-btns" id="filterBtns">
+          <button data-filter="all" class="active">جميع العملات</button>
+          <button data-filter="supertrend">Supertrend BUY</button>
+          <button data-filter="ai">AI BUY</button>
+          <button data-filter="strong">Strong BUY</button>
+        </div>
+      </section>
 
-    <section class="table-card">
-      <div class="table-head">
-        <h2>جدول العملات</h2>
-        <span class="table-count" id="tableCount">— عملة</span>
-      </div>
-      <div class="table-scroll">
-        <table id="coinsTable">
-          <thead>
-            <tr>
-              <th>العملة</th>
-              <th>السعر</th>
-              <th>Supertrend</th>
-              <th>AI Reader</th>
-              <th>الإشارة</th>
-              <th>الدخول</th>
-              <th>SL</th>
-              <th>TP</th>
-              <th>وقت الإشارة</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+      <section class="table-card">
+        <div class="table-head">
+          <h2>جدول العملات</h2>
+          <span class="table-count" id="tableCount">— عملة</span>
+        </div>
+        <div class="table-scroll">
+          <table id="coinsTable">
+            <thead>
+              <tr>
+                <th>العملة</th>
+                <th>السعر</th>
+                <th>Supertrend</th>
+                <th>AI Reader</th>
+                <th>الإشارة</th>
+                <th>الدخول</th>
+                <th>SL</th>
+                <th>TP</th>
+                <th>وقت الإشارة</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="view" id="view-results" hidden>
+      <section class="table-card perf-card">
+        <div class="table-head">
+          <h2>نتائج الإشارات (جميع الإشارات المرسلة · تُحذف بعد 8 أيام)</h2>
+          <span class="table-count" id="perfCount">—</span>
+        </div>
+        <div class="perf-chips" id="perfChips"></div>
+        <div class="table-scroll">
+          <table id="perfTable">
+            <thead>
+              <tr>
+                <th>العملة</th>
+                <th>المؤشر</th>
+                <th>الدخول</th>
+                <th>SL</th>
+                <th>TP</th>
+                <th>النتيجة</th>
+                <th>وقت الحسم</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
 
     <footer>تُدار البيانات عبر GitHub Actions وتُعرض مباشرة من Binance Public API · توقيت السعودية · BUY / Long فقط</footer>
   </div>

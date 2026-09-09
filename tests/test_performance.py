@@ -1,8 +1,9 @@
 """اختبارات تتبع الأداء: تحقق الهدف / ضرب الوقف / المهلة / البذر / الإحصاءات."""
 import pytest
 
-from src.engine.performance import (HORIZON_MS, compute_stats, evaluate_candles,
-                                    make_record, mark_expired, seed_from_signals)
+from src.engine.performance import (HORIZON_MS, RETENTION_MS, compute_stats,
+                                    evaluate_candles, make_record,
+                                    mark_expired, prune_old, seed_from_signals)
 
 
 def _sig(symbol="BTCUSDT", open_ms=1000, close_ms=None, tp="103", sl="95",
@@ -153,3 +154,13 @@ def test_tp_hit_after_many_candles():
     candles = [(2100 + i * 600, 2200 + i * 600, 102, 100, 101) for i in range(30)]
     candles.append((21000, 21100, 104.0, 101, 103))
     assert evaluate_candles(rec, candles)["status"] == "tp_hit"
+
+
+def test_prune_old_keeps_8_days_and_drops_older():
+    now = int(__import__("time").time() * 1000)
+    recent = _rec(open_ms=now - 3600_000, close_ms=now)
+    border = _rec(symbol="B1", open_ms=now - 7 * 24 * 3600_000, close_ms=now - RETENTION_MS)
+    old = _rec(symbol="B2", open_ms=now - 10 * 24 * 3600_000, close_ms=now - RETENTION_MS - 60_000)
+    kept = prune_old([recent, border, old], now)
+    assert {r["symbol"] for r in kept} == {"BTCUSDT", "B1"}
+    assert _rec(symbol="B2") not in kept

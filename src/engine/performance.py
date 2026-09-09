@@ -9,7 +9,8 @@
 
 import time
 
-HORIZON_MS = 7 * 24 * 3600 * 1000  # 7 أيام
+HORIZON_MS = 7 * 24 * 3600 * 1000  # 7 أيام لانتظار الحسم
+RETENTION_MS = 8 * 24 * 3600 * 1000  # الاحتفاظ بالسجلات 8 أيام ثم حذفها
 
 
 def make_record(sig: dict) -> dict:
@@ -86,6 +87,17 @@ def mark_expired(records: list[dict], now_ms: int) -> list[dict]:
             r["resolved_at_ms"] = int(r["deadline_ms"])
             r["hit_price"] = None
     return records
+
+
+def prune_old(records: list[dict], now_ms: int, retention_ms: int = RETENTION_MS) -> list[dict]:
+    """حذف السجلات التي تجاوزت مدة الاحتفاظ (8 أيام) منذ إغلاق شمعة الإشارة."""
+    cutoff = now_ms - retention_ms
+    out = []
+    for r in records:
+        close_ms = int(r.get("signal_close_ms") or (int(r["deadline_ms"]) - HORIZON_MS))
+        if close_ms >= cutoff:
+            out.append(r)
+    return out
 
 
 def compute_stats(records: list[dict]) -> dict:

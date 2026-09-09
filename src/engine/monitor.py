@@ -18,7 +18,7 @@ from ..storage.store import append_capped, load_json, save_json
 from .detector import build_signal
 from .duplicates import DuplicateGuard
 from .performance import (compute_stats, evaluate_candles, mark_expired,
-                          seed_from_signals)
+                          prune_old, seed_from_signals)
 
 logger = logging.getLogger("monitor")
 
@@ -207,6 +207,15 @@ class Monitor:
                 result = evaluate_candles(rec, candles, server_now)
                 if result:
                     rec.update(result)
+            # حسم لحظي: بلوغ السعر الحالي مستوى الهدف يحسم فورًا حتى قبل غلق الشمعة
+            if price_str is not None:
+                px = float(price_str)
+                for rec in perf_pending_map.get(symbol_info.symbol, []):
+                    if rec.get("status") != "pending":
+                        continue
+                    tp_val = float(rec["tp"])
+                    if px >= tp_val:
+                        rec.update({"status": "tp_hit", "resolved_at_ms": server_now, "hit_price": tp_val})
 
         row = self._build_row(symbol_info, candle, st_res, ai_res, price_str, entry_values)
         return row, signal
@@ -349,6 +358,7 @@ class Monitor:
         # ---- الحفظ ----
         perf = seed_from_signals(perf, signals)  # بذر فوري للإشارات الجديدة في نفس التشغيل
         perf = mark_expired(perf, now_ms)
+        perf = prune_old(perf, now_ms)  # حذف سجلات تجاوزت 8 أيام
         if len(perf) > 2500:
             perf = perf[-2500:]
         save_json(perf_path, perf)
