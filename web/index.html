@@ -33,6 +33,30 @@
 
     <section class="stats-grid" id="statsGrid"></section>
 
+    <section class="table-card perf-card" id="perfCard" hidden>
+      <div class="table-head">
+        <h2>نتائج الإشارات (تحقق الهدف / ضرب الوقف)</h2>
+        <span class="table-count" id="perfCount">—</span>
+      </div>
+      <div class="perf-chips" id="perfChips"></div>
+      <div class="table-scroll">
+        <table id="perfTable">
+          <thead>
+            <tr>
+              <th>العملة</th>
+              <th>المؤشر</th>
+              <th>الدخول</th>
+              <th>SL</th>
+              <th>TP</th>
+              <th>النتيجة</th>
+              <th>وقت الحسم</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="filters">
       <input id="searchInput" type="search" placeholder="🔍 ابحث عن عملة... (مثال: BTC)" autocomplete="off" />
       <div class="filter-btns" id="filterBtns">

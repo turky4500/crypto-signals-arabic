@@ -17,6 +17,8 @@ from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
 from .detector import build_signal
 from .duplicates import DuplicateGuard
+from .performance import (compute_stats, evaluate_candles, mark_expired,
+                          seed_from_signals)
 
 logger = logging.getLogger("monitor")
 
@@ -149,8 +151,9 @@ class Monitor:
         }
 
     # ------------------------------------------------------------------ #
-    def _process_symbol(self, symbol_info, server_now, prices: dict):
-        """يعيد (row، signal أو None). signal = إشارة جديدة غير مكررة إن وُجدت."""
+    def _process_symbol(self, symbol_info, server_now, prices: dict,
+                        perf_pending_map: dict | None = None):
+        """يعيد (row، signal أو None). signal = إشارة جديدة غير مكررة إن وُجِدت."""
         series = self.client.kline_series(symbol_info.symbol, self.history_candles)
         ot = series["open_time"]
         ct = series["close_time"]
@@ -195,6 +198,15 @@ class Monitor:
         entry_values = None
         if signal is not None:
             entry_values = {"entry": signal.entry, "sl": signal.sl, "tp": signal.tp}
+
+        if perf_pending_map:
+            for rec in perf_pending_map.get(symbol_info.symbol, []):
+                if rec.get("status") != "pending":
+                    continue
+                candles = [(ot_c[i], ct_c[i], h[i], l[i], c[i]) for i in range(len(c))]
+                result = evaluate_candles(rec, candles, server_now)
+                if result:
+                    rec.update(result)
 
         row = self._build_row(symbol_info, candle, st_res, ai_res, price_str, entry_values)
         return row, signal
@@ -248,6 +260,15 @@ class Monitor:
         guard = DuplicateGuard()
         guard.load_history(signals)
 
+        # ---- سجل الأداء (نتائج الإشارات) ----
+        perf_path = os.path.join(self.data_dir, "performance.json")
+        perf = load_json(perf_path, []) or []
+        perf = seed_from_signals(perf, signals)
+        perf_pending_map: dict = {}
+        for _r in perf:
+            if _r.get("status") == "pending":
+                perf_pending_map.setdefault(_r["symbol"], []).append(_r)
+
         rows_map = {}
         new_signals = []
         processed = 0
@@ -262,7 +283,9 @@ class Monitor:
 
             for s_info in monitored:
                 try:
-                    row, signal = self._process_symbol(s_info, server_now, prices)
+                    row, signal = self._process_symbol(
+                        s_info, server_now, prices, perf_pending_map
+                    )
                 except Exception as exc:
                     logger.warning("%s: %s", s_info.symbol, exc)
                     errors.append(f"{s_info.symbol}: {exc}")
@@ -324,6 +347,12 @@ class Monitor:
         stats["last_signal"] = signals[-1] if signals else None
 
         # ---- الحفظ ----
+        perf = mark_expired(perf, now_ms)
+        if len(perf) > 2500:
+            perf = perf[-2500:]
+        save_json(perf_path, perf)
+        status["performance"] = compute_stats(perf)
+
         save_json(os.path.join(self.data_dir, "symbols.json"), [s.symbol for s in monitored])
         save_json(
             os.path.join(self.data_dir, "current_signals.json"),

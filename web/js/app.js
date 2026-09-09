@@ -8,6 +8,7 @@ const state = {
   filter: "all",
   search: "",
   lastStatus: null,
+  perf: [],
 };
 
 const BINANCE_API = "https://data-api.binance.vision";
@@ -16,16 +17,19 @@ const INTERVALS = { static: 60000, live: 30000 };
 /* ============================================================ */
 async function fetchStatic() {
   try {
-    const [status, stats, symbols, rows] = await Promise.all([
+    const [status, stats, symbols, rows, perf] = await Promise.all([
       loadJSON(`${DATA_PATH}/status.json`),
       loadJSON(`${DATA_PATH}/stats.json`),
       loadJSON(`${DATA_PATH}/symbols.json`),
       loadJSON(`${DATA_PATH}/current_signals.json`),
+      loadJSON(`${DATA_PATH}/performance.json`),
     ]);
     state.symbols = symbols || [];
     state.rows = rows || [];
+    state.perf = perf || [];
     renderStatus(status);
     renderStats(stats);
+    renderPerf();
   } catch (err) {
     console.warn("بيانات ثابتة غير متوفرة بعد", err);
     qs("#statusBar").innerHTML =
@@ -86,6 +90,66 @@ function renderStats(st) {
     ${statCard(last ? last.symbol : "—", "آخر إشارة", "blue")}
     ${statCard(st.last_check ? formatTime12h(st.last_check) : "—", "آخر فحص", "")}
   `;
+}
+
+/* ---------- نتائج الإشارات ---------- */
+const PERF_STATUS = {
+  tp_hit: ["✅ تحقق الهدف", "green"],
+  sl_hit: ["❌ ضرب الوقف", "red"],
+  pending: ["⏳ في الانتظار", "blue"],
+  expired: ["⌛ انتهت المهلة", "gray"],
+};
+
+function perfChip(value, label, tone = "") {
+  return `<div class="perf-chip"><span class="perf-v ${tone}">${esc(value)}</span><span class="perf-l">${esc(label)}</span></div>`;
+}
+
+function renderPerf() {
+  const card = qs("#perfCard");
+  if (!state.perf.length) {
+    card.hidden = true;
+    return;
+  }
+  card.hidden = false;
+  const sorted = [...state.perf].sort((a, b) => (b.signal_open_ms ?? 0) - (a.signal_open_ms ?? 0));
+
+  let total = 0, tp = 0, sl = 0, pending = 0;
+  sorted.forEach((r) => {
+    total++;
+    if (r.status === "tp_hit") tp++;
+    else if (r.status === "sl_hit") sl++;
+    else if (r.status === "pending") pending++;
+  });
+  const resolved = tp + sl;
+  const winRate = resolved ? (tp / resolved) * 100 : null;
+  const evTone = winRate === null ? "" : (winRate / 100) * 2 - (1 - winRate / 100) >= 0 ? "green" : "red";
+  const evTxt = winRate === null ? "—" : `${((winRate / 100) * 2 - (1 - winRate / 100)).toFixed(2)}R`;
+
+  qs("#perfCount").textContent = `${total} إشارة`;
+  qs("#perfChips").innerHTML = [
+    perfChip(total, "إجمالي"),
+    perfChip(tp, "تحقق الهدف", "green"),
+    perfChip(sl, "ضرب الوقف", "red"),
+    perfChip(pending, "معلق", "blue"),
+    perfChip(winRate === null ? "—" : winRate.toFixed(1) + "%", "نسبة التحقق", winRate !== null && winRate >= 50 ? "green" : ""),
+    perfChip(evTxt, "القيمة المتوقعة (EV)", evTone),
+  ].join("");
+
+  const top = sorted.slice(0, 20);
+  qs("#perfTable tbody").innerHTML = top.length
+    ? top.map((r) => {
+        const st = PERF_STATUS[r.status] || PERF_STATUS.pending;
+        return `<tr>
+          <td class="coin"><span class="coin-sym">${esc((r.symbol || "").replace("USDT", ""))}</span><span class="coin-base">${esc(r.symbol || "—")}</span></td>
+          <td>${esc(r.indicator || "—")}</td>
+          <td class="num">${esc(r.entry ?? "—")}</td>
+          <td class="num">${esc(r.sl ?? "—")}</td>
+          <td class="num">${esc(r.tp ?? "—")}</td>
+          <td>${badge(st[0], st[1])}</td>
+          <td class="time">${r.resolved_at_ms ? formatTime12h(r.resolved_at_ms) : "—"}</td>
+        </tr>`;
+      }).join("")
+    : `<tr><td colspan="7" class="dim" style="text-align:center;padding:2rem;">لا توجد نتائج بعد</td></tr>`;
 }
 
 /* ---------- الفلاتر ---------- */

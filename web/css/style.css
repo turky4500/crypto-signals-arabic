@@ -110,6 +110,25 @@ body {
 .stat-value.orange { color: var(--orange); }
 .stat-label { color: var(--muted); font-size: .78rem; margin-top: 2px; }
 
+/* ---------- نتائج الإشارات ---------- */
+.perf-card { margin-bottom: 20px; }
+.perf-chips {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+}
+.perf-chip {
+  background: var(--gray-soft); border-radius: 12px;
+  padding: 8px 14px; min-width: 88px; text-align: center;
+}
+.perf-v { display: block; font-weight: 800; font-size: 1.02rem; }
+.perf-v.green { color: var(--green); }
+.perf-v.red { color: var(--red); }
+.perf-l { display: block; color: var(--muted); font-size: .72rem; margin-top: 2px; }
+@media (max-width: 480px) {
+  .perf-chips { padding: 10px; gap: 8px; }
+  .perf-chip { min-width: 0; flex: 1 1 42%; }
+}
+
 /* ---------- الفلاتر ---------- */
 .filters {
   display: flex; flex-direction: column; gap: 10px;
