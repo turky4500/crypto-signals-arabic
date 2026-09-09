@@ -246,6 +246,15 @@ function openModal(row) {
 }
 
 /* ---------- الأسعار اللحظية ---------- */
+const BATCH_SAFE_SYMBOL = /^[A-Z0-9._\-]{1,50}$/;
+
+async function fetchSinglePrice(symbol) {
+  const res = await fetch(`${BINANCE_API}/api/v3/ticker/price?symbol=${encodeURIComponent(symbol)}`);
+  const data = await res.json();
+  if (data && typeof data.symbol === "string") return data;
+  return null;
+}
+
 async function updateLivePrices() {
   if (!state.symbols.length) {
     renderTable();
@@ -253,17 +262,28 @@ async function updateLivePrices() {
   }
   try {
     const out = {};
+    const batchable = state.symbols.filter((s) => BATCH_SAFE_SYMBOL.test(s));
+    const singles = state.symbols.filter((s) => !BATCH_SAFE_SYMBOL.test(s));
+
     const chunks = [];
-    for (let i = 0; i < state.symbols.length; i += 100) {
-      chunks.push(state.symbols.slice(i, i + 100));
+    for (let i = 0; i < batchable.length; i += 100) {
+      chunks.push(batchable.slice(i, i + 100));
     }
     const results = await Promise.all(
-      chunks.map((c) =>
-        fetch(`${BINANCE_API}/api/v3/ticker/price?symbols=${encodeURIComponent(JSON.stringify(c))}`)
-          .then((r) => r.json())
-      )
+      chunks.map(async (c) => {
+        const res = await fetch(`${BINANCE_API}/api/v3/ticker/price?symbols=${encodeURIComponent(JSON.stringify(c))}`);
+        const data = await res.json();
+        if (!Array.isArray(data)) {
+          return (await Promise.all(c.map((s) => fetchSinglePrice(s)))).filter(Boolean);
+        }
+        return data;
+      })
     );
     results.flat().forEach((row) => { out[row.symbol] = parseFloat(row.price); });
+
+    const singleRows = (await Promise.all(singles.map((s) => fetchSinglePrice(s)))).filter(Boolean);
+    singleRows.forEach((row) => { out[row.symbol] = parseFloat(row.price); });
+
     state.prices = out;
     renderTable();
   } catch (err) {
