@@ -312,3 +312,23 @@ footer {
   .modal { align-items: center; }
   .modal-box { border-radius: 18px; }
 }
+
+/* ---------- الأسعار الحية (WebSocket) ---------- */
+.lp-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gray-soft); border: 1px solid var(--border);
+  display: inline-block; margin-inline-end: 6px; vertical-align: middle;
+}
+body.ws-on .lp-dot { background: var(--green); border-color: var(--green); animation: lpPulse 1.6s infinite; }
+@keyframes lpPulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+.live-price { font-weight: 700; }
+.lp-up { animation: lpFlashUp .6s ease; }
+.lp-down { animation: lpFlashDown .6s ease; }
+@keyframes lpFlashUp {
+  0% { color: var(--green); background: var(--green-soft); border-radius: 4px; }
+  100% { color: inherit; background: transparent; }
+}
+@keyframes lpFlashDown {
+  0% { color: var(--red); background: var(--red-soft); border-radius: 4px; }
+  100% { color: inherit; background: transparent; }
+}

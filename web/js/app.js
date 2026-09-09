@@ -150,6 +150,12 @@ function applyLiveTargets(rerender = true) {
   return changed;
 }
 
+function perfLiveText(r) {
+  const p = state.prices[r.symbol];
+  if (p === null || p === undefined) return "—";
+  return fmtNumber(p, livePrecision(r.symbol));
+}
+
 function renderPerf() {
   const sorted = [...state.perf].sort((a, b) => (b.signal_open_ms ?? 0) - (a.signal_open_ms ?? 0));
 
@@ -183,13 +189,14 @@ function renderPerf() {
           <td class="coin"><span class="coin-sym">${esc((r.symbol || "").replace("USDT", ""))}</span><span class="coin-base">${esc(r.symbol || "—")}</span></td>
           <td>${esc(r.indicator || "—")}</td>
           <td class="num">${esc(r.entry ?? "—")}</td>
+          <td class="num"><span data-live-sym="${esc(r.symbol || "")}" class="live-price">${perfLiveText(r)}</span></td>
           <td class="num">${esc(r.sl ?? "—")}</td>
           <td class="num">${esc(r.tp ?? "—")}</td>
           <td>${badge(st[0], st[1])}</td>
           <td class="time">${r.resolved_at_ms ? formatTime12h(r.resolved_at_ms) : "—"}</td>
         </tr>`;
       }).join("")
-    : `<tr><td colspan="7" class="dim" style="text-align:center;padding:2rem;">لا توجد إشارات مرسلة بعد</td></tr>`;
+    : `<tr><td colspan="8" class="dim" style="text-align:center;padding:2rem;">لا توجد إشارات مرسلة بعد</td></tr>`;
 }
 
 /* ---------- الفلاتر ---------- */
@@ -223,7 +230,7 @@ function priceCell(row) {
   const live = state.prices[row.symbol];
   const p = live ?? row.price_raw;
   if (p === null || p === undefined) return '<span class="dim">—</span>';
-  return fmtNumber(p, row.price_precision ?? 2);
+  return fmtNumber(p, precisionFor(row));
 }
 
 function signalBadge(row) {
@@ -243,17 +250,16 @@ function renderTable() {
   qs("#tableCount").textContent = `${rows.length} عملة`;
   qs("#coinsTable tbody").innerHTML = rows
     .map((r) => {
-      const precision = r.price_precision ?? 2;
       return `<tr data-symbol="${esc(r.symbol)}">
         <td class="coin">
           <span class="coin-sym">${esc(r.symbol.replace("USDT", ""))}</span>
           <span class="coin-base">${esc(r.symbol)}</span>
         </td>
-        <td class="num price">${priceCell(r)}</td>
+        <td class="num signal-price">${esc(r.entry ?? "—")}</td>
+        <td class="num price"><span data-live-sym="${esc(r.symbol)}" class="live-price">${priceCell(r)}</span></td>
         <td>${r.supertrend === "BUY" ? badge("BUY", "green") : badge("—", "gray")}</td>
         <td>${r.ai_reader === "BUY" ? badge("BUY", "blue") : badge("—", "gray")}</td>
         <td>${signalBadge(r)}</td>
-        <td class="num">${esc(r.entry ?? "—")}</td>
         <td class="num">${esc(r.sl ?? "—")}</td>
         <td class="num">${esc(r.tp ?? "—")}</td>
         <td class="time">${r.signal_time ? formatTime12h(r.candle_close_ms ?? Date.now()) : "—"}</td>
@@ -285,22 +291,62 @@ function openModal(row) {
   qs("#detailModal").classList.add("open");
 }
 
-/* ---------- الأسعار اللحظية ---------- */
+/* ---------- الأسعار اللحظية (WebSocket من Binance + وميض) ---------- */
 const BATCH_SAFE_SYMBOL = /^[A-Z0-9._\-]{1,50}$/;
-const WS_URL = "wss://stream.binance.com:9443/stream?streams=";
+const WS_ENDPOINTS = ["wss://data-stream.binance.vision", "wss://stream.binance.com:9443"];
 
 let ws = null;
 let wsStreamsKey = "";
 let wsDead = false;
 let lastWsTick = 0;
-let lastRenderTs = 0;
+let lastTargetCheck = 0;
+let wsEndpointIdx = 0;
+const livePrev = {};
+
+function precisionFor(row) {
+  if (row && Number.isInteger(row.price_precision)) return row.price_precision;
+  const e = row ? (row.entry ?? row.tp ?? row.sl) : null;
+  if (e === null || e === undefined) return 4;
+  const s = String(e);
+  const i = s.indexOf(".");
+  return i === -1 ? 0 : Math.min(s.length - i - 1, 8);
+}
+
+function livePrecision(sym) {
+  const row = state.rows.find((r) => r.symbol === sym);
+  if (row) return precisionFor(row);
+  const p = (state.perf || []).find((x) => x.symbol === sym && x.entry != null);
+  return precisionFor(p || null);
+}
+
+function liveSymbols() {
+  const set = new Set(state.symbols || []);
+  (state.perf || []).forEach((p) => { if (p && p.symbol) set.add(p.symbol); });
+  return Array.from(set);
+}
 
 function wsStreamKey() {
-  return [...state.symbols].sort().join(",").toLowerCase();
+  return liveSymbols().sort().join(",").toLowerCase();
+}
+
+/* تحديث السعر في مكانه مع وميض أخضر/أحمر عند كل تغير (بنمط لوحة التداول) */
+function updateLivePrice(sym, price) {
+  const prev = livePrev[sym];
+  const dir = prev == null || price === prev ? 0 : (price > prev ? 1 : -1);
+  livePrev[sym] = price;
+  const text = fmtNumber(price, livePrecision(sym)) + (dir > 0 ? " ▲" : dir < 0 ? " ▼" : "");
+  document.querySelectorAll(`[data-live-sym="${sym}"]`).forEach((el) => {
+    el.textContent = text;
+    if (dir !== 0) {
+      el.classList.remove("lp-up", "lp-down");
+      void el.offsetWidth; // إعادة تشغيل الوميض
+      el.classList.add(dir > 0 ? "lp-up" : "lp-down");
+    }
+  });
 }
 
 function connectLiveStream() {
-  const symbols = (state.symbols || []).filter((s) => BATCH_SAFE_SYMBOL.test(s));
+  const symbols = liveSymbols().filter((s) => BATCH_SAFE_SYMBOL.test(s));
   if (!symbols.length) return;
   const key = wsStreamKey();
   if (key === wsStreamsKey && ws && ws.readyState === WebSocket.OPEN) return;
@@ -313,25 +359,32 @@ function connectLiveStream() {
     ws = null;
   }
   wsDead = false;
+  const url = WS_ENDPOINTS[wsEndpointIdx % WS_ENDPOINTS.length] + "/stream?streams=" + streams;
+  let opened = false;
   try {
-    ws = new WebSocket(WS_URL + streams);
-  } catch (_) { wsDead = true; return; }
+    ws = new WebSocket(url);
+  } catch (_) { wsDead = true; wsEndpointIdx++; return; }
 
-  ws.onopen = () => { wsDead = false; };
+  ws.onopen = () => { opened = true; wsDead = false; document.body.classList.add("ws-on"); };
   ws.onmessage = (e) => {
     try {
       const frame = JSON.parse(e.data);
       const d = frame.data || frame;
       if (d && typeof d.s === "string" && typeof d.c === "string") {
-        state.prices[d.s] = parseFloat(d.c);
+        const price = parseFloat(d.c);
+        if (!isFinite(price)) return;
+        state.prices[d.s] = price;
         lastWsTick = Date.now();
-        if (Date.now() - lastRenderTs > 1000) { lastRenderTs = Date.now(); renderTable(); applyLiveTargets(); }
+        updateLivePrice(d.s, price);
+        if (Date.now() - lastTargetCheck >= 1000) { lastTargetCheck = Date.now(); applyLiveTargets(); }
       }
     } catch (_) {}
   };
   ws.onerror = () => { wsDead = true; };
   ws.onclose = () => {
+    document.body.classList.remove("ws-on");
     wsDead = true;
+    if (!opened) wsEndpointIdx++; // جرّب المضيف البديل
     if (wsStreamsKey === key) { ws = null; setTimeout(connectLiveStream, 5000); }
   };
   setTimeout(() => { if (Date.now() - lastWsTick > 8000) wsDead = true; }, 8000);
@@ -376,6 +429,7 @@ async function updateLivePrices() {
 
     state.prices = out;
     renderTable();
+    renderPerf();
     applyLiveTargets();
   } catch (err) {
     console.warn("فشل التحديث اللحظي", err);
