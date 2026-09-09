@@ -75,9 +75,14 @@ jobs:
         run: |
           git config user.name "crypto-monitor[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/
-          git diff --cached --quiet && echo "no data changes" || git commit -m "chore(data): تحديث بيانات المراقبة والإشارات"
-          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:main
+          git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          for i in 1 2 3; do
+            git add data/
+            git diff --cached --quiet && echo "no data changes" && break
+            git commit -q -m "chore(data): تحديث بيانات المراقبة والإشارات" || true
+            if git pull --rebase origin main -q && git push origin HEAD:main -q; then echo "data committed"; break; fi
+            echo "push race — retry $i"; sleep 5
+          done
 
       - name: Assemble static site (web + data)
         if: steps.freshness.outputs.STILL_FRESH != 'true'
