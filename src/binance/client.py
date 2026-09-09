@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import time
 
 import requests
@@ -21,6 +22,10 @@ logger = logging.getLogger(__name__)
 
 BINANCE_REST = "https://data-api.binance.vision"
 INTERVAL_1H = "1h"
+
+# الرموز المسموح بها في الطلب المجمّع symbols=["..."] فقط ASCII (A-Z, أرقام, _ - .)
+# مثل 币安人生USDT تنتهك القاعدة -> تُجلب بطريقة فردية symbol= تمنع تعطل كامل المكالمة.
+_BATCH_SAFE_SYMBOL = re.compile(r"^[A-Z0-9._\-]{1,50}$")
 
 
 class BinanceAPIError(RuntimeError):
@@ -112,14 +117,19 @@ class BinanceClient:
             return {row["symbol"]: row["price"] for row in data}
 
         results: dict[str, str] = {}
-        for i in range(0, len(symbols), 100):
-            chunk = symbols[i : i + 100]
+        batchable = [s for s in symbols if _BATCH_SAFE_SYMBOL.match(s)]
+        singles = [s for s in symbols if not _BATCH_SAFE_SYMBOL.match(s)]
+        for i in range(0, len(batchable), 100):
+            chunk = batchable[i : i + 100]
             data = self._get(
                 "/api/v3/ticker/price",
                 {"symbols": json.dumps(chunk, separators=(",", ":"))},
             )
             for row in data:
                 results[row["symbol"]] = row["price"]
+        for s in singles:
+            data = self._get("/api/v3/ticker/price", {"symbol": s})
+            results[data["symbol"]] = data["price"]
         return results
 
     def kline_series(self, symbol: str, limit: int = 400) -> dict:

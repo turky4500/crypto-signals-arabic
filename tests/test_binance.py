@@ -1,4 +1,5 @@
 """اختبارات طبقة Binance (نمذجة، فلترة، دقة الأسعار)."""
+import json
 from decimal import Decimal
 
 import pytest
@@ -50,6 +51,32 @@ def test_usdt_spot_filter():
     assert "BTCUSDC" not in syms
     assert "ETHBTC" not in syms
     assert "XRPUSDT" not in syms
+
+
+def test_ticker_prices_handles_non_ascii_symbol(monkeypatch):
+    from src.binance.client import BinanceClient
+
+    calls: list = []
+
+    def fake_get(path, params=None):
+        params = params or {}
+        calls.append((path, params))
+        if "symbol" in params:
+            return {"symbol": params["symbol"], "price": "1.23456789"}
+        merged = params["symbols"]
+        return [{"symbol": s, "price": "9.99999999"} for s in json.loads(merged)]
+
+    client = BinanceClient()
+    monkeypatch.setattr(client, "_get", fake_get)
+    prices = client.ticker_prices(["BTCUSDT", "币安人生USDT", "ETHUSDT"])
+
+    assert prices["BTCUSDT"] == "9.99999999"
+    assert prices["ETHUSDT"] == "9.99999999"
+    assert prices["币安人生USDT"] == "1.23456789"
+    singles = [c for c in calls if "symbol" in c[1]]
+    batches = [c for c in calls if "symbols" in c[1]]
+    assert len(singles) == 1 and singles[0][1]["symbol"] == "币安人生USDT"
+    assert len(batches) == 1
 
 
 def test_kline_parse():
