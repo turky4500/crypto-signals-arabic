@@ -2,9 +2,9 @@ name: Crypto Monitor
 
 on:
   schedule:
-    # موعدان كل ساعة (7 و37) — الموال خارج ذروة الضغط (:00) التي تُسقط GitHub مهامها
-    - cron: '7 * * * *'
-    - cron: '37 * * * *'
+    # كل 5 دقائق — يغطي لحظة إغلاق/فتح شمعة 1H (عند الدقيقة 0) ويحسم الأهداف لحظيًا تقريبًا
+    # (حديق GitHub الأدنى ~5 دقائق؛ التأخير الفعلي قد يزيد قليلاً عند ذروة الضغط)
+    - cron: '*/5 * * * *'
   push:
     branches: [main]
   workflow_dispatch:
@@ -53,7 +53,7 @@ jobs:
           NOW=$(( $(date +%s) * 1000 ))
           DIFF=$(( (NOW - LAST) / 1000 ))
           echo "diff_seconds=$DIFF"
-          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$DIFF" -lt 1800 ]; then
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$DIFF" -lt 270 ]; then
             echo "STILL_FRESH=true"
           else
             echo "STILL_FRESH=false"

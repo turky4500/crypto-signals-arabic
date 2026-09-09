@@ -27,6 +27,7 @@ async function fetchStatic() {
     state.symbols = symbols || [];
     state.rows = rows || [];
     state.perf = perf || [];
+    connectLiveStream();
     renderStatus(status);
     renderStats(stats);
     renderPerf();
@@ -241,6 +242,55 @@ function openModal(row) {
 
 /* ---------- الأسعار اللحظية ---------- */
 const BATCH_SAFE_SYMBOL = /^[A-Z0-9._\-]{1,50}$/;
+const WS_URL = "wss://stream.binance.com:9443/stream?streams=";
+
+let ws = null;
+let wsStreamsKey = "";
+let wsDead = false;
+let lastWsTick = 0;
+let lastRenderTs = 0;
+
+function wsStreamKey() {
+  return [...state.symbols].sort().join(",").toLowerCase();
+}
+
+function connectLiveStream() {
+  const symbols = (state.symbols || []).filter((s) => BATCH_SAFE_SYMBOL.test(s));
+  if (!symbols.length) return;
+  const key = wsStreamKey();
+  if (key === wsStreamsKey && ws && ws.readyState === WebSocket.OPEN) return;
+
+  const streams = symbols.map((s) => `${s.toLowerCase()}@miniTicker`).join("/");
+  wsStreamsKey = key;
+  if (ws) {
+    ws.onclose = null;
+    try { ws.close(); } catch (_) {}
+    ws = null;
+  }
+  wsDead = false;
+  try {
+    ws = new WebSocket(WS_URL + streams);
+  } catch (_) { wsDead = true; return; }
+
+  ws.onopen = () => { wsDead = false; };
+  ws.onmessage = (e) => {
+    try {
+      const frame = JSON.parse(e.data);
+      const d = frame.data || frame;
+      if (d && typeof d.s === "string" && typeof d.c === "string") {
+        state.prices[d.s] = parseFloat(d.c);
+        lastWsTick = Date.now();
+        if (Date.now() - lastRenderTs > 1000) { lastRenderTs = Date.now(); renderTable(); }
+      }
+    } catch (_) {}
+  };
+  ws.onerror = () => { wsDead = true; };
+  ws.onclose = () => {
+    wsDead = true;
+    if (wsStreamsKey === key) { ws = null; setTimeout(connectLiveStream, 5000); }
+  };
+  setTimeout(() => { if (Date.now() - lastWsTick > 8000) wsDead = true; }, 8000);
+}
 
 async function fetchSinglePrice(symbol) {
   const res = await fetch(`${BINANCE_API}/api/v3/ticker/price?symbol=${encodeURIComponent(symbol)}`);
@@ -254,6 +304,7 @@ async function updateLivePrices() {
     renderTable();
     return;
   }
+  if (!wsDead && Date.now() - lastWsTick < 15000) return; // الـ WebSocket حي — لا حاجة لسحب REST
   try {
     const out = {};
     const batchable = state.symbols.filter((s) => BATCH_SAFE_SYMBOL.test(s));
