@@ -126,3 +126,30 @@ def test_compute_stats_empty_and_win_rate():
 def test_make_record_deadline_is_close_plus_horizon():
     rec = _rec(open_ms=1000, close_ms=5000)
     assert rec["deadline_ms"] == 5000 + HORIZON_MS
+
+
+def test_tp_equality_boundary():
+    """لمس الهدف بالضبط (h == tp) يحسم الهدف، وإغلاق مساوٍ للوقف لا يحسم."""
+    rec = _rec()
+    assert evaluate_candles(rec, [(2100, 2200, 103.0, 96, 101)])["status"] == "tp_hit"
+    assert evaluate_candles(rec, [(2100, 2200, 101, 96, 95.0)]) is None
+
+
+def test_shadow_sl_touch_then_tp_wins_later_candle():
+    """لُمس الوقف شمائيًّا دون إغلاق لا يحسم؛ لمس الهدف في شمعة لاحقة يحسم كهدف."""
+    rec = _rec()
+    candles = [
+        (2100, 2200, 102, 93.0, 100),   # low لمس 93 < 95 لكن close=100 -> لا حسم
+        (2700, 2800, 99, 94.5, 97),     # لا هدف ولا وقف
+        (3300, 3400, 104.0, 96, 102),   # h>=tp -> هدف يسبق أي إغلاق وقف
+    ]
+    res = evaluate_candles(rec, candles)
+    assert res["status"] == "tp_hit"
+    assert res["resolved_at_ms"] == 3400
+
+
+def test_tp_hit_after_many_candles():
+    rec = _rec()
+    candles = [(2100 + i * 600, 2200 + i * 600, 102, 100, 101) for i in range(30)]
+    candles.append((21000, 21100, 104.0, 101, 103))
+    assert evaluate_candles(rec, candles)["status"] == "tp_hit"

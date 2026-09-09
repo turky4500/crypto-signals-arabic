@@ -347,6 +347,7 @@ class Monitor:
         stats["last_signal"] = signals[-1] if signals else None
 
         # ---- الحفظ ----
+        perf = seed_from_signals(perf, signals)  # بذر فوري للإشارات الجديدة في نفس التشغيل
         perf = mark_expired(perf, now_ms)
         if len(perf) > 2500:
             perf = perf[-2500:]
