@@ -156,6 +156,43 @@ function perfLiveText(r) {
   return fmtNumber(p, livePrecision(r.symbol));
 }
 
+/* ---------- فرز النتائج حسب المؤشر ---------- */
+const PERF_IND_LABELS = { supertrend: "Supertrend", ai: "AI Reader", strong: "متوافقة (Strong)" };
+const PERF_IND_ORDER = ["supertrend", "ai", "strong"];
+
+function perfGroupsHtml() {
+  const byInd = {};
+  (state.perf || []).forEach((r) => {
+    const k = r.indicator || "other";
+    (byInd[k] = byInd[k] || []).push(r);
+  });
+  const names = Object.keys(byInd);
+  const ordered = PERF_IND_ORDER.filter((k) => names.includes(k))
+    .concat(names.filter((k) => !PERF_IND_ORDER.includes(k)));
+
+  return ordered
+    .map((k) => {
+      const rows = byInd[k];
+      const tp = rows.filter((r) => r.status === "tp_hit").length;
+      const sl = rows.filter((r) => r.status === "sl_hit").length;
+      const open = rows.filter((r) => r.status === "pending" || r.status === "expired").length;
+      const resolved = tp + sl;
+      const rate = resolved ? (tp / resolved) * 100 : null;
+      const pct = rate === null ? "—" : rate.toFixed(1) + "%";
+      const tone = rate === null ? "" : rate >= 50 ? "green" : rate >= 30 ? "orange" : "red";
+      const bar = resolved ? Math.round((tp / resolved) * 100) : 0;
+      return `<div class="perf-group">
+        <div class="pg-head"><span class="pg-name">${esc(PERF_IND_LABELS[k] || k)}</span><span class="pg-rate ${tone}">${pct}</span></div>
+        <div class="pg-bar"><i style="width:${bar}%"></i></div>
+        <div class="pg-cols">
+          <span>${tp} ✅ تحقق هدف</span><span>${sl} ❌ ضرب وقف</span><span>${open} ⏳ لم يُحسم</span>
+        </div>
+        <div class="pg-sub">${resolved ? `${tp} ناجحة من ${resolved} محسومة · ` : ""}${rows.length} إشارة إجمالًا</div>
+      </div>`;
+    })
+    .join("");
+}
+
 function renderPerf() {
   const sorted = [...state.perf].sort((a, b) => (b.signal_open_ms ?? 0) - (a.signal_open_ms ?? 0));
 
@@ -172,6 +209,7 @@ function renderPerf() {
   const evTxt = winRate === null ? "—" : `${((winRate / 100) * 2 - (1 - winRate / 100)).toFixed(2)}R`;
 
   qs("#perfCount").textContent = `${total} إشارة`;
+  qs("#perfGroups").innerHTML = perfGroupsHtml();
   qs("#perfChips").innerHTML = [
     perfChip(total, "إجمالي"),
     perfChip(tp, "تحقق الهدف", "green"),

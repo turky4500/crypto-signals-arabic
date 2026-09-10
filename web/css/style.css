@@ -332,3 +332,18 @@ body.ws-on .lp-dot { background: var(--green); border-color: var(--green); anima
   0% { color: var(--red); background: var(--red-soft); border-radius: 4px; }
   100% { color: inherit; background: transparent; }
 }
+
+/* ---------- فرز النتائج حسب المؤشر ---------- */
+.perf-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.perf-group { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; box-shadow: var(--shadow); }
+.pg-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.pg-name { font-weight: 800; font-size: .92rem; }
+.pg-rate { font-weight: 800; font-size: 1.05rem; }
+.pg-rate.green { color: var(--green); }
+.pg-rate.orange { color: var(--orange); }
+.pg-rate.red { color: var(--red); }
+.pg-bar { height: 6px; border-radius: 999px; background: var(--gray-soft); margin: 8px 0 6px; overflow: hidden; }
+.pg-bar i { display: block; height: 100%; background: var(--green); border-radius: 999px; }
+.pg-cols { display: flex; gap: 12px; flex-wrap: wrap; font-size: .76rem; color: var(--muted); }
+.pg-cols span { white-space: nowrap; }
+.pg-sub { font-size: .7rem; color: var(--muted); margin-top: 3px; }
