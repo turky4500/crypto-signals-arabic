@@ -1418,9 +1418,9 @@
     "signal_open_ms": 1788955200000,
     "signal_close_ms": 1788958799999,
     "deadline_ms": 1789563599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789016399999,
+    "hit_price": 0.00424,
     "created_ms": 1788961626135
   },
   {
@@ -1818,9 +1818,9 @@
     "signal_open_ms": 1788969600000,
     "signal_close_ms": 1788973199999,
     "deadline_ms": 1789577999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789016399999,
+    "hit_price": 0.1271,
     "created_ms": 1788974181322
   },
   {
@@ -2302,5 +2302,53 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789009380660
+  },
+  {
+    "signature": "REZUSDT|strong|BUY|1789012800000",
+    "symbol": "REZUSDT",
+    "indicator": "strong",
+    "entry": "0.003740",
+    "sl": "0.002922",
+    "tp": "0.005376",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789012800000,
+    "signal_close_ms": 1789016399999,
+    "deadline_ms": 1789621199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789016865120
+  },
+  {
+    "signature": "UUSDT|supertrend|BUY|1789012800000",
+    "symbol": "UUSDT",
+    "indicator": "supertrend",
+    "entry": "0.9997",
+    "sl": "0.9993",
+    "tp": "1.0005",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789012800000,
+    "signal_close_ms": 1789016399999,
+    "deadline_ms": 1789621199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789016866216
+  },
+  {
+    "signature": "WLFIUSDT|supertrend|BUY|1789012800000",
+    "symbol": "WLFIUSDT",
+    "indicator": "supertrend",
+    "entry": "0.0568",
+    "sl": "0.0550",
+    "tp": "0.0604",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789012800000,
+    "signal_close_ms": 1789016399999,
+    "deadline_ms": 1789621199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789016867318
   }
 ]
