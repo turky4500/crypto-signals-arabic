@@ -42,9 +42,9 @@
     "signal_open_ms": 1788858000000,
     "signal_close_ms": 1788861599999,
     "deadline_ms": 1789466399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789059599999,
+    "hit_price": 0.231,
     "created_ms": 1788863091410
   },
   {
@@ -378,9 +378,9 @@
     "signal_open_ms": 1788883200000,
     "signal_close_ms": 1788886799999,
     "deadline_ms": 1789491599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789059599999,
+    "hit_price": 0.231,
     "created_ms": 1788887957443
   },
   {
@@ -570,9 +570,9 @@
     "signal_open_ms": 1788922800000,
     "signal_close_ms": 1788926399999,
     "deadline_ms": 1789531199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789059599999,
+    "hit_price": 0.0991,
     "created_ms": 1788927318314
   },
   {
@@ -1722,9 +1722,9 @@
     "signal_open_ms": 1788958800000,
     "signal_close_ms": 1788962399999,
     "deadline_ms": 1789567199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789059599999,
+    "hit_price": 980.59,
     "created_ms": 1788963963130
   },
   {
@@ -2394,9 +2394,9 @@
     "signal_open_ms": 1789016400000,
     "signal_close_ms": 1789019999999,
     "deadline_ms": 1789624799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789059599999,
+    "hit_price": 0.0553,
     "created_ms": 1789020170640
   },
   {
@@ -2442,9 +2442,9 @@
     "signal_open_ms": 1789030800000,
     "signal_close_ms": 1789034399999,
     "deadline_ms": 1789639199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789059599999,
+    "hit_price": 0.01555,
     "created_ms": 1789034575567
   },
   {
@@ -2926,5 +2926,21 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789056180142
+  },
+  {
+    "signature": "MSFTBUSDT|supertrend|BUY|1789056000000",
+    "symbol": "MSFTBUSDT",
+    "indicator": "supertrend",
+    "entry": "493.98",
+    "sl": "487.39",
+    "tp": "507.16",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789056000000,
+    "signal_close_ms": 1789059599999,
+    "deadline_ms": 1789664399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789059797211
   }
 ]
