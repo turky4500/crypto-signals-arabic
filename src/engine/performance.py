@@ -32,6 +32,7 @@ def make_record(sig: dict) -> dict:
         "resolved_at_ms": None,
         "hit_price": None,
         "created_ms": now,
+        "filtered": bool(sig.get("filter_info")),
     }
 
 

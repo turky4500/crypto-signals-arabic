@@ -83,7 +83,17 @@ function statCard(value, label, tone) {
 function renderStats(st) {
   if (!st) return;
   const last = st.last_signal;
+  const fm = st.filter_meta || {};
+  const fs = fm.filtered_stats;
+  const filterCard = fs
+    ? statCard(
+        `${fs.tp_hit}/${fs.total} · ${fs.win_rate === null ? "—" : fs.win_rate + "%"}`,
+        `منذ تفعيل الفلتر${fm.activated_ms ? ` (من ${formatTime12h(fm.activated_ms)})` : ""}`,
+        fs.win_rate === null ? "" : fs.win_rate >= 50 ? "green" : fs.win_rate >= 30 ? "orange" : "red"
+      )
+    : statCard(fm.enabled ? "بانتظار أول إشارة" : "معطّل", "منذ تفعيل الفلتر", "");
   qs("#statsGrid").innerHTML = `
+    ${filterCard}
     ${statCard(st.monitored_symbols ?? "-", "أزواج USDT مُراقبة", "")}
     ${statCard(st.signals_today ?? 0, "إشارات اليوم", "")}
     ${statCard(st.supertrend_today ?? 0, "إشارات Supertrend", "green")}

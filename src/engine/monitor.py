@@ -301,7 +301,10 @@ class Monitor:
             filter_info = self._evaluate_momentum_filter(
                 symbol_info.symbol, server_now
             )
-            if not filter_info.get("accepted"):
+            if filter_info.get("accepted"):
+                signal.filter_rejected = False
+                signal.filter_info = filter_info
+            else:
                 signal = None  # مرفوضة بالفلتر ولا تُرسل
         entry_values = None
         if signal is not None:
@@ -485,6 +488,39 @@ class Monitor:
             perf = perf[-2500:]
         save_json(perf_path, perf)
         status["performance"] = compute_stats(perf)
+
+        # ---- عدّاد "منذ تفعيل الفلتر": أول جولة تُثبّت الختم، ثم الإحصاءات لاحقًا ----
+        filter_meta_path = os.path.join(self.data_dir, "filter_meta.json")
+        filter_meta = load_json(filter_meta_path, None) or {}
+        fcfg = self.settings.get("momentum_filter", {})
+        from_ms = filter_meta.get("activated_ms")
+        if fcfg.get("enabled", True) and not from_ms:
+            from_ms = now_ms
+            filter_meta["activated_ms"] = from_ms
+            save_json(filter_meta_path, filter_meta)
+        filtered_stats = None
+        if from_ms:
+            after = [_r for _r in perf if _r.get("filtered")]
+            if after:
+                f_tp = sum(1 for _r in after if _r.get("status") == "tp_hit")
+                f_sl = sum(1 for _r in after if _r.get("status") == "sl_hit")
+                f_pend = sum(1 for _r in after if _r.get("status") == "pending")
+                f_exp = len(after) - f_tp - f_sl - f_pend
+                f_res = f_tp + f_sl
+                filtered_stats = {
+                    "total": len(after),
+                    "tp_hit": f_tp,
+                    "sl_hit": f_sl,
+                    "pending": f_pend,
+                    "expired": f_exp,
+                    "win_rate": round(f_tp / f_res * 100, 1) if f_res else None,
+                    "activated_ms": from_ms,
+                }
+        stats["filter_meta"] = {
+            "enabled": bool(fcfg.get("enabled", True)),
+            "activated_ms": from_ms,
+            "filtered_stats": filtered_stats,
+        }
 
         save_json(os.path.join(self.data_dir, "symbols.json"), [s.symbol for s in monitored])
         current_rows = []

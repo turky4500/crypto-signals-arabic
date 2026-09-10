@@ -450,3 +450,26 @@ def test_momentum_filter_disabled_respects_settings(tmp_path):
     assert not (data_dir / "filter_log.json").exists()
     signals = json.loads((data_dir / "signals.json").read_text(encoding="utf-8"))
     assert len(signals) >= 1
+
+
+def test_filter_meta_activation_stamp_and_stats(tmp_path):
+    """أول جولة مفعّل فيها الفلتر تُثبّت ختم التفعيل وتُنتج إحصاءات 'منذ الفلتر'."""
+    h1 = make_flip_candles()
+    d1 = h1  # اتجاه يومي صاعد -> تُقبل الإشارة
+    mon, data_dir = _make_filter_monitor(tmp_path, h1, d1)
+    mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+
+    meta = json.loads((data_dir / "filter_meta.json").read_text(encoding="utf-8"))
+    assert meta["activated_ms"] is not None
+
+    # ثبات الختم بين التشغيلات
+    run2 = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    meta2 = json.loads((data_dir / "filter_meta.json").read_text(encoding="utf-8"))
+    assert meta2["activated_ms"] == meta["activated_ms"]
+
+    stats = json.loads((data_dir / "stats.json").read_text(encoding="utf-8"))
+    fm = stats["filter_meta"]
+    assert fm["enabled"] is True
+    assert fm["activated_ms"] == meta["activated_ms"]
+    # صفقة مقبولة واحدة بانتظار الحسم -> total=1 و pending>=0
+    assert fm["filtered_stats"]["total"] >= 1
