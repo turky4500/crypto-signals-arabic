@@ -6,12 +6,14 @@ import logging
 import os
 import time
 
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from ..binance.client import BinanceClient
 from ..binance.models import Kline, format_price
 from ..config.settings import load_settings
 from ..indicators import ai_market_reader, supertrend
+from ..notify.daily_report import build_daily_report_message, compute_daily_report
 from ..notify.formatter import build_alert_message, format_time_12h, ts_to_riyadh
 from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
@@ -110,6 +112,73 @@ class Monitor:
         if not primary:
             return None
         return WhatsAppClient(url, token, primary, receivers=receivers)
+
+    # ------------------------------------------------------------------ #
+    def _daily_report_state_path(self) -> str:
+        return os.path.join(self.data_dir, "daily_report_state.json")
+
+    def _maybe_send_daily_report(self, perf: list, now_ms: int,
+                                 notifications: list, wa) -> dict:
+        """إرسال تقرير نهاية اليوم (بعد منتصف الليل بتوقيت الرياض) لليوم المنتهي.
+
+        يُرسل مرة واحدة لكل يوم عبر ملف حالة daily_report_state.json.
+        إعادة التشغيل في نفس اليوم لا ترسل مرة أخرى؛ والإرسال الفاشل يُعاد في
+        آخر تشغيل (بدون تقدم الحالة)."""
+        dr_cfg = self.settings.get("whatsapp", {}).get("daily_report", {})
+        if not dr_cfg.get("enabled", True):
+            return {"sent": False, "reason": "disabled"}
+
+        now_dt = ts_to_riyadh(now_ms)
+        today = now_dt.date()
+        yesterday = (today - timedelta(days=1)).isoformat()
+
+        state = load_json(self._daily_report_state_path(), None) or {}
+        last = state.get("last_report_date")
+        if last == yesterday:
+            return {"sent": False, "reason": "already_sent"}
+
+        hour = int(dr_cfg.get("hour", 0))
+        minute = int(dr_cfg.get("minute", 5))
+        report_time = datetime(
+            now_dt.year, now_dt.month, now_dt.day, hour, minute,
+            tzinfo=ZoneInfo(self.tz.key if hasattr(self.tz, "key") else "Asia/Riyadh"),
+        )
+        if now_dt < report_time:
+            return {"sent": False, "reason": "too_early"}
+
+        stats = compute_daily_report(perf, yesterday, tz=self.tz)
+        if stats["total"] == 0:
+            state["last_report_date"] = yesterday
+            save_json(self._daily_report_state_path(), state)
+            return {"sent": False, "reason": "no_signals", "day": yesterday}
+
+        msg = build_daily_report_message(stats)
+        res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
+
+        notifications = append_capped(
+            notifications,
+            {
+                "ts": now_ms,
+                "kind": "daily_report",
+                "day": yesterday,
+                "message": msg,
+                "ok": res.get("ok"),
+                "error": res.get("error"),
+                "attempts": res.get("attempts"),
+            },
+            500,
+        )
+        save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
+
+        if res.get("ok"):
+            state["last_report_date"] = yesterday
+            save_json(self._daily_report_state_path(), state)
+        return {
+            "sent": bool(res.get("ok")),
+            "day": yesterday,
+            "error": res.get("error"),
+            **stats,
+        }
 
     # ------------------------------------------------------------------ #
     def _build_row(self, symbol_info, candle, st_res, ai_res, price_str, entry_values) -> dict:
@@ -377,6 +446,9 @@ class Monitor:
         status["last_error"] = errors[-1] if errors else None
         save_json(os.path.join(self.data_dir, "status.json"), status)
 
+        # ---- تقرير نهاية اليوم (بعد منتصف الليل بتوقيت الرياض) ----
+        daily_report = self._maybe_send_daily_report(perf, now_ms, notifications, wa)
+
         # ---- ملخص ----
         return {
             "ok": binance_ok,
@@ -390,4 +462,5 @@ class Monitor:
             "whatsapp_connected": wa is not None,
             "duration_s": round(time.time() - started, 2),
             "server_time_ms": server_now,
+            "daily_report": daily_report,
         }

@@ -30,6 +30,11 @@ DEFAULT_SETTINGS = {
     "whatsapp": {
         "enabled": True,
         "max_history_signals": 2000,
+        "daily_report": {
+            "enabled": True,
+            "hour": 0,
+            "minute": 5,
+        },
     },
 }
 
