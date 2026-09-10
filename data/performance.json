@@ -1994,9 +1994,9 @@
     "signal_open_ms": 1788976800000,
     "signal_close_ms": 1788980399999,
     "deadline_ms": 1789585199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789030799999,
+    "hit_price": 1.384,
     "created_ms": 1788980572626
   },
   {
@@ -2414,5 +2414,21 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789020171788
+  },
+  {
+    "signature": "AWEUSDT|supertrend|BUY|1789027200000",
+    "symbol": "AWEUSDT",
+    "indicator": "supertrend",
+    "entry": "0.06044",
+    "sl": "0.05856",
+    "tp": "0.06420",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789027200000,
+    "signal_close_ms": 1789030799999,
+    "deadline_ms": 1789635599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789030999890
   }
 ]
