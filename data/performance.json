@@ -2202,9 +2202,9 @@
     "signal_open_ms": 1789002000000,
     "signal_close_ms": 1789005599999,
     "deadline_ms": 1789610399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789073999999,
+    "hit_price": 0.001076,
     "created_ms": 1789005794153
   },
   {
@@ -2958,6 +2958,40 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789070573731,
+    "filtered": true
+  },
+  {
+    "signature": "RAYUSDT|supertrend|BUY|1789070400000",
+    "symbol": "RAYUSDT",
+    "indicator": "supertrend",
+    "entry": "1.4261",
+    "sl": "1.2178",
+    "tp": "1.8427",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789070400000,
+    "signal_close_ms": 1789073999999,
+    "deadline_ms": 1789678799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789074199271,
+    "filtered": true
+  },
+  {
+    "signature": "RPLUSDT|supertrend|BUY|1789070400000",
+    "symbol": "RPLUSDT",
+    "indicator": "supertrend",
+    "entry": "1.730",
+    "sl": "1.644",
+    "tp": "1.902",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789070400000,
+    "signal_close_ms": 1789073999999,
+    "deadline_ms": 1789678799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789074200838,
     "filtered": true
   }
 ]
