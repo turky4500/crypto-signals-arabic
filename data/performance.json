@@ -1530,9 +1530,9 @@
     "signal_open_ms": 1788955200000,
     "signal_close_ms": 1788958799999,
     "deadline_ms": 1789563599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789001999999,
+    "hit_price": 0.2719,
     "created_ms": 1788961633910
   },
   {
@@ -1866,9 +1866,9 @@
     "signal_open_ms": 1788969600000,
     "signal_close_ms": 1788973199999,
     "deadline_ms": 1789577999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789001999999,
+    "hit_price": 0.003,
     "created_ms": 1788974184382
   },
   {
@@ -2142,5 +2142,53 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1788998599053
+  },
+  {
+    "signature": "CKBUSDT|ai|BUY|1788998400000",
+    "symbol": "CKBUSDT",
+    "indicator": "ai",
+    "entry": "0.001141",
+    "sl": "0.001088",
+    "tp": "0.001247",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1788998400000,
+    "signal_close_ms": 1789001999999,
+    "deadline_ms": 1789606799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789002178916
+  },
+  {
+    "signature": "NEWTUSDT|supertrend|BUY|1788998400000",
+    "symbol": "NEWTUSDT",
+    "indicator": "supertrend",
+    "entry": "0.04471",
+    "sl": "0.04210",
+    "tp": "0.04993",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1788998400000,
+    "signal_close_ms": 1789001999999,
+    "deadline_ms": 1789606799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789002180181
+  },
+  {
+    "signature": "VTHOUSDT|supertrend|BUY|1788998400000",
+    "symbol": "VTHOUSDT",
+    "indicator": "supertrend",
+    "entry": "0.000590",
+    "sl": "0.000451",
+    "tp": "0.000868",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1788998400000,
+    "signal_close_ms": 1789001999999,
+    "deadline_ms": 1789606799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789002181449
   }
 ]
