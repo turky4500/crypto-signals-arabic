@@ -1,34 +1,54 @@
 {
   "monitored_symbols": 473,
-  "signals_today": 54,
+  "signals_today": 55,
   "supertrend_today": 42,
-  "ai_today": 10,
+  "ai_today": 11,
   "strong_today": 2,
   "last_signal": {
-    "symbol": "MSFTBUSDT",
-    "indicator": "supertrend",
+    "symbol": "INITUSDT",
+    "indicator": "ai",
     "signal_type": "BUY",
-    "candle_open_ms": 1789056000000,
-    "candle_close_ms": 1789059599999,
-    "signal_price": 493.98,
-    "entry": "493.98",
-    "sl": "487.39",
-    "tp": "507.16",
+    "candle_open_ms": 1789066800000,
+    "candle_close_ms": 1789070399999,
+    "signal_price": 0.0685,
+    "entry": "0.06850",
+    "sl": "0.06557",
+    "tp": "0.07436",
     "rr_ratio": 2.0,
-    "confidence": 0.7968,
-    "ema_trend": "bearish",
+    "confidence": 0.7089,
+    "ema_trend": "bullish",
     "volume_ok": true,
-    "time_text": "7:59 مساءً",
-    "created_at_ms": 1789059797211,
+    "time_text": "10:59 مساءً",
+    "created_at_ms": 1789070573731,
     "whatsapp_status": "sent",
-    "whatsapp_sent_at": 1789059797211,
-    "signature": "MSFTBUSDT|supertrend|BUY|1789056000000"
+    "whatsapp_sent_at": 1789070573731,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 3.84,
+      "h4_ret5_min": 2.0,
+      "h1_rsi": 35.6,
+      "h1_rsi_max": 70.0,
+      "d1_above_ema50": true,
+      "h4_in_uptrend": true,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true
+    },
+    "signature": "INITUSDT|ai|BUY|1789066800000"
   },
-  "last_check": 1789070127750,
+  "last_check": 1789070442578,
   "data_date": "2026-09-10",
   "filter_meta": {
     "enabled": true,
     "activated_ms": 1789061762249,
-    "filtered_stats": null
+    "filtered_stats": {
+      "total": 1,
+      "tp_hit": 0,
+      "sl_hit": 0,
+      "pending": 1,
+      "expired": 0,
+      "win_rate": null,
+      "activated_ms": 1789061762249
+    }
   }
 }
