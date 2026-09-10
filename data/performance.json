@@ -1258,9 +1258,9 @@
     "signal_open_ms": 1788940800000,
     "signal_close_ms": 1788944399999,
     "deadline_ms": 1789549199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789005599999,
+    "hit_price": 0.1267,
     "created_ms": 1788944667858
   },
   {
@@ -1786,9 +1786,9 @@
     "signal_open_ms": 1788958800000,
     "signal_close_ms": 1788962399999,
     "deadline_ms": 1789567199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789005599999,
+    "hit_price": 0.00424,
     "created_ms": 1788963967685
   },
   {
@@ -2190,5 +2190,37 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789002181449
+  },
+  {
+    "signature": "CKBUSDT|supertrend|BUY|1789002000000",
+    "symbol": "CKBUSDT",
+    "indicator": "supertrend",
+    "entry": "0.001171",
+    "sl": "0.001091",
+    "tp": "0.001331",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789002000000,
+    "signal_close_ms": 1789005599999,
+    "deadline_ms": 1789610399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789005794153
+  },
+  {
+    "signature": "USDCUSDT|supertrend|BUY|1789002000000",
+    "symbol": "USDCUSDT",
+    "indicator": "supertrend",
+    "entry": "1.00023",
+    "sl": "0.99997",
+    "tp": "1.00075",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789002000000,
+    "signal_close_ms": 1789005599999,
+    "deadline_ms": 1789610399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789005795352
   }
 ]
