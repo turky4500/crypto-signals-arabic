@@ -14,6 +14,11 @@ DEFAULT_SETTINGS = {
         "factor": 3.0,
         "rr_ratio": 2.0,
     },
+    "momentum_filter": {
+        "enabled": True,
+        "h4_ret5_min": 2.0,
+        "h1_rsi_max": 70.0,
+    },
     "ai_reader": {
         "neighbors_count": 8,
         "max_window": 300,

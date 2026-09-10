@@ -132,9 +132,10 @@ class BinanceClient:
             results[data["symbol"]] = data["price"]
         return results
 
-    def kline_series(self, symbol: str, limit: int = 400) -> dict:
-        """إرجاع المتسلسلات المطلوبة للحسابات دفعة واحدة."""
-        klines = self.klines(symbol, INTERVAL_1H, limit)
+    def kline_series(self, symbol: str, limit: int = 400,
+                     interval: str = INTERVAL_1H) -> dict:
+        """إرجاع المتسلسلات المطلوبة للحسابات دفعة واحدة (فريم قابل للتخصيص)."""
+        klines = self.klines(symbol, interval, limit)
         return {
             "open": [k.open for k in klines],
             "high": [k.high for k in klines],

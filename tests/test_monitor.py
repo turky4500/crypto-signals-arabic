@@ -55,7 +55,7 @@ class FakeBinance:
             out[s] = str(self.candles[s][-1]["close"])
         return out
 
-    def kline_series(self, symbol, limit=None):
+    def kline_series(self, symbol, limit=None, interval="1h"):
         ks = self.candles[symbol]
         return {
             "open": [k["open"] for k in ks],
@@ -117,7 +117,7 @@ def make_flip_candles(n=140, start=500.0, step=2.0):
     return ks
 
 
-def _make_monitor(tmp_path, candles, server=None):
+def _make_monitor(tmp_path, candles, server=None, filter_enabled=False):
     data_dir = tmp_path / "data"
     data_dir.mkdir(exist_ok=True)
     (data_dir / "settings.json").write_text(
@@ -126,6 +126,7 @@ def _make_monitor(tmp_path, candles, server=None):
                 "history_candles": 200,
                 "min_24h_quote_volume_usdt": 1.0,
             },
+            "momentum_filter": {"enabled": filter_enabled},
             "ai_reader": {
                 "neighbors_count": 8, "max_window": 300,
                 "min_ai_score": 0.60, "use_distance_weight": True,
@@ -356,3 +357,96 @@ def test_perf_status_metrics(tmp_path):
     assert status["performance"]["total"] == 1
     assert status["performance"]["pending"] == 1
     assert status["performance"]["win_rate"] is None
+
+
+# ------------------------- فلتر الزخم (تكاملي) ------------------------- #
+
+class FilterAwareBinance(FakeBinance):
+    """مثل FakeBinance مع إمكانية تغذية فريم 1d ببيانات منفصلة."""
+
+    def __init__(self, candles_by_symbol, d1_by_symbol=None):
+        super().__init__(candles_by_symbol)
+        self.d1 = d1_by_symbol or {}
+
+    def kline_series(self, symbol, limit=None, interval="1h"):
+        ks = self.d1.get(symbol) if interval == "1d" else self.candles[symbol]
+        return {
+            "open": [k["open"] for k in ks],
+            "high": [k["high"] for k in ks],
+            "low": [k["low"] for k in ks],
+            "close": [k["close"] for k in ks],
+            "volume": [k["volume"] for k in ks],
+            "open_time": [k["open_time"] for k in ks],
+            "close_time": [k["close_time"] for k in ks],
+        }
+
+
+def _downtrend_candles(n=220, start=500.0, step=2.0):
+    """اتجاه هابط حاد — آخر إغلاق تحت EMA50 (يُغذي فريم 1d للرفض)."""
+    import time as _t
+    t0 = int(_t.time() * 1000) - n * 86_400_000
+    ks = []
+    for i in range(n):
+        close = start - step * i
+        open_ = close + step
+        ks.append({
+            "open_time": t0 + i * 86_400_000,
+            "close_time": t0 + (i + 1) * 86_400_000,
+            "open": round(open_, 4), "high": round(open_ * 1.002, 4),
+            "low": round(close * 0.998, 4), "close": round(close, 4),
+            "volume": 10000.0,
+        })
+    return ks
+
+
+def _make_filter_monitor(tmp_path, h1_candles, d1_candles):
+    """Monitor بفلتر مفعّل: 1H مولّدة للإشارة + 1d منفصل للفلتر."""
+    candles = {"BTCUSDT": h1_candles}
+    mon, data_dir = _make_monitor(tmp_path, candles,
+                                  server=h1_candles[-1]["close_time"],
+                                  filter_enabled=True)
+    mon.client = FilterAwareBinance(candles, d1_by_symbol={"BTCUSDT": d1_candles})
+    mon.client.server = h1_candles[-1]["close_time"]
+    return mon, data_dir
+
+
+def test_momentum_filter_blocks_low_momentum_signal(tmp_path):
+    """إشارة انقلاب على 1H مع اتجاه يومي هابط تُرفض: لا تُرسل وتُسجَّل مرفوضة."""
+    h1 = make_flip_candles()
+    d1 = _downtrend_candles()
+    mon, data_dir = _make_filter_monitor(tmp_path, h1, d1)
+    run = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    signals = json.loads((data_dir / "signals.json").read_text(encoding="utf-8"))
+    assert run["new_signals"] == 0
+    assert len(signals) == 0
+    rows = json.loads((data_dir / "current_signals.json").read_text(encoding="utf-8"))
+    assert rows[0]["filter_state"] == "rejected"
+    log = json.loads((data_dir / "filter_log.json").read_text(encoding="utf-8"))
+    assert log[0]["accepted"] is False
+
+
+def test_momentum_filter_accepts_strong_trend_signal(tmp_path):
+    """نفس الإشارة مع اتجاه يومي صاعد تُقبل وتُرسل وتُسجَّل."""
+    h1 = make_flip_candles()
+    d1 = h1  # الاتجاه اليومي الصاعد (نفس اتجاه 1H الصاعد) -> فوق EMA50
+    mon, data_dir = _make_filter_monitor(tmp_path, h1, d1)
+    run = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    assert run["new_signals"] >= 1
+    signals = json.loads((data_dir / "signals.json").read_text(encoding="utf-8"))
+    assert len(signals) >= 1
+    log = json.loads((data_dir / "filter_log.json").read_text(encoding="utf-8"))
+    assert log[0]["accepted"] is True
+
+
+def test_momentum_filter_disabled_respects_settings(tmp_path):
+    """عندما الفلتر معطّل، تُرسل الإشارة ولا يُكتب سجل فلتر."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles,
+                                  server=candles["BTCUSDT"][-1]["close_time"],
+                                  filter_enabled=False)
+    mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    rows = json.loads((data_dir / "current_signals.json").read_text(encoding="utf-8"))
+    assert rows[0]["filter_state"] is None
+    assert not (data_dir / "filter_log.json").exists()
+    signals = json.loads((data_dir / "signals.json").read_text(encoding="utf-8"))
+    assert len(signals) >= 1

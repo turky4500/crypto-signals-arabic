@@ -1,7 +1,7 @@
 """كشف إشارات BUY فقط (Spot / Long) مع حساب Entry / SL / TP بدقة Binance."""
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass, field
 from decimal import Decimal
 
 from ..binance.models import Kline, SymbolInfo, format_price, round_price
@@ -26,6 +26,8 @@ class Signal:
     created_at_ms: int = 0
     whatsapp_status: str = "pending"
     whatsapp_sent_at: int | None = None
+    filter_rejected: bool = False
+    filter_info: dict = field(default_factory=dict)
 
     def signature(self) -> str:
         return f"{self.symbol}|{self.indicator}|{self.signal_type}|{self.candle_open_ms}"

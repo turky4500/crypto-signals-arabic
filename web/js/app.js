@@ -272,8 +272,9 @@ function priceCell(row) {
 }
 
 function signalBadge(row) {
-  if (row.signal === "STRONG BUY") return badge("🔥 STRONG BUY", "orange");
-  if (row.signal === "BUY") return badge("🟢 BUY", "green");
+  const filterTag = row.filter_state === "rejected" ? " ⛔" : "";
+  if (row.signal === "STRONG BUY") return badge(`🔥 STRONG BUY${filterTag}`, "orange");
+  if (row.signal === "BUY") return badge(`🟢 BUY${filterTag}`, "green");
   return badge("—", "gray");
 }
 

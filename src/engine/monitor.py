@@ -19,6 +19,7 @@ from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
 from .detector import build_signal
 from .duplicates import DuplicateGuard
+from .momentum_filter import evaluate_filter
 from .performance import (compute_stats, evaluate_candles, mark_expired,
                           prune_old, seed_from_signals)
 
@@ -181,7 +182,8 @@ class Monitor:
         }
 
     # ------------------------------------------------------------------ #
-    def _build_row(self, symbol_info, candle, st_res, ai_res, price_str, entry_values) -> dict:
+    def _build_row(self, symbol_info, candle, st_res, ai_res, price_str,
+                   entry_values, filter_info: dict | None = None) -> dict:
         st_buy = bool(st_res["buy_signal"][-1])
         ai_buy = bool(ai_res["buy_signal"])
         tick = symbol_info.tick_size
@@ -194,6 +196,10 @@ class Monitor:
             signal_label = "BUY"
         else:
             signal_label = "—"
+
+        filter_state = None
+        if filter_info is not None and not filter_info.get("disabled"):
+            filter_state = "accepted" if filter_info.get("accepted") else "rejected"
 
         return {
             "symbol": symbol_info.symbol,
@@ -213,11 +219,37 @@ class Monitor:
             "ema_fast": ai_res.get("ema_fast"),
             "ema_slow": ai_res.get("ema_slow"),
             "volume_ok": bool(ai_res.get("vol_ok")),
+            "filter_state": filter_state,
+            "filter_info": filter_info if filter_state is not None else None,
             "signal_time": format_time_12h(ts_to_riyadh(candle.close_time)),
             "candle_open_ms": candle.open_time,
             "candle_close_ms": candle.close_time,
             "last_update_ms": int(time.time() * 1000),
         }
+
+    # ------------------------------------------------------------------ #
+    def _evaluate_momentum_filter(self, symbol: str, server_now: int) -> dict:
+        """تطبيق فلتر الزخم الموحّد على مرشّح إشارة (يُجلب 1H/4H/D1 مغلقة فقط)."""
+        cfg = self.settings.get("momentum_filter", {})
+        if not cfg.get("enabled", True):
+            return {"accepted": True, "disabled": True}
+
+        def _closed(series: dict) -> dict:
+            ct = series["close_time"]
+            idx = [i for i in range(len(ct)) if ct[i] <= server_now]
+            return {k: [series[k][i] for i in idx] for k in series} or None
+
+        try:
+            h1_src = self.client.kline_series(symbol, self.history_candles)
+            h4 = self.client.kline_series(symbol, 120, interval="4h")
+            d1 = self.client.kline_series(symbol, 120, interval="1d")
+            return evaluate_filter(
+                _closed(h1_src), _closed(h4), _closed(d1),
+                h4_ret5_min=float(cfg.get("h4_ret5_min", 2.0)),
+                h1_rsi_max=float(cfg.get("h1_rsi_max", 70.0)),
+            )
+        except Exception as exc:
+            return {"accepted": False, "error": str(exc)}
 
     # ------------------------------------------------------------------ #
     def _process_symbol(self, symbol_info, server_now, prices: dict,
@@ -264,6 +296,13 @@ class Monitor:
 
         price_str = prices.get(symbol_info.symbol)
         signal = build_signal(symbol_info, candle, st_res, ai_res, st_cfg, ai_cfg)
+        filter_info = None
+        if signal is not None:
+            filter_info = self._evaluate_momentum_filter(
+                symbol_info.symbol, server_now
+            )
+            if not filter_info.get("accepted"):
+                signal = None  # مرفوضة بالفلتر ولا تُرسل
         entry_values = None
         if signal is not None:
             entry_values = {"entry": signal.entry, "sl": signal.sl, "tp": signal.tp}
@@ -286,7 +325,10 @@ class Monitor:
                     if px >= tp_val:
                         rec.update({"status": "tp_hit", "resolved_at_ms": server_now, "hit_price": tp_val})
 
-        row = self._build_row(symbol_info, candle, st_res, ai_res, price_str, entry_values)
+        row = self._build_row(
+            symbol_info, candle, st_res, ai_res, price_str,
+            entry_values, filter_info,
+        )
         return row, signal
 
     # ------------------------------------------------------------------ #
@@ -349,6 +391,7 @@ class Monitor:
 
         rows_map = {}
         new_signals = []
+        filter_log = []
         processed = 0
 
         if monitored:
@@ -370,6 +413,16 @@ class Monitor:
                     continue
                 processed += 1
                 rows_map[s_info.symbol] = row
+                f_info = row.get("filter_info")
+                if f_info is not None and not f_info.get("disabled"):
+                    filter_log.append({
+                        "symbol": s_info.symbol,
+                        "sig": f"{s_info.symbol}|{row.get('candle_close_ms')}",
+                        "ts": now_ms,
+                        "signal": row.get("signal"),
+                        "accepted": bool(f_info.get("accepted")),
+                        **f_info,
+                    })
                 if signal is not None and not guard.is_duplicate(signal.signature()):
                     guard.add(signal.signature())
                     new_signals.append(signal)
@@ -434,10 +487,23 @@ class Monitor:
         status["performance"] = compute_stats(perf)
 
         save_json(os.path.join(self.data_dir, "symbols.json"), [s.symbol for s in monitored])
+        current_rows = []
+        for _row in rows_map.values():
+            _row = dict(_row)
+            _row["filter_info"] = None  # بيانات الفلتر الكاملة في filter_log فقط
+            current_rows.append(_row)
         save_json(
             os.path.join(self.data_dir, "current_signals.json"),
-            list(rows_map.values()),
+            current_rows,
         )
+        if filter_log:
+            filter_log_path = os.path.join(self.data_dir, "filter_log.json")
+            prev_log = load_json(filter_log_path, []) or []
+            seen: dict = {}
+            for _rec in prev_log + filter_log:
+                seen.setdefault(_rec.get("sig"), _rec)
+            merged = list(seen.values())[-5000:]
+            save_json(filter_log_path, merged)
         save_json(signals_path, signals)
         save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
         save_json(os.path.join(self.data_dir, "stats.json"), stats)
