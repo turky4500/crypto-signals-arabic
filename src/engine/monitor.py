@@ -17,7 +17,7 @@ from ..notify.daily_report import build_daily_report_message, compute_daily_repo
 from ..notify.formatter import build_alert_message, format_time_12h, ts_to_riyadh
 from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
-from .detector import build_signal
+from .detector import build_bollinger_signal, build_signal
 from .duplicates import DuplicateGuard
 from .candidate_study import build_candidate, compute_candidate_stats, seed_candidates
 from .indicators_panel import build_paper_records, compute_panel, panel_brief
@@ -84,6 +84,7 @@ def _empty_stats():
         "supertrend_today": 0,
         "ai_today": 0,
         "strong_today": 0,
+        "bollinger_today": 0,
         "last_signal": None,
         "last_check": None,
         "data_date": None,
@@ -193,10 +194,10 @@ class Monitor:
 
         if st_buy and ai_buy:
             signal_label = "STRONG BUY"
-        elif st_buy:
+        elif st_buy or ai_buy:
             signal_label = "BUY"
-        elif ai_buy:
-            signal_label = "BUY"
+        elif entry_values is not None:
+            signal_label = "BOLL BUY"
         else:
             signal_label = "—"
 
@@ -264,7 +265,7 @@ class Monitor:
                         perf_pending_map: dict | None = None,
                         study_pending_map: dict | None = None,
                         candidates_pending_map: dict | None = None):
-        """يعيد (row، signal أو None، panel، paper). signal = إشارة جديدة غير مكررة إن وُجِدت."""
+        """يعيد (row، set إشارات، panel، paper، مرشّحات). signals = إشارات جديدة غير مكررة إن وُجِدت."""
         series = self.client.kline_series(symbol_info.symbol, self.history_candles)
         ot = series["open_time"]
         ct = series["close_time"]
@@ -334,36 +335,52 @@ class Monitor:
 
         # ---- بوابة الإرسال: Supertrend/AI ثم الاتجاه ثم اتفاق ≥ min_consensus ----
         first_signal = build_signal(symbol_info, candle, st_res, ai_res, st_cfg, ai_cfg)
+        # ---- مصدر ثانٍ (تجربة بوليجر الحي): BUY ارتدادي بشرط اجتياز فلتر الترند ----
+        boll_signal = None
+        if study_cfg.get("enabled", True) and panel is not None \
+                and panel["indicators"]["bollinger"].get("buy_signal"):
+            atr_last = st_res.get("atr")
+            atr_val = float(atr_last[-1]) if atr_last is not None and len(atr_last) else None
+            boll_signal = build_bollinger_signal(
+                symbol_info, candle, atr_val, study_cfg,
+                ema_trend="bullish" if ai_res.get("ema_bull") else "bearish",
+                volume_ok=bool(ai_res.get("vol_ok")),
+            )
+
         min_consensus = int(study_cfg.get("min_consensus", 3))
-        signal = None
+        consensus_gate = study_cfg.get("en_consensus_gate",
+                                       bool(study_cfg.get("enabled", True)))
+        consensus_val = panel["consensus"] if panel is not None else 0
+        sources = [s for s in (first_signal, boll_signal) if s is not None]
+        signals_out: list = []
+        candidates_out: list = []
         filter_info = None
-        if first_signal is not None:
+        if sources:
             filter_info = self._evaluate_momentum_filter(
                 symbol_info.symbol, server_now
             )
-            if filter_info.get("accepted"):
-                consensus_gate = study_cfg.get("en_consensus_gate",
-                                               bool(study_cfg.get("enabled", True)))
-                if consensus_gate and panel is not None \
-                        and panel["consensus"] < min_consensus:
-                    # الاتجاه مؤيد لكن اتفاق المؤشرات دون الحد: لا تُرسل
-                    signal = None
-                    filter_info = dict(filter_info)
-                    filter_info.update({
-                        "accepted": False,
-                        "gate": "consensus",
-                        "consensus": panel["consensus"],
-                        "min_consensus": min_consensus,
-                    })
-                else:
-                    signal = first_signal
-                    signal.filter_rejected = False
-                    signal.filter_info = filter_info
-            else:
-                signal = None  # مرفوضة بالفلتر ولا تُرسل
+            if filter_info.get("accepted") and consensus_gate and panel is not None \
+                    and panel["consensus"] < min_consensus:
+                filter_info = dict(filter_info)
+                filter_info.update({
+                    "accepted": False,
+                    "gate": "consensus",
+                    "consensus": panel["consensus"],
+                    "min_consensus": min_consensus,
+                })
+            for src in sources:
+                fi = filter_info
+                src.filter_info = fi
+                src.filter_rejected = not bool(fi.get("accepted"))
+                if fi.get("accepted"):
+                    signals_out.append(src)
+                cand = build_candidate(src.to_dict(), fi, consensus_val)
+                if cand is not None:
+                    candidates_out.append(cand)
         entry_values = None
-        if signal is not None:
-            entry_values = {"entry": signal.entry, "sl": signal.sl, "tp": signal.tp}
+        if signals_out:
+            first = signals_out[0]
+            entry_values = {"entry": first.entry, "sl": first.sl, "tp": first.tp}
 
         if perf_pending_map:
             for rec in perf_pending_map.get(symbol_info.symbol, []):
@@ -424,17 +441,7 @@ class Monitor:
             entry_values, filter_info, panel,
         )
 
-        # مرشّح قياس لمنطق الإرسال: نسجّل كل إشارة Supertrend/AI (مقبولة أو
-        # مرفوضة) كصفقة ورقية بعلامات القواعد، لنقيس أي قاعدة توقعها موجب.
-        candidate = None
-        if first_signal is not None:
-            sig = first_signal.to_dict()
-            sig.setdefault("candle_open_ms", candle.open_time)
-            sig.setdefault("candle_close_ms", candle.close_time)
-            consensus_val = panel["consensus"] if panel is not None else 0
-            candidate = build_candidate(sig, filter_info, consensus_val)
-
-        return row, signal, panel, paper, candidate
+        return row, signals_out, panel, paper, candidates_out
 
     # ------------------------------------------------------------------ #
     def _indicator_study_stats(self, study: list, now_ms: int) -> dict:
@@ -556,7 +563,7 @@ class Monitor:
 
             for s_info in monitored:
                 try:
-                    row, signal, panel, paper, candidate = self._process_symbol(
+                    row, signals_out, panel, paper, candidates_out = self._process_symbol(
                         s_info, server_now, prices, perf_pending_map,
                         study_pending_map, candidates_pending_map,
                     )
@@ -566,8 +573,9 @@ class Monitor:
                     continue
                 processed += 1
                 rows_map[s_info.symbol] = row
-                if candidate is not None:
-                    candidates.append(candidate)
+                for cand in candidates_out:
+                    if cand is not None:
+                        candidates.append(cand)
                 f_info = row.get("filter_info")
                 if f_info is not None and not f_info.get("disabled"):
                     filter_log.append({
@@ -592,9 +600,10 @@ class Monitor:
                             if _p.get("signature") not in study_seen:
                                 study_seen.add(_p.get("signature"))
                                 study.append(_p)
-                if signal is not None and not guard.is_duplicate(signal.signature()):
-                    guard.add(signal.signature())
-                    new_signals.append(signal)
+                for sig in signals_out:
+                    if not guard.is_duplicate(sig.signature()):
+                        guard.add(sig.signature())
+                        new_signals.append(sig)
 
         status["market_data_connected"] = bool(monitored) and processed > 0
         status["monitoring_active"] = True
@@ -644,6 +653,8 @@ class Monitor:
                 stats["ai_today"] += 1
             elif ind == "strong":
                 stats["strong_today"] += 1
+            elif ind == "bollinger":
+                stats["bollinger_today"] += 1
         stats["last_signal"] = signals[-1] if signals else None
 
         # ---- الحفظ ----

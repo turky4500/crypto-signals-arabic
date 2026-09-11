@@ -1,7 +1,10 @@
 """اختبارات المؤشرات التسجيلية (Ichimoku, AO, MACD, Bollinger, RSI50, ADX)
 + لوحة المؤشرات وبنية الصفقات الورقية."""
 import math
+from decimal import Decimal
 
+from src.binance.models import Kline, SymbolInfo
+from src.engine.detector import build_bollinger_signal
 from src.engine.indicators_panel import (
     build_paper_records, compute_panel, panel_brief,
 )
@@ -94,6 +97,57 @@ def test_bollinger_reversion_shape():
     assert res["lower"] is not None
     assert res["mid"] is not None
     assert res["upper"] is not None
+
+
+def test_build_bollinger_signal_structure():
+    """إشارة Bollinger الحية من (display: family) بنفس بنية Signal مع
+    Entry=إغلاق / SL=أدنى−k·ATR / TP=RR·(Entry−SL) وقاعدة >Entry>SL."""
+    info = SymbolInfo(
+        symbol="BTCUSDT", base_asset="BTC", quote_asset="USDT",
+        status="TRADING", tick_size=Decimal("0.01000000"),
+        price_precision=2, step_size=Decimal("0.00001000"),
+        qty_precision=5, min_notional=5.0, spot_trading=True,
+    )
+    candle = Kline(
+        open_time=1700000000000, open=50000.0, high=50100.0,
+        low=49800.0, close=50010.0, volume=1000.0,
+        close_time=1700003600000, quote_volume=5e7,
+    )
+    sig = build_bollinger_signal(
+        info, candle, atr_value=150.0, study_cfg={"rr_ratio": 2.0, "atr_sl_multiplier": 1.5},
+        ema_trend="bullish", volume_ok=True,
+    )
+    assert sig is not None
+    assert sig.indicator == "bollinger"
+    assert sig.signal_type == "BUY"
+    assert sig.ema_trend == "bullish"
+    assert sig.volume_ok is True
+    assert float(sig.entry) == 50010.00
+    assert float(sig.sl) < float(sig.entry) < float(sig.tp)
+    assert math.isclose(
+        float(sig.tp) - float(sig.entry),
+        (float(sig.entry) - float(sig.sl)) * 2.0, rel_tol=1e-6,
+    )
+
+
+def test_build_bollinger_signal_returns_none_when_invalid():
+    """SL أعلى من Entry أو TP دون Entry -> لا يُبنى سجل (حماية من إشارة غير صالحة)."""
+    info = SymbolInfo(
+        symbol="BTCUSDT", base_asset="BTC", quote_asset="USDT",
+        status="TRADING", tick_size=Decimal("0.01000000"),
+        price_precision=2, step_size=Decimal("0.00001000"),
+        qty_precision=5, min_notional=5.0, spot_trading=True,
+    )
+    candle = Kline(
+        open_time=1700000000000, open=50000.0, high=50000.0,
+        low=50000.0, close=50000.0, volume=1000.0,
+        close_time=1700003600000, quote_volume=5e7,
+    )
+    # ATR صغير جدًا: SL = أدنى − 0.0015 يقرب لأعلى حتى يساوي Entry -> TP لا يتجاوز
+    sig = build_bollinger_signal(
+        info, candle, atr_value=0.001, study_cfg={"rr_ratio": 2.0, "atr_sl_multiplier": 1.5},
+    )
+    assert sig is None
 
 
 # ---------------- ADX/DMI ---------------- #

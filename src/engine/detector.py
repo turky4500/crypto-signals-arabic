@@ -111,3 +111,47 @@ def build_signal(
         ema_trend=_trend_label(ai_res),
         volume_ok=bool(ai_res.get("vol_ok")),
     )
+
+
+def build_bollinger_signal(
+    symbol_info: SymbolInfo,
+    candle: Kline,
+    atr_value: float | None,
+    study_cfg: dict,
+    ema_trend: str = "bearish",
+    volume_ok: bool = False,
+) -> Signal | None:
+    """إشارة Bollinger BUY تجريبية: ارتداد فوق الباند السفلي مع إغلاق تحت المتوسط.
+
+    نفس قواعد المحاكاة (التسجيلية) حتى يتطابق السجل الحي مع دراسة المحاكاة:
+    Entry = إغلاق، SL = أدنى شمعة − k·ATR، TP = RR·(Entry−SL).
+    """
+    rr = float(study_cfg.get("rr_ratio", 2.0))
+    mult = Decimal(str(float(study_cfg.get("atr_sl_multiplier", 1.5))))
+    tick = symbol_info.tick_size
+    close_dec = Decimal(str(candle.close))
+    low_dec = Decimal(str(candle.low))
+    entry_dec = round_price(close_dec, tick, "nearest")
+    if atr_value and atr_value > 0:
+        sl_raw = low_dec - Decimal(str(atr_value)) * mult
+    else:
+        sl_raw = low_dec * Decimal("0.97")
+    sl_dec = round_price(sl_raw, tick, "up")
+    tp_dec = round_price(entry_dec + (entry_dec - sl_dec) * Decimal(str(rr)), tick, "down")
+    if tp_dec <= entry_dec or sl_dec >= entry_dec:
+        return None
+    return Signal(
+        symbol=symbol_info.symbol,
+        indicator="bollinger",
+        signal_type="BUY",
+        candle_open_ms=candle.open_time,
+        candle_close_ms=candle.close_time,
+        signal_price=candle.close,
+        entry=format_price(entry_dec, tick),
+        sl=format_price(sl_dec, tick),
+        tp=format_price(tp_dec, tick),
+        rr_ratio=rr,
+        confidence=None,
+        ema_trend=ema_trend,
+        volume_ok=volume_ok,
+    )
