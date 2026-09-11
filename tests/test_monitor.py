@@ -8,6 +8,7 @@ import os
 import time
 
 from src.engine.monitor import Monitor, _load_receivers
+from src.config.settings import load_settings
 
 # ------------------------- Fakes ------------------------- #
 class FakeBinance:
@@ -134,6 +135,11 @@ def _make_monitor(tmp_path, candles, server=None, filter_enabled=False):
                 "use_vol_filter": False, "vol_threshold": 1.0,
             },
             "whatsapp": {"enabled": True, "max_history_signals": 100},
+            "indicators_study": {
+                "enabled": True,
+                "min_consensus": 3,
+                "en_consensus_gate": False,
+            },
         }),
         encoding="utf-8",
     )
@@ -399,12 +405,16 @@ def _downtrend_candles(n=220, start=500.0, step=2.0):
     return ks
 
 
-def _make_filter_monitor(tmp_path, h1_candles, d1_candles):
+def _make_filter_monitor(tmp_path, h1_candles, d1_candles, consensus_gate=False):
     """Monitor بفلتر مفعّل: 1H مولّدة للإشارة + 1d منفصل للفلتر."""
     candles = {"BTCUSDT": h1_candles}
     mon, data_dir = _make_monitor(tmp_path, candles,
                                   server=h1_candles[-1]["close_time"],
                                   filter_enabled=True)
+    settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
+    settings["indicators_study"]["en_consensus_gate"] = consensus_gate
+    (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
+    mon.settings = load_settings(str(data_dir / "settings.json"))
     mon.client = FilterAwareBinance(candles, d1_by_symbol={"BTCUSDT": d1_candles})
     mon.client.server = h1_candles[-1]["close_time"]
     return mon, data_dir
@@ -436,6 +446,32 @@ def test_momentum_filter_accepts_strong_trend_signal(tmp_path):
     assert len(signals) >= 1
     log = json.loads((data_dir / "filter_log.json").read_text(encoding="utf-8"))
     assert log[0]["accepted"] is True
+
+
+def test_consensus_gate_blocks_low_consensus_with_uptrend(tmp_path):
+    """اتجاه صاعد مقبول بالفلتر لكن اتفاق المؤشرات دون الحد (min_consensus):
+    الإشارة لا تُرسل وتُسجَّل مرفوضة بسبب البوابة."""
+    h1 = make_flip_candles()
+    d1 = h1  # اتجاه يومي صاعد -> الفلتر يقبل
+    mon, data_dir = _make_filter_monitor(tmp_path, h1, d1, consensus_gate=True)
+    run = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    assert run["new_signals"] == 0
+    signals = json.loads((data_dir / "signals.json").read_text(encoding="utf-8"))
+    assert len(signals) == 0
+    log = json.loads((data_dir / "filter_log.json").read_text(encoding="utf-8"))
+    assert log[0]["accepted"] is False
+    assert log[0]["gate"] == "consensus"
+
+
+def test_consensus_gate_disabled_sends_uptrend(tmp_path):
+    """عند إيقاف بوابة الاتفاق، الإشارة ذات الاتجاه الصاعد تُرسل رغم اتفاق دون 3."""
+    h1 = make_flip_candles()
+    d1 = h1
+    mon, data_dir = _make_filter_monitor(tmp_path, h1, d1, consensus_gate=False)
+    run = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    assert run["new_signals"] >= 1
+    signals = json.loads((data_dir / "signals.json").read_text(encoding="utf-8"))
+    assert len(signals) >= 1
 
 
 def test_momentum_filter_disabled_respects_settings(tmp_path):

@@ -303,15 +303,60 @@ class Monitor:
         )
 
         price_str = prices.get(symbol_info.symbol)
-        signal = build_signal(symbol_info, candle, st_res, ai_res, st_cfg, ai_cfg)
+
+        # ---- لوحة المؤشرات التسجيلية (تُحسب قبل بوابة الإرسال) ----
+        study_cfg = self.settings.get("indicators_study", {})
+        panel = None
+        paper: list[dict] = []
+        if study_cfg.get("enabled", True):
+            try:
+                panel = compute_panel(h, l, c, study_cfg)
+            except Exception:
+                panel = None
+            if panel is not None and study_cfg.get("paper_tracking", True) \
+                    and panel["consensus"] > 0:
+                atr_last = st_res.get("atr")
+                atr_val = float(atr_last[-1]) if atr_last is not None and len(atr_last) else 0.0
+                candle_dict = {
+                    "open_time": candle.open_time,
+                    "close_time": candle.close_time,
+                    "high": candle.high,
+                    "low": candle.low,
+                    "close": candle.close,
+                    "atr": atr_val,
+                }
+                paper = build_paper_records(
+                    symbol_info.symbol, panel, candle_dict,
+                    symbol_info.tick_size, study_cfg,
+                )
+
+        # ---- بوابة الإرسال: Supertrend/AI ثم الاتجاه ثم اتفاق ≥ min_consensus ----
+        first_signal = build_signal(symbol_info, candle, st_res, ai_res, st_cfg, ai_cfg)
+        min_consensus = int(study_cfg.get("min_consensus", 3))
+        signal = None
         filter_info = None
-        if signal is not None:
+        if first_signal is not None:
             filter_info = self._evaluate_momentum_filter(
                 symbol_info.symbol, server_now
             )
             if filter_info.get("accepted"):
-                signal.filter_rejected = False
-                signal.filter_info = filter_info
+                consensus_gate = study_cfg.get("en_consensus_gate",
+                                               bool(study_cfg.get("enabled", True)))
+                if consensus_gate and panel is not None \
+                        and panel["consensus"] < min_consensus:
+                    # الاتجاه مؤيد لكن اتفاق المؤشرات دون الحد: لا تُرسل
+                    signal = None
+                    filter_info = dict(filter_info)
+                    filter_info.update({
+                        "accepted": False,
+                        "gate": "consensus",
+                        "consensus": panel["consensus"],
+                        "min_consensus": min_consensus,
+                    })
+                else:
+                    signal = first_signal
+                    signal.filter_rejected = False
+                    signal.filter_info = filter_info
             else:
                 signal = None  # مرفوضة بالفلتر ولا تُرسل
         entry_values = None
@@ -353,32 +398,6 @@ class Monitor:
                     tp_val = float(rec["tp"])
                     if px >= tp_val:
                         rec.update({"status": "tp_hit", "resolved_at_ms": server_now, "hit_price": tp_val})
-
-        # ---- لوحة المؤشرات التسجيلية ----
-        study_cfg = self.settings.get("indicators_study", {})
-        panel = None
-        paper: list[dict] = []
-        if study_cfg.get("enabled", True):
-            try:
-                panel = compute_panel(h, l, c, study_cfg)
-            except Exception:
-                panel = None
-            if panel is not None and study_cfg.get("paper_tracking", True) \
-                    and panel["consensus"] > 0:
-                atr_last = st_res.get("atr")
-                atr_val = float(atr_last[-1]) if atr_last is not None and len(atr_last) else 0.0
-                candle_dict = {
-                    "open_time": candle.open_time,
-                    "close_time": candle.close_time,
-                    "high": candle.high,
-                    "low": candle.low,
-                    "close": candle.close,
-                    "atr": atr_val,
-                }
-                paper = build_paper_records(
-                    symbol_info.symbol, panel, candle_dict,
-                    symbol_info.tick_size, study_cfg,
-                )
 
         row = self._build_row(
             symbol_info, candle, st_res, ai_res, price_str,

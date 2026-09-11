@@ -22,6 +22,7 @@ DEFAULT_SETTINGS = {
     "indicators_study": {
         "enabled": True,
         "min_consensus": 3,
+        "en_consensus_gate": True,
         "rr_ratio": 2.0,
         "atr_sl_multiplier": 1.5,
         "paper_tracking": True,
