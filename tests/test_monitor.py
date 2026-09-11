@@ -474,6 +474,37 @@ def test_consensus_gate_disabled_sends_uptrend(tmp_path):
     assert len(signals) >= 1
 
 
+def test_candidate_study_records_blocked_and_accepted(tmp_path):
+    """مرحلة القياس: كل إشارة Supertrend/AI تُسجَّل كمرشّح بعلامة قرارها."""
+    h1 = make_flip_candles()
+    d1_down = _downtrend_candles()
+    mon, data_dir = _make_filter_monitor(tmp_path, h1, d1_down)
+    mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    cands = json.loads((data_dir / "candidate_study.json").read_text(encoding="utf-8"))
+    assert len(cands) == 1
+    assert cands[0]["verdict"] == "blocked"
+    assert cands[0]["reason"] == "filter"
+    assert cands[0]["status"] == "pending"
+    assert cands[0]["source"] == "candidate"
+
+    stats = json.loads((data_dir / "stats.json").read_text(encoding="utf-8"))
+    cs = stats["candidate_study"]
+    assert cs["enabled"] is True
+    assert cs["total"] == 1
+    assert cs["blocked"]["total"] == 1
+
+
+def test_candidate_study_with_accepted(tmp_path):
+    """المرشّح المقبول بالفلتر يظهر بعلامة accepted في السجل."""
+    h1 = make_flip_candles()
+    mon, data_dir = _make_filter_monitor(tmp_path, h1, h1)
+    mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    cands = json.loads((data_dir / "candidate_study.json").read_text(encoding="utf-8"))
+    assert len(cands) == 1
+    assert cands[0]["verdict"] == "accepted"
+    assert cands[0]["consensus"] >= 0
+
+
 def test_momentum_filter_disabled_respects_settings(tmp_path):
     """عندما الفلتر معطّل، تُرسل الإشارة ولا يُكتب سجل فلتر."""
     candles = {"BTCUSDT": make_flip_candles()}

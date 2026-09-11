@@ -111,6 +111,30 @@ function renderStats(st) {
         </div>
       </div>`
     : "";
+  const candStudy = st.candidate_study;
+  const candStudyHtml = candStudy && candStudy.no_filter && candStudy.with_filter
+    ? (() => {
+        const g = (x) => x && x.total > 0
+          ? `<div style="flex:1;min-width:120px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;text-align:center;">
+              <div style="font-size:11px;color:var(--dim);">${esc(x.label)}</div>
+              <div class="stat-value ${x.wr === null ? "" : (x.wr >= 50 ? "green" : "red")}" style="font-size:1.1em;">${x.wr === null ? "—" : x.wr.toFixed(1) + "%"}</div>
+              <div style="font-size:10px;color:var(--dim);">${x.n} عينة · ${x.tp}✅ ${x.sl}❌ ${x.pend}⏳${x.ev !== null ? ` · EV ${x.ev}` : ""}</div>
+            </div>`
+          : "";
+        const wrap = (label, grp) => ({ label, n: grp.total, wr: grp.win_rate, tp: grp.tp_hit, sl: grp.sl_hit, pend: grp.pending, ev: grp.ev_per_trade });
+        const rows = [
+          wrap("الكل (بلا تقييد)", candStudy.no_filter),
+          wrap("بعد فلتر الترند", candStudy.with_filter),
+          wrap("اتفاق ≥3 مؤشرات", candStudy.with_consensus_ge3),
+          wrap("المحجوبة", candStudy.blocked),
+        ].filter((r) => r.n > 0).map(g);
+        return `<div class="stat-card" style="grid-column: span 3;">
+          <div class="stat-label" style="margin-bottom:8px;font-weight:600;">🧪 مرحلة القياس — مقارنة قواعد الإرسال (خارج العينة)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">${rows.join("")}</div>
+          <div style="font-size:10px;color:var(--dim);margin-top:6px;">عينة ${candStudy.total} مرشّح · أُضيف هذا التشغيل ${candStudy.added_this_run ?? 0}</div>
+        </div>`;
+      })()
+    : "";
   qs("#statsGrid").innerHTML = `
     ${filterCard}
     ${statCard(st.monitored_symbols ?? "-", "أزواج USDT مُراقبة", "")}
@@ -120,6 +144,7 @@ function renderStats(st) {
     ${statCard(st.strong_today ?? 0, "إشارات متوافقة (Strong)", "orange")}
     ${statCard(last ? last.symbol : "—", "آخر إشارة", "blue")}
     ${statCard(st.last_check ? formatTime12h(st.last_check) : "—", "آخر فحص", "")}
+    ${candStudyHtml}
     ${indStudyHtml}
   `;
 }

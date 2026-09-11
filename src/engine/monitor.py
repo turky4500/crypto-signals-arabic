@@ -19,6 +19,7 @@ from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
 from .detector import build_signal
 from .duplicates import DuplicateGuard
+from .candidate_study import build_candidate, compute_candidate_stats, seed_candidates
 from .indicators_panel import build_paper_records, compute_panel, panel_brief
 from .momentum_filter import evaluate_filter
 from .performance import (compute_stats, evaluate_candles, mark_expired,
@@ -261,7 +262,8 @@ class Monitor:
     # ------------------------------------------------------------------ #
     def _process_symbol(self, symbol_info, server_now, prices: dict,
                         perf_pending_map: dict | None = None,
-                        study_pending_map: dict | None = None):
+                        study_pending_map: dict | None = None,
+                        candidates_pending_map: dict | None = None):
         """يعيد (row، signal أو None، panel، paper). signal = إشارة جديدة غير مكررة إن وُجِدت."""
         series = self.client.kline_series(symbol_info.symbol, self.history_candles)
         ot = series["open_time"]
@@ -399,11 +401,40 @@ class Monitor:
                     if px >= tp_val:
                         rec.update({"status": "tp_hit", "resolved_at_ms": server_now, "hit_price": tp_val})
 
+        # ---- تقييم مرشّحات قياس منطق الإرسال ----
+        if candidates_pending_map:
+            candles = [(ot_c[i], ct_c[i], h[i], l[i], c[i]) for i in range(len(c))]
+            for rec in candidates_pending_map.get(symbol_info.symbol, []):
+                if rec.get("status") != "pending":
+                    continue
+                result = evaluate_candles(rec, candles, server_now)
+                if result:
+                    rec.update(result)
+            if price_str is not None:
+                px = float(price_str)
+                for rec in candidates_pending_map.get(symbol_info.symbol, []):
+                    if rec.get("status") != "pending":
+                        continue
+                    tp_val = float(rec["tp"])
+                    if px >= tp_val:
+                        rec.update({"status": "tp_hit", "resolved_at_ms": server_now, "hit_price": tp_val})
+
         row = self._build_row(
             symbol_info, candle, st_res, ai_res, price_str,
             entry_values, filter_info, panel,
         )
-        return row, signal, panel, paper
+
+        # مرشّح قياس لمنطق الإرسال: نسجّل كل إشارة Supertrend/AI (مقبولة أو
+        # مرفوضة) كصفقة ورقية بعلامات القواعد، لنقيس أي قاعدة توقعها موجب.
+        candidate = None
+        if first_signal is not None:
+            sig = first_signal.to_dict()
+            sig.setdefault("candle_open_ms", candle.open_time)
+            sig.setdefault("candle_close_ms", candle.close_time)
+            consensus_val = panel["consensus"] if panel is not None else 0
+            candidate = build_candidate(sig, filter_info, consensus_val)
+
+        return row, signal, panel, paper, candidate
 
     # ------------------------------------------------------------------ #
     def _indicator_study_stats(self, study: list, now_ms: int) -> dict:
@@ -499,8 +530,17 @@ class Monitor:
             if _r.get("status") == "pending":
                 study_pending_map.setdefault(_r["symbol"], []).append(_r)
 
+        # ---- سجل دراسة المرشّحات (قياس منطق الإرسال خارج العينة) ----
+        candidates_path = os.path.join(self.data_dir, "candidate_study.json")
+        candidates_study = load_json(candidates_path, []) or []
+        candidates_pending_map: dict = {}
+        for _r in candidates_study:
+            if _r.get("status") == "pending":
+                candidates_pending_map.setdefault(_r["symbol"], []).append(_r)
+
         rows_map = {}
         new_signals = []
+        candidates: list[dict] = []
         filter_log = []
         ind_log = {}
         ind_paper: list[dict] = []
@@ -516,9 +556,9 @@ class Monitor:
 
             for s_info in monitored:
                 try:
-                    row, signal, panel, paper = self._process_symbol(
+                    row, signal, panel, paper, candidate = self._process_symbol(
                         s_info, server_now, prices, perf_pending_map,
-                        study_pending_map,
+                        study_pending_map, candidates_pending_map,
                     )
                 except Exception as exc:
                     logger.warning("%s: %s", s_info.symbol, exc)
@@ -526,6 +566,8 @@ class Monitor:
                     continue
                 processed += 1
                 rows_map[s_info.symbol] = row
+                if candidate is not None:
+                    candidates.append(candidate)
                 f_info = row.get("filter_info")
                 if f_info is not None and not f_info.get("disabled"):
                     filter_log.append({
@@ -654,6 +696,20 @@ class Monitor:
             study = study[-study_cap:]
         save_json(study_path, study)
         stats["indicator_study"] = self._indicator_study_stats(study, now_ms)
+
+        # ---- حفظ + إحصاءات دراسة المرشّحات (مقياس منطق الإرسال) ----
+        candidates_study, added_c = seed_candidates(candidates_study, candidates)
+        candidates_study = mark_expired(candidates_study, now_ms)
+        candidates_study = prune_old(candidates_study, now_ms)
+        cand_cap = int(study_cfg.get("max_log", 5000))
+        if len(candidates_study) > cand_cap:
+            candidates_study = candidates_study[-cand_cap:]
+        save_json(candidates_path, candidates_study)
+        stats["candidate_study"] = {
+            "enabled": True,
+            "added_this_run": added_c,
+            **compute_candidate_stats(candidates_study),
+        }
 
         save_json(os.path.join(self.data_dir, "symbols.json"), [s.symbol for s in monitored])
         current_rows = []
