@@ -2254,9 +2254,9 @@
     "signal_open_ms": 1789124400000,
     "signal_close_ms": 1789127999999,
     "deadline_ms": 1789732799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789136610969,
+    "hit_price": 0.0405,
     "created_ms": 1789128143152,
     "source": "simulation"
   },
@@ -19751,6 +19751,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789135553767,
+    "source": "simulation"
+  },
+  {
+    "signature": "USDSUSDT|macd|1789131600000",
+    "symbol": "USDSUSDT",
+    "indicator": "macd",
+    "entry": "1.0002",
+    "sl": "1.0000",
+    "tp": "1.0006",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789131600000,
+    "signal_close_ms": 1789135199999,
+    "deadline_ms": 1789739999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789136872664,
     "source": "simulation"
   }
 ]
