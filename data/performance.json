@@ -3022,9 +3022,9 @@
     "signal_open_ms": 1789092000000,
     "signal_close_ms": 1789095599999,
     "deadline_ms": 1789700399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789117199999,
+    "hit_price": 0.624,
     "created_ms": 1789095792129,
     "filtered": true
   },
@@ -3077,6 +3077,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789103003876,
+    "filtered": true
+  },
+  {
+    "signature": "THETAUSDT|ai|BUY|1789113600000",
+    "symbol": "THETAUSDT",
+    "indicator": "ai",
+    "entry": "0.1876",
+    "sl": "0.1783",
+    "tp": "0.2062",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789113600000,
+    "signal_close_ms": 1789117199999,
+    "deadline_ms": 1789721999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789117390158,
     "filtered": true
   }
 ]
