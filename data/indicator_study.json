@@ -2696,9 +2696,9 @@
     "signal_open_ms": 1789128000000,
     "signal_close_ms": 1789131599999,
     "deadline_ms": 1789736399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789134031333,
+    "hit_price": 332.05,
     "created_ms": 1789131650709,
     "source": "simulation"
   },
@@ -2713,9 +2713,9 @@
     "signal_open_ms": 1789128000000,
     "signal_close_ms": 1789131599999,
     "deadline_ms": 1789736399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789134031333,
+    "hit_price": 332.05,
     "created_ms": 1789131650709,
     "source": "simulation"
   },
@@ -10996,6 +10996,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789131824072,
+    "source": "simulation"
+  },
+  {
+    "signature": "AMZNBUSDT|adx|1789128000000",
+    "symbol": "AMZNBUSDT",
+    "indicator": "adx",
+    "entry": "254.84",
+    "sl": "252.18",
+    "tp": "260.16",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789128000000,
+    "signal_close_ms": 1789131599999,
+    "deadline_ms": 1789736399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789134049978,
     "source": "simulation"
   }
 ]
