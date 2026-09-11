@@ -473,3 +473,39 @@ def test_filter_meta_activation_stamp_and_stats(tmp_path):
     assert fm["activated_ms"] == meta["activated_ms"]
     # صفقة مقبولة واحدة بانتظار الحسم -> total=1 و pending>=0
     assert fm["filtered_stats"]["total"] >= 1
+
+
+def test_indicator_panel_written_to_rows(tmp_path):
+    """لوحة المؤشرات التسجيلية تُحسب لكل رمز وتظهر في current_signals."""
+    candles = {"BTCUSDT": make_uptrend_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles)
+    mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+
+    rows = json.loads((data_dir / "current_signals.json").read_text(encoding="utf-8"))
+    assert len(rows) == 1
+    panel = rows[0].get("ind_panel")
+    assert panel is not None
+    assert set(["consensus", "ind_buy", "ind_values"]).issubset(panel)
+    assert set(["ichimoku", "awesome", "macd", "bollinger", "rsi50", "adx"]).issubset(
+        panel["ind_buy"]
+    )
+    # سجل لقطة اللوحة كُتب
+    snap = json.loads((data_dir / "indicator_panel.json").read_text(encoding="utf-8"))
+    assert len(snap) == 1
+    assert snap[0]["symbol"] == "BTCUSDT"
+
+
+def test_indicator_study_stats_in_status(tmp_path):
+    """صفقات المحاكاة تُسجَّل وتُبنى إحصاءات أداء لكل مؤشر."""
+    candles = {"BTCUSDT": make_uptrend_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles)
+    mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+
+    stats = json.loads((data_dir / "stats.json").read_text(encoding="utf-8"))
+    ind = stats.get("indicator_study", {})
+    assert ind.get("enabled") is True
+    for name in ["ichimoku", "awesome", "macd", "bollinger", "rsi50", "adx"]:
+        assert name in ind["stats"]
+        s = ind["stats"][name]
+        assert len(s) >= 0
+        assert s["total"] is not None

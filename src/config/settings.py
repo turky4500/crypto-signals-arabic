@@ -19,6 +19,15 @@ DEFAULT_SETTINGS = {
         "h4_ret5_min": 2.0,
         "h1_rsi_max": 70.0,
     },
+    "indicators_study": {
+        "enabled": True,
+        "min_consensus": 3,
+        "rr_ratio": 2.0,
+        "atr_sl_multiplier": 1.5,
+        "paper_tracking": True,
+        "max_log": 5000,
+        "adx_period": 14,
+    },
     "ai_reader": {
         "neighbors_count": 8,
         "max_window": 300,

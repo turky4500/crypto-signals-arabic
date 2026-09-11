@@ -19,6 +19,7 @@ from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
 from .detector import build_signal
 from .duplicates import DuplicateGuard
+from .indicators_panel import build_paper_records, compute_panel, panel_brief
 from .momentum_filter import evaluate_filter
 from .performance import (compute_stats, evaluate_candles, mark_expired,
                           prune_old, seed_from_signals)
@@ -183,7 +184,8 @@ class Monitor:
 
     # ------------------------------------------------------------------ #
     def _build_row(self, symbol_info, candle, st_res, ai_res, price_str,
-                   entry_values, filter_info: dict | None = None) -> dict:
+                   entry_values, filter_info: dict | None = None,
+                   panel: dict | None = None) -> dict:
         st_buy = bool(st_res["buy_signal"][-1])
         ai_buy = bool(ai_res["buy_signal"])
         tick = symbol_info.tick_size
@@ -200,6 +202,10 @@ class Monitor:
         filter_state = None
         if filter_info is not None and not filter_info.get("disabled"):
             filter_state = "accepted" if filter_info.get("accepted") else "rejected"
+
+        ind_panel = None
+        if panel is not None:
+            ind_panel = panel_brief(panel)
 
         return {
             "symbol": symbol_info.symbol,
@@ -221,6 +227,7 @@ class Monitor:
             "volume_ok": bool(ai_res.get("vol_ok")),
             "filter_state": filter_state,
             "filter_info": filter_info if filter_state is not None else None,
+            "ind_panel": ind_panel,
             "signal_time": format_time_12h(ts_to_riyadh(candle.close_time)),
             "candle_open_ms": candle.open_time,
             "candle_close_ms": candle.close_time,
@@ -253,8 +260,9 @@ class Monitor:
 
     # ------------------------------------------------------------------ #
     def _process_symbol(self, symbol_info, server_now, prices: dict,
-                        perf_pending_map: dict | None = None):
-        """يعيد (row، signal أو None). signal = إشارة جديدة غير مكررة إن وُجِدت."""
+                        perf_pending_map: dict | None = None,
+                        study_pending_map: dict | None = None):
+        """يعيد (row، signal أو None، panel، paper). signal = إشارة جديدة غير مكررة إن وُجِدت."""
         series = self.client.kline_series(symbol_info.symbol, self.history_candles)
         ot = series["open_time"]
         ct = series["close_time"]
@@ -328,11 +336,80 @@ class Monitor:
                     if px >= tp_val:
                         rec.update({"status": "tp_hit", "resolved_at_ms": server_now, "hit_price": tp_val})
 
+        # ---- تقييم صفقات المحاكاة (دراسة المؤشرات) ----
+        if study_pending_map:
+            candles = [(ot_c[i], ct_c[i], h[i], l[i], c[i]) for i in range(len(c))]
+            for rec in study_pending_map.get(symbol_info.symbol, []):
+                if rec.get("status") != "pending":
+                    continue
+                result = evaluate_candles(rec, candles, server_now)
+                if result:
+                    rec.update(result)
+            if price_str is not None:
+                px = float(price_str)
+                for rec in study_pending_map.get(symbol_info.symbol, []):
+                    if rec.get("status") != "pending":
+                        continue
+                    tp_val = float(rec["tp"])
+                    if px >= tp_val:
+                        rec.update({"status": "tp_hit", "resolved_at_ms": server_now, "hit_price": tp_val})
+
+        # ---- لوحة المؤشرات التسجيلية ----
+        study_cfg = self.settings.get("indicators_study", {})
+        panel = None
+        paper: list[dict] = []
+        if study_cfg.get("enabled", True):
+            try:
+                panel = compute_panel(h, l, c, study_cfg)
+            except Exception:
+                panel = None
+            if panel is not None and study_cfg.get("paper_tracking", True) \
+                    and panel["consensus"] > 0:
+                atr_last = st_res.get("atr")
+                atr_val = float(atr_last[-1]) if atr_last is not None and len(atr_last) else 0.0
+                candle_dict = {
+                    "open_time": candle.open_time,
+                    "close_time": candle.close_time,
+                    "high": candle.high,
+                    "low": candle.low,
+                    "close": candle.close,
+                    "atr": atr_val,
+                }
+                paper = build_paper_records(
+                    symbol_info.symbol, panel, candle_dict,
+                    symbol_info.tick_size, study_cfg,
+                )
+
         row = self._build_row(
             symbol_info, candle, st_res, ai_res, price_str,
-            entry_values, filter_info,
+            entry_values, filter_info, panel,
         )
-        return row, signal
+        return row, signal, panel, paper
+
+    # ------------------------------------------------------------------ #
+    def _indicator_study_stats(self, study: list, now_ms: int) -> dict:
+        """أداء كل مؤشر تسجيلي على حدة من صفقات المحاكاة (محسومة فقط)."""
+        names = ["ichimoku", "awesome", "macd", "bollinger", "rsi50", "adx"]
+        out = {}
+        for name in names:
+            recs = [r for r in study if r.get("indicator") == name]
+            tp = sum(1 for r in recs if r.get("status") == "tp_hit")
+            sl = sum(1 for r in recs if r.get("status") == "sl_hit")
+            pend = sum(1 for r in recs if r.get("status") == "pending")
+            exp = len(recs) - tp - sl - pend
+            res = tp + sl
+            out[name] = {
+                "total": len(recs),
+                "tp_hit": tp,
+                "sl_hit": sl,
+                "pending": pend,
+                "expired": exp,
+                "win_rate": round(tp / res * 100, 1) if res else None,
+            }
+        return {
+            "enabled": bool(self.settings.get("indicators_study", {}).get("enabled", True)),
+            "stats": out,
+        }
 
     # ------------------------------------------------------------------ #
     def run(self, env: dict | None = None, limit_symbols: int | None = None,
@@ -392,9 +469,22 @@ class Monitor:
             if _r.get("status") == "pending":
                 perf_pending_map.setdefault(_r["symbol"], []).append(_r)
 
+        # ---- سجل دراسة المؤشرات (صفقات محاكاة) ----
+        study_cfg = self.settings.get("indicators_study", {})
+        study_enabled = study_cfg.get("enabled", True)
+        study_path = os.path.join(self.data_dir, "indicator_study.json")
+        study = load_json(study_path, []) or []
+        study_seen = {r.get("signature") for r in study}
+        study_pending_map: dict = {}
+        for _r in study:
+            if _r.get("status") == "pending":
+                study_pending_map.setdefault(_r["symbol"], []).append(_r)
+
         rows_map = {}
         new_signals = []
         filter_log = []
+        ind_log = {}
+        ind_paper: list[dict] = []
         processed = 0
 
         if monitored:
@@ -407,8 +497,9 @@ class Monitor:
 
             for s_info in monitored:
                 try:
-                    row, signal = self._process_symbol(
-                        s_info, server_now, prices, perf_pending_map
+                    row, signal, panel, paper = self._process_symbol(
+                        s_info, server_now, prices, perf_pending_map,
+                        study_pending_map,
                     )
                 except Exception as exc:
                     logger.warning("%s: %s", s_info.symbol, exc)
@@ -426,6 +517,20 @@ class Monitor:
                         "accepted": bool(f_info.get("accepted")),
                         **f_info,
                     })
+                # ---- تسجيل لوحة المؤشرات التسجيلية + صفقات المحاكاة ----
+                if study_enabled and panel is not None:
+                    ind_log[s_info.symbol] = {
+                        "symbol": s_info.symbol,
+                        "ts": now_ms,
+                        "candle_close_ms": row.get("candle_close_ms"),
+                        "consensus": panel["consensus"],
+                        "buys": panel["buys"],
+                    }
+                    if paper:
+                        for _p in paper:
+                            if _p.get("signature") not in study_seen:
+                                study_seen.add(_p.get("signature"))
+                                study.append(_p)
                 if signal is not None and not guard.is_duplicate(signal.signature()):
                     guard.add(signal.signature())
                     new_signals.append(signal)
@@ -522,6 +627,15 @@ class Monitor:
             "filtered_stats": filtered_stats,
         }
 
+        # ---- إحصاءات دراسة المؤشرات (لكل مؤشر على حدة) ----
+        study = mark_expired(study, now_ms)
+        study = prune_old(study, now_ms)
+        study_cap = int(study_cfg.get("max_log", 5000))
+        if len(study) > study_cap:
+            study = study[-study_cap:]
+        save_json(study_path, study)
+        stats["indicator_study"] = self._indicator_study_stats(study, now_ms)
+
         save_json(os.path.join(self.data_dir, "symbols.json"), [s.symbol for s in monitored])
         current_rows = []
         for _row in rows_map.values():
@@ -532,6 +646,9 @@ class Monitor:
             os.path.join(self.data_dir, "current_signals.json"),
             current_rows,
         )
+        # ---- سجل لوحة المؤشرات (آخر حالة لكل رمز) ----
+        save_json(os.path.join(self.data_dir, "indicator_panel.json"),
+                  list(ind_log.values()))
         if filter_log:
             filter_log_path = os.path.join(self.data_dir, "filter_log.json")
             prev_log = load_json(filter_log_path, []) or []

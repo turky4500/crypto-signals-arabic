@@ -92,6 +92,25 @@ function renderStats(st) {
         fs.win_rate === null ? "" : fs.win_rate >= 50 ? "green" : fs.win_rate >= 30 ? "orange" : "red"
       )
     : statCard(fm.enabled ? "بانتظار أول إشارة" : "معطّل", "منذ تفعيل الفلتر", "");
+
+  const indStudy = st.indicator_study;
+  const indStudyHtml = indStudy && indStudy.enabled
+    ? `<div class="stat-card" style="grid-column: span 3;">
+        <div class="stat-label" style="margin-bottom:8px;font-weight:600;">📊 دراسة المؤشرات (محاكاة)</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${Object.entries(indStudy.stats || {}).map(([k, v]) => {
+            const n = {ichimoku:"Ichimoku",awesome:"AO",macd:"MACD",bollinger:"Bollinger",rsi50:"RSI50",adx:"ADX"}[k] || k;
+            const wr = v.win_rate;
+            const tone = wr === null ? "" : wr >= 50 ? "green" : wr >= 30 ? "orange" : "red";
+            return `<div style="flex:1;min-width:100px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;text-align:center;">
+              <div style="font-size:11px;color:var(--dim);">${esc(n)}</div>
+              <div class="stat-value ${tone}" style="font-size:1.1em;">${wr === null ? "—" : wr.toFixed(1) + "%"}</div>
+              <div style="font-size:10px;color:var(--dim);">${v.tp_hit}✅ ${v.sl_hit}❌ ${v.pending}⏳</div>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>`
+    : "";
   qs("#statsGrid").innerHTML = `
     ${filterCard}
     ${statCard(st.monitored_symbols ?? "-", "أزواج USDT مُراقبة", "")}
@@ -101,6 +120,7 @@ function renderStats(st) {
     ${statCard(st.strong_today ?? 0, "إشارات متوافقة (Strong)", "orange")}
     ${statCard(last ? last.symbol : "—", "آخر إشارة", "blue")}
     ${statCard(st.last_check ? formatTime12h(st.last_check) : "—", "آخر فحص", "")}
+    ${indStudyHtml}
   `;
 }
 
@@ -269,6 +289,7 @@ function filteredRows() {
     if (f === "supertrend") return r.supertrend === "BUY";
     if (f === "ai") return r.ai_reader === "BUY";
     if (f === "strong") return r.signal === "STRONG BUY";
+    if (f === "consensus") return (r.ind_panel?.consensus ?? 0) >= 3;
     return true;
   });
 }
@@ -292,13 +313,20 @@ function renderTable() {
   const rows = filteredRows();
   if (!rows.length) {
     qs("#coinsTable tbody").innerHTML =
-      `<tr><td colspan="9" class="dim" style="text-align:center;padding:2rem;">لا توجد نتائج مطابقة</td></tr>`;
+      `<tr><td colspan="10" class="dim" style="text-align:center;padding:2rem;">لا توجد نتائج مطابقة</td></tr>`;
     qs("#tableCount").textContent = `0 عملة`;
     return;
   }
   qs("#tableCount").textContent = `${rows.length} عملة`;
   qs("#coinsTable tbody").innerHTML = rows
     .map((r) => {
+      const panel = r.ind_panel || {};
+      const cons = panel.consensus ?? 0;
+      const consClass = cons >= 3 ? "green" : cons >= 2 ? "orange" : "";
+      const buys = panel.ind_buy || {};
+      const icons = ["ichimoku","awesome","macd","bollinger","rsi50","adx"]
+        .filter(k => buys[k]).map(k => ({ichimoku:"☁️",awesome:"🔥",macd:"📉",bollinger:"📊",rsi50:"💪",adx:"🧭"}[k]))
+        .join("") || (cons === 0 ? "" : "");
       return `<tr data-symbol="${esc(r.symbol)}">
         <td class="coin">
           <span class="coin-sym">${esc(r.symbol.replace("USDT", ""))}</span>
@@ -309,6 +337,7 @@ function renderTable() {
         <td>${r.supertrend === "BUY" ? badge("BUY", "green") : badge("—", "gray")}</td>
         <td>${r.ai_reader === "BUY" ? badge("BUY", "blue") : badge("—", "gray")}</td>
         <td>${signalBadge(r)}</td>
+        <td>${cons > 0 ? badge(`${cons} ${icons}`, consClass) : badge("0", "gray")}</td>
         <td class="num">${esc(r.sl ?? "—")}</td>
         <td class="num">${esc(r.tp ?? "—")}</td>
         <td class="time">${r.signal_time ? formatTime12h(r.candle_close_ms ?? Date.now()) : "—"}</td>
@@ -322,6 +351,16 @@ function openModal(row) {
   const live = state.prices[row.symbol];
   const p = live ?? row.price_raw;
   const precision = row.price_precision ?? 2;
+  const panel = row.ind_panel || {};
+  const buys = panel.ind_buy || {};
+  const vals = panel.ind_values || {};
+  const IND_NAMES = {ichimoku:"Ichimoku ☁️",awesome:"Awesome AO 🔥",macd:"MACD 📉",bollinger:"Bollinger 📊",rsi50:"RSI 50 💪",adx:"ADX+DMI 🧭"};
+  const panelHtml = Object.keys(IND_NAMES).map(k => {
+    const b = buys[k] ? badge("BUY", "green") : badge("—", "gray");
+    const v = vals[k] || {};
+    const detail = Object.entries(v).filter(([sk]) => !["buy_signal"].includes(sk)).map(([sk,sv]) => `${sk}: ${typeof sv === "number" ? sv.toFixed(3) : sv}`).join(" · ");
+    return `<div style="margin:4px 0;"><strong>${IND_NAMES[k]}</strong> ${b} <span style="color:var(--dim);font-size:0.85em;">${esc(detail)}</span></div>`;
+  }).join("");
   qs("#modalTitle").textContent = row.symbol;
   qs("#modalBody").innerHTML = `
     <div class="kv"><span>السعر الحالي</span><strong class="dir-ltr">${p ? fmtNumber(p, precision) : "—"}</strong></div>
@@ -336,6 +375,9 @@ function openModal(row) {
     <div class="kv"><span>الهدف</span><strong class="dir-ltr">${esc(row.tp ?? "—")}</strong></div>
     <div class="kv"><span>وقت الإشارة</span><strong>${row.candle_close_ms ? formatTime12h(row.candle_close_ms) + " بتوقيت السعودية" : "—"}</strong></div>
     <div class="kv"><span>آخر تحديث</span><strong>${row.last_update_ms ? formatTime12h(row.last_update_ms) : "—"}</strong></div>
+    <hr style="margin:12px 0;border:none;border-top:1px solid var(--border);">
+    <div style="font-weight:600;margin-bottom:6px;">لوحة المؤشرات التسجيلية (دراستية)</div>
+    <div style="font-size:0.9em;">${panelHtml || '<span class="dim">لا توجد بيانات بعد</span>'}</div>
   `;
   qs("#detailModal").classList.add("open");
 }
