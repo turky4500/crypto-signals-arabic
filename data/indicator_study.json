@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ENSOUSDT|ichimoku|1789178400000",
-    "symbol": "ENSOUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.953",
-    "sl": "0.932",
-    "tp": "0.995",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789178400000,
-    "signal_close_ms": 1789181999999,
-    "deadline_ms": 1789786799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1789225199999,
-    "hit_price": 0.93,
-    "created_ms": 1789182105544,
-    "source": "simulation"
-  },
-  {
     "signature": "ENSOUSDT|adx|1789178400000",
     "symbol": "ENSOUSDT",
     "indicator": "adx",
@@ -299,9 +282,9 @@
     "signal_open_ms": 1789178400000,
     "signal_close_ms": 1789181999999,
     "deadline_ms": 1789786799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789243199999,
+    "hit_price": 0.0528,
     "created_ms": 1789182111568,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789243887497,
+    "source": "simulation"
+  },
+  {
+    "signature": "FLUXUSDT|adx|1789239600000",
+    "symbol": "FLUXUSDT",
+    "indicator": "adx",
+    "entry": "0.0525",
+    "sl": "0.0511",
+    "tp": "0.0553",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789239600000,
+    "signal_close_ms": 1789243199999,
+    "deadline_ms": 1789847999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789244173613,
     "source": "simulation"
   }
 ]
