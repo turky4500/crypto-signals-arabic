@@ -1693,9 +1693,9 @@
     "signal_open_ms": 1789124400000,
     "signal_close_ms": 1789127999999,
     "deadline_ms": 1789732799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789176331299,
+    "hit_price": 0.475,
     "created_ms": 1789128114652,
     "source": "simulation"
   },
@@ -78350,6 +78350,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789174971374,
+    "source": "simulation"
+  },
+  {
+    "signature": "NFLXBUSDT|adx|1789171200000",
+    "symbol": "NFLXBUSDT",
+    "indicator": "adx",
+    "entry": "77.34",
+    "sl": "77.03",
+    "tp": "77.96",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789171200000,
+    "signal_close_ms": 1789174799999,
+    "deadline_ms": 1789779599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789176413134,
     "source": "simulation"
   }
 ]
