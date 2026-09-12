@@ -1,22 +1,5 @@
 [
   {
-    "signature": "JASMYUSDT|adx|1789153200000",
-    "symbol": "JASMYUSDT",
-    "indicator": "adx",
-    "entry": "0.00399",
-    "sl": "0.00387",
-    "tp": "0.00423",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789153200000,
-    "signal_close_ms": 1789156799999,
-    "deadline_ms": 1789761599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1789156918673,
-    "source": "simulation"
-  },
-  {
     "signature": "JSTUSDT|adx|1789153200000",
     "symbol": "JSTUSDT",
     "indicator": "adx",
@@ -11111,9 +11094,9 @@
     "signal_open_ms": 1789164000000,
     "signal_close_ms": 1789167599999,
     "deadline_ms": 1789772399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789219233423,
+    "hit_price": 1.264,
     "created_ms": 1789167692264,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789218175611,
+    "source": "simulation"
+  },
+  {
+    "signature": "BANDUSDT|adx|1789214400000",
+    "symbol": "BANDUSDT",
+    "indicator": "adx",
+    "entry": "0.1836",
+    "sl": "0.1810",
+    "tp": "0.1888",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789214400000,
+    "signal_close_ms": 1789217999999,
+    "deadline_ms": 1789822799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789219256739,
     "source": "simulation"
   }
 ]
