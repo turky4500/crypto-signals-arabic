@@ -1,22 +1,5 @@
 [
   {
-    "signature": "QTUMUSDT|macd|1789221600000",
-    "symbol": "QTUMUSDT",
-    "indicator": "macd",
-    "entry": "0.907",
-    "sl": "0.884",
-    "tp": "0.953",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789221600000,
-    "signal_close_ms": 1789225199999,
-    "deadline_ms": 1789829999999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1789261199999,
-    "hit_price": 0.953,
-    "created_ms": 1789225335583,
-    "source": "simulation"
-  },
-  {
     "signature": "QTUMUSDT|adx|1789221600000",
     "symbol": "QTUMUSDT",
     "indicator": "adx",
@@ -42153,9 +42136,9 @@
     "signal_open_ms": 1789254000000,
     "signal_close_ms": 1789257599999,
     "deadline_ms": 1789862399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789284926376,
+    "hit_price": 0.0806,
     "created_ms": 1789257756829,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789284452582,
+    "source": "simulation"
+  },
+  {
+    "signature": "SANTOSUSDT|adx|1789279200000",
+    "symbol": "SANTOSUSDT",
+    "indicator": "adx",
+    "entry": "0.506",
+    "sl": "0.500",
+    "tp": "0.518",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789279200000,
+    "signal_close_ms": 1789282799999,
+    "deadline_ms": 1789887599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789285032082,
     "source": "simulation"
   }
 ]
