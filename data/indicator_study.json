@@ -1,22 +1,5 @@
 [
   {
-    "signature": "EDUUSDT|bollinger|1789318800000",
-    "symbol": "EDUUSDT",
-    "indicator": "bollinger",
-    "entry": "0.0514",
-    "sl": "0.0500",
-    "tp": "0.0542",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789318800000,
-    "signal_close_ms": 1789322399999,
-    "deadline_ms": 1789927199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1789361999999,
-    "hit_price": 0.0498,
-    "created_ms": 1789322488606,
-    "source": "simulation"
-  },
-  {
     "signature": "EIGENUSDT|macd|1789318800000",
     "symbol": "EIGENUSDT",
     "indicator": "macd",
@@ -60139,9 +60122,9 @@
     "signal_open_ms": 1789362000000,
     "signal_close_ms": 1789365599999,
     "deadline_ms": 1789970399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789386333103,
+    "hit_price": 180.4,
     "created_ms": 1789365680386,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789383827620,
+    "source": "simulation"
+  },
+  {
+    "signature": "MRNABUSDT|rsi50|1789380000000",
+    "symbol": "MRNABUSDT",
+    "indicator": "rsi50",
+    "entry": "145.04",
+    "sl": "141.63",
+    "tp": "151.86",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789380000000,
+    "signal_close_ms": 1789383599999,
+    "deadline_ms": 1789988399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789386434902,
     "source": "simulation"
   }
 ]
