@@ -1,22 +1,5 @@
 [
   {
-    "signature": "MAVUSDT|adx|1789286400000",
-    "symbol": "MAVUSDT",
-    "indicator": "adx",
-    "entry": "0.01072",
-    "sl": "0.01053",
-    "tp": "0.01110",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789286400000,
-    "signal_close_ms": 1789289999999,
-    "deadline_ms": 1789894799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1789306828855,
-    "hit_price": 0.0111,
-    "created_ms": 1789290702498,
-    "source": "simulation"
-  },
-  {
     "signature": "MBLUSDT|ichimoku|1789286400000",
     "symbol": "MBLUSDT",
     "indicator": "ichimoku",
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789344258075,
+    "source": "simulation"
+  },
+  {
+    "signature": "STGUSDT|bollinger|1789340400000",
+    "symbol": "STGUSDT",
+    "indicator": "bollinger",
+    "entry": "0.1529",
+    "sl": "0.1506",
+    "tp": "0.1575",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789340400000,
+    "signal_close_ms": 1789343999999,
+    "deadline_ms": 1789948799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789347198775,
     "source": "simulation"
   }
 ]
