@@ -1,22 +1,5 @@
 [
   {
-    "signature": "WINUSDT|ichimoku|1789322400000",
-    "symbol": "WINUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.00003932",
-    "sl": "0.00003833",
-    "tp": "0.00004130",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789322400000,
-    "signal_close_ms": 1789325999999,
-    "deadline_ms": 1789930799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1789326170771,
-    "source": "simulation"
-  },
-  {
     "signature": "WLFIUSDT|adx|1789322400000",
     "symbol": "WLFIUSDT",
     "indicator": "adx",
@@ -36203,9 +36186,9 @@
     "signal_open_ms": 1789351200000,
     "signal_close_ms": 1789354799999,
     "deadline_ms": 1789959599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789394729827,
+    "hit_price": 135.07,
     "created_ms": 1789354958540,
     "source": "simulation"
   },
@@ -36220,9 +36203,9 @@
     "signal_open_ms": 1789351200000,
     "signal_close_ms": 1789354799999,
     "deadline_ms": 1789959599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789394729827,
+    "hit_price": 135.07,
     "created_ms": 1789354958540,
     "source": "simulation"
   },
@@ -72702,9 +72685,9 @@
     "signal_open_ms": 1789380000000,
     "signal_close_ms": 1789383599999,
     "deadline_ms": 1789988399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789394729827,
+    "hit_price": 135.09,
     "created_ms": 1789383749666,
     "source": "simulation"
   },
@@ -79638,9 +79621,9 @@
     "signal_open_ms": 1789387200000,
     "signal_close_ms": 1789390799999,
     "deadline_ms": 1789995599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789394729827,
+    "hit_price": 135.19,
     "created_ms": 1789390927485,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789394627477,
+    "source": "simulation"
+  },
+  {
+    "signature": "INTWBUSDT|bollinger|1789390800000",
+    "symbol": "INTWBUSDT",
+    "indicator": "bollinger",
+    "entry": "20.79",
+    "sl": "19.40",
+    "tp": "23.57",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789390800000,
+    "signal_close_ms": 1789394399999,
+    "deadline_ms": 1789999199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789394810236,
     "source": "simulation"
   }
 ]
