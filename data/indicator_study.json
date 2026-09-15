@@ -1,22 +1,5 @@
 [
   {
-    "signature": "EGLDUSDT|rsi50|1789380000000",
-    "symbol": "EGLDUSDT",
-    "indicator": "rsi50",
-    "entry": "4.234",
-    "sl": "4.049",
-    "tp": "4.604",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789380000000,
-    "signal_close_ms": 1789383599999,
-    "deadline_ms": 1789988399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1789383703008,
-    "source": "simulation"
-  },
-  {
     "signature": "ENSOUSDT|rsi50|1789380000000",
     "symbol": "ENSOUSDT",
     "indicator": "rsi50",
@@ -75677,9 +75660,9 @@
     "signal_open_ms": 1789441200000,
     "signal_close_ms": 1789444799999,
     "deadline_ms": 1790049599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789456236603,
+    "hit_price": 1.0,
     "created_ms": 1789444989740,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789455800799,
+    "source": "simulation"
+  },
+  {
+    "signature": "DGBUSDT|adx|1789452000000",
+    "symbol": "DGBUSDT",
+    "indicator": "adx",
+    "entry": "0.00438",
+    "sl": "0.00430",
+    "tp": "0.00454",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789452000000,
+    "signal_close_ms": 1789455599999,
+    "deadline_ms": 1790060399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789456276161,
     "source": "simulation"
   }
 ]
