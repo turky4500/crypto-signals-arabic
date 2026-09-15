@@ -1,22 +1,5 @@
 [
   {
-    "signature": "WALUSDT|adx|1789401600000",
-    "symbol": "WALUSDT",
-    "indicator": "adx",
-    "entry": "0.0285",
-    "sl": "0.0271",
-    "tp": "0.0313",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789401600000,
-    "signal_close_ms": 1789405199999,
-    "deadline_ms": 1790009999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1789405400126,
-    "source": "simulation"
-  },
-  {
     "signature": "WAXPUSDT|macd|1789401600000",
     "symbol": "WAXPUSDT",
     "indicator": "macd",
@@ -66905,9 +66888,9 @@
     "signal_open_ms": 1789462800000,
     "signal_close_ms": 1789466399999,
     "deadline_ms": 1790071199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789488328279,
+    "hit_price": 1.001,
     "created_ms": 1789466952885,
     "source": "simulation"
   },
@@ -71784,9 +71767,9 @@
     "signal_open_ms": 1789470000000,
     "signal_close_ms": 1789473599999,
     "deadline_ms": 1790078399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789488328279,
+    "hit_price": 1.001,
     "created_ms": 1789473807263,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789488261090,
+    "source": "simulation"
+  },
+  {
+    "signature": "DOLOUSDT|bollinger|1789484400000",
+    "symbol": "DOLOUSDT",
+    "indicator": "bollinger",
+    "entry": "0.02380",
+    "sl": "0.02323",
+    "tp": "0.02494",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789484400000,
+    "signal_close_ms": 1789487999999,
+    "deadline_ms": 1790092799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789488405974,
     "source": "simulation"
   }
 ]
