@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ZKPUSDT|ichimoku|1789408800000",
-    "symbol": "ZKPUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.0453",
-    "sl": "0.0442",
-    "tp": "0.0475",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789408800000,
-    "signal_close_ms": 1789412399999,
-    "deadline_ms": 1790017199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1789455599999,
-    "hit_price": 0.0441,
-    "created_ms": 1789412599766,
-    "source": "simulation"
-  },
-  {
     "signature": "ZKPUSDT|macd|1789408800000",
     "symbol": "ZKPUSDT",
     "indicator": "macd",
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789506217862,
+    "source": "simulation"
+  },
+  {
+    "signature": "MSFTBUSDT|bollinger|1789502400000",
+    "symbol": "MSFTBUSDT",
+    "indicator": "bollinger",
+    "entry": "498.25",
+    "sl": "494.95",
+    "tp": "504.85",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789502400000,
+    "signal_close_ms": 1789505999999,
+    "deadline_ms": 1790110799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789506424676,
     "source": "simulation"
   }
 ]
