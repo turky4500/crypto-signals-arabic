@@ -197,9 +197,9 @@
     "signal_open_ms": 1789311600000,
     "signal_close_ms": 1789315199999,
     "deadline_ms": 1789919999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789570799999,
+    "hit_price": 0.003368,
     "created_ms": 1789315375893,
     "filtered": true
   },
@@ -592,6 +592,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789560951189,
+    "filtered": true
+  },
+  {
+    "signature": "SOLVUSDT|ai|BUY|1789567200000",
+    "symbol": "SOLVUSDT",
+    "indicator": "ai",
+    "entry": "0.00485",
+    "sl": "0.00472",
+    "tp": "0.00511",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789567200000,
+    "signal_close_ms": 1789570799999,
+    "deadline_ms": 1790175599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789571261329,
     "filtered": true
   }
 ]
