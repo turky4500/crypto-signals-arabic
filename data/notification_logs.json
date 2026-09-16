@@ -322,5 +322,32 @@
     "ok": true,
     "error": null,
     "attempts": 1
+  },
+  {
+    "ts": 1789560445176,
+    "symbol": "HUMAUSDT",
+    "indicator": "ai",
+    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: HUMAUSDT\n📊 الفريم: 1H\n📌 المؤشر: AI Market Reader\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.02372\n🎯 سعر الدخول: 0.02372\n🛑 وقف الخسارة: 0.02282\n🎯 الهدف: 0.02552\n📈 R:R: 1:2\n🤖 ثقة AI: 100.0%\n🕐 وقت الإشارة: 2:59 مساءً\n🇸🇦 توقيت السعودية",
+    "ok": false,
+    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1049f1ab40>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f104a04db50>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1049f50800>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
+    "attempts": 3
+  },
+  {
+    "ts": 1789560698123,
+    "symbol": "MTLUSDT",
+    "indicator": "supertrend",
+    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: MTLUSDT\n📊 الفريم: 1H\n📌 المؤشر: Supertrend\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.296\n🎯 سعر الدخول: 0.296\n🛑 وقف الخسارة: 0.264\n🎯 الهدف: 0.360\n📈 R:R: 1:2\n🕐 وقت الإشارة: 2:59 مساءً\n🇸🇦 توقيت السعودية",
+    "ok": false,
+    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1049f1b2f0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1049f18c80>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1049f50b90>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
+    "attempts": 3
+  },
+  {
+    "ts": 1789560951189,
+    "symbol": "NEARUSDT",
+    "indicator": "supertrend",
+    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: NEARUSDT\n📊 الفريم: 1H\n📌 المؤشر: Supertrend\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 2.486\n🎯 سعر الدخول: 2.486\n🛑 وقف الخسارة: 2.326\n🎯 الهدف: 2.806\n📈 R:R: 1:2\n🕐 وقت الإشارة: 2:59 مساءً\n🇸🇦 توقيت السعودية",
+    "ok": false,
+    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1049f51640>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1049f1be60>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f104a01fd40>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
+    "attempts": 3
   }
 ]
