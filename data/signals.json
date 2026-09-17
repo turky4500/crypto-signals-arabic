@@ -1374,5 +1374,37 @@
       "accepted": true
     },
     "signature": "INITUSDT|ai|BUY|1789617600000"
+  },
+  {
+    "symbol": "SENTUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1789621200000,
+    "candle_close_ms": 1789624799999,
+    "signal_price": 0.01554,
+    "entry": "0.01554",
+    "sl": "0.01476",
+    "tp": "0.01710",
+    "rr_ratio": 2.0,
+    "confidence": 1.0,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "",
+    "created_at_ms": 1789625973879,
+    "whatsapp_status": "failed",
+    "whatsapp_sent_at": null,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 4.23,
+      "h4_ret5_min": 2.0,
+      "h1_rsi": 61.0,
+      "h1_rsi_max": 70.0,
+      "d1_above_ema50": true,
+      "h4_in_uptrend": true,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true
+    },
+    "signature": "SENTUSDT|supertrend|BUY|1789621200000"
   }
 ]
