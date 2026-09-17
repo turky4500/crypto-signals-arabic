@@ -817,5 +817,14 @@
     "ok": false,
     "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f9603fbdc70>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f9603fbe840>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f9604274e60>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
     "attempts": 3
+  },
+  {
+    "ts": 1789634758407,
+    "kind": "daily_report",
+    "day": "2026-09-16",
+    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-16 (الأربعاء)\n\n🚨 إجمالي الإشارات: 8\n✅ تحقق الهدف: 2\n❌ ضرب الوقف: 1\n⏳ لم تُحسم بعد: 5\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 66.7% (من أصل 3 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 5 (✅0 ❌1 ⏳4)\n• AI Market Reader: 3 (✅2 ❌0 ⏳1)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
+    "ok": false,
+    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f87069b9d00>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f87069b8bc0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f870699bc80>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
+    "attempts": 3
   }
 ]
