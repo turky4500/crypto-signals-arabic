@@ -605,9 +605,9 @@
     "signal_open_ms": 1789567200000,
     "signal_close_ms": 1789570799999,
     "deadline_ms": 1790175599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789611193761,
+    "hit_price": 0.00511,
     "created_ms": 1789571261329,
     "filtered": true
   },
@@ -677,6 +677,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789605139166,
+    "filtered": true
+  },
+  {
+    "signature": "UNIUSDT|ai|BUY|1789606800000",
+    "symbol": "UNIUSDT",
+    "indicator": "ai",
+    "entry": "6.773",
+    "sl": "6.384",
+    "tp": "7.551",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789606800000,
+    "signal_close_ms": 1789610399999,
+    "deadline_ms": 1790215199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789611620679,
     "filtered": true
   }
 ]
