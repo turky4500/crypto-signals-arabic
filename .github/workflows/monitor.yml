@@ -94,33 +94,33 @@ jobs:
           # 1) تعقيم: لا تُنشر أبدًا ملفات JSON تالفة (حتى لو ملوثة بعلامات صراع git)
           #    معدَّل أمان: يعزل النشر تمامًا عن أي حالة git داخل مجلد العمل.
           python - <<'PY'
-import glob, json, os, re
-MARK = re.compile(r'^(<{7}|={7,}|>{7})( |$)', re.M)
-for p in glob.glob('data/*.json'):
-    path = p.replace('\\', '/')
-    try:
-        raw = open(p, encoding='utf-8').read()
-    except OSError as exc:
-        print('[sanitize] SKIP unreadable', p, exc)
-        continue
-    if MARK.search(raw):
-        print('[sanitize] FIX conflict markers ->', os.path.basename(p))
-        # حدد أي جزء من الملف ملوث: نعيد بناء بأمان لأقرب JSON صالح إن أمكن
-        try:
-            json.loads(raw)
-        except Exception:
-            # إزالة أسطر العلامات فقط؛ الربط الخلفي تتم معالجته هنا بالقاعدة:
-            lines = [ln for ln in raw.splitlines() if not MARK.match(ln)]
-            raw = '\n'.join(lines)
-    try:
-        json.loads(raw)
-    except Exception as exc:
-        print('[sanitize] DROP corrupt', os.path.basename(p), str(exc)[:80])
-        os.remove(p)
-    else:
-        with open(p, 'w', encoding='utf-8') as fh:
-            fh.write(raw)
-PY
+          import glob, json, os, re
+          MARK = re.compile(r'^(<{7}|={7,}|>{7})( |$)', re.M)
+          for p in glob.glob('data/*.json'):
+              path = p.replace('\\', '/')
+              try:
+                  raw = open(p, encoding='utf-8').read()
+              except OSError as exc:
+                  print('[sanitize] SKIP unreadable', p, exc)
+                  continue
+              if MARK.search(raw):
+                  print('[sanitize] FIX conflict markers ->', os.path.basename(p))
+                  # حدد أي جزء من الملف ملوث: نعيد بناء بأمان لأقرب JSON صالح إن أمكن
+                  try:
+                      json.loads(raw)
+                  except Exception:
+                      # إزالة أسطر العلامات فقط؛ الربط الخلفي تتم معالجته هنا بالقاعدة:
+                      lines = [ln for ln in raw.splitlines() if not MARK.match(ln)]
+                      raw = '\n'.join(lines)
+              try:
+                  json.loads(raw)
+              except Exception as exc:
+                  print('[sanitize] DROP corrupt', os.path.basename(p), str(exc)[:80])
+                  os.remove(p)
+              else:
+                  with open(p, 'w', encoding='utf-8') as fh:
+                      fh.write(raw)
+          PY
           # 2) تجميع الموقع من مجلد العمل (بيانات طازجة + واجهة)
           mkdir -p _site
           cp -r web/* _site/
