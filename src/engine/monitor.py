@@ -479,7 +479,13 @@ class Monitor:
         status = _empty_status()
         status["run_id"] = run_id
         wa = None if no_whatsapp else self._whatsapp(env)
-        status["whatsapp_connected"] = wa is not None
+        if wa is not None:
+            wa_ok, wa_why = wa.ping(timeout=8.0)
+            status["whatsapp_connected"] = wa_ok
+            if not wa_ok:
+                logger.warning("خادم WhatsApp لا يستجيب (whatsapp_connected=false): %s", wa_why)
+        else:
+            status["whatsapp_connected"] = False
 
         errors: list[str] = []
         binance_ok = False
@@ -764,7 +770,7 @@ class Monitor:
             "errors": errors,
             "errors_count": len(errors),
             "new_signals": len(new_signals),
-            "whatsapp_connected": wa is not None,
+            "whatsapp_connected": status["whatsapp_connected"],
             "duration_s": round(time.time() - started, 2),
             "server_time_ms": server_now,
             "daily_report": daily_report,

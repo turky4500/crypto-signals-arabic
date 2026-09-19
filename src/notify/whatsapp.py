@@ -35,6 +35,25 @@ class WhatsAppClient:
         self.backoff = backoff
         self.session = requests.Session()
 
+    def ping(self, timeout: float = 8.0) -> tuple[bool, str]:
+        """فحص حي سريع للاتصال بالخادم — يُستخدم لإظهار حالة واتساب صادقة في اللوحة.
+
+        يرسل GET بسيطًا إلى نقطة الإرسال ويعتبر أي استجابة HTTP (حتى 4xx/5xx)
+        دليلًا على أن الخادم حي. فقط انقطاع الاتصال/المهلة يعني أنه معطّل.
+        """
+        try:
+            resp = self.session.get(
+                self.api_url,
+                headers={"Authorization": f"Bearer {self.token}"},
+                timeout=timeout,
+                allow_redirects=True,
+            )
+            return True, f"HTTP {resp.status_code}"
+        except requests.RequestException as exc:
+            return False, str(exc)[:200]
+        except Exception as exc:  # أي خطأ شبكة آخر
+            return False, str(exc)[:200]
+
     def send(self, message: str) -> dict:
         """إرسال رسالة لكل رقم مسجل (رقم واحد أو أكثر). يستمر في المحاولة لبقية الأرقام حتى لو فشل أحدها."""
         targets = list(self.receivers) if self.receivers else [self.receiver]
