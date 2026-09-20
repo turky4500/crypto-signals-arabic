@@ -18,10 +18,6 @@ DEFAULT_SETTINGS = {
         "enabled": True,
         "h4_ret5_min": 2.0,
         "h1_rsi_max": 70.0,
-        # سقف زخم خاص بإشارات supertrend فقط: الملاحقة فوق هذا الحد كانت
-        # خاسرة 100% (0/6 عند r5>=6) في مراجعة أسبوع 09-2026، بينما ai
-        # يستفيد من الزخم العالي فلا يُطبَّق عليه هذا السقف.
-        "h4_ret5_max_supertrend": 5.0,
     },
     "indicators_study": {
         "enabled": True,
@@ -32,9 +28,6 @@ DEFAULT_SETTINGS = {
         "paper_tracking": True,
         "max_log": 5000,
         "adx_period": 14,
-        # إيقاف نشر إشارات bollinger الحية (تجريبية): WR=0/2 منشورة هذا
-        # الأسبوع وWR=44% لكل مرشّحاتها — تُسجَّل للدراسة فقط دون إرسال.
-        "publish_bollinger": False,
     },
     "ai_reader": {
         "neighbors_count": 8,
