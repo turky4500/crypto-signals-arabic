@@ -1,5 +1,5 @@
 {
-  "monitored_symbols": 437,
+  "monitored_symbols": 440,
   "signals_today": 13,
   "supertrend_today": 8,
   "ai_today": 3,
@@ -37,7 +37,7 @@
     },
     "signature": "QIUSDT|supertrend|BUY|1789916400000"
   },
-  "last_check": 1789922433582,
+  "last_check": 1789922727330,
   "data_date": "2026-09-20",
   "filter_meta": {
     "enabled": true,
@@ -81,11 +81,11 @@
       },
       "bollinger": {
         "total": 442,
-        "tp_hit": 25,
+        "tp_hit": 28,
         "sl_hit": 42,
-        "pending": 375,
+        "pending": 372,
         "expired": 0,
-        "win_rate": 37.3
+        "win_rate": 40.0
       },
       "rsi50": {
         "total": 417,
@@ -97,11 +97,11 @@
       },
       "adx": {
         "total": 2592,
-        "tp_hit": 305,
+        "tp_hit": 308,
         "sl_hit": 1010,
-        "pending": 1277,
+        "pending": 1274,
         "expired": 0,
-        "win_rate": 23.2
+        "win_rate": 23.4
       }
     }
   },
@@ -111,13 +111,13 @@
     "total": 3977,
     "no_filter": {
       "total": 3977,
-      "resolved": 3286,
-      "pending": 688,
+      "resolved": 3289,
+      "pending": 685,
       "expired": 3,
-      "tp_hit": 1717,
+      "tp_hit": 1720,
       "sl_hit": 1569,
-      "win_rate": 0.5225,
-      "ev_per_trade": 0.5675
+      "win_rate": 0.523,
+      "ev_per_trade": 0.569
     },
     "with_filter": {
       "total": 80,
@@ -141,24 +141,24 @@
     },
     "blocked": {
       "total": 3897,
-      "resolved": 3228,
-      "pending": 666,
+      "resolved": 3231,
+      "pending": 663,
       "expired": 3,
-      "tp_hit": 1682,
+      "tp_hit": 1685,
       "sl_hit": 1546,
-      "win_rate": 0.5211,
-      "ev_per_trade": 0.5633
+      "win_rate": 0.5215,
+      "ev_per_trade": 0.5645
     },
     "by_reason": {
       "bollinger_live_off": {
         "total": 291,
-        "resolved": 37,
-        "pending": 254,
+        "resolved": 40,
+        "pending": 251,
         "expired": 0,
-        "tp_hit": 19,
+        "tp_hit": 22,
         "sl_hit": 18,
-        "win_rate": 0.5135,
-        "ev_per_trade": 0.5405
+        "win_rate": 0.55,
+        "ev_per_trade": 0.65
       },
       "filter": {
         "total": 3604,
