@@ -1,22 +1,5 @@
 [
   {
-    "signature": "THEUSDT|ichimoku|1789884000000",
-    "symbol": "THEUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.0761",
-    "sl": "0.0736",
-    "tp": "0.0811",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789884000000,
-    "signal_close_ms": 1789887599999,
-    "deadline_ms": 1790492399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1789887821174,
-    "source": "simulation"
-  },
-  {
     "signature": "THEUSDT|adx|1789884000000",
     "symbol": "THEUSDT",
     "indicator": "adx",
@@ -23283,9 +23266,9 @@
     "signal_open_ms": 1789912800000,
     "signal_close_ms": 1789916399999,
     "deadline_ms": 1790521199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789948238955,
+    "hit_price": 147.55,
     "created_ms": 1789916536412,
     "source": "simulation"
   },
@@ -56399,9 +56382,9 @@
     "signal_open_ms": 1789930800000,
     "signal_close_ms": 1789934399999,
     "deadline_ms": 1790539199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789948238955,
+    "hit_price": 280.51,
     "created_ms": 1789934464491,
     "source": "simulation"
   },
@@ -69166,9 +69149,9 @@
     "signal_open_ms": 1789934400000,
     "signal_close_ms": 1789937999999,
     "deadline_ms": 1790542799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789948238955,
+    "hit_price": 222.29,
     "created_ms": 1789938139314,
     "source": "simulation"
   },
@@ -75405,9 +75388,9 @@
     "signal_open_ms": 1789938000000,
     "signal_close_ms": 1789941599999,
     "deadline_ms": 1790546399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789948238955,
+    "hit_price": 222.31,
     "created_ms": 1789941742574,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789945406860,
+    "source": "simulation"
+  },
+  {
+    "signature": "MUUBUSDT|ichimoku|1789941600000",
+    "symbol": "MUUBUSDT",
+    "indicator": "ichimoku",
+    "entry": "33.45",
+    "sl": "32.94",
+    "tp": "34.47",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789941600000,
+    "signal_close_ms": 1789945199999,
+    "deadline_ms": 1790549999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789948335398,
     "source": "simulation"
   }
 ]
