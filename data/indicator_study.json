@@ -1,22 +1,5 @@
 [
   {
-    "signature": "FOGOUSDT|adx|1789880400000",
-    "symbol": "FOGOUSDT",
-    "indicator": "adx",
-    "entry": "0.00673",
-    "sl": "0.00654",
-    "tp": "0.00711",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789880400000,
-    "signal_close_ms": 1789883999999,
-    "deadline_ms": 1790488799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1789898399999,
-    "hit_price": 0.00651,
-    "created_ms": 1789884104732,
-    "source": "simulation"
-  },
-  {
     "signature": "FTTUSDT|macd|1789880400000",
     "symbol": "FTTUSDT",
     "indicator": "macd",
@@ -5943,9 +5926,9 @@
     "signal_open_ms": 1789884000000,
     "signal_close_ms": 1789887599999,
     "deadline_ms": 1790492399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789942539921,
+    "hit_price": 221.52,
     "created_ms": 1789887780617,
     "source": "simulation"
   },
@@ -21787,9 +21770,9 @@
     "signal_open_ms": 1789902000000,
     "signal_close_ms": 1789905599999,
     "deadline_ms": 1790510399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789942539921,
+    "hit_price": 0.0723,
     "created_ms": 1789905739023,
     "source": "simulation"
   },
@@ -35251,9 +35234,9 @@
     "signal_open_ms": 1789916400000,
     "signal_close_ms": 1789919999999,
     "deadline_ms": 1790524799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789942539921,
+    "hit_price": 721.89,
     "created_ms": 1789920158252,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789941954010,
+    "source": "simulation"
+  },
+  {
+    "signature": "XVSUSDT|adx|1789938000000",
+    "symbol": "XVSUSDT",
+    "indicator": "adx",
+    "entry": "3.15",
+    "sl": "3.11",
+    "tp": "3.23",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789938000000,
+    "signal_close_ms": 1789941599999,
+    "deadline_ms": 1790546399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789942681476,
     "source": "simulation"
   }
 ]
