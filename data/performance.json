@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ESPUSDT|ai|BUY|1789171200000",
-    "symbol": "ESPUSDT",
-    "indicator": "ai",
-    "entry": "0.09212",
-    "sl": "0.08910",
-    "tp": "0.09816",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789171200000,
-    "signal_close_ms": 1789174799999,
-    "deadline_ms": 1789779599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1789268399999,
-    "hit_price": 0.08798,
-    "created_ms": 1789174975127,
-    "filtered": true
-  },
-  {
     "signature": "REZUSDT|ai|BUY|1789174800000",
     "symbol": "REZUSDT",
     "indicator": "ai",
@@ -1065,7 +1048,7 @@
     "signal_close_ms": 1789725599999,
     "deadline_ms": 1790330399999,
     "status": "tp_hit",
-    "resolved_at_ms": 1789861525534,
+    "resolved_at_ms": 1789862399999,
     "hit_price": 0.00534,
     "created_ms": 1789726034252,
     "filtered": true
@@ -1288,7 +1271,7 @@
     "status": "pending",
     "resolved_at_ms": null,
     "hit_price": null,
-    "created_ms": 1789860536072,
+    "created_ms": 1789859576510,
     "filtered": true
   },
   {
@@ -1305,7 +1288,24 @@
     "status": "pending",
     "resolved_at_ms": null,
     "hit_price": null,
-    "created_ms": 1789860788555,
+    "created_ms": 1789859835688,
+    "filtered": true
+  },
+  {
+    "signature": "XPLUSDT|supertrend|BUY|1789862400000",
+    "symbol": "XPLUSDT",
+    "indicator": "supertrend",
+    "entry": "0.09418",
+    "sl": "0.08862",
+    "tp": "0.10530",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789862400000,
+    "signal_close_ms": 1789865999999,
+    "deadline_ms": 1790470799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789866567729,
     "filtered": true
   }
 ]
