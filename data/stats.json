@@ -1,5 +1,5 @@
 {
-  "monitored_symbols": 444,
+  "monitored_symbols": 442,
   "signals_today": 7,
   "supertrend_today": 3,
   "ai_today": 2,
@@ -20,7 +20,7 @@
     "ema_trend": "bullish",
     "volume_ok": true,
     "time_text": "",
-    "created_at_ms": 1789882032982,
+    "created_at_ms": 1789881324472,
     "whatsapp_status": "failed",
     "whatsapp_sent_at": null,
     "filter_rejected": false,
@@ -37,7 +37,7 @@
     },
     "signature": "GENIUSUSDT|supertrend|BUY|1789876800000"
   },
-  "last_check": 1789881599271,
+  "last_check": 1789882311566,
   "data_date": "2026-09-20",
   "filter_meta": {
     "enabled": true,
@@ -58,8 +58,8 @@
       "ichimoku": {
         "total": 1772,
         "tp_hit": 99,
-        "sl_hit": 681,
-        "pending": 992,
+        "sl_hit": 680,
+        "pending": 993,
         "expired": 0,
         "win_rate": 12.7
       },
@@ -88,17 +88,17 @@
         "win_rate": 0.0
       },
       "rsi50": {
-        "total": 222,
-        "tp_hit": 5,
+        "total": 223,
+        "tp_hit": 6,
         "sl_hit": 35,
         "pending": 182,
         "expired": 0,
-        "win_rate": 12.5
+        "win_rate": 14.6
       },
       "adx": {
-        "total": 2654,
+        "total": 2653,
         "tp_hit": 123,
-        "sl_hit": 922,
+        "sl_hit": 921,
         "pending": 1609,
         "expired": 0,
         "win_rate": 11.8
@@ -107,7 +107,7 @@
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 24,
+    "added_this_run": 0,
     "total": 3789,
     "no_filter": {
       "total": 3789,
@@ -150,10 +150,20 @@
       "ev_per_trade": 0.5615
     },
     "by_reason": {
+      "bollinger_live_off": {
+        "total": 25,
+        "resolved": 0,
+        "pending": 25,
+        "expired": 0,
+        "tp_hit": 0,
+        "sl_hit": 0,
+        "win_rate": null,
+        "ev_per_trade": null
+      },
       "filter": {
-        "total": 3713,
+        "total": 3688,
         "resolved": 3222,
-        "pending": 488,
+        "pending": 463,
         "expired": 3,
         "tp_hit": 1677,
         "sl_hit": 1545,

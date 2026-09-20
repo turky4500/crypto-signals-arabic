@@ -368,8 +368,29 @@ class Monitor:
                     "consensus": panel["consensus"],
                     "min_consensus": min_consensus,
                 })
+            mf_cfg = self.settings.get("momentum_filter", {})
+            st_cap = float(mf_cfg.get("h4_ret5_max_supertrend", 5.0))
             for src in sources:
                 fi = filter_info
+                # سياسة خاصة بالعرض فقط (دون تغيير قياسات الفلتر):
+                # 1) سقف زخم لـ supertrend — الملاحقة عالية الزخم كانت
+                #    خاسرة 100% هذا الأسبوع (0/6 عند r5>=6)، بينما ai
+                #    يستفيد من الزخم فلا يُقيَّد هنا.
+                if src.indicator == "supertrend" and fi.get("accepted") \
+                        and fi.get("h4_ret5") is not None \
+                        and float(fi["h4_ret5"]) > st_cap:
+                    fi = dict(fi)
+                    fi["accepted"] = False
+                    fi["reason"] = "supertrend_momentum_cap"
+                    fi["h4_ret5_max"] = st_cap
+                # 2) إيقاف نشر bollinger الحية — تُسجَّل كمرشّح مرفوض فقط
+                #    لاستمرار الدراسة دون إرسال (WR=0/2 هذا الأسبوع).
+                elif src.indicator == "bollinger" \
+                        and not bool(self.settings.get("indicators_study", {})
+                                     .get("publish_bollinger", False)):
+                    fi = dict(fi)
+                    fi["accepted"] = False
+                    fi["reason"] = "bollinger_live_off"
                 src.filter_info = fi
                 src.filter_rejected = not bool(fi.get("accepted"))
                 if fi.get("accepted"):
