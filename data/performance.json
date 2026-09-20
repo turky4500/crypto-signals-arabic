@@ -1270,9 +1270,9 @@
     "signal_open_ms": 1789862400000,
     "signal_close_ms": 1789865999999,
     "deadline_ms": 1790470799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1789909199999,
+    "hit_price": 0.0885,
     "created_ms": 1789867246565,
     "filtered": true,
     "whatsapp_status": "failed"
@@ -1346,6 +1346,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789883976483,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "FFUSDT|ai|BUY|1789905600000",
+    "symbol": "FFUSDT",
+    "indicator": "ai",
+    "entry": "0.13452",
+    "sl": "0.12774",
+    "tp": "0.14808",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789905600000,
+    "signal_close_ms": 1789909199999,
+    "deadline_ms": 1790513999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789909407904,
     "filtered": true,
     "whatsapp_status": "sent"
   }
