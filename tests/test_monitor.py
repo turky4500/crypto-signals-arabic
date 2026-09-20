@@ -120,14 +120,15 @@ def make_flip_candles(n=140, start=500.0, step=2.0):
 
 def _make_monitor(tmp_path, candles, server=None, filter_enabled=False):
     data_dir = tmp_path / "data"
-    data_dir.mkdir(exist_ok=True)
+    data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "settings.json").write_text(
         json.dumps({
             "monitoring": {
                 "history_candles": 200,
                 "min_24h_quote_volume_usdt": 1.0,
             },
-            "momentum_filter": {"enabled": filter_enabled},
+            "momentum_filter": {"enabled": filter_enabled,
+                "h4_ret5_max_supertrend": 100.0},
             "ai_reader": {
                 "neighbors_count": 8, "max_window": 300,
                 "min_ai_score": 0.60, "use_distance_weight": True,
@@ -505,6 +506,85 @@ def test_candidate_study_with_accepted(tmp_path):
     assert cands[0]["consensus"] >= 0
 
 
+def _bollinger_rebound_candles(n_flat=115, drop=8.0, rebound=2.0, start=100.0):
+    """شكل يطلق إشارة bollinger حتمًا: استقرار ثم هبوط حاد ثم ارتداد خفيف
+    (الإغلاق قبل الأخير تحت الباند السفلي والأخير فوقه ودون المتوسط)."""
+    import time as _t
+    t0 = int(_t.time() * 1000) - (n_flat + 6) * 3_600_000
+    vals = [start] * n_flat
+    step_down = drop / 5.0
+    for i in range(5):
+        vals.append(start - step_down * (i + 1))
+    vals.append(vals[-1] + rebound)
+    ks = []
+    for i in range(len(vals)):
+        ks.append({
+            "open_time": t0 + i * 3_600_000,
+            "close_time": t0 + (i + 1) * 3_600_000,
+            "open": round(vals[i], 4), "high": round(vals[i] * 1.001, 4),
+            "low": round(vals[i] * 0.999, 4), "close": round(vals[i], 4),
+            "volume": 10000.0,
+        })
+    return ks
+
+
+def test_bollinger_not_published_by_default(tmp_path):
+    """إشارات bollinger الحية لا تُنشر افتراضيًا (تُسجَّل كمرشّح مرفوض فقط)،
+    وعند تفعيل publish_bollinger تعود للنشر إذا اجتازت الفلتر."""
+    h1 = _bollinger_rebound_candles()
+    candles = {"BTCUSDT": h1}
+
+    def make_run(cap_dir, toggle):
+        mon, data_dir = _make_monitor(cap_dir, candles,
+                                      server=h1[-1]["close_time"],
+                                      filter_enabled=False)
+        settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
+        settings["indicators_study"]["publish_bollinger"] = toggle
+        (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
+        mon.settings = load_settings(str(data_dir / "settings.json"))
+        mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+        return data_dir
+
+    # إيقاف (الافتراضي): لا إشارة bollinger منشورة، والمرشّح مسجَّل مرفوض بسببه
+    d_off = make_run(tmp_path / "off", False)
+    sigs = json.loads((d_off / "signals.json").read_text(encoding="utf-8"))
+    assert not any(s.get("indicator") == "bollinger" for s in sigs)
+    cands = json.loads((d_off / "candidate_study.json").read_text(encoding="utf-8"))
+    assert any(c.get("indicator") == "bollinger"
+               and c.get("reason") == "bollinger_live_off" for c in cands)
+
+    # تفعيل: تُنشر إشارة bollinger وتُسجَّل كمرشّح مقبول
+    d_on = make_run(tmp_path / "on", True)
+    sigs = json.loads((d_on / "signals.json").read_text(encoding="utf-8"))
+    assert any(s.get("indicator") == "bollinger" for s in sigs)
+
+
+def test_supertrend_momentum_cap_blocks_high_momentum(tmp_path):
+    """سقف الزخم الخاص بـ supertrend: إشارة ذات h4_ret5 فوق السقف تُرفض
+    ولا تُرسل، بينما تُسجَّل بعلامة السبب في مرشّح الدراسة."""
+    h1 = make_flip_candles()  # الشمعة الأخيرة تقفز 30% -> h4_ret5 مرتفع
+    d1 = h1
+
+    def make_run(cap_dir, cap):
+        mon, data_dir = _make_filter_monitor(cap_dir, h1, d1)
+        settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
+        settings["momentum_filter"]["h4_ret5_max_supertrend"] = cap
+        (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
+        mon.settings = load_settings(str(data_dir / "settings.json"))
+        run = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+        return run, data_dir
+
+    # سقف مرتفع جداً -> يُقبل (كما الاختبارات الأساسية)
+    run, data_dir = make_run(tmp_path / "hi", 100.0)
+    assert run["new_signals"] >= 1
+
+    # سقف منخفض (الافتراضي 5.0) -> يُرفض بسبب السقف
+    run, data_dir = make_run(tmp_path / "lo", 5.0)
+    assert run["new_signals"] == 0
+    cands = json.loads((data_dir / "candidate_study.json").read_text(encoding="utf-8"))
+    assert any(c.get("reason") == "supertrend_momentum_cap" for c in cands)
+
+
 def test_momentum_filter_disabled_respects_settings(tmp_path):
     """عندما الفلتر معطّل، تُرسل الإشارة ولا يُكتب سجل فلتر."""
     candles = {"BTCUSDT": make_flip_candles()}
@@ -576,3 +656,103 @@ def test_indicator_study_stats_in_status(tmp_path):
         s = ind["stats"][name]
         assert len(s) >= 0
         assert s["total"] is not None
+
+
+# ------------------------- القناة الاحتياطية (Telegram) ------------------------- #
+class FakeNotifyClient:
+    """عميل وهمي لكل من WhatsApp/Telegram: يتحكم في ping ويسجّل ما أُرسل."""
+
+    def __init__(self, connected=True):
+        self.connected = connected
+        self.sent = []
+
+    def ping(self, timeout=8.0):
+        return self.connected, "ok" if self.connected else "down"
+
+    def send(self, msg):
+        self.sent.append(msg)
+        return {"ok": True, "attempts": 1}
+
+
+def _fallback_monitor(tmp_path):
+    """Monitor مولّد لإشارة مقبولة (سقف زخم مرتفع) بفلتر مفعّل."""
+    h1 = make_flip_candles()
+    return _make_filter_monitor(tmp_path, h1, h1)
+
+
+def test_telegram_builder_requires_env(tmp_path):
+    """باني تلغرام لا يُنشئ عميلًا بلا env، وينشئه عند وجود التوكن والـ chat_id."""
+    candles = {"BTCUSDT": make_uptrend_candles()}
+    mon, _ = _make_monitor(tmp_path, candles)
+    assert mon._telegram({}) is None
+    assert mon._telegram({"TELEGRAM_BOT_TOKEN": "t"}) is None
+    tg = mon._telegram({"TELEGRAM_BOT_TOKEN": "t", "TELEGRAM_CHAT_ID": "123"})
+    assert tg is not None
+    assert mon._telegram({}) is None  # لا ينشئ ثانية بلا env
+
+
+def test_deliver_route_table(tmp_path):
+    """جدول اختيار القناة: واتساب متصل -> واتساب فقط؛ معطّل -> تلغرام؛ بلا قناتين -> فشل."""
+    candles = {"BTCUSDT": make_uptrend_candles()}
+    mon, _ = _make_monitor(tmp_path, candles)
+    wa_ok = FakeNotifyClient(connected=True)
+    wa_down = FakeNotifyClient(connected=False)
+    tg = FakeNotifyClient(connected=True)
+
+    res, ch = mon._deliver("m", wa_ok, tg, True)
+    assert ch == "whatsapp" and res["ok"] is True and wa_ok.sent == ["m"] and tg.sent == []
+
+    res, ch = mon._deliver("m", wa_down, tg, False)
+    assert ch == "telegram" and res["ok"] is True and wa_down.sent == [] and tg.sent == ["m"]
+
+    res, ch = mon._deliver("m", None, None, False)
+    assert ch is None and res["ok"] is False
+
+
+def test_whatsapp_connected_sends_whatsapp_only(tmp_path):
+    """واتساب يعمل -> الإشارات تُرسل واتساب فقط، ولا شيء للتلغرام."""
+    mon, data_dir = _fallback_monitor(tmp_path)
+    wa = FakeNotifyClient(connected=True)
+    tg = FakeNotifyClient(connected=True)
+    mon._whatsapp = lambda env: wa
+    mon._telegram = lambda env: tg
+    run = mon.run(env={}, limit_symbols=1, no_whatsapp=False)
+    assert run["new_signals"] >= 1
+    assert len(wa.sent) >= run["new_signals"]
+    assert tg.sent == []
+    status = json.loads((data_dir / "status.json").read_text(encoding="utf-8"))
+    assert status["whatsapp_connected"] is True
+
+
+def test_whatsapp_down_falls_back_to_telegram(tmp_path):
+    """واتساب معطّل (ping فاشل) -> نفس الرسالة تُرسل تلغرام مع تسجيل القناة."""
+    mon, data_dir = _fallback_monitor(tmp_path)
+    wa = FakeNotifyClient(connected=False)
+    tg = FakeNotifyClient(connected=True)
+    mon._whatsapp = lambda env: wa
+    mon._telegram = lambda env: tg
+    run = mon.run(env={}, limit_symbols=1, no_whatsapp=False)
+    assert run["new_signals"] >= 1
+    assert wa.sent == []
+    assert len(tg.sent) >= run["new_signals"]
+    status = json.loads((data_dir / "status.json").read_text(encoding="utf-8"))
+    assert status["whatsapp_connected"] is False
+    assert status["telegram_connected"] is True
+    logs = json.loads((data_dir / "notification_logs.json").read_text(encoding="utf-8"))
+    sig_logs = [ln for ln in logs if ln.get("channel")]
+    assert sig_logs and all(ln["channel"] == "telegram" for ln in sig_logs)
+
+
+def test_whatsapp_down_without_telegram_fails_honestly(tmp_path):
+    """واتساب معطّل ولا تلغرام مهيأ -> التوقيع وحده بلا قناة: فشل موثّق دون انهيار."""
+    mon, data_dir = _fallback_monitor(tmp_path)
+    wa = FakeNotifyClient(connected=False)
+    mon._whatsapp = lambda env: wa
+    mon._telegram = lambda env: None
+    run = mon.run(env={}, limit_symbols=1, no_whatsapp=False)
+    assert run["new_signals"] >= 1
+    assert wa.sent == []
+    logs = json.loads((data_dir / "notification_logs.json").read_text(encoding="utf-8"))
+    sig_logs = [ln for ln in logs if ln.get("symbol") == "BTCUSDT"]
+    assert sig_logs and all(ln.get("ok") is False for ln in sig_logs)
+    assert all(ln.get("channel") is None for ln in sig_logs)

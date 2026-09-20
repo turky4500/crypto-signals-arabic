@@ -15,6 +15,7 @@ from ..config.settings import load_settings
 from ..indicators import ai_market_reader, supertrend
 from ..notify.daily_report import build_daily_report_message, compute_daily_report
 from ..notify.formatter import build_alert_message, format_time_12h, ts_to_riyadh
+from ..notify.telegram import TelegramClient
 from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
 from .detector import build_bollinger_signal, build_signal
@@ -71,6 +72,7 @@ def _empty_status():
         "market_data_connected": False,
         "monitoring_active": False,
         "whatsapp_connected": False,
+        "telegram_connected": False,
         "last_update": None,
         "last_error": None,
         "run_id": None,
@@ -118,16 +120,42 @@ class Monitor:
         return WhatsAppClient(url, token, primary, receivers=receivers)
 
     # ------------------------------------------------------------------ #
+    def _telegram(self, env: dict) -> TelegramClient | None:
+        tg_cfg = self.settings.get("telegram", {})
+        if not tg_cfg.get("enabled", True):
+            return None
+        token = env.get("TELEGRAM_BOT_TOKEN")
+        chat_id = env.get("TELEGRAM_CHAT_ID")
+        if not (token and chat_id):
+            return None
+        return TelegramClient(token, chat_id)
+
+    # ------------------------------------------------------------------ #
+    def _deliver(self, msg: str, wa, tg, wa_ok: bool) -> tuple[dict, str | None]:
+        """اختيار قناة الإرسال الفعلية لرسالة (إشارة أو تقرير):
+
+        - واتساب إن كان متصلاً (whatsapp_connected=true) → يُرسل واتساب فقط.
+        - وإلا → تلغرام فورًا إن كان مهيأ (قناة احتياطية؛ لا ازدواج بين القناتين).
+        - دون أي قناة متاحة → فشل موثّق في سجل التنبيهات.
+        ترجع (النتيجة, اسم القناة) لتسجيل القناة الحاملة للرسالة في السجلات."""
+        if wa is not None and wa_ok:
+            return wa.send(msg), "whatsapp"
+        if tg is not None:
+            return tg.send(msg), "telegram"
+        return ({"ok": False, "error": "whatsapp معطّل ولا تلغرام مهيأ", "attempts": 0}, None)
+
+    # ------------------------------------------------------------------ #
     def _daily_report_state_path(self) -> str:
         return os.path.join(self.data_dir, "daily_report_state.json")
 
     def _maybe_send_daily_report(self, perf: list, now_ms: int,
-                                 notifications: list, wa) -> dict:
+                                 notifications: list, wa, deliver=None) -> dict:
         """إرسال تقرير نهاية اليوم (بعد منتصف الليل بتوقيت الرياض) لليوم المنتهي.
 
         يُرسل مرة واحدة لكل يوم عبر ملف حالة daily_report_state.json.
         إعادة التشغيل في نفس اليوم لا ترسل مرة أخرى؛ والإرسال الفاشل يُعاد في
-        آخر تشغيل (بدون تقدم الحالة)."""
+        آخر تشغيل (بدون تقدم الحالة). القناة تُحدَّد عبر deliver(msg)->(res,channel):
+        واتساب إن متصل، وإلا تلغرام؛ بدون deliver يبقى السلوك السابق (واتساب فقط)."""
         dr_cfg = self.settings.get("whatsapp", {}).get("daily_report", {})
         if not dr_cfg.get("enabled", True):
             return {"sent": False, "reason": "disabled"}
@@ -157,7 +185,11 @@ class Monitor:
             return {"sent": False, "reason": "no_signals", "day": yesterday}
 
         msg = build_daily_report_message(stats)
-        res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
+        if deliver is not None:
+            res, channel = deliver(msg)
+        else:
+            res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
+            channel = None
 
         notifications = append_capped(
             notifications,
@@ -169,6 +201,7 @@ class Monitor:
                 "ok": res.get("ok"),
                 "error": res.get("error"),
                 "attempts": res.get("attempts"),
+                "channel": channel,
             },
             500,
         )
@@ -368,8 +401,29 @@ class Monitor:
                     "consensus": panel["consensus"],
                     "min_consensus": min_consensus,
                 })
+            mf_cfg = self.settings.get("momentum_filter", {})
+            st_cap = float(mf_cfg.get("h4_ret5_max_supertrend", 5.0))
             for src in sources:
                 fi = filter_info
+                # سياسة خاصة بالعرض فقط (دون تغيير قياسات الفلتر):
+                # 1) سقف زخم لـ supertrend — الملاحقة عالية الزخم كانت
+                #    خاسرة 100% هذا الأسبوع (0/6 عند r5>=6)، بينما ai
+                #    يستفيد من الزخم فلا يُقيَّد هنا.
+                if src.indicator == "supertrend" and fi.get("accepted") \
+                        and fi.get("h4_ret5") is not None \
+                        and float(fi["h4_ret5"]) > st_cap:
+                    fi = dict(fi)
+                    fi["accepted"] = False
+                    fi["reason"] = "supertrend_momentum_cap"
+                    fi["h4_ret5_max"] = st_cap
+                # 2) إيقاف نشر bollinger الحية — تُسجَّل كمرشّح مرفوض فقط
+                #    لاستمرار الدراسة دون إرسال (WR=0/2 هذا الأسبوع).
+                elif src.indicator == "bollinger" \
+                        and not bool(self.settings.get("indicators_study", {})
+                                     .get("publish_bollinger", False)):
+                    fi = dict(fi)
+                    fi["accepted"] = False
+                    fi["reason"] = "bollinger_live_off"
                 src.filter_info = fi
                 src.filter_rejected = not bool(fi.get("accepted"))
                 if fi.get("accepted"):
@@ -486,6 +540,15 @@ class Monitor:
                 logger.warning("خادم WhatsApp لا يستجيب (whatsapp_connected=false): %s", wa_why)
         else:
             status["whatsapp_connected"] = False
+
+        tg = None if no_whatsapp else self._telegram(env)
+        if tg is not None:
+            tg_ok, tg_why = tg.ping(timeout=8.0)
+            status["telegram_connected"] = tg_ok
+            if not tg_ok:
+                logger.warning("بوت Telegram لا يستجيب (telegram_connected=false): %s", tg_why)
+        else:
+            status["telegram_connected"] = False
 
         errors: list[str] = []
         binance_ok = False
@@ -618,7 +681,7 @@ class Monitor:
         notifications = load_json(os.path.join(self.data_dir, "notification_logs.json"), []) or []
         for sig in new_signals:
             msg = build_alert_message(sig.to_dict())
-            res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
+            res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"))
             sig.whatsapp_status = "sent" if res.get("ok") else "failed"
             sig.whatsapp_sent_at = int(time.time() * 1000) if res.get("ok") else None
             sig.created_at_ms = int(time.time() * 1000)
@@ -635,6 +698,7 @@ class Monitor:
                     "ok": res.get("ok"),
                     "error": res.get("error"),
                     "attempts": res.get("attempts"),
+                    "channel": channel,
                 },
                 500,
             )
@@ -758,7 +822,10 @@ class Monitor:
         save_json(os.path.join(self.data_dir, "status.json"), status)
 
         # ---- تقرير نهاية اليوم (بعد منتصف الليل بتوقيت الرياض) ----
-        daily_report = self._maybe_send_daily_report(perf, now_ms, notifications, wa)
+        daily_report = self._maybe_send_daily_report(
+            perf, now_ms, notifications, wa,
+            deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
+        )
 
         # ---- ملخص ----
         return {
@@ -771,6 +838,7 @@ class Monitor:
             "errors_count": len(errors),
             "new_signals": len(new_signals),
             "whatsapp_connected": status["whatsapp_connected"],
+            "telegram_connected": status.get("telegram_connected", False),
             "duration_s": round(time.time() - started, 2),
             "server_time_ms": server_now,
             "daily_report": daily_report,
