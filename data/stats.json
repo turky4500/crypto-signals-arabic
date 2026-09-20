@@ -1,33 +1,33 @@
 {
-  "monitored_symbols": 444,
-  "signals_today": 3,
+  "monitored_symbols": 445,
+  "signals_today": 4,
   "supertrend_today": 1,
-  "ai_today": 0,
+  "ai_today": 1,
   "strong_today": 0,
   "bollinger_today": 2,
   "last_signal": {
-    "symbol": "XPLUSDT",
-    "indicator": "supertrend",
+    "symbol": "STRAXUSDT",
+    "indicator": "ai",
     "signal_type": "BUY",
-    "candle_open_ms": 1789862400000,
-    "candle_close_ms": 1789865999999,
-    "signal_price": 0.09418,
-    "entry": "0.09418",
-    "sl": "0.08862",
-    "tp": "0.10530",
+    "candle_open_ms": 1789866000000,
+    "candle_close_ms": 1789869599999,
+    "signal_price": 0.01085,
+    "entry": "0.01085",
+    "sl": "0.01055",
+    "tp": "0.01145",
     "rr_ratio": 2.0,
-    "confidence": 1.0,
+    "confidence": 0.6466,
     "ema_trend": "bullish",
     "volume_ok": true,
     "time_text": "",
-    "created_at_ms": 1789867246565,
+    "created_at_ms": 1789873489076,
     "whatsapp_status": "failed",
     "whatsapp_sent_at": null,
     "filter_rejected": false,
     "filter_info": {
-      "h4_ret5": 2.04,
+      "h4_ret5": 2.98,
       "h4_ret5_min": 2.0,
-      "h1_rsi": 64.7,
+      "h1_rsi": 68.1,
       "h1_rsi_max": 70.0,
       "d1_above_ema50": true,
       "h4_in_uptrend": true,
@@ -35,18 +35,18 @@
       "h1_rsi_ok": true,
       "accepted": true
     },
-    "signature": "XPLUSDT|supertrend|BUY|1789862400000"
+    "signature": "STRAXUSDT|ai|BUY|1789866000000"
   },
-  "last_check": 1789873767982,
+  "last_check": 1789874200655,
   "data_date": "2026-09-20",
   "filter_meta": {
     "enabled": true,
     "activated_ms": 1789124605224,
     "filtered_stats": {
-      "total": 74,
+      "total": 75,
       "tp_hit": 36,
       "sl_hit": 20,
-      "pending": 18,
+      "pending": 19,
       "expired": 0,
       "win_rate": 64.3,
       "activated_ms": 1789124605224
@@ -57,11 +57,11 @@
     "stats": {
       "ichimoku": {
         "total": 1903,
-        "tp_hit": 109,
-        "sl_hit": 801,
-        "pending": 993,
+        "tp_hit": 105,
+        "sl_hit": 804,
+        "pending": 994,
         "expired": 0,
-        "win_rate": 12.0
+        "win_rate": 11.6
       },
       "awesome": {
         "total": 44,
@@ -73,11 +73,11 @@
       },
       "macd": {
         "total": 115,
-        "tp_hit": 6,
+        "tp_hit": 5,
         "sl_hit": 40,
-        "pending": 69,
+        "pending": 70,
         "expired": 0,
-        "win_rate": 13.0
+        "win_rate": 11.1
       },
       "bollinger": {
         "total": 23,
@@ -97,11 +97,11 @@
       },
       "adx": {
         "total": 2782,
-        "tp_hit": 139,
+        "tp_hit": 134,
         "sl_hit": 1065,
-        "pending": 1578,
+        "pending": 1583,
         "expired": 0,
-        "win_rate": 11.5
+        "win_rate": 11.2
       }
     }
   },
