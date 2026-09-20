@@ -37,7 +37,7 @@
     },
     "signature": "FFUSDT|supertrend|BUY|1789873200000"
   },
-  "last_check": 1789879236625,
+  "last_check": 1789879764111,
   "data_date": "2026-09-20",
   "filter_meta": {
     "enabled": true,
@@ -57,11 +57,11 @@
     "stats": {
       "ichimoku": {
         "total": 1806,
-        "tp_hit": 99,
+        "tp_hit": 104,
         "sl_hit": 733,
-        "pending": 974,
+        "pending": 969,
         "expired": 0,
-        "win_rate": 11.9
+        "win_rate": 12.4
       },
       "awesome": {
         "total": 43,
@@ -97,11 +97,11 @@
       },
       "adx": {
         "total": 2664,
-        "tp_hit": 122,
+        "tp_hit": 127,
         "sl_hit": 981,
-        "pending": 1561,
+        "pending": 1556,
         "expired": 0,
-        "win_rate": 11.1
+        "win_rate": 11.5
       }
     }
   },
@@ -150,10 +150,20 @@
       "ev_per_trade": 0.5645
     },
     "by_reason": {
+      "bollinger_live_off": {
+        "total": 2,
+        "resolved": 0,
+        "pending": 2,
+        "expired": 0,
+        "tp_hit": 0,
+        "sl_hit": 0,
+        "win_rate": null,
+        "ev_per_trade": null
+      },
       "filter": {
-        "total": 3701,
+        "total": 3699,
         "resolved": 3231,
-        "pending": 468,
+        "pending": 466,
         "expired": 2,
         "tp_hit": 1685,
         "sl_hit": 1546,
