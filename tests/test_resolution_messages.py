@@ -19,7 +19,8 @@ def _ms_riyadh(y, m, d, hh, mm=0):
     return int(dt.timestamp() * 1000)
 
 
-def _rec(symbol, status, op_ms, hit=None, entry="195.0", sl="190.0", tp="200.0"):
+def _rec(symbol, status, op_ms, hit=None, entry="195.0", sl="190.0", tp="200.0",
+         whatsapp_status="sent"):
     return {
         "signature": f"{symbol}|supertrend|BUY|{op_ms}",
         "symbol": symbol,
@@ -32,6 +33,7 @@ def _rec(symbol, status, op_ms, hit=None, entry="195.0", sl="190.0", tp="200.0")
         "status": status,
         "resolved_at_ms": op_ms + 2 * 3600_000,
         "hit_price": hit,
+        "whatsapp_status": whatsapp_status,
     }
 
 
@@ -161,3 +163,52 @@ def test_state_pruned_to_current_records(tmp_path):
     state = json.loads((data_dir / "resolution_state.json").read_text(encoding="utf-8"))
     assert "GONE" not in state["notified"]
     assert fresh["signature"] in state["notified"]
+
+
+# ---------- قاعدة: رسائل الحسم فقط للتوصيات الموَصَّلة فعلًا ----------
+
+def test_failed_delivery_not_messaged(tmp_path):
+    """توصية رُفضت/فشل إيصالها أصلًا — لا تُرسل رسالة حسم عنها إطلاقًا."""
+    mon, _ = _make_monitor(tmp_path)
+    mon._seed_resolution_state([])
+    rec = _rec("NOPE", "sl_hit", _ms_riyadh(2026, 9, 16, 10, 0), hit=190.0,
+               whatsapp_status="failed")
+    wa = FakeWhatsApp()
+    out = mon._maybe_send_resolution_messages([rec], _ms_riyadh(2026, 9, 16, 13, 0), [], wa)
+    assert out["sent"] == 0 and out["failed"] == 0 and len(wa.sent) == 0
+
+
+def test_missing_delivery_status_not_messaged(tmp_path):
+    """سجل قديم بلا حقل whatsapp_status يُعتبر غير موصَّل — لا يُرسَل."""
+    mon, _ = _make_monitor(tmp_path)
+    mon._seed_resolution_state([])
+    rec = _rec("OLD", "tp_hit", _ms_riyadh(2026, 9, 16, 10, 0), hit=200.0)
+    rec.pop("whatsapp_status")
+    wa = FakeWhatsApp()
+    out = mon._maybe_send_resolution_messages([rec], _ms_riyadh(2026, 9, 16, 13, 0), [], wa)
+    assert out["sent"] == 0 and len(wa.sent) == 0
+
+
+def test_sent_signal_gets_resolution(tmp_path):
+    """توصية وصلت فعلًا (sent) — تُرسل رسالة حسمها في حينها."""
+    mon, _ = _make_monitor(tmp_path)
+    mon._seed_resolution_state([])
+    rec = _rec("YESX", "tp_hit", _ms_riyadh(2026, 9, 16, 10, 0), hit=200.0,
+               whatsapp_status="sent")
+    wa = FakeWhatsApp()
+    out = mon._maybe_send_resolution_messages([rec], _ms_riyadh(2026, 9, 16, 13, 0), [], wa)
+    assert out["sent"] == 1 and len(wa.sent) == 1
+
+
+def test_make_record_copies_whatsapp_status():
+    """سجل الأداء يحمل حالة التسليم من الإشارة (أساس البوّابة)."""
+    from src.engine.performance import make_record
+    rec = make_record({
+        "signature": "X|supertrend|BUY|1",
+        "symbol": "X", "indicator": "supertrend",
+        "entry": "1.0", "sl": "0.9", "tp": "1.2",
+        "candle_open_ms": 1000, "candle_close_ms": 3599999,
+        "rr_ratio": 2.0, "filter_info": {},
+        "whatsapp_status": "failed",
+    })
+    assert rec["whatsapp_status"] == "failed"

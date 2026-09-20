@@ -337,6 +337,7 @@ class Monitor:
             _r for _r in perf
             if _r.get("status") in ("tp_hit", "sl_hit", "expired")
             and _r.get("signature") not in notified
+            and _r.get("whatsapp_status") == "sent"  # فقط التوصيات التي اجتازت الفلتر ووصلت فعلًا
         ]
 
         sent = failed = 0
@@ -892,6 +893,12 @@ class Monitor:
 
         # ---- الحفظ ----
         perf = seed_from_signals(perf, signals)  # بذر فوري للإشارات الجديدة في نفس التشغيل
+        # تعبئة خلفية: حمل حالة التسليم (sent/failed) من signals.json للأشياء القديمة
+        # حتى تُرسل رسائل الحسم فقط للتوصيات التي وصلت المستخدم فعلًا.
+        sig_status = {s.get("signature"): s.get("whatsapp_status") for s in signals}
+        for _r in perf:
+            if not _r.get("whatsapp_status") and _r.get("signature") in sig_status:
+                _r["whatsapp_status"] = sig_status[_r["signature"]]
         perf = mark_expired(perf, now_ms)
         perf = prune_old(perf, now_ms)  # حذف سجلات تجاوزت 8 أيام
         if len(perf) > 2500:

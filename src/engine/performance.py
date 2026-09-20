@@ -33,6 +33,7 @@ def make_record(sig: dict) -> dict:
         "hit_price": None,
         "created_ms": now,
         "filtered": bool(sig.get("filter_info")),
+        "whatsapp_status": sig.get("whatsapp_status"),
     }
 
 
