@@ -14,11 +14,8 @@ from ..binance.models import Kline, format_price
 from ..config.settings import load_settings
 from ..indicators import ai_market_reader, supertrend
 from ..notify.daily_report import build_daily_report_message, compute_daily_report
-from ..notify.formatter import (build_alert_message, build_resolution_message,
-                                format_time_12h, ts_to_riyadh)
+from ..notify.formatter import build_alert_message, format_time_12h, ts_to_riyadh
 from ..notify.telegram import TelegramClient
-from ..notify.weekly_report import (build_weekly_report_message,
-                                    compute_weekly_report, week_bounds)
 from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
 from .detector import build_bollinger_signal, build_signal
@@ -219,165 +216,6 @@ class Monitor:
             "error": res.get("error"),
             **stats,
         }
-
-    # ------------------------------------------------------------------ #
-    def _weekly_report_state_path(self) -> str:
-        return os.path.join(self.data_dir, "weekly_report_state.json")
-
-    def _maybe_send_weekly_report(self, perf: list, now_ms: int,
-                                  notifications: list, wa, deliver=None) -> dict:
-        """إرسال التقرير الأسبوعي: أسبوع تقويمي (الأحد → السبت) يُرسل يوم الأحد
-        بعد منتصف الليل (افتراضي 00:05) عن أسبوع السبت المنتهي — مرة واحدة لكل
-        أسبوع عبر weekly_report_state.json (الفشل يُعاد في تشغيل لاحق).
-
-        القناة عبر deliver(msg)->(res,channel): واتساب إن متصل، وإلا تلغرام.
-        """
-        wr_cfg = self.settings.get("whatsapp", {}).get("weekly_report", {})
-        if not wr_cfg.get("enabled", True):
-            return {"sent": False, "reason": "disabled"}
-
-        now_dt = ts_to_riyadh(now_ms)
-        if now_dt.weekday() != 6:  # الأحد فقط (datetime.weekday: الاثنين=0..الأحد=6)
-            return {"sent": False, "reason": "not_sunday"}
-
-        hour = int(wr_cfg.get("hour", 0))
-        minute = int(wr_cfg.get("minute", 5))
-        report_time = datetime(
-            now_dt.year, now_dt.month, now_dt.day, hour, minute,
-            tzinfo=ZoneInfo(self.tz.key if hasattr(self.tz, "key") else "Asia/Riyadh"),
-        )
-        if now_dt < report_time:
-            return {"sent": False, "reason": "too_early"}
-
-        # الأسبوع المنتهي: الأحد → السبت اللذين احتويا يوم أمس (السبت).
-        saturday = (now_dt - timedelta(days=1)).date().isoformat()
-        week_start, week_end = week_bounds(saturday)
-
-        state = load_json(self._weekly_report_state_path(), None) or {}
-        if state.get("last_report_week") == week_start:
-            return {"sent": False, "reason": "already_sent"}
-
-        stats = compute_weekly_report(perf, week_start, week_end, tz=self.tz)
-        if stats["total"] == 0:
-            state["last_report_week"] = week_start
-            save_json(self._weekly_report_state_path(), state)
-            return {"sent": False, "reason": "no_signals",
-                    "week_start": week_start, "week_end": week_end}
-
-        msg = build_weekly_report_message(stats)
-        if deliver is not None:
-            res, channel = deliver(msg)
-        else:
-            res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
-            channel = None
-
-        notifications = append_capped(
-            notifications,
-            {
-                "ts": now_ms,
-                "kind": "weekly_report",
-                "week_start": week_start,
-                "week_end": week_end,
-                "message": msg,
-                "ok": res.get("ok"),
-                "error": res.get("error"),
-                "attempts": res.get("attempts"),
-                "channel": channel,
-            },
-            500,
-        )
-        save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
-
-        if res.get("ok"):
-            state["last_report_week"] = week_start
-            save_json(self._weekly_report_state_path(), state)
-        return {
-            "sent": bool(res.get("ok")),
-            "week_start": week_start,
-            "week_end": week_end,
-            "error": res.get("error"),
-            **stats,
-        }
-
-    # ------------------------------------------------------------------ #
-    def _resolution_state_path(self) -> str:
-        return os.path.join(self.data_dir, "resolution_state.json")
-
-    def _seed_resolution_state(self, perf: list) -> None:
-        """البذر عند أول تشغيل للكود الجديد: حسمات قديمة موجودة مسبقًا تُعلَّم
-        كمنجَزة دون إرسال حتى لا يصل انفجار رسائل عن حسمات قديمة."""
-        state_path = self._resolution_state_path()
-        if load_json(state_path, None) is not None:
-            return
-        notified = sorted({
-            _r.get("signature")
-            for _r in perf
-            if _r.get("status") in ("tp_hit", "sl_hit", "expired")
-            and _r.get("signature")
-        })
-        save_json(state_path, {"notified": notified})
-
-    def _maybe_send_resolution_messages(self, perf: list, now_ms: int,
-                                        notifications: list, wa,
-                                        deliver=None) -> dict:
-        """رسالة فورية عند حسم أي توصية معلّقة: ✅ تحقق الهدف / ❌ ضرب الوقف /
-        📭 انتهاء المهلة. تُرسل مرة واحدة لكل توصية (الفشل يُعاد في تشغيل لاحق
-        ولا يُعلَّم كمنجَز إلا عند النجاح).
-
-        القناة عبر deliver(msg)->(res,channel): واتساب إن متصل، وإلا تلغرام.
-        """
-        rm_cfg = self.settings.get("whatsapp", {}).get("resolution_messages", {})
-        if not rm_cfg.get("enabled", True):
-            return {"sent": 0, "reason": "disabled"}
-
-        state = load_json(self._resolution_state_path(), None) or {}
-        notified = set(state.get("notified", []) or [])
-
-        newly = [
-            _r for _r in perf
-            if _r.get("status") in ("tp_hit", "sl_hit", "expired")
-            and _r.get("signature") not in notified
-        ]
-
-        sent = failed = 0
-        for rec in newly:
-            msg = build_resolution_message(rec)
-            if deliver is not None:
-                res, channel = deliver(msg)
-            else:
-                res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
-                channel = None
-
-            notifications = append_capped(
-                notifications,
-                {
-                    "ts": now_ms,
-                    "kind": "resolution",
-                    "symbol": rec.get("symbol"),
-                    "indicator": rec.get("indicator"),
-                    "status": rec.get("status"),
-                    "message": msg,
-                    "ok": res.get("ok"),
-                    "error": res.get("error"),
-                    "attempts": res.get("attempts"),
-                    "channel": channel,
-                },
-                500,
-            )
-            save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
-
-            if res.get("ok"):
-                notified.add(rec.get("signature"))
-                sent += 1
-            else:
-                failed += 1
-
-        # إبقاء الحالة متوافقة مع السجلات الحالية (حذف ما حُذف من perf)
-        remain = {_r.get("signature") for _r in perf if _r.get("signature")}
-        notified = {s for s in notified if s in remain}
-        state["notified"] = sorted(notified)[-5000:]
-        save_json(self._resolution_state_path(), state)
-        return {"sent": sent, "failed": failed, "newly_resolved": len(newly)}
 
     # ------------------------------------------------------------------ #
     def _build_row(self, symbol_info, candle, st_res, ai_res, price_str,
@@ -751,7 +589,6 @@ class Monitor:
         # ---- سجل الأداء (نتائج الإشارات) ----
         perf_path = os.path.join(self.data_dir, "performance.json")
         perf = load_json(perf_path, []) or []
-        self._seed_resolution_state(perf)  # بذر حسمات قديمة دون إرسال
         perf = seed_from_signals(perf, signals)
         perf_pending_map: dict = {}
         for _r in perf:
@@ -990,18 +827,6 @@ class Monitor:
             deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
         )
 
-        # ---- التقرير الأسبوعي (الأحد بعد منتصف الليل عن أسبوع السبت المنتهي) ----
-        weekly_report = self._maybe_send_weekly_report(
-            perf, now_ms, notifications, wa,
-            deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
-        )
-
-        # ---- رسائل حسم التوصيات: تحقق الهدف / ضرب الوقف / انتهاء المهلة ----
-        resolution = self._maybe_send_resolution_messages(
-            perf, now_ms, notifications, wa,
-            deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
-        )
-
         # ---- ملخص ----
         return {
             "ok": binance_ok,
@@ -1017,6 +842,4 @@ class Monitor:
             "duration_s": round(time.time() - started, 2),
             "server_time_ms": server_now,
             "daily_report": daily_report,
-            "weekly_report": weekly_report,
-            "resolution_messages": resolution,
         }
