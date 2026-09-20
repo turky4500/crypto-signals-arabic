@@ -1,22 +1,5 @@
 [
   {
-    "signature": "FTTUSDT|macd|1789880400000",
-    "symbol": "FTTUSDT",
-    "indicator": "macd",
-    "entry": "0.2115",
-    "sl": "0.2044",
-    "tp": "0.2257",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789880400000,
-    "signal_close_ms": 1789883999999,
-    "deadline_ms": 1790488799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1789919734446,
-    "hit_price": 0.2257,
-    "created_ms": 1789884105254,
-    "source": "simulation"
-  },
-  {
     "signature": "FTTUSDT|rsi50|1789880400000",
     "symbol": "FTTUSDT",
     "indicator": "rsi50",
@@ -48664,9 +48647,9 @@
     "signal_open_ms": 1789923600000,
     "signal_close_ms": 1789927199999,
     "deadline_ms": 1790531999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789944346026,
+    "hit_price": 561.84,
     "created_ms": 1789927431458,
     "source": "simulation"
   },
@@ -65409,9 +65392,9 @@
     "signal_open_ms": 1789930800000,
     "signal_close_ms": 1789934399999,
     "deadline_ms": 1790539199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789944346026,
+    "hit_price": 1.1604,
     "created_ms": 1789934498567,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789942681476,
+    "source": "simulation"
+  },
+  {
+    "signature": "MVLLBUSDT|ichimoku|1789938000000",
+    "symbol": "MVLLBUSDT",
+    "indicator": "ichimoku",
+    "entry": "30.57",
+    "sl": "30.25",
+    "tp": "31.21",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789938000000,
+    "signal_close_ms": 1789941599999,
+    "deadline_ms": 1790546399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789944418487,
     "source": "simulation"
   }
 ]
