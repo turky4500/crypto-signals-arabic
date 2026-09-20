@@ -78,16 +78,20 @@ jobs:
           git config user.name "crypto-monitor[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          # الدفع الآمن: نلتزم تغييراتنا (data فقط) ثم ندفع، وإن سبقنا أحد (دفعة
+          # خارجية أو دورة أخرى) نُعيد تطبيق التزامنا عبر pull --rebase بدلًا من
+          # reset --soft — حتى لا نُرجع أبدًا src/ أو بيانات غيّرها غيرنا.
+          git add data/
+          git diff --cached --quiet && { echo "no data changes"; exit 0; }
+          git commit -q -m "chore(data): تحديث بيانات المراقبة والإشارات" || true
           for i in 1 2 3; do
-            git add data/
-            git diff --cached --quiet && echo "no data changes" && break
-            # نضع موضع الفرع على أحدث main مع إبقاء تغييراتنا معلّقة (reset --soft)
-            # — بلا pull --rebase فلا تبقى علامات صراع في مجلد العمل أبدًا
-            git fetch origin main -q
-            git reset --soft origin/main
-            git commit -q -m "chore(data): تحديث بيانات المراقبة والإشارات" || true
             if git push origin HEAD:main -q; then echo "data committed"; break; fi
-            echo "push race — retry $i"; sleep 5
+            echo "push race — pull --rebase ثم إعادة المحاولة ($i)"
+            git fetch origin main -q
+            if ! git pull --rebase origin main -q; then
+              git rebase --abort 2>/dev/null || true
+              sleep 5
+            fi
           done
 
       - name: Assemble static site (web + data)
