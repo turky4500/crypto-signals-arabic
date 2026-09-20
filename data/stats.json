@@ -37,7 +37,7 @@
     },
     "signature": "GENIUSUSDT|supertrend|BUY|1789876800000"
   },
-  "last_check": 1789884470438,
+  "last_check": 1789884663429,
   "data_date": "2026-09-20",
   "filter_meta": {
     "enabled": true,
@@ -81,11 +81,11 @@
       },
       "bollinger": {
         "total": 223,
-        "tp_hit": 0,
+        "tp_hit": 1,
         "sl_hit": 2,
-        "pending": 221,
+        "pending": 220,
         "expired": 0,
-        "win_rate": 0.0
+        "win_rate": 33.3
       },
       "rsi50": {
         "total": 243,
@@ -111,13 +111,13 @@
     "total": 3811,
     "no_filter": {
       "total": 3811,
-      "resolved": 3269,
-      "pending": 539,
+      "resolved": 3270,
+      "pending": 538,
       "expired": 3,
-      "tp_hit": 1709,
+      "tp_hit": 1710,
       "sl_hit": 1560,
-      "win_rate": 0.5228,
-      "ev_per_trade": 0.5684
+      "win_rate": 0.5229,
+      "ev_per_trade": 0.5687
     },
     "with_filter": {
       "total": 76,
@@ -141,24 +141,24 @@
     },
     "blocked": {
       "total": 3735,
-      "resolved": 3214,
-      "pending": 518,
+      "resolved": 3215,
+      "pending": 517,
       "expired": 3,
-      "tp_hit": 1674,
+      "tp_hit": 1675,
       "sl_hit": 1540,
-      "win_rate": 0.5208,
-      "ev_per_trade": 0.5624
+      "win_rate": 0.521,
+      "ev_per_trade": 0.563
     },
     "by_reason": {
       "bollinger_live_off": {
         "total": 56,
-        "resolved": 0,
-        "pending": 56,
+        "resolved": 1,
+        "pending": 55,
         "expired": 0,
-        "tp_hit": 0,
+        "tp_hit": 1,
         "sl_hit": 0,
-        "win_rate": null,
-        "ev_per_trade": null
+        "win_rate": 1.0,
+        "ev_per_trade": 2.0
       },
       "filter": {
         "total": 3679,
