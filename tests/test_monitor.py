@@ -120,14 +120,15 @@ def make_flip_candles(n=140, start=500.0, step=2.0):
 
 def _make_monitor(tmp_path, candles, server=None, filter_enabled=False):
     data_dir = tmp_path / "data"
-    data_dir.mkdir(exist_ok=True)
+    data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "settings.json").write_text(
         json.dumps({
             "monitoring": {
                 "history_candles": 200,
                 "min_24h_quote_volume_usdt": 1.0,
             },
-            "momentum_filter": {"enabled": filter_enabled},
+            "momentum_filter": {"enabled": filter_enabled,
+                "h4_ret5_max_supertrend": 100.0},
             "ai_reader": {
                 "neighbors_count": 8, "max_window": 300,
                 "min_ai_score": 0.60, "use_distance_weight": True,
@@ -503,6 +504,85 @@ def test_candidate_study_with_accepted(tmp_path):
     assert len(cands) == 1
     assert cands[0]["verdict"] == "accepted"
     assert cands[0]["consensus"] >= 0
+
+
+def _bollinger_rebound_candles(n_flat=115, drop=8.0, rebound=2.0, start=100.0):
+    """شكل يطلق إشارة bollinger حتمًا: استقرار ثم هبوط حاد ثم ارتداد خفيف
+    (الإغلاق قبل الأخير تحت الباند السفلي والأخير فوقه ودون المتوسط)."""
+    import time as _t
+    t0 = int(_t.time() * 1000) - (n_flat + 6) * 3_600_000
+    vals = [start] * n_flat
+    step_down = drop / 5.0
+    for i in range(5):
+        vals.append(start - step_down * (i + 1))
+    vals.append(vals[-1] + rebound)
+    ks = []
+    for i in range(len(vals)):
+        ks.append({
+            "open_time": t0 + i * 3_600_000,
+            "close_time": t0 + (i + 1) * 3_600_000,
+            "open": round(vals[i], 4), "high": round(vals[i] * 1.001, 4),
+            "low": round(vals[i] * 0.999, 4), "close": round(vals[i], 4),
+            "volume": 10000.0,
+        })
+    return ks
+
+
+def test_bollinger_not_published_by_default(tmp_path):
+    """إشارات bollinger الحية لا تُنشر افتراضيًا (تُسجَّل كمرشّح مرفوض فقط)،
+    وعند تفعيل publish_bollinger تعود للنشر إذا اجتازت الفلتر."""
+    h1 = _bollinger_rebound_candles()
+    candles = {"BTCUSDT": h1}
+
+    def make_run(cap_dir, toggle):
+        mon, data_dir = _make_monitor(cap_dir, candles,
+                                      server=h1[-1]["close_time"],
+                                      filter_enabled=False)
+        settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
+        settings["indicators_study"]["publish_bollinger"] = toggle
+        (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
+        mon.settings = load_settings(str(data_dir / "settings.json"))
+        mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+        return data_dir
+
+    # إيقاف (الافتراضي): لا إشارة bollinger منشورة، والمرشّح مسجَّل مرفوض بسببه
+    d_off = make_run(tmp_path / "off", False)
+    sigs = json.loads((d_off / "signals.json").read_text(encoding="utf-8"))
+    assert not any(s.get("indicator") == "bollinger" for s in sigs)
+    cands = json.loads((d_off / "candidate_study.json").read_text(encoding="utf-8"))
+    assert any(c.get("indicator") == "bollinger"
+               and c.get("reason") == "bollinger_live_off" for c in cands)
+
+    # تفعيل: تُنشر إشارة bollinger وتُسجَّل كمرشّح مقبول
+    d_on = make_run(tmp_path / "on", True)
+    sigs = json.loads((d_on / "signals.json").read_text(encoding="utf-8"))
+    assert any(s.get("indicator") == "bollinger" for s in sigs)
+
+
+def test_supertrend_momentum_cap_blocks_high_momentum(tmp_path):
+    """سقف الزخم الخاص بـ supertrend: إشارة ذات h4_ret5 فوق السقف تُرفض
+    ولا تُرسل، بينما تُسجَّل بعلامة السبب في مرشّح الدراسة."""
+    h1 = make_flip_candles()  # الشمعة الأخيرة تقفز 30% -> h4_ret5 مرتفع
+    d1 = h1
+
+    def make_run(cap_dir, cap):
+        mon, data_dir = _make_filter_monitor(cap_dir, h1, d1)
+        settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
+        settings["momentum_filter"]["h4_ret5_max_supertrend"] = cap
+        (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
+        mon.settings = load_settings(str(data_dir / "settings.json"))
+        run = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+        return run, data_dir
+
+    # سقف مرتفع جداً -> يُقبل (كما الاختبارات الأساسية)
+    run, data_dir = make_run(tmp_path / "hi", 100.0)
+    assert run["new_signals"] >= 1
+
+    # سقف منخفض (الافتراضي 5.0) -> يُرفض بسبب السقف
+    run, data_dir = make_run(tmp_path / "lo", 5.0)
+    assert run["new_signals"] == 0
+    cands = json.loads((data_dir / "candidate_study.json").read_text(encoding="utf-8"))
+    assert any(c.get("reason") == "supertrend_momentum_cap" for c in cands)
 
 
 def test_momentum_filter_disabled_respects_settings(tmp_path):
