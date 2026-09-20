@@ -1,22 +1,5 @@
 [
   {
-    "signature": "JASMYUSDT|ichimoku|1789855200000",
-    "symbol": "JASMYUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.00412",
-    "sl": "0.00400",
-    "tp": "0.00436",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789855200000,
-    "signal_close_ms": 1789858799999,
-    "deadline_ms": 1790463599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1789894799999,
-    "hit_price": 0.00398,
-    "created_ms": 1789860195864,
-    "source": "simulation"
-  },
-  {
     "signature": "JASMYUSDT|adx|1789855200000",
     "symbol": "JASMYUSDT",
     "indicator": "adx",
@@ -37172,9 +37155,9 @@
     "signal_open_ms": 1789869600000,
     "signal_close_ms": 1789873199999,
     "deadline_ms": 1790477999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789917637852,
+    "hit_price": 0.0359,
     "created_ms": 1789874265575,
     "source": "simulation"
   },
@@ -69319,9 +69302,9 @@
     "signal_open_ms": 1789894800000,
     "signal_close_ms": 1789898399999,
     "deadline_ms": 1790503199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789917637852,
+    "hit_price": 0.0359,
     "created_ms": 1789898760107,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789916587600,
+    "source": "simulation"
+  },
+  {
+    "signature": "DJTBUSDT|rsi50|1789912800000",
+    "symbol": "DJTBUSDT",
+    "indicator": "rsi50",
+    "entry": "8.86",
+    "sl": "8.80",
+    "tp": "8.98",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789912800000,
+    "signal_close_ms": 1789916399999,
+    "deadline_ms": 1790521199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789917674585,
     "source": "simulation"
   }
 ]
