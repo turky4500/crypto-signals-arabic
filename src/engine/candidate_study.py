@@ -40,7 +40,7 @@ def build_candidate(sig: dict, filter_info: dict | None,
             else:
                 verdict, reason = "accepted", "filter_ok"
         else:
-            verdict, reason = "blocked", str(filter_info.get("reason") or "filter")
+            verdict, reason = "blocked", "filter"
     else:
         verdict, reason = "accepted", "filter_disabled"
 
