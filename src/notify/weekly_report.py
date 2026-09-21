@@ -105,6 +105,136 @@ def compute_weekly_report(records: list[dict], week_start_iso: str,
     }
 
 
+def compute_weekly_analysis(records: list[dict], signals_by_sig: dict | None,
+                            week_start_iso: str, week_end_iso: str | None = None,
+                            tz=None) -> dict | None:
+    """التحليل الذاتي الأسبوعي (حلقة التعلم من تجربة الإشارات).
+
+    من الإشارات المحسومة (هدف/وقف) داخل الأسبوع:
+    - دقة الحسم الإجمالية + لكل مؤشر (⚠️ على كل المحسومة).
+    - حصة الإشارات الموَصَّلة فعليًا (whatsapp_status=sent) — ما جربه المستخدم.
+    - مقارنة قياسات فلتر الزخم (زخم 4H و RSI ساعة) للرابحين مقابل الخاسرين
+      عبر ربط توقيع الإشارة ببيانات signals (filter_info) — لتغذية اقتراحات
+      ضبط عتبات الفلتر. يرجع None إن لم يوجد أي حسم في الأسبوع.
+    """
+    tz = tz or ZoneInfo("Asia/Riyadh")
+    start = datetime.fromisoformat(week_start_iso).date()
+    if week_end_iso is None:
+        week_end_iso = (start + timedelta(days=6)).isoformat()
+    end = datetime.fromisoformat(week_end_iso).date()
+
+    by_indicator: dict[str, dict] = {}
+    delivered = {"tp": 0, "sl": 0}
+    f_win = {"h4_ret5": [], "h1_rsi": []}
+    f_loss = {"h4_ret5": [], "h1_rsi": []}
+
+    for r in records:
+        ms = int(r.get("signal_close_ms") or r.get("signal_open_ms") or 0)
+        if not ms:
+            continue
+        day = datetime.fromtimestamp(ms / 1000.0, tz).date()
+        if not (start <= day <= end):
+            continue
+        status = r.get("status")
+        if status not in ("tp_hit", "sl_hit"):
+            continue
+        won = status == "tp_hit"
+        ind = r.get("indicator", "other")
+        b = by_indicator.get(ind)
+        if b is None:
+            b = {"total": 0, "tp": 0, "sl": 0}
+            by_indicator[ind] = b
+        b["total"] += 1
+        b["tp" if won else "sl"] += 1
+        if r.get("whatsapp_status") == "sent":
+            delivered["tp" if won else "sl"] += 1
+
+        sig = (signals_by_sig or {}).get(r.get("signature")) or {}
+        fi = sig.get("filter_info") or {}
+        target = f_win if won else f_loss
+        h4 = fi.get("h4_ret5")
+        rsi_v = fi.get("h1_rsi")
+        if isinstance(h4, (int, float)):
+            target["h4_ret5"].append(float(h4))
+        if isinstance(rsi_v, (int, float)):
+            target["h1_rsi"].append(float(rsi_v))
+
+    resolved = sum(b["total"] for b in by_indicator.values())
+    if resolved == 0:
+        return None
+
+    for b in by_indicator.values():
+        b["win_rate"] = round(b["tp"] / b["total"], 4)
+    win_rate = round(
+        sum(b["tp"] for b in by_indicator.values()) / resolved, 4
+    )
+
+    del_stats = None
+    dr = delivered["tp"] + delivered["sl"]
+    if dr > 0:
+        del_stats = {
+            "tp": delivered["tp"],
+            "sl": delivered["sl"],
+            "resolved": dr,
+            "win_rate": round(delivered["tp"] / dr, 4),
+        }
+
+    def _avg(vals):
+        return round(sum(vals) / len(vals), 2) if vals else None
+
+    suggestions: list[str] = []
+
+    hw, hl = _avg(f_win["h4_ret5"]), _avg(f_loss["h4_ret5"])
+    if (hw is not None and hl is not None
+            and len(f_win["h4_ret5"]) + len(f_loss["h4_ret5"]) >= 8
+            and min(len(f_win["h4_ret5"]), len(f_loss["h4_ret5"])) >= 3):
+        gap = hw - hl
+        if gap >= 0.8:
+            suggestions.append(
+                f"زخم 4H: الرابحون +{hw}% وسطًا مقابل +{hl}% للخاسرين — "
+                "رفع عتبة الزخم (حاليًا 2%) قد يرفع الدقة"
+            )
+        elif gap <= -0.7:
+            suggestions.append(
+                f"زخم 4H: الرابحون +{hw}% وسطًا مقابل +{hl}% للخاسرين — "
+                "خفض عتبة الزخم قد ينقذ إشارات رابحة مفقودة"
+            )
+        else:
+            suggestions.append(
+                f"زخم 4H: فرق بسيط بين الرابحين ({hw}%) والخاسرين ({hl}%) — "
+                "العتبة الحالية (2%) مقبولة"
+            )
+
+    rw, rl = _avg(f_win["h1_rsi"]), _avg(f_loss["h1_rsi"])
+    if (rw is not None and rl is not None
+            and len(f_win["h1_rsi"]) + len(f_loss["h1_rsi"]) >= 8
+            and min(len(f_win["h1_rsi"]), len(f_loss["h1_rsi"])) >= 3):
+        gap = rl - rw
+        if gap >= 4.0:
+            suggestions.append(
+                f"RSI ساعة: الرابحون {rw} مقابل {rl} للخاسرين — "
+                "خفض حد RSI (حاليًا 70) قد يرفع الدقة"
+            )
+        elif gap <= -4.0:
+            suggestions.append(
+                f"RSI ساعة: الرابحون {rw} مقابل {rl} للخاسرين — "
+                "رفع حد RSI قد ينقذ إشارات رابحة مفقودة"
+            )
+        else:
+            suggestions.append(
+                f"RSI ساعة: فروق طفيفة ({rw} رابحون / {rl} خاسرون) — "
+                "الحد الحالي (70) مقبول"
+            )
+
+    return {
+        "resolved": resolved,
+        "win_rate": win_rate,
+        "delivered": del_stats,
+        "by_indicator": by_indicator,
+        "suggestions": suggestions,
+    }
+
+
 def build_weekly_report_message(stats: dict) -> str:
     """رسالة التقرير الأسبوعي — تنسيق مطابق للتقرير اليومي مع توزيع أيام الأسبوع."""
     start_dt = datetime.fromisoformat(stats["week_start"])
@@ -166,6 +296,38 @@ def build_weekly_report_message(stats: dict) -> str:
                 f"• {AR_DAY_NAMES[day.weekday()]} {day_iso[5:]}: "
                 f"{b['total']} (✅{b['tp_hit']} ❌{b['sl_hit']} ⏳{b['pending']})"
             )
+
+    analysis = stats.get("analysis")
+    if analysis:
+        a = analysis
+        lines.append("")
+        lines.append("🔬 *التحليل الذاتي الأسبوعي*")
+        lines.append(
+            f"📈 دقة الإشارات المحسومة: {a['win_rate'] * 100:.1f}% (من {a['resolved']})"
+        )
+        d = a.get("delivered")
+        if d:
+            lines.append(
+                f"📨 الموصلة لك: {d['resolved']} (✅{d['tp']} ❌{d['sl']}) — "
+                f"{d['win_rate'] * 100:.1f}%"
+            )
+        lines.append("📌 دقة المؤشرات (رابح/محسوم):")
+        inds = INDICATOR_ORDER + sorted(
+            (k for k in a["by_indicator"] if k not in INDICATOR_ORDER)
+        )
+        for ind in inds:
+            b = a["by_indicator"].get(ind)
+            if not b or b["total"] == 0:
+                continue
+            label = INDICATOR_AR.get(ind, ind)
+            lines.append(
+                f"• {label}: {b['tp']}/{b['total']} — {b['win_rate'] * 100:.1f}%"
+            )
+        if a["suggestions"]:
+            lines.append("💡 مقترحات الضبط (استرشادية من قياسات الفلتر):")
+            for s_ in a["suggestions"]:
+                lines.append(f"• {s_}")
+            lines.append("⚠️ عينة صغيرة — يُرجى التراكم قبل إقرار أي تعديل")
 
     lines.append("")
     lines.append("🇸🇦 توقيت السعودية — الأحد بعد منتصف الليل")

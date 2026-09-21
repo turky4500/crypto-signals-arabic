@@ -10,6 +10,7 @@ INDICATOR_AR = {
     "supertrend": "Supertrend",
     "ai": "AI Market Reader",
     "strong": "متفقان (Supertrend + AI)",
+    "bollinger": "Bollinger Bands",
 }
 
 

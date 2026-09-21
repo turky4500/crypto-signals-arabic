@@ -18,6 +18,7 @@ from ..notify.formatter import (build_alert_message, build_resolution_message,
                                 format_time_12h, ts_to_riyadh)
 from ..notify.telegram import TelegramClient
 from ..notify.weekly_report import (build_weekly_report_message,
+                                    compute_weekly_analysis,
                                     compute_weekly_report, week_bounds)
 from ..notify.whatsapp import WhatsAppClient
 from ..storage.store import append_capped, load_json, save_json
@@ -225,12 +226,14 @@ class Monitor:
         return os.path.join(self.data_dir, "weekly_report_state.json")
 
     def _maybe_send_weekly_report(self, perf: list, now_ms: int,
-                                  notifications: list, wa, deliver=None) -> dict:
+                                  notifications: list, wa, deliver=None,
+                                  signals: list | None = None) -> dict:
         """إرسال التقرير الأسبوعي: أسبوع تقويمي (الأحد → السبت) يُرسل يوم الأحد
         بعد منتصف الليل (افتراضي 00:05) عن أسبوع السبت المنتهي — مرة واحدة لكل
         أسبوع عبر weekly_report_state.json (الفشل يُعاد في تشغيل لاحق).
 
         القناة عبر deliver(msg)->(res,channel): واتساب إن متصل، وإلا تلغرام.
+        signals يزوّد التحليل الذاتي بقياسات الفلتر (filter_info).
         """
         wr_cfg = self.settings.get("whatsapp", {}).get("weekly_report", {})
         if not wr_cfg.get("enabled", True):
@@ -258,6 +261,15 @@ class Monitor:
             return {"sent": False, "reason": "already_sent"}
 
         stats = compute_weekly_report(perf, week_start, week_end, tz=self.tz)
+        # التحليل الذاتي الأسبوعي: دقة الحسم + مقارنة قياسات الفلتر للتوصيات
+        analysis = None
+        if signals:
+            sig_by = {s.get("signature"): s for s in signals if s.get("signature")}
+            analysis = compute_weekly_analysis(
+                perf, sig_by, week_start, week_end, tz=self.tz
+            )
+            if analysis:
+                stats["analysis"] = analysis
         if stats["total"] == 0:
             state["last_report_week"] = week_start
             save_json(self._weekly_report_state_path(), state)
@@ -1001,6 +1013,7 @@ class Monitor:
         weekly_report = self._maybe_send_weekly_report(
             perf, now_ms, notifications, wa,
             deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
+            signals=signals,
         )
 
         # ---- رسائل حسم التوصيات: تحقق الهدف / ضرب الوقف / انتهاء المهلة ----

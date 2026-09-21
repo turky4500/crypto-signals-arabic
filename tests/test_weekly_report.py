@@ -178,3 +178,76 @@ def test_weekly_report_no_signals_marks_week(tmp_path):
     state = json.loads((data_dir / "weekly_report_state.json").read_text(encoding="utf-8"))
     assert state["last_report_week"] == "2026-09-13"
     assert len(wa.sent) == 0
+
+
+# ---------- التحليل الذاتي الأسبوعي (حلقة التعلم) ----------
+
+def _sig_for(rec, h4=2.5, rsi=55.0, status="sent"):
+    return {
+        "signature": rec["signature"],
+        "symbol": rec["symbol"],
+        "indicator": rec["indicator"],
+        "filter_info": {"h4_ret5": h4, "h1_rsi": rsi, "accepted": True},
+        "whatsapp_status": status,
+    }
+
+
+def test_analysis_none_when_no_resolved():
+    from src.notify.weekly_report import compute_weekly_analysis
+    perf = [_rec("A", "supertrend", "pending", _ms_riyadh(2026, 9, 15, 10, 0))]
+    assert compute_weekly_analysis(perf, {}, "2026-09-13", "2026-09-19") is None
+
+
+def test_analysis_accuracy_and_delivered_subset():
+    from src.notify.weekly_report import compute_weekly_analysis
+    r1 = _rec("A", "supertrend", "tp_hit", _ms_riyadh(2026, 9, 15, 10, 0)); r1["whatsapp_status"] = "sent"
+    r2 = _rec("B", "supertrend", "sl_hit", _ms_riyadh(2026, 9, 16, 11, 0)); r2["whatsapp_status"] = "sent"
+    r3 = _rec("C", "ai", "tp_hit", _ms_riyadh(2026, 9, 18, 9, 0)); r3["whatsapp_status"] = "failed"
+    r0 = _rec("Z", "ai", "tp_hit", _ms_riyadh(2026, 9, 12, 9, 0))  # خارج الأسبوع
+    sigs = {r["signature"]: _sig_for(r, h4=3.0, rsi=60.0) for r in (r1, r2, r3)}
+    a = compute_weekly_analysis([r1, r2, r3, r0], sigs, "2026-09-13", "2026-09-19")
+    assert a is not None
+    assert a["resolved"] == 3 and a["win_rate"] == round(2 / 3, 4)
+    assert a["by_indicator"]["supertrend"] == {"total": 2, "tp": 1, "sl": 1, "win_rate": 0.5}
+    d = a["delivered"]
+    assert d == {"tp": 1, "sl": 1, "resolved": 2, "win_rate": 0.5}
+
+
+def test_analysis_suggestions_from_filter_measurements():
+    from src.notify.weekly_report import compute_weekly_analysis
+    perf, sigs = [], {}
+    for i in range(5):  # رابحون: زخم قوي + RSI منخفض
+        r = _rec(f"W{i}", "supertrend", "tp_hit",
+                 _ms_riyadh(2026, 9, 13 + i % 6, 10, 0))
+        r["whatsapp_status"] = "sent"
+        perf.append(r)
+        sigs[r["signature"]] = _sig_for(r, h4=5.5, rsi=55.0)
+    for i in range(5):  # خاسرون: زخم ضعيف + RSI مرتفع
+        r = _rec(f"L{i}", "supertrend", "sl_hit",
+                 _ms_riyadh(2026, 9, 14 + i % 6, 10, 0))
+        r["whatsapp_status"] = "sent"
+        perf.append(r)
+        sigs[r["signature"]] = _sig_for(r, h4=1.5, rsi=75.0)
+    a = compute_weekly_analysis(perf, sigs, "2026-09-13", "2026-09-19")
+    joined = "\n".join(a["suggestions"])
+    assert any("رفع عتبة الزخم" in s for s in a["suggestions"])
+    assert any("خفض حد RSI" in s for s in a["suggestions"])
+    assert isinstance(joined, str)
+    assert a["win_rate"] == 0.5
+
+
+def test_weekly_message_includes_analysis_section():
+    from src.notify.weekly_report import compute_weekly_analysis
+    from src.engine.monitor import Monitor
+    r1 = _rec("A", "supertrend", "tp_hit", _ms_riyadh(2026, 9, 15, 10, 0)); r1["whatsapp_status"] = "sent"
+    r2 = _rec("B", "ai", "sl_hit", _ms_riyadh(2026, 9, 16, 11, 0)); r2["whatsapp_status"] = "sent"
+    sigs = {r["signature"]: _sig_for(r, h4=3.0, rsi=60.0) for r in (r1, r2)}
+    st = compute_weekly_report([r1, r2], "2026-09-13", "2026-09-19")
+    st["analysis"] = compute_weekly_analysis([r1, r2], sigs, "2026-09-13", "2026-09-19")
+    msg = build_weekly_report_message(st)
+    assert "🔬 *التحليل الذاتي الأسبوعي*" in msg
+    assert "📈 دقة الإشارات المحسومة: 50.0% (من 2)" in msg
+    assert "📨 الموصلة لك: 2 (✅1 ❌1) — 50.0%" in msg
+    assert "📌 دقة المؤشرات (رابح/محسوم):" in msg
+    assert "• Supertrend: 1/1 — 100.0%" in msg
+    assert "• AI Market Reader: 0/1 — 0.0%" in msg
