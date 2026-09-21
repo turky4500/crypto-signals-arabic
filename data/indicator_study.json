@@ -1,22 +1,5 @@
 [
   {
-    "signature": "TURBOUSDT|adx|1789927200000",
-    "symbol": "TURBOUSDT",
-    "indicator": "adx",
-    "entry": "0.000974",
-    "sl": "0.000949",
-    "tp": "0.001024",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789927200000,
-    "signal_close_ms": 1789930799999,
-    "deadline_ms": 1790535599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1789930966282,
-    "source": "simulation"
-  },
-  {
     "signature": "TURTLEUSDT|adx|1789927200000",
     "symbol": "TURTLEUSDT",
     "indicator": "adx",
@@ -1472,9 +1455,9 @@
     "signal_open_ms": 1789930800000,
     "signal_close_ms": 1789934399999,
     "deadline_ms": 1790539199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1789968645463,
+    "hit_price": 0.00329,
     "created_ms": 1789934462180,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1789967258824,
+    "source": "simulation"
+  },
+  {
+    "signature": "DGBUSDT|ichimoku|1789963200000",
+    "symbol": "DGBUSDT",
+    "indicator": "ichimoku",
+    "entry": "0.00437",
+    "sl": "0.00426",
+    "tp": "0.00459",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1789963200000,
+    "signal_close_ms": 1789966799999,
+    "deadline_ms": 1790571599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1789968685888,
     "source": "simulation"
   }
 ]
