@@ -37,7 +37,7 @@
     },
     "signature": "BARUSDT|supertrend|BUY|1790020800000"
   },
-  "last_check": 1790034928075,
+  "last_check": 1790035260309,
   "data_date": "2026-09-22",
   "filter_meta": {
     "enabled": true,
@@ -56,68 +56,68 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 1252,
-        "tp_hit": 21,
-        "sl_hit": 12,
-        "pending": 1219,
+        "total": 1190,
+        "tp_hit": 17,
+        "sl_hit": 10,
+        "pending": 1163,
         "expired": 0,
-        "win_rate": 63.6
+        "win_rate": 63.0
       },
       "awesome": {
-        "total": 17,
+        "total": 20,
         "tp_hit": 0,
-        "sl_hit": 2,
-        "pending": 15,
+        "sl_hit": 1,
+        "pending": 19,
         "expired": 0,
         "win_rate": 0.0
       },
       "macd": {
-        "total": 68,
+        "total": 103,
         "tp_hit": 0,
         "sl_hit": 0,
-        "pending": 68,
+        "pending": 103,
         "expired": 0,
         "win_rate": null
       },
       "bollinger": {
-        "total": 33,
+        "total": 34,
         "tp_hit": 0,
-        "sl_hit": 2,
+        "sl_hit": 3,
         "pending": 31,
         "expired": 0,
         "win_rate": 0.0
       },
       "rsi50": {
-        "total": 138,
+        "total": 142,
         "tp_hit": 0,
-        "sl_hit": 1,
-        "pending": 137,
+        "sl_hit": 0,
+        "pending": 142,
         "expired": 0,
-        "win_rate": 0.0
+        "win_rate": null
       },
       "adx": {
-        "total": 3492,
+        "total": 3511,
         "tp_hit": 58,
-        "sl_hit": 20,
-        "pending": 3414,
+        "sl_hit": 17,
+        "pending": 3436,
         "expired": 0,
-        "win_rate": 74.4
+        "win_rate": 77.3
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
-    "total": 3850,
+    "added_this_run": 3,
+    "total": 3738,
     "no_filter": {
-      "total": 3850,
-      "resolved": 3315,
-      "pending": 517,
-      "expired": 18,
-      "tp_hit": 2115,
-      "sl_hit": 1200,
-      "win_rate": 0.638,
-      "ev_per_trade": 0.914
+      "total": 3738,
+      "resolved": 3203,
+      "pending": 516,
+      "expired": 19,
+      "tp_hit": 2073,
+      "sl_hit": 1130,
+      "win_rate": 0.6472,
+      "ev_per_trade": 0.9416
     },
     "with_filter": {
       "total": 124,
@@ -130,45 +130,45 @@
       "ev_per_trade": 1.0454
     },
     "with_consensus_ge3": {
-      "total": 115,
-      "resolved": 71,
+      "total": 113,
+      "resolved": 69,
       "pending": 42,
       "expired": 2,
       "tp_hit": 49,
-      "sl_hit": 22,
-      "win_rate": 0.6901,
-      "ev_per_trade": 1.0703
+      "sl_hit": 20,
+      "win_rate": 0.7101,
+      "ev_per_trade": 1.1303
     },
     "blocked": {
-      "total": 3726,
-      "resolved": 3249,
-      "pending": 459,
-      "expired": 18,
-      "tp_hit": 2070,
-      "sl_hit": 1179,
-      "win_rate": 0.6371,
-      "ev_per_trade": 0.9113
+      "total": 3614,
+      "resolved": 3137,
+      "pending": 458,
+      "expired": 19,
+      "tp_hit": 2028,
+      "sl_hit": 1109,
+      "win_rate": 0.6465,
+      "ev_per_trade": 0.9395
     },
     "by_reason": {
       "bollinger_live_off": {
-        "total": 346,
-        "resolved": 281,
+        "total": 347,
+        "resolved": 282,
         "pending": 65,
         "expired": 0,
         "tp_hit": 252,
-        "sl_hit": 29,
-        "win_rate": 0.8968,
-        "ev_per_trade": 1.6904
+        "sl_hit": 30,
+        "win_rate": 0.8936,
+        "ev_per_trade": 1.6808
       },
       "filter": {
-        "total": 3374,
-        "resolved": 2968,
-        "pending": 388,
-        "expired": 18,
-        "tp_hit": 1818,
-        "sl_hit": 1150,
-        "win_rate": 0.6125,
-        "ev_per_trade": 0.8375
+        "total": 3261,
+        "resolved": 2855,
+        "pending": 387,
+        "expired": 19,
+        "tp_hit": 1776,
+        "sl_hit": 1079,
+        "win_rate": 0.6221,
+        "ev_per_trade": 0.8663
       },
       "filter_ok": {
         "total": 124,
