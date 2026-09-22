@@ -37,7 +37,7 @@
     },
     "signature": "BARUSDT|supertrend|BUY|1790020800000"
   },
-  "last_check": 1790037393993,
+  "last_check": 1790037629442,
   "data_date": "2026-09-22",
   "filter_meta": {
     "enabled": true,
@@ -81,11 +81,11 @@
       },
       "bollinger": {
         "total": 34,
-        "tp_hit": 0,
+        "tp_hit": 1,
         "sl_hit": 3,
-        "pending": 31,
+        "pending": 30,
         "expired": 0,
-        "win_rate": 0.0
+        "win_rate": 25.0
       },
       "rsi50": {
         "total": 142,
@@ -97,11 +97,11 @@
       },
       "adx": {
         "total": 3511,
-        "tp_hit": 78,
+        "tp_hit": 80,
         "sl_hit": 17,
-        "pending": 3416,
+        "pending": 3414,
         "expired": 0,
-        "win_rate": 82.1
+        "win_rate": 82.5
       }
     }
   },
@@ -111,13 +111,13 @@
     "total": 3738,
     "no_filter": {
       "total": 3738,
-      "resolved": 3210,
-      "pending": 509,
+      "resolved": 3211,
+      "pending": 508,
       "expired": 19,
-      "tp_hit": 2080,
+      "tp_hit": 2081,
       "sl_hit": 1130,
-      "win_rate": 0.648,
-      "ev_per_trade": 0.944
+      "win_rate": 0.6481,
+      "ev_per_trade": 0.9443
     },
     "with_filter": {
       "total": 124,
@@ -141,24 +141,24 @@
     },
     "blocked": {
       "total": 3614,
-      "resolved": 3143,
-      "pending": 452,
+      "resolved": 3144,
+      "pending": 451,
       "expired": 19,
-      "tp_hit": 2034,
+      "tp_hit": 2035,
       "sl_hit": 1109,
-      "win_rate": 0.6472,
-      "ev_per_trade": 0.9416
+      "win_rate": 0.6473,
+      "ev_per_trade": 0.9419
     },
     "by_reason": {
       "bollinger_live_off": {
         "total": 347,
-        "resolved": 283,
-        "pending": 64,
+        "resolved": 284,
+        "pending": 63,
         "expired": 0,
-        "tp_hit": 253,
+        "tp_hit": 254,
         "sl_hit": 30,
-        "win_rate": 0.894,
-        "ev_per_trade": 1.682
+        "win_rate": 0.8944,
+        "ev_per_trade": 1.6832
       },
       "filter": {
         "total": 3261,
