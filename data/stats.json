@@ -37,7 +37,7 @@
     },
     "signature": "AGLDUSDT|supertrend|BUY|1790042400000"
   },
-  "last_check": 1790056528929,
+  "last_check": 1790056843247,
   "data_date": "2026-09-22",
   "filter_meta": {
     "enabled": true,
@@ -56,68 +56,68 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 1278,
-        "tp_hit": 43,
-        "sl_hit": 89,
-        "pending": 1146,
+        "total": 1353,
+        "tp_hit": 35,
+        "sl_hit": 99,
+        "pending": 1219,
         "expired": 0,
-        "win_rate": 32.6
+        "win_rate": 26.1
       },
       "awesome": {
-        "total": 26,
-        "tp_hit": 1,
+        "total": 24,
+        "tp_hit": 0,
         "sl_hit": 1,
-        "pending": 24,
+        "pending": 23,
         "expired": 0,
-        "win_rate": 50.0
+        "win_rate": 0.0
       },
       "macd": {
-        "total": 181,
-        "tp_hit": 4,
+        "total": 193,
+        "tp_hit": 5,
         "sl_hit": 4,
-        "pending": 173,
+        "pending": 184,
         "expired": 0,
-        "win_rate": 50.0
+        "win_rate": 55.6
       },
       "bollinger": {
-        "total": 14,
+        "total": 25,
         "tp_hit": 0,
         "sl_hit": 0,
-        "pending": 14,
+        "pending": 25,
         "expired": 0,
         "win_rate": null
       },
       "rsi50": {
-        "total": 115,
-        "tp_hit": 0,
-        "sl_hit": 4,
-        "pending": 111,
+        "total": 129,
+        "tp_hit": 1,
+        "sl_hit": 5,
+        "pending": 123,
         "expired": 0,
-        "win_rate": 0.0
+        "win_rate": 16.7
       },
       "adx": {
-        "total": 3386,
-        "tp_hit": 99,
-        "sl_hit": 174,
-        "pending": 3113,
+        "total": 3276,
+        "tp_hit": 87,
+        "sl_hit": 189,
+        "pending": 3000,
         "expired": 0,
-        "win_rate": 36.3
+        "win_rate": 31.5
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
-    "total": 3559,
+    "added_this_run": 15,
+    "total": 3563,
     "no_filter": {
-      "total": 3559,
+      "total": 3563,
       "resolved": 3052,
-      "pending": 488,
-      "expired": 19,
-      "tp_hit": 2056,
-      "sl_hit": 996,
-      "win_rate": 0.6737,
-      "ev_per_trade": 1.0211
+      "pending": 493,
+      "expired": 18,
+      "tp_hit": 2060,
+      "sl_hit": 992,
+      "win_rate": 0.675,
+      "ev_per_trade": 1.025
     },
     "with_filter": {
       "total": 122,
@@ -130,45 +130,45 @@
       "ev_per_trade": 1.1231
     },
     "with_consensus_ge3": {
-      "total": 108,
+      "total": 109,
       "resolved": 65,
-      "pending": 40,
-      "expired": 3,
+      "pending": 42,
+      "expired": 2,
       "tp_hit": 48,
       "sl_hit": 17,
       "win_rate": 0.7385,
       "ev_per_trade": 1.2155
     },
     "blocked": {
-      "total": 3437,
+      "total": 3441,
       "resolved": 2987,
-      "pending": 431,
-      "expired": 19,
-      "tp_hit": 2010,
-      "sl_hit": 977,
-      "win_rate": 0.6729,
-      "ev_per_trade": 1.0187
+      "pending": 436,
+      "expired": 18,
+      "tp_hit": 2014,
+      "sl_hit": 973,
+      "win_rate": 0.6743,
+      "ev_per_trade": 1.0229
     },
     "by_reason": {
       "bollinger_live_off": {
-        "total": 356,
-        "resolved": 287,
-        "pending": 69,
+        "total": 369,
+        "resolved": 293,
+        "pending": 76,
         "expired": 0,
-        "tp_hit": 256,
-        "sl_hit": 31,
-        "win_rate": 0.892,
-        "ev_per_trade": 1.676
+        "tp_hit": 258,
+        "sl_hit": 35,
+        "win_rate": 0.8805,
+        "ev_per_trade": 1.6415
       },
       "filter": {
-        "total": 3074,
-        "resolved": 2700,
-        "pending": 355,
-        "expired": 19,
-        "tp_hit": 1754,
-        "sl_hit": 946,
-        "win_rate": 0.6496,
-        "ev_per_trade": 0.9488
+        "total": 3065,
+        "resolved": 2694,
+        "pending": 353,
+        "expired": 18,
+        "tp_hit": 1756,
+        "sl_hit": 938,
+        "win_rate": 0.6518,
+        "ev_per_trade": 0.9554
       },
       "filter_ok": {
         "total": 122,
