@@ -400,13 +400,14 @@ class Monitor:
 
     def _maybe_send_sl_touch_messages(self, perf: list, now_ms: int,
                                       notifications: list, wa,
-                                      deliver=None) -> dict:
+                                      deliver=None, current_prices=None) -> dict:
         """تنبيه «لمسة سعر الوقف» للمشتركين: وصل السعر الحالي للوقف (رصد لحظي)
         أو رصد اللمسة داخل شمعة 1H مغلقة دون إغلاق تحته — ولا تُعتبر خسارة
         حتى الإغلاق تحت الوقف على فريم الساعة.
 
-        يُرسل مرة واحدة لكل توصية معلّقة (رصد/إغلاق + سعر لحظي = تنبيه واحد).
-        الفشل يُعاد في تشغيل لاحق دون تقدّم الحالة؛ القناة عبر deliver كرسائل الحسم.
+        السطر «السعر الحالي» يعرض سعر السوق لحظة الإرسال من آخر قراءة لحظية
+        (current_prices: {symbol: سعر})، ويتراجع إلى سعر اللمسة المسجّل إن غاب.
+        يُرسل مرة واحدة لكل توصية معلّقة؛ الفشل يُعاد في تشغيل لاحق.
         """
         cfg = self.settings.get("whatsapp", {}).get("resolution_messages", {})
         if not cfg.get("enabled", True):
@@ -414,6 +415,7 @@ class Monitor:
 
         state = load_json(self._sl_touch_state_path(), None) or {}
         notified = set(state.get("notified", []) or [])
+        prices = current_prices or {}
 
         newly = [
             _r for _r in perf
@@ -425,7 +427,10 @@ class Monitor:
 
         sent = failed = 0
         for rec in newly:
-            msg = build_sl_touch_message(rec)
+            msg = build_sl_touch_message(
+                rec,
+                current_price=prices.get(rec.get("symbol")),
+            )
             if deliver is not None:
                 res, channel = deliver(msg)
             else:
@@ -878,6 +883,7 @@ class Monitor:
         ind_paper: list[dict] = []
         processed = 0
 
+        current_prices = {}
         if monitored:
             prices = {}
             try:
@@ -885,6 +891,7 @@ class Monitor:
             except Exception as exc:
                 logger.warning("تعذر جلب الأسعار اللحظية: %s", exc)
                 errors.append(f"prices: {exc}")
+            current_prices = prices or {}
 
             for s_info in monitored:
                 try:
@@ -1114,6 +1121,7 @@ class Monitor:
         sl_touch_warnings = self._maybe_send_sl_touch_messages(
             perf, now_ms, notifications, wa,
             deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
+            current_prices=current_prices,
         )
 
         # ---- ملخص ----

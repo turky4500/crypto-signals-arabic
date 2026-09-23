@@ -93,28 +93,32 @@ def build_alert_message(sig: dict, halal_verdict: str | None = None) -> str:
     return "\n".join(lines)
 
 
-def build_sl_touch_message(rec: dict) -> str:
+def build_sl_touch_message(rec: dict, current_price=None) -> str:
     """تنبيه «لمسة سعر الوقف» للمشتركين: وصل السعر للوقف داخل شمعة 1H
     دون إغلاق تحته — لا تُعتبر العملة خاسرة حتى تُغلق تحت سعر الوقف.
-    يُرسل مرة واحدة لكل توصية معلّقة."""
+    يُرسل مرة واحدة لكل توصية معلّقة.
+
+    «السعر الحالي» = سعر السوق لحظة الإرسال (آخر قراءة لحظية)، ويرتد إلى
+    سعر اللمسة المسجّل (sl_touch_low) ثم إلى الوقف إن غابت القراءة.
+    """
     symbol = rec.get("symbol", "-")
     entry = rec.get("entry", "-")
     sl = rec.get("sl", "-")
     tp = rec.get("tp", "-")
     touch_ms = int(rec.get("sl_touch_ms") or 0)
     time_txt = format_time_12h(ts_to_riyadh(touch_ms)) if touch_ms else "-"
-    touch_low = rec.get("sl_touch_low")
+    cur = current_price if current_price is not None else rec.get("sl_touch_low")
     try:
-        low_f = float(touch_low)
+        cur_f = float(cur)
     except (TypeError, ValueError):
-        low_f = None
-    low_txt = f"{low_f:g}" if low_f is not None else sl
+        cur_f = None
+    cur_txt = f"{cur_f:g}" if cur_f is not None else sl
     return "\n".join([
         "⚠️ تنبيه: لمسة سعر الوقف",
         f"🪙 العملة: {symbol}",
         f"وصلت العملة إلى سعر الوقف ({sl}) داخل شمعة 1H",
         "لكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف",
-        f"📊 السعر عند اللمسة: {low_txt}",
+        f"📊 السعر الحالي: {cur_txt}",
         f"🎯 سعر الدخول: {entry}",
         f"🛑 سعر الوقف: {sl}",
         f"🎯 الهدف: {tp}",

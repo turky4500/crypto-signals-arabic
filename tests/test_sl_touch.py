@@ -83,7 +83,8 @@ def test_build_sl_touch_message_full():
     assert "🪙 العملة: BTCUSDT" in msg
     assert "وصلت العملة إلى سعر الوقف (95)" in msg
     assert "لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف" in msg
-    assert "📊 السعر عند اللمسة: 93.5" in msg
+    # بلا قراءة لحظية: يتراجع إلى سعر اللمسة المسجّل
+    assert "📊 السعر الحالي: 93.5" in msg
     assert "🎯 سعر الدخول: 100" in msg
     assert "🛑 سعر الوقف: 95" in msg
     assert "🎯 الهدف: 103" in msg
@@ -91,6 +92,14 @@ def test_build_sl_touch_message_full():
     assert "المؤشر" not in msg
     assert "Supertrend" not in msg
     assert "🇸🇦 توقيت السعودية" not in msg
+
+
+def test_build_sl_touch_message_uses_current_price_at_send_time():
+    """السعر الحالي لحظة الإرسال (من القراءة اللحظية) يسبق سعر اللمسة المسجّل."""
+    rec = _rec("BTCUSDT", touch_ms=_ms_riyadh(2026, 9, 15, 10, 30), touch_low=93.5)
+    msg = build_sl_touch_message(rec, current_price="93.1")
+    assert "📊 السعر الحالي: 93.1" in msg
+    assert ".السعر عند اللمسة" not in msg  # لم يعد هناك سطر «عند اللمسة»
 
 
 # ---------- الإرسال عبر Monitor ----------
