@@ -41,7 +41,8 @@ def test_build_supertrend_message():
     msg = build_alert_message(_sig())
     assert "🚨 إشارة شراء جديدة" in msg
     assert "🪙 العملة: BTCUSDT" in msg
-    assert "📌 المؤشر: Supertrend" in msg
+    assert "المؤشر" not in msg  # اسم المؤشر لا يُرسل للمشتركين
+    assert "Supertrend" not in msg
     assert "🟢 الإشارة: BUY / LONG" in msg
     assert "💰 سعر رصد الإشارة: 112500.20" in msg
     assert "🎯 سعر الدخول: 112500.20" in msg
@@ -53,19 +54,22 @@ def test_build_supertrend_message():
     assert "🕐 وقت الإشارة: 6:00 مساءً" in msg
 
 
-def test_build_ai_message_confidence():
+def test_build_ai_message_hides_confidence_and_indicator():
     msg = build_alert_message(_sig(indicator="ai", confidence=0.78,
                                     candle_close_ms=datetime(2026, 1, 1, 4, 30, tzinfo=timezone.utc).timestamp() * 1000))
-    assert "📌 المؤشر: AI Market Reader" in msg
-    assert "🤖 ثقة AI: 78.0%" in msg
+    assert "المؤشر" not in msg
+    assert "AI Market Reader" not in msg
+    assert "ثقة AI" not in msg
+    assert "confidence" not in msg
     assert "🕐 وقت الإشارة: 7:30 صباحًا" in msg  # 04:30 UTC = 07:30 الرياض
 
 
 def test_build_strong_message():
     msg = build_alert_message(_sig(indicator="strong", confidence=0.72))
     assert "🔥 إشارة شراء قوية" in msg
-    assert "✅ Supertrend BUY" in msg
-    assert "✅ AI Market Reader BUY" in msg
+    assert "Supertrend BUY" not in msg
+    assert "AI Market Reader" not in msg
+    assert "المؤشر" not in msg
     assert "🟢 الإشارة: STRONG BUY / LONG" in msg
     # رسالة واحدة موحّدة برأس واحد فقط
     assert msg.count("🔥") == 1

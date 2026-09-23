@@ -95,21 +95,7 @@ def build_daily_report_message(stats: dict) -> str:
         lines.append("")
         lines.append(f"📈 نسبة النجاح: {win_rate * 100:.1f}% (من أصل {resolved} محسومة)")
 
-    if stats["by_indicator"]:
-        lines.append("")
-        lines.append("📌 حسب المؤشر:")
-        inds = INDICATOR_ORDER + sorted(
-            (k for k in stats["by_indicator"] if k not in INDICATOR_ORDER)
-        )
-        for ind in inds:
-            b = stats["by_indicator"].get(ind)
-            if not b or b["total"] == 0:
-                continue
-            label = INDICATOR_AR.get(ind, ind)
-            lines.append(
-                f"• {label}: {b['total']} (✅{b['tp_hit']} ❌{b['sl_hit']} ⏳{b['pending']})"
-            )
-
+    # تفاصيل الأداء حسب المؤشر تبقى للمالك على الصفحة فقط — لا تُرسل للمشتركين
     lines.append("")
     lines.append("🇸🇦 توقيت السعودية — نهاية اليوم")
     return "\n".join(lines)

@@ -81,8 +81,8 @@ def test_build_weekly_report_message():
     assert "✅ تحقق الهدف: 1" in msg
     assert "❌ ضرب الوقف: 1" in msg
     assert "📈 نسبة النجاح: 50.0%" in msg
-    assert "• Supertrend: 1 (✅1 ❌0 ⏳0)" in msg
-    assert "• AI Market Reader: 1 (✅0 ❌1 ⏳0)" in msg
+    assert "حسب المؤشر" not in msg  # تفاصيل المؤشرات تبقى للمالك على الصفحة
+    assert "Supertrend" not in msg
     assert "📅 توزيع الأسبوع:" in msg
     assert "الأحد 09-13" in msg and "السبت 09-19" in msg
     assert "🇸🇦 توقيت السعودية" in msg
@@ -230,8 +230,8 @@ def test_analysis_suggestions_from_filter_measurements():
         sigs[r["signature"]] = _sig_for(r, h4=1.5, rsi=75.0)
     a = compute_weekly_analysis(perf, sigs, "2026-09-13", "2026-09-19")
     joined = "\n".join(a["suggestions"])
-    assert any("رفع عتبة الزخم" in s for s in a["suggestions"])
-    assert any("خفض حد RSI" in s for s in a["suggestions"])
+    assert any("رفع عتبة الفلتر" in s for s in a["suggestions"])
+    assert any("خفض حد الفلتر" in s for s in a["suggestions"])
     assert isinstance(joined, str)
     assert a["win_rate"] == 0.5
 
@@ -248,6 +248,6 @@ def test_weekly_message_includes_analysis_section():
     assert "🔬 *التحليل الذاتي الأسبوعي*" in msg
     assert "📈 دقة الإشارات المحسومة: 50.0% (من 2)" in msg
     assert "📨 الموصلة لك: 2 (✅1 ❌1) — 50.0%" in msg
-    assert "📌 دقة المؤشرات (رابح/محسوم):" in msg
-    assert "• Supertrend: 1/1 — 100.0%" in msg
-    assert "• AI Market Reader: 0/1 — 0.0%" in msg
+    assert "دقة المؤشرات" not in msg  # تفاصيل المؤشرات تبقى للمالك على الصفحة
+    assert "Supertrend" not in msg
+    assert "AI Market Reader" not in msg

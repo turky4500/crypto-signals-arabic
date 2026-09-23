@@ -75,8 +75,8 @@ def test_build_daily_report_message():
     assert "❌ ضرب الوقف: 1" in msg
     assert "⏳ لم تُحسم بعد: 1" in msg
     assert "📈 نسبة النجاح: 50.0%" in msg
-    assert "• Supertrend: 2 (✅1 ❌0 ⏳1)" in msg
-    assert "• AI Market Reader: 1 (✅0 ❌1 ⏳0)" in msg
+    assert "حسب المؤشر" not in msg  # تفاصيل المؤشرات تبقى للمالك على الصفحة
+    assert "Supertrend" not in msg
     assert "🇸🇦 توقيت السعودية" in msg
 
 

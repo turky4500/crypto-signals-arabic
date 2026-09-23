@@ -9,8 +9,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from .daily_report import AR_DAY_NAMES, INDICATOR_ORDER
-from .formatter import INDICATOR_AR
+from .daily_report import AR_DAY_NAMES
 
 
 def week_bounds(day_iso: str) -> tuple[str, str]:
@@ -191,18 +190,18 @@ def compute_weekly_analysis(records: list[dict], signals_by_sig: dict | None,
         gap = hw - hl
         if gap >= 0.8:
             suggestions.append(
-                f"زخم 4H: الرابحون +{hw}% وسطًا مقابل +{hl}% للخاسرين — "
-                "رفع عتبة الزخم (حاليًا 2%) قد يرفع الدقة"
+                "قوة الاتجاه: الرابحون أقوى اتجاهًا من الخاسرين — "
+                "رفع عتبة الفلتر قد يرفع الدقة"
             )
         elif gap <= -0.7:
             suggestions.append(
-                f"زخم 4H: الرابحون +{hw}% وسطًا مقابل +{hl}% للخاسرين — "
-                "خفض عتبة الزخم قد ينقذ إشارات رابحة مفقودة"
+                "قوة الاتجاه: الرابحون أضعف اتجاهًا من الخاسرين — "
+                "خفض عتبة الفلتر قد ينقذ إشارات رابحة مفقودة"
             )
         else:
             suggestions.append(
-                f"زخم 4H: فرق بسيط بين الرابحين ({hw}%) والخاسرين ({hl}%) — "
-                "العتبة الحالية (2%) مقبولة"
+                "قوة الاتجاه: فرق بسيط بين الرابحين والخاسرين — "
+                "عتبة الفلتر الحالية مقبولة"
             )
 
     rw, rl = _avg(f_win["h1_rsi"]), _avg(f_loss["h1_rsi"])
@@ -212,18 +211,18 @@ def compute_weekly_analysis(records: list[dict], signals_by_sig: dict | None,
         gap = rl - rw
         if gap >= 4.0:
             suggestions.append(
-                f"RSI ساعة: الرابحون {rw} مقابل {rl} للخاسرين — "
-                "خفض حد RSI (حاليًا 70) قد يرفع الدقة"
+                "الزخم اللحظي: الرابحون دخلوا عند تشبع أدنى من الخاسرين — "
+                "خفض حد الفلتر قد يرفع الدقة"
             )
         elif gap <= -4.0:
             suggestions.append(
-                f"RSI ساعة: الرابحون {rw} مقابل {rl} للخاسرين — "
-                "رفع حد RSI قد ينقذ إشارات رابحة مفقودة"
+                "الزخم اللحظي: الرابحون دخلوا عند تشبع أعلى من الخاسرين — "
+                "رفع حد الفلتر قد ينقذ إشارات رابحة مفقودة"
             )
         else:
             suggestions.append(
-                f"RSI ساعة: فروق طفيفة ({rw} رابحون / {rl} خاسرون) — "
-                "الحد الحالي (70) مقبول"
+                "الزخم اللحظي: فروق طفيفة بين الرابحين والخاسرين — "
+                "الحد الحالي مقبول"
             )
 
     return {
@@ -271,21 +270,7 @@ def build_weekly_report_message(stats: dict) -> str:
             sign = "+" if ev > 0 else ""
             lines.append(f"🎲 القيمة المتوقعة/توصية (EV): {sign}{ev:.2f}R")
 
-    if stats["by_indicator"]:
-        lines.append("")
-        lines.append("📌 حسب المؤشر:")
-        inds = INDICATOR_ORDER + sorted(
-            (k for k in stats["by_indicator"] if k not in INDICATOR_ORDER)
-        )
-        for ind in inds:
-            b = stats["by_indicator"].get(ind)
-            if not b or b["total"] == 0:
-                continue
-            label = INDICATOR_AR.get(ind, ind)
-            lines.append(
-                f"• {label}: {b['total']} (✅{b['tp_hit']} ❌{b['sl_hit']} ⏳{b['pending']})"
-            )
-
+    # تفاصيل الأداء حسب المؤشر تبقى للمالك على الصفحة فقط — لا تُرسل للمشتركين
     if stats["by_day"]:
         lines.append("")
         lines.append("📅 توزيع الأسبوع:")
@@ -311,20 +296,8 @@ def build_weekly_report_message(stats: dict) -> str:
                 f"📨 الموصلة لك: {d['resolved']} (✅{d['tp']} ❌{d['sl']}) — "
                 f"{d['win_rate'] * 100:.1f}%"
             )
-        lines.append("📌 دقة المؤشرات (رابح/محسوم):")
-        inds = INDICATOR_ORDER + sorted(
-            (k for k in a["by_indicator"] if k not in INDICATOR_ORDER)
-        )
-        for ind in inds:
-            b = a["by_indicator"].get(ind)
-            if not b or b["total"] == 0:
-                continue
-            label = INDICATOR_AR.get(ind, ind)
-            lines.append(
-                f"• {label}: {b['tp']}/{b['total']} — {b['win_rate'] * 100:.1f}%"
-            )
         if a["suggestions"]:
-            lines.append("💡 مقترحات الضبط (استرشادية من قياسات الفلتر):")
+            lines.append("💡 ملاحظات أداء (استرشادية):")
             for s_ in a["suggestions"]:
                 lines.append(f"• {s_}")
             lines.append("⚠️ عينة صغيرة — يُرجى التراكم قبل إقرار أي تعديل")

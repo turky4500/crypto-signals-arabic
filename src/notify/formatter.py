@@ -65,30 +65,26 @@ def build_alert_message(sig: dict) -> str:
     close_ms = sig.get("candle_close_ms") or 0
     time_txt = format_time_12h(ts_to_riyadh(close_ms)) if close_ms else "-"
     signal_price = _fmt_signal_price(sig)
-    conf = sig.get("confidence")
 
     lines = []
     if indicator == "strong":
         lines.append("🔥 إشارة شراء قوية")
         lines.append(f"🪙 العملة: {symbol}")
         lines.append("📊 الفريم: 1H")
-        lines.append("✅ Supertrend BUY")
-        lines.append("✅ AI Market Reader BUY")
         lines.append("🟢 الإشارة: STRONG BUY / LONG")
     else:
         lines.append("🚨 إشارة شراء جديدة")
         lines.append(f"🪙 العملة: {symbol}")
         lines.append("📊 الفريم: 1H")
-        lines.append(f"📌 المؤشر: {INDICATOR_AR.get(indicator, indicator)}")
         lines.append("🟢 الإشارة: BUY / LONG")
 
+    # اسم المؤشر ونسبة الثقة لا يُرسلان للمشتركين — كتمان تفاصيل الاستراتيجية،
+    # وتظهر للمالك وحده على الصفحة وفي ملفات البيانات.
     lines.append(f"💰 سعر رصد الإشارة: {signal_price}")
     lines.append(f"🎯 سعر الدخول: {entry}")
     lines.append(f"🛑 وقف الخسارة: {sl}")
     lines.append(f"🎯 الهدف: {tp}")
     lines.append(f"📈 R:R: 1:{rr}")
-    if conf is not None and indicator in ("ai", "strong"):
-        lines.append(f"🤖 ثقة AI: {conf * 100:.1f}%")
     lines.append(f"🕐 وقت الإشارة: {time_txt}")
     lines.append("🇸🇦 توقيت السعودية")
     return "\n".join(lines)
@@ -101,7 +97,6 @@ def build_resolution_message(rec: dict) -> str:
     status/hit_price). تُرسل مرة واحدة عند انتقال السجل من معلّق إلى محسوم.
     """
     symbol = rec.get("symbol", "-")
-    indicator = rec.get("indicator", "ai")
     status = rec.get("status", "pending")
     entry = rec.get("entry", "-")
     sl = rec.get("sl", "-")
@@ -109,7 +104,6 @@ def build_resolution_message(rec: dict) -> str:
     rr = format_number(rec.get("rr_ratio", 2.0))
     sig_ms = int(rec.get("signal_close_ms") or rec.get("signal_open_ms") or 0)
     time_txt = format_time_12h(ts_to_riyadh(sig_ms)) if sig_ms else "-"
-    ind_label = INDICATOR_AR.get(indicator, indicator)
 
     try:
         e = float(entry)
@@ -142,7 +136,6 @@ def build_resolution_message(rec: dict) -> str:
 
     info = [
         f"🪙 العملة: {symbol}",
-        f"📌 المؤشر: {ind_label}",
         f"💰 سعر الدخول: {entry}",
     ]
     lines[1:1] = info

@@ -45,7 +45,8 @@ def test_resolution_message_tp_hit():
     assert "✅ تحقق الهدف" in msg
     assert "التوصية نجحت" in msg
     assert "BTC" in msg
-    assert "Supertrend" in msg
+    assert "Supertrend" not in msg  # اسم المؤشر لا يُرسل للمشتركين
+    assert "المؤشر" not in msg
     assert "سعر الدخول: 195.0" in msg
     assert "+2R" in msg
     assert "+2.56%" in msg
