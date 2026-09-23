@@ -77,7 +77,7 @@ def test_build_daily_report_message():
     assert "📈 نسبة النجاح: 50.0%" in msg
     assert "حسب المؤشر" not in msg  # تفاصيل المؤشرات تبقى للمالك على الصفحة
     assert "Supertrend" not in msg
-    assert "🇸🇦 توقيت السعودية" in msg
+    assert "🇸🇦 توقيت السعودية" not in msg
 
 
 class FakeWhatsApp:

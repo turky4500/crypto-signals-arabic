@@ -96,6 +96,4 @@ def build_daily_report_message(stats: dict) -> str:
         lines.append(f"📈 نسبة النجاح: {win_rate * 100:.1f}% (من أصل {resolved} محسومة)")
 
     # تفاصيل الأداء حسب المؤشر تبقى للمالك على الصفحة فقط — لا تُرسل للمشتركين
-    lines.append("")
-    lines.append("🇸🇦 توقيت السعودية — نهاية اليوم")
     return "\n".join(lines)

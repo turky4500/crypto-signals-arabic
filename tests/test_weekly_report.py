@@ -85,7 +85,7 @@ def test_build_weekly_report_message():
     assert "Supertrend" not in msg
     assert "📅 توزيع الأسبوع:" in msg
     assert "الأحد 09-13" in msg and "السبت 09-19" in msg
-    assert "🇸🇦 توقيت السعودية" in msg
+    assert "🇸🇦 توقيت السعودية" not in msg
 
 
 # ---------- إرسال Monitor ----------

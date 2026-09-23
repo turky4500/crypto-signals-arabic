@@ -303,5 +303,4 @@ def build_weekly_report_message(stats: dict) -> str:
             lines.append("⚠️ عينة صغيرة — يُرجى التراكم قبل إقرار أي تعديل")
 
     lines.append("")
-    lines.append("🇸🇦 توقيت السعودية — الأحد بعد منتصف الليل")
     return "\n".join(lines)
