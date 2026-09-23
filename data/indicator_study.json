@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BONKUSDT|adx|1790096400000",
-    "symbol": "BONKUSDT",
-    "indicator": "adx",
-    "entry": "0.00000357",
-    "sl": "0.00000338",
-    "tp": "0.00000395",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790096400000,
-    "signal_close_ms": 1790099999999,
-    "deadline_ms": 1790704799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790100087211,
-    "source": "simulation"
-  },
-  {
     "signature": "BREVUSDT|ichimoku|1790096400000",
     "symbol": "BREVUSDT",
     "indicator": "ichimoku",
@@ -1251,9 +1234,9 @@
     "signal_open_ms": 1790096400000,
     "signal_close_ms": 1790099999999,
     "deadline_ms": 1790704799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790129744911,
+    "hit_price": 0.9997,
     "created_ms": 1790100107269,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790129011381,
+    "source": "simulation"
+  },
+  {
+    "signature": "POWRUSDT|ichimoku|1790125200000",
+    "symbol": "POWRUSDT",
+    "indicator": "ichimoku",
+    "entry": "0.0641",
+    "sl": "0.0634",
+    "tp": "0.0655",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790125200000,
+    "signal_close_ms": 1790128799999,
+    "deadline_ms": 1790733599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790129835820,
     "source": "simulation"
   }
 ]
