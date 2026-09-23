@@ -81,6 +81,31 @@ def evaluate_candles(rec: dict, candles: list, server_now_ms: int | None = None)
     return None
 
 
+def sl_touch_event(rec: dict, candles: list):
+    """أول لمسة لسعر الوقف داخل نافذة الشموع لسجل معلّق: أدنى سعر ≤ الوقف.
+
+    يُستدعى فقط بعد تقييم سجل ظل معلّقًا (pending) — ما يعني عدم وجود إغلاق
+    تحت الوقف ولا لمسة هدف في النافذة، فكل لمسة هنا تقابل شمعة أغلقت فوق الوقف.
+    يرجع معلومات اللمسة (زمن شمعة اللمسة + أدنى سعر) أو None.
+    """
+    sl = float(rec["sl"])
+    sig_open = int(rec["signal_open_ms"])
+
+    start = None
+    for i, (ot, ct, h, l, c) in enumerate(candles):
+        if ot > sig_open:
+            start = i
+            break
+
+    if start is None:
+        return None
+
+    for ot, ct, h, l, c in candles[start:]:
+        if l <= sl:
+            return {"sl_touch_ms": ct, "sl_touch_low": l}
+    return None
+
+
 def mark_expired(records: list[dict], now_ms: int) -> list[dict]:
     """إنهاء أي سجل معلّق تجاوز مهلة 7 أيام."""
     for r in records:

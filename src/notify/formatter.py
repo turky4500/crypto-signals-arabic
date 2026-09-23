@@ -93,6 +93,28 @@ def build_alert_message(sig: dict, halal_verdict: str | None = None) -> str:
     return "\n".join(lines)
 
 
+def build_sl_touch_message(rec: dict) -> str:
+    """تنبيه «لمسة سعر الوقف» للمشتركين: وصل السعر للوقف داخل شمعة 1H
+    دون إغلاق تحته — لا تُعتبر العملة خاسرة حتى تُغلق تحت سعر الوقف.
+    يُرسل مرة واحدة لكل توصية معلّقة."""
+    symbol = rec.get("symbol", "-")
+    entry = rec.get("entry", "-")
+    sl = rec.get("sl", "-")
+    tp = rec.get("tp", "-")
+    touch_ms = int(rec.get("sl_touch_ms") or 0)
+    time_txt = format_time_12h(ts_to_riyadh(touch_ms)) if touch_ms else "-"
+    return "\n".join([
+        "⚠️ تنبيه: لمسة سعر الوقف",
+        f"🪙 العملة: {symbol}",
+        f"وصلت العملة إلى سعر الوقف ({sl}) داخل شمعة 1H",
+        "لكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف",
+        f"🎯 سعر الدخول: {entry}",
+        f"🛑 سعر الوقف: {sl}",
+        f"🎯 الهدف: {tp}",
+        f"🕐 وقت اللمسة: {time_txt}",
+    ])
+
+
 def build_resolution_message(rec: dict) -> str:
     """رسالة حسم التوصية فور بلوغ النتيجة: تحقق الهدف / ضرب الوقف / انتهاء المهلة.
 

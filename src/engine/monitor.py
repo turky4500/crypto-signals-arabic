@@ -15,7 +15,8 @@ from ..config.settings import load_settings
 from ..indicators import ai_market_reader, supertrend
 from ..notify.daily_report import build_daily_report_message, compute_daily_report
 from ..notify.formatter import (build_alert_message, build_resolution_message,
-                                format_time_12h, ts_to_riyadh)
+                                build_sl_touch_message, format_time_12h,
+                                ts_to_riyadh)
 from ..notify.halal import refresh_if_stale, verdict_label
 from ..notify.telegram import TelegramClient
 from ..notify.weekly_report import (build_weekly_report_message,
@@ -29,7 +30,7 @@ from .candidate_study import build_candidate, compute_candidate_stats, seed_cand
 from .indicators_panel import build_paper_records, compute_panel, panel_brief
 from .momentum_filter import evaluate_filter
 from .performance import (compute_stats, evaluate_candles, mark_expired,
-                          prune_old, seed_from_signals)
+                          prune_old, seed_from_signals, sl_touch_event)
 
 logger = logging.getLogger("monitor")
 
@@ -394,6 +395,74 @@ class Monitor:
         return {"sent": sent, "failed": failed, "newly_resolved": len(newly)}
 
     # ------------------------------------------------------------------ #
+    def _sl_touch_state_path(self) -> str:
+        return os.path.join(self.data_dir, "sl_touch_state.json")
+
+    def _maybe_send_sl_touch_messages(self, perf: list, now_ms: int,
+                                      notifications: list, wa,
+                                      deliver=None) -> dict:
+        """تنبيه «لمسة سعر الوقف» للمشتركين: وصل السعر الحالي للوقف (رصد لحظي)
+        أو رصد اللمسة داخل شمعة 1H مغلقة دون إغلاق تحته — ولا تُعتبر خسارة
+        حتى الإغلاق تحت الوقف على فريم الساعة.
+
+        يُرسل مرة واحدة لكل توصية معلّقة (رصد/إغلاق + سعر لحظي = تنبيه واحد).
+        الفشل يُعاد في تشغيل لاحق دون تقدّم الحالة؛ القناة عبر deliver كرسائل الحسم.
+        """
+        cfg = self.settings.get("whatsapp", {}).get("resolution_messages", {})
+        if not cfg.get("enabled", True):
+            return {"sent": 0, "reason": "disabled"}
+
+        state = load_json(self._sl_touch_state_path(), None) or {}
+        notified = set(state.get("notified", []) or [])
+
+        newly = [
+            _r for _r in perf
+            if _r.get("status") == "pending"
+            and _r.get("sl_touch_notified")
+            and _r.get("signature") not in notified
+            and _r.get("whatsapp_status") == "sent"  # وصلت فعلًا للمشترك قبل التنبيه
+        ]
+
+        sent = failed = 0
+        for rec in newly:
+            msg = build_sl_touch_message(rec)
+            if deliver is not None:
+                res, channel = deliver(msg)
+            else:
+                res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
+                channel = None
+
+            notifications = append_capped(
+                notifications,
+                {
+                    "ts": now_ms,
+                    "kind": "sl_touch",
+                    "symbol": rec.get("symbol"),
+                    "indicator": rec.get("indicator"),
+                    "status": rec.get("status"),
+                    "message": msg,
+                    "ok": res.get("ok"),
+                    "error": res.get("error"),
+                    "attempts": res.get("attempts"),
+                    "channel": channel,
+                },
+                500,
+            )
+            save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
+
+            if res.get("ok"):
+                notified.add(rec.get("signature"))
+                sent += 1
+            else:
+                failed += 1
+
+        remain = {_r.get("signature") for _r in perf if _r.get("signature")}
+        notified = {s for s in notified if s in remain}
+        state["notified"] = sorted(notified)[-5000:]
+        save_json(self._sl_touch_state_path(), state)
+        return {"sent": sent, "failed": failed, "sl_touch": len(newly)}
+
+    # ------------------------------------------------------------------ #
     def _build_row(self, symbol_info, candle, st_res, ai_res, price_str,
                    entry_values, filter_info: dict | None = None,
                    panel: dict | None = None) -> dict:
@@ -620,6 +689,16 @@ class Monitor:
                 result = evaluate_candles(rec, candles, server_now)
                 if result:
                     rec.update(result)
+                # تنبيه «لمسة سعر الوقف»: فور وصول السعر الحالي للوقف (دون انتظار
+                # إغلاق الشمعة)، أو رصد اللمسة داخل أي شمعة مغلقة (low <= sl).
+                # لا يُغير قواعد الحسم: الخسارة تبقى عند الإغلاق تحت الوقف فقط.
+                if result is None and not rec.get("sl_touch_notified"):
+                    touch = sl_touch_event(rec, candles)
+                    if touch is None and price_str is not None \
+                            and float(price_str) <= float(rec["sl"]):
+                        touch = {"sl_touch_ms": server_now, "sl_touch_low": float(price_str)}
+                    if touch:
+                        rec.update({**touch, "sl_touch_notified": True})
             # حسم لحظي: بلوغ السعر الحالي مستوى الهدف يحسم فورًا حتى قبل غلق الشمعة
             if price_str is not None:
                 px = float(price_str)
@@ -1031,6 +1110,12 @@ class Monitor:
             deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
         )
 
+        # ---- تنبيه «لمسة سعر الوقف»: رصد لحظي/شمعة دون إغلاق تحته ----
+        sl_touch_warnings = self._maybe_send_sl_touch_messages(
+            perf, now_ms, notifications, wa,
+            deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
+        )
+
         # ---- ملخص ----
         return {
             "ok": binance_ok,
@@ -1048,4 +1133,5 @@ class Monitor:
             "daily_report": daily_report,
             "weekly_report": weekly_report,
             "resolution_messages": resolution,
+            "sl_touch_warnings": sl_touch_warnings,
         }
