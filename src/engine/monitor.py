@@ -16,6 +16,7 @@ from ..indicators import ai_market_reader, supertrend
 from ..notify.daily_report import build_daily_report_message, compute_daily_report
 from ..notify.formatter import (build_alert_message, build_resolution_message,
                                 format_time_12h, ts_to_riyadh)
+from ..notify.halal import refresh_if_stale, verdict_label
 from ..notify.telegram import TelegramClient
 from ..notify.weekly_report import (build_weekly_report_message,
                                     compute_weekly_analysis,
@@ -855,8 +856,16 @@ class Monitor:
 
         # ---- WhatsApp + تسجيل الإشارات الجديدة ----
         notifications = load_json(os.path.join(self.data_dir, "notification_logs.json"), []) or []
+        halal_cfg = self.settings.get("halal", {})
+        halal_verdicts = refresh_if_stale(
+            self.data_dir,
+            max_age_hours=int(halal_cfg.get("refresh_hours", 6)),
+        ) if halal_cfg.get("enabled", False) else {}
         for sig in new_signals:
-            msg = build_alert_message(sig.to_dict())
+            msg = build_alert_message(
+                sig.to_dict(),
+                halal_verdict=verdict_label(halal_verdicts, sig.symbol),
+            )
             res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"))
             sig.whatsapp_status = "sent" if res.get("ok") else "failed"
             sig.whatsapp_sent_at = int(time.time() * 1000) if res.get("ok") else None

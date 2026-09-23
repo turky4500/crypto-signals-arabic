@@ -4,6 +4,8 @@ from __future__ import annotations
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+from .halal import NO_RULING
+
 RIYADH = ZoneInfo("Asia/Riyadh")
 
 INDICATOR_AR = {
@@ -55,7 +57,7 @@ def _fmt_signal_price(sig: dict) -> str:
     return f"{value:.{dec}f}"
 
 
-def build_alert_message(sig: dict) -> str:
+def build_alert_message(sig: dict, halal_verdict: str | None = None) -> str:
     symbol = sig.get("symbol", "-")
     indicator = sig.get("indicator", "ai")
     entry = sig.get("entry", "-")
@@ -86,7 +88,8 @@ def build_alert_message(sig: dict) -> str:
     lines.append(f"🎯 الهدف: {tp}")
     lines.append(f"📈 R:R: 1:{rr}")
     lines.append(f"🕐 وقت الإشارة: {time_txt}")
-    lines.append("🇸🇦 توقيت السعودية")
+    lines.append("─────────────")
+    lines.append(f"الحكم الشرعي: {halal_verdict or NO_RULING}")
     return "\n".join(lines)
 
 
@@ -142,5 +145,4 @@ def build_resolution_message(rec: dict) -> str:
     if r_line:
         lines.append(r_line)
     lines.append(f"🕐 وقت الإشارة: {time_txt}")
-    lines.append("🇸🇦 توقيت السعودية")
     return "\n".join(lines)

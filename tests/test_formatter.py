@@ -49,9 +49,12 @@ def test_build_supertrend_message():
     assert "🛑 وقف الخسارة: 110800.20" in msg
     assert "🎯 الهدف: 115900.20" in msg
     assert "📈 R:R: 1:2" in msg
-    assert "🇸🇦 توقيت السعودية" in msg
+    assert "🇸🇦 توقيت السعودية" not in msg
     # وقت الإشارة: 15:00 UTC = 18:00 الرياض -> مساءً
     assert "🕐 وقت الإشارة: 6:00 مساءً" in msg
+    # ذيل الحكم الشرعي: فاصل + سطر الحكم (افتراضيًا: لا يوجد حكم)
+    assert "─────────────" in msg
+    assert "الحكم الشرعي: ℹ️ لا يوجد حكم" in msg
 
 
 def test_build_ai_message_hides_confidence_and_indicator():
@@ -62,6 +65,15 @@ def test_build_ai_message_hides_confidence_and_indicator():
     assert "ثقة AI" not in msg
     assert "confidence" not in msg
     assert "🕐 وقت الإشارة: 7:30 صباحًا" in msg  # 04:30 UTC = 07:30 الرياض
+
+
+def test_build_message_with_halal_verdict():
+    # الحكم الشرعي يُمرَّر من الوحدة ويظهر في الذيل كما وافق المستخدم
+    msg = build_alert_message(_sig(symbol="XRPUSDT"), halal_verdict="✅ مباح")
+    assert "الحكم الشرعي: ✅ مباح" in msg
+    # السطر الأخيران هما الفاصل ثم الحكم — بدون توقيت السعودية
+    assert msg.rstrip().endswith("─────────────\nالحكم الشرعي: ✅ مباح")
+    assert "🇸🇦 توقيت السعودية" not in msg
 
 
 def test_build_strong_message():
