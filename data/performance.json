@@ -1,23 +1,5 @@
 [
   {
-    "signature": "KNCUSDT|bollinger|BUY|1789448400000",
-    "symbol": "KNCUSDT",
-    "indicator": "bollinger",
-    "entry": "0.1361",
-    "sl": "0.1301",
-    "tp": "0.1481",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1789448400000,
-    "signal_close_ms": 1789451999999,
-    "deadline_ms": 1790056799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1789567199999,
-    "hit_price": 0.1292,
-    "created_ms": 1789452206649,
-    "filtered": true,
-    "whatsapp_status": "sent"
-  },
-  {
     "signature": "LAUSDT|bollinger|BUY|1789452000000",
     "symbol": "LAUSDT",
     "indicator": "bollinger",
@@ -1774,9 +1756,9 @@
     "signal_open_ms": 1789977600000,
     "signal_close_ms": 1789981199999,
     "deadline_ms": 1790585999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790143199999,
+    "hit_price": 1.488,
     "created_ms": 1789981432128,
     "filtered": true,
     "whatsapp_status": "sent"
@@ -2066,6 +2048,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790139786142,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "FLOWUSDT|supertrend|BUY|1790139600000",
+    "symbol": "FLOWUSDT",
+    "indicator": "supertrend",
+    "entry": "0.03341",
+    "sl": "0.03165",
+    "tp": "0.03693",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790139600000,
+    "signal_close_ms": 1790143199999,
+    "deadline_ms": 1790747999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790143387946,
     "filtered": true,
     "whatsapp_status": "sent"
   }
