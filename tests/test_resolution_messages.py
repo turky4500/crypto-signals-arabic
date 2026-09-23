@@ -50,6 +50,8 @@ def test_resolution_message_tp_hit():
     assert "سعر الدخول: 195.0" in msg
     assert "+2R" in msg
     assert "+2.56%" in msg
+    # مدة الاستغراق: الإشارة 09:00 -> الحسم 12:00 = ساعتان
+    assert "⏱ المدة: ساعتان" in msg
 
 
 def test_resolution_message_sl_hit():
@@ -59,6 +61,7 @@ def test_resolution_message_sl_hit():
     assert "التوصية خسرت" in msg
     assert "-1R" in msg
     assert "-2.56%" in msg
+    assert "⏱ المدة: ساعتان" in msg
 
 
 def test_resolution_message_expired():
@@ -68,6 +71,7 @@ def test_resolution_message_expired():
     assert "الهدف: 200.0" in msg
     assert "الوقف: 190.0" in msg
     assert "+2R" not in msg and "-1R" not in msg
+    assert "⏱ المدة: ساعتان" in msg
 
 
 # ---------- الإرسال عبر Monitor ----------

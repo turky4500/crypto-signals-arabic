@@ -126,6 +126,44 @@ def build_sl_touch_message(rec: dict, current_price=None) -> str:
     ])
 
 
+def fmt_duration_ar(ms) -> str:
+    """مدة بصيغة عربية بشرية مطابقة لجداول الصفحة (fmtElapsed):
+    أقل من دقيقة · دقيقة واحدة · ساعتان · 3 ساعات و25 دقيقة · يوم واحد و3 ساعات."""
+    try:
+        ms = float(ms)
+    except (TypeError, ValueError):
+        return "-"
+    if ms < 0 or ms != ms:  # سالب أو NaN
+        return "-"
+    total_min = int(ms // 60000)
+    if total_min < 1:
+        return "أقل من دقيقة"
+    days, rem = divmod(total_min, 1440)
+    hours, mins = divmod(rem, 60)
+
+    def word(n: int, kind: str) -> str:
+        if n == 1:
+            return {"day": "يوم واحد", "hour": "ساعة واحدة", "min": "دقيقة واحدة"}[kind]
+        if n == 2:
+            return {"day": "يومان", "hour": "ساعتان", "min": "دقيقتان"}[kind]
+        plur = {"day": "أيام", "hour": "ساعات", "min": "دقائق"}[kind]
+        gen = {"day": "يومًا", "hour": "ساعة", "min": "دقيقة"}[kind]
+        return f"{n} {plur if n <= 10 else gen}"
+
+    parts = []
+    if days > 0:
+        parts.append(word(days, "day"))
+        if hours > 0:
+            parts.append(word(hours, "hour"))
+    elif hours > 0:
+        parts.append(word(hours, "hour"))
+        if mins > 0:
+            parts.append(word(mins, "min"))
+    else:
+        parts.append(word(mins, "min"))
+    return " و".join(parts)
+
+
 def build_resolution_message(rec: dict) -> str:
     """رسالة حسم التوصية فور بلوغ النتيجة: تحقق الهدف / ضرب الوقف / انتهاء المهلة.
 
@@ -140,6 +178,12 @@ def build_resolution_message(rec: dict) -> str:
     rr = format_number(rec.get("rr_ratio", 2.0))
     sig_ms = int(rec.get("signal_close_ms") or rec.get("signal_open_ms") or 0)
     time_txt = format_time_12h(ts_to_riyadh(sig_ms)) if sig_ms else "-"
+    res_ms = rec.get("resolved_at_ms")
+    try:
+        res_f = float(res_ms)
+    except (TypeError, ValueError):
+        res_f = None
+    dura_txt = fmt_duration_ar(res_f - sig_ms) if (res_f is not None and sig_ms) else None
 
     try:
         e = float(entry)
@@ -177,5 +221,7 @@ def build_resolution_message(rec: dict) -> str:
     lines[1:1] = info
     if r_line:
         lines.append(r_line)
+    if dura_txt:
+        lines.append(f"⏱ المدة: {dura_txt}")
     lines.append(f"🕐 وقت الإشارة: {time_txt}")
     return "\n".join(lines)

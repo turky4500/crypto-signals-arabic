@@ -2,7 +2,8 @@
 from datetime import datetime, timezone
 
 from src.notify.formatter import (
-    INDICATOR_AR, build_alert_message, format_number, format_time_12h, ts_to_riyadh,
+    INDICATOR_AR, build_alert_message, fmt_duration_ar, format_number,
+    format_time_12h, ts_to_riyadh,
 )
 
 
@@ -97,3 +98,21 @@ def test_format_number():
 def test_indicator_labels_map():
     assert INDICATOR_AR["supertrend"] == "Supertrend"
     assert INDICATOR_AR["ai"] == "AI Market Reader"
+
+
+def test_fmt_duration_ar():
+    # مطابقة صيغة صفحات الويب (fmtElapsed)
+    assert fmt_duration_ar(30_000) == "أقل من دقيقة"
+    assert fmt_duration_ar(1 * 60_000) == "دقيقة واحدة"
+    assert fmt_duration_ar(2 * 60_000) == "دقيقتان"
+    assert fmt_duration_ar(11 * 60_000) == "11 دقيقة"
+    assert fmt_duration_ar(1 * 3600_000) == "ساعة واحدة"
+    assert fmt_duration_ar(2 * 3600_000) == "ساعتان"
+    assert fmt_duration_ar(5 * 3600_000) == "5 ساعات"
+    assert fmt_duration_ar(11 * 3600_000) == "11 ساعة"
+    assert fmt_duration_ar((3 * 3600 + 25 * 60) * 1000) == "3 ساعات و25 دقيقة"
+    assert fmt_duration_ar(1 * 24 * 3600_000 + 3 * 3600_000) == "يوم واحد و3 ساعات"
+    # الأيام أسقطت الدقائق كما في الصفحة (يوم واحد + 30 دقيقة -> يوم واحد)
+    assert fmt_duration_ar(1 * 24 * 3600_000 + 30 * 60_000) == "يوم واحد"
+    assert fmt_duration_ar(-1) == "-"
+    assert fmt_duration_ar("x") == "-"
