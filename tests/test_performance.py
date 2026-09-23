@@ -156,7 +156,7 @@ def test_tp_hit_after_many_candles():
     assert evaluate_candles(rec, candles)["status"] == "tp_hit"
 
 
-def test_prune_old_keeps_8_days_and_drops_older():
+def test_prune_old_keeps_retention_window_and_drops_older():
     now = int(__import__("time").time() * 1000)
     recent = _rec(open_ms=now - 3600_000, close_ms=now)
     border = _rec(symbol="B1", open_ms=now - 7 * 24 * 3600_000, close_ms=now - RETENTION_MS)
@@ -164,3 +164,15 @@ def test_prune_old_keeps_8_days_and_drops_older():
     kept = prune_old([recent, border, old], now)
     assert {r["symbol"] for r in kept} == {"BTCUSDT", "B1"}
     assert _rec(symbol="B2") not in kept
+
+
+def test_prune_old_retention_window_is_30_days():
+    """الاحتفاظ أصبح 30 يومًا (بقرار التعديل الشهري) — حدود fetch القاطع."""
+    assert RETENTION_MS == 30 * 24 * 3600 * 1000
+    now = int(__import__("time").time() * 1000)
+    inside = _rec(symbol="IN", open_ms=now - 29 * 24 * 3600_000,
+                  close_ms=now - 29 * 24 * 3600_000)
+    outside = _rec(symbol="OUT", open_ms=now - 31 * 24 * 3600_000,
+                   close_ms=now - 31 * 24 * 3600_000)
+    kept = prune_old([inside, outside], now)
+    assert {r["symbol"] for r in kept} == {"IN"}

@@ -10,7 +10,7 @@
 import time
 
 HORIZON_MS = 7 * 24 * 3600 * 1000  # 7 أيام لانتظار الحسم
-RETENTION_MS = 8 * 24 * 3600 * 1000  # الاحتفاظ بالسجلات 8 أيام ثم حذفها
+RETENTION_MS = 30 * 24 * 3600 * 1000  # الاحتفاظ بالسجلات 30 يومًا ثم حذفها
 
 
 def make_record(sig: dict) -> dict:
@@ -92,7 +92,7 @@ def mark_expired(records: list[dict], now_ms: int) -> list[dict]:
 
 
 def prune_old(records: list[dict], now_ms: int, retention_ms: int = RETENTION_MS) -> list[dict]:
-    """حذف السجلات التي تجاوزت مدة الاحتفاظ (8 أيام) منذ إغلاق شمعة الإشارة."""
+    """حذف السجلات التي تجاوزت مدة الاحتفاظ (30 يومًا) منذ إغلاق شمعة الإشارة."""
     cutoff = now_ms - retention_ms
     out = []
     for r in records:

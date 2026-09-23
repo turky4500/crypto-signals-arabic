@@ -912,7 +912,7 @@ class Monitor:
             if not _r.get("whatsapp_status") and _r.get("signature") in sig_status:
                 _r["whatsapp_status"] = sig_status[_r["signature"]]
         perf = mark_expired(perf, now_ms)
-        perf = prune_old(perf, now_ms)  # حذف سجلات تجاوزت 8 أيام
+        perf = prune_old(perf, now_ms)  # حذف سجلات تجاوزت 30 يومًا
         if len(perf) > 2500:
             perf = perf[-2500:]
         save_json(perf_path, perf)
