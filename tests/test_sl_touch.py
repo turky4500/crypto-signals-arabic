@@ -83,6 +83,7 @@ def test_build_sl_touch_message_full():
     assert "🪙 العملة: BTCUSDT" in msg
     assert "وصلت العملة إلى سعر الوقف (95)" in msg
     assert "لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف" in msg
+    assert "📊 السعر عند اللمسة: 93.5" in msg
     assert "🎯 سعر الدخول: 100" in msg
     assert "🛑 سعر الوقف: 95" in msg
     assert "🎯 الهدف: 103" in msg

@@ -103,11 +103,18 @@ def build_sl_touch_message(rec: dict) -> str:
     tp = rec.get("tp", "-")
     touch_ms = int(rec.get("sl_touch_ms") or 0)
     time_txt = format_time_12h(ts_to_riyadh(touch_ms)) if touch_ms else "-"
+    touch_low = rec.get("sl_touch_low")
+    try:
+        low_f = float(touch_low)
+    except (TypeError, ValueError):
+        low_f = None
+    low_txt = f"{low_f:g}" if low_f is not None else sl
     return "\n".join([
         "⚠️ تنبيه: لمسة سعر الوقف",
         f"🪙 العملة: {symbol}",
         f"وصلت العملة إلى سعر الوقف ({sl}) داخل شمعة 1H",
         "لكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف",
+        f"📊 السعر عند اللمسة: {low_txt}",
         f"🎯 سعر الدخول: {entry}",
         f"🛑 سعر الوقف: {sl}",
         f"🎯 الهدف: {tp}",
