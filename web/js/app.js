@@ -265,6 +265,17 @@ function renderPerf() {
 
   qs("#perfCount").textContent = `${total} إشارة`;
   qs("#perfGroups").innerHTML = perfGroupsHtml();
+  // متوسط مدة الحسم (من لحظة صدور الإشارة حتى الحسم)
+  let sumElapsed = 0, elapsedCount = 0;
+  sorted.forEach((r) => {
+    const base = r.signal_close_ms || r.signal_open_ms || 0;
+    if (r.resolved_at_ms && base && r.status !== "pending") {
+      sumElapsed += r.resolved_at_ms - base;
+      elapsedCount++;
+    }
+  });
+  const avgElapsed = elapsedCount ? fmtAvgElapsed(sumElapsed / elapsedCount) : "—";
+
   qs("#perfChips").innerHTML = [
     perfChip(total, "إجمالي"),
     perfChip(tp, "تحقق الهدف", "green"),
@@ -272,12 +283,15 @@ function renderPerf() {
     perfChip(pending, "لم يبلغ هدفًا ولا وقفًا", "blue"),
     perfChip(expired, "انتهت المهلة", "gray"),
     perfChip(winRate === null ? "—" : winRate.toFixed(1) + "%", "نسبة التحقق", winRate !== null && winRate >= 50 ? "green" : ""),
+    perfChip(avgElapsed, "⏱ متوسط مدة الحسم"),
     perfChip(evTxt, "القيمة المتوقعة (EV)", evTone),
   ].join("");
 
   qs("#perfTable tbody").innerHTML = sorted.length
     ? sorted.map((r) => {
         const st = PERF_STATUS[r.status] || PERF_STATUS.pending;
+        const sigMs = r.signal_close_ms || r.signal_open_ms || 0;
+        const durTxt = r.resolved_at_ms && sigMs ? fmtElapsed(r.resolved_at_ms - sigMs) : "—";
         return `<tr>
           <td class="coin"><span class="coin-sym">${esc((r.symbol || "").replace("USDT", ""))}</span><span class="coin-base">${esc(r.symbol || "—")}</span></td>
           <td>${esc(r.indicator || "—")}</td>
@@ -286,10 +300,12 @@ function renderPerf() {
           <td class="num">${esc(r.sl ?? "—")}</td>
           <td class="num">${esc(r.tp ?? "—")}</td>
           <td>${badge(st[0], st[1])}</td>
-          <td class="time">${r.resolved_at_ms ? formatTime12h(r.resolved_at_ms) : "—"}</td>
+          <td class="time">${sigMs ? fmtShortTs(sigMs) : "—"}</td>
+          <td class="time">${r.resolved_at_ms ? fmtShortTs(r.resolved_at_ms) : "—"}</td>
+          <td class="time">${durTxt}</td>
         </tr>`;
       }).join("")
-    : `<tr><td colspan="8" class="dim" style="text-align:center;padding:2rem;">لا توجد إشارات مرسلة بعد</td></tr>`;
+    : `<tr><td colspan="10" class="dim" style="text-align:center;padding:2rem;">لا توجد إشارات مرسلة بعد</td></tr>`;
 }
 
 /* ---------- الفلاتر ---------- */

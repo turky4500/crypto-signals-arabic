@@ -55,6 +55,61 @@ function formatFullDate(ms) {
   return `${DAYS_AR[wk]}، ${day} ${MONTHS_AR[month - 1]} ${year}`;
 }
 
+/* توقيت مختصر: 23/09 · 2:00 م — يستخدم في جداول النتائج */
+function fmtShortTs(ms) {
+  if (!ms) return "—";
+  const p = timeParts(ms);
+  const dd = String(p.day).padStart(2, "0");
+  const mm = String(p.month).padStart(2, "0");
+  const hh = String(parseInt(p.hour, 10)).padStart(2, "0");
+  const period = p.dayPeriod === "am" ? "ص" : "م";
+  return `${dd}/${mm} ${hh}:${p.minute} ${period}`;
+}
+
+/* الصيغ العربية لعدد يوم/ساعة/دقيقة: واحد، مثنى، 3-10، 11+ */
+function _duraWord(n, kind) {
+  if (n === 1) {
+    return kind === "day" ? "يوم واحد" : kind === "hour" ? "ساعة واحدة" : "دقيقة واحدة";
+  }
+  if (n === 2) {
+    return kind === "day" ? "يومان" : kind === "hour" ? "ساعتان" : "دقيقتان";
+  }
+  const plur = { day: "أيام", hour: "ساعات", min: "دقائق" }[kind];
+  const gen = { day: "يومًا", hour: "ساعة", min: "دقيقة" }[kind];
+  return `${n} ${n <= 10 ? plur : gen}`;
+}
+
+/* مدة بين لحظتين بصيغة بشرية: 45 دقيقة · 3 ساعات و20 دقيقة · 5 أيام و4 ساعات */
+function fmtElapsed(ms) {
+  if (typeof ms !== "number" || !isFinite(ms) || ms < 0) return "—";
+  const totalMin = Math.floor(ms / 60000);
+  if (totalMin < 1) return "أقل من دقيقة";
+  const days = Math.floor(totalMin / 1440);
+  const hours = Math.floor((totalMin % 1440) / 60);
+  const mins = totalMin % 60;
+  const parts = [];
+  if (days > 0) {
+    parts.push(_duraWord(days, "day"));
+    if (hours > 0) parts.push(_duraWord(hours, "hour"));
+  } else if (hours > 0) {
+    parts.push(_duraWord(hours, "hour"));
+    if (mins > 0) parts.push(_duraWord(mins, "min"));
+  } else {
+    parts.push(_duraWord(mins, "min"));
+  }
+  return parts.join(" و");
+}
+
+/* متوسط (كسري) بوحدة واحدة واضحة: 45 دقيقة · 3.5 ساعة · 2.8 يوم */
+function fmtAvgElapsed(ms) {
+  if (typeof ms !== "number" || !isFinite(ms) || ms < 0) return "—";
+  const h = ms / 3600000;
+  const clean = (v) => `${v % 1 === 0 ? v : v.toFixed(1).replace(/\.0$/, "")}`;
+  if (h < 1) return `${Math.round(h * 60)} دقيقة`;
+  if (h < 24) return `${clean(h)} ساعة`;
+  return `${clean(h / 24)} يوم`;
+}
+
 function fmtNumber(x, dec) {
   if (x === null || x === undefined || x === "-") return "-";
   const n = Number(x);
