@@ -483,7 +483,10 @@
     "hit_price": null,
     "created_ms": 1789705006175,
     "filtered": true,
-    "whatsapp_status": "failed"
+    "whatsapp_status": "failed",
+    "sl_touch_ms": 1790182799999,
+    "sl_touch_low": 0.3216,
+    "sl_touch_notified": true
   },
   {
     "signature": "IOTAUSDT|ai|BUY|1789700400000",
@@ -1446,7 +1449,10 @@
     "hit_price": null,
     "created_ms": 1789963430731,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790182799999,
+    "sl_touch_low": 0.00837,
+    "sl_touch_notified": true
   },
   {
     "signature": "PIXELUSDT|supertrend|BUY|1789959600000",
@@ -1680,7 +1686,10 @@
     "hit_price": null,
     "created_ms": 1789977807516,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790182799999,
+    "sl_touch_low": 0.003588,
+    "sl_touch_notified": true
   },
   {
     "signature": "AUSDT|supertrend|BUY|1789977600000",
@@ -2605,9 +2614,9 @@
     "signal_open_ms": 1790157600000,
     "signal_close_ms": 1790161199999,
     "deadline_ms": 1790765999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790182799999,
+    "hit_price": 0.1901,
     "created_ms": 1790161397074,
     "filtered": true,
     "whatsapp_status": "sent",
