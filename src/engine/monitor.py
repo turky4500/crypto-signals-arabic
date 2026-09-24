@@ -23,6 +23,11 @@ from ..notify.weekly_report import (build_weekly_report_message,
                                     compute_weekly_analysis,
                                     compute_weekly_report, week_bounds)
 from ..notify.whatsapp import WhatsAppClient
+from .previews import (
+    build_comparison_message, build_preview_message, build_weekly_summary_message,
+    count_today, find_flip, find_matching_preview, load_state, mark_matched,
+    mark_sent, preview_signature, save_state,
+)
 from ..storage.store import append_capped, load_json, save_json
 from .detector import build_bollinger_signal, build_signal
 from .duplicates import DuplicateGuard
@@ -132,6 +137,22 @@ class Monitor:
             return None
         token = env.get("TELEGRAM_BOT_TOKEN")
         chat_id = env.get("TELEGRAM_CHAT_ID")
+        if not (token and chat_id):
+            return None
+        return TelegramClient(token, chat_id)
+
+    # ------------------------------------------------------------------ #
+    def _telegram_owner(self, env: dict) -> TelegramClient | None:
+        """عميل تلغرام خاص بالمالك للمعاينات الاستكشافية (15m) فقط.
+
+        منفصل تمامًا عن عميل القناة: لا يمر عبر _deliver أبدًا، فلا تصل
+        المعاينات إلى القناة ولا واتساب. المعرف من سرّ TELEGRAM_OWNER_CHAT_ID.
+        """
+        pv = self.settings.get("previews", {})
+        if not pv.get("enabled", True):
+            return None
+        token = env.get("TELEGRAM_BOT_TOKEN")
+        chat_id = env.get("TELEGRAM_OWNER_CHAT_ID")
         if not (token and chat_id):
             return None
         return TelegramClient(token, chat_id)
@@ -312,6 +333,47 @@ class Monitor:
             "error": res.get("error"),
             **stats,
         }
+
+    # ------------------------------------------------------------------ #
+    def _maybe_send_preview_weekly_summary(self, pv_state: dict, now_ms: int,
+                                           tg_owner, perf: list) -> dict:
+        """ملخص أسبوعي للمعاينات الاستكشافية — يُرسل للمالك فقط يوم الأحد بعد
+        منتصف الليل (مرة واحدة لكل أسبوع عبر مفتاح في pv_state)."""
+        pv_cfg = self.settings.get("previews", {})
+        ws = pv_cfg.get("weekly_summary", {})
+        if not ws.get("enabled", True):
+            return {"sent": False, "reason": "disabled"}
+        if tg_owner is None:
+            return {"sent": False, "reason": "no_owner"}
+        if not (pv_state.get("sent") or {}):
+            return {"sent": False, "reason": "no_previews"}
+
+        now_dt = ts_to_riyadh(now_ms)
+        if now_dt.weekday() != 6:
+            return {"sent": False, "reason": "not_sunday"}
+        hour = int(ws.get("hour", 0))
+        minute = int(ws.get("minute", 5))
+        if (now_dt.hour, now_dt.minute) < (hour, minute):
+            return {"sent": False, "reason": "too_early"}
+
+        iso = now_dt.isocalendar()
+        week_key = f"{iso[0]}-W{iso[1]:02d}"
+        if pv_state.get("last_weekly_summary") == week_key:
+            return {"sent": False, "reason": "already_sent"}
+
+        perf_by = {}
+        for _r in perf:
+            perf_by.setdefault(_r.get("symbol"), _r)
+        msg = build_weekly_summary_message(pv_state, perf_by, now_ms)
+        if msg is None:
+            return {"sent": False, "reason": "empty"}
+
+        res = tg_owner.send(msg)
+        if res.get("ok"):
+            pv_state["last_weekly_summary"] = week_key
+            save_state(self.data_dir, pv_state)
+        return {"sent": bool(res.get("ok")), "week": week_key,
+                "error": res.get("error")}
 
     # ------------------------------------------------------------------ #
     def _resolution_state_path(self) -> str:
@@ -810,6 +872,9 @@ class Monitor:
         else:
             status["telegram_connected"] = False
 
+        # عميل المعاينات الاستكشافية الخاص بالمالك — منفصل عن القناة تمامًا
+        tg_owner = None if no_whatsapp else self._telegram_owner(env)
+
         errors: list[str] = []
         binance_ok = False
         server_now = now_ms
@@ -940,6 +1005,40 @@ class Monitor:
         status["market_data_connected"] = bool(monitored) and processed > 0
         status["monitoring_active"] = True
 
+        # ---- المعاينات الاستكشافية (15m) — للمالك فقط، لا القناة ولا واتساب ----
+        pv_cfg = self.settings.get("previews", {})
+        pv_state = load_state(self.data_dir)
+        pv_stats = {"sent": 0, "comparisons": 0}
+        if tg_owner is not None and pv_cfg.get("enabled", True) and monitored:
+            pv_max = int(pv_cfg.get("max_per_day", 25))
+            pv_lim = int(pv_cfg.get("candles_limit", 60))
+            st_cfg = self.settings.get("supertrend", {})
+            pv_today = count_today(pv_state, now_ms)
+            for s_info in monitored:
+                if pv_today >= pv_max:
+                    break
+                try:
+                    series = self.client.kline_series(s_info.symbol, pv_lim, interval="15m")
+                except Exception:
+                    continue
+                flip = find_flip(
+                    series["open"], series["high"], series["low"],
+                    series["close"], series["open_time"], series["close_time"],
+                    st_cfg, server_now,
+                )
+                if flip is None:
+                    continue
+                sig = preview_signature(s_info.symbol, flip["candle_open_ms"])
+                if sig in (pv_state.get("sent") or {}):
+                    continue
+                res_owner = tg_owner.send(build_preview_message(s_info.symbol, flip))
+                if res_owner.get("ok"):
+                    mark_sent(pv_state, sig, flip["close"], now_ms)
+                    pv_today += 1
+                    pv_stats["sent"] += 1
+                    time.sleep(0.3)  # لطفٌ مع Telegram
+            save_state(self.data_dir, pv_state)
+
         # ---- WhatsApp + تسجيل الإشارات الجديدة ----
         notifications = load_json(os.path.join(self.data_dir, "notification_logs.json"), []) or []
         halal_cfg = self.settings.get("halal", {})
@@ -961,6 +1060,23 @@ class Monitor:
                 sig.to_dict(),
                 halal_verdict=get_verdict(sig.symbol),
             )
+            # مقارنة تعليمية للمالك: هل سبقتنا معاينة 15m لنفس الرمز قبل الرسمية؟
+            if tg_owner is not None and pv_cfg.get("enabled", True):
+                pv_match = find_matching_preview(
+                    pv_state, sig.symbol, sig.candle_close_ms,
+                    int(pv_cfg.get("lead_minutes_max", 180)),
+                )
+                if pv_match:
+                    pv_sig, pv_ev = pv_match
+                    official = {
+                        "symbol": sig.symbol,
+                        "entry": sig.entry,
+                        "signal_close_ms": sig.candle_close_ms,
+                    }
+                    cres = tg_owner.send(build_comparison_message(sig.symbol, pv_ev, official))
+                    if cres.get("ok"):
+                        mark_matched(pv_state, pv_sig, official, pv_ev)
+                        pv_stats["comparisons"] += 1
             res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"))
             sig.whatsapp_status = "sent" if res.get("ok") else "failed"
             sig.whatsapp_sent_at = int(time.time() * 1000) if res.get("ok") else None
@@ -984,6 +1100,10 @@ class Monitor:
             )
             max_hist = int(self.settings.get("whatsapp", {}).get("max_history_signals", 2000))
             signals = append_capped(signals, sig.to_dict(), max_hist)
+        if tg_owner is not None:
+            save_state(self.data_dir, pv_state)
+            status["previews_sent"] = pv_stats["sent"]
+            status["preview_comparisons"] = pv_stats["comparisons"]
 
         # ---- الإحصاءات ----
         today = ts_to_riyadh(now_ms).date().isoformat()
@@ -1118,6 +1238,11 @@ class Monitor:
             perf, now_ms, notifications, wa,
             deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
             signals=signals,
+        )
+
+        # ---- ملخص المعاينات الأسبوعي (للمالك فقط — لا يُرسل للقناة) ----
+        preview_weekly = self._maybe_send_preview_weekly_summary(
+            pv_state, now_ms, tg_owner, perf,
         )
 
         # ---- رسائل حسم التوصيات: تحقق الهدف / ضرب الوقف / انتهاء المهلة ----

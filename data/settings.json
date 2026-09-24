@@ -58,6 +58,17 @@
   "telegram": {
     "enabled": true
   },
+  "previews": {
+    "enabled": true,
+    "candles_limit": 60,
+    "max_per_day": 25,
+    "lead_minutes_max": 180,
+    "weekly_summary": {
+      "enabled": true,
+      "hour": 0,
+      "minute": 5
+    }
+  },
   "halal": {
     "enabled": true,
     "refresh_hours": 6,

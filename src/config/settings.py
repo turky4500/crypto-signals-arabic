@@ -75,6 +75,20 @@ DEFAULT_SETTINGS = {
     "telegram": {
         "enabled": True,
     },
+    # معاينات استكشافية على شموع 15m تُرسل للمالك فقط (وليس للقناة ولا واتساب):
+    # تبكير بـ15-45 دقيقة قبل التوصية الرسمية 1H بغرض المراجعة الذاتية والتعلّم.
+    # المعرّف الشخصي يأتي من سرّ TELEGRAM_OWNER_CHAT_ID (لا يُسجَّل في المستودع).
+    "previews": {
+        "enabled": True,
+        "candles_limit": 60,
+        "max_per_day": 25,
+        "lead_minutes_max": 180,  # نافذة ربط المعاينة بالتوصية الرسمية للمقارنة
+        "weekly_summary": {
+            "enabled": True,
+            "hour": 0,
+            "minute": 5,
+        },
+    },
 }
 
 

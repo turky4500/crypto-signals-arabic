@@ -67,6 +67,7 @@ jobs:
           WHATSAPP_RECEIVER: ${{ secrets.WHATSAPP_TO }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_OWNER_CHAT_ID: ${{ secrets.TELEGRAM_OWNER_CHAT_ID }}
           LIMIT_SYMBOLS: ${{ inputs.limit_symbols }}
           NO_WHATSAPP: ${{ inputs.no_whatsapp }}
           RUN_ID: ${{ github.run_number }}
