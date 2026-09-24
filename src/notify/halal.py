@@ -63,20 +63,27 @@ def _parse_items(payload: dict) -> dict:
     return out
 
 
-def _search_symbol(base_symbol: str, timeout: int = 8) -> Optional[int]:
+def _search_symbol(base_symbol: str, timeout: int = 8, retries: int = 1) -> Optional[int]:
     """بحث واحد عن رمز أساسي في القاعدة الكاملة (؟search=) ويعيد الحكم فقط عند
-    تطابق دقيق للرمز — لأن البحث الجزئي قد يرجع عملات مشابهة (gram -> GRAM وDFG)."""
+    تطابق دقيق للرمز — لأن البحث الجزئي قد يرجع عملات مشابهة (gram -> GRAM وDFG).
+
+    إعادة المحاولة على الخطأ الشبكي العابر (مثل انتهاء المهلة) حتى لا نفقّد رمزًا
+    صادف فشلًا واحدًا أثناء المسح الكبير (الموقع يحمي نفسه أحيانًا بمهل قصيرة)."""
     if not base_symbol:
         return None
-    try:
-        q = urllib.parse.quote(base_symbol)
-        url = f"{HALAL_API_URL}?search={q}"
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-    except Exception:
-        return None
-    return _parse_items(payload).get(base_symbol)
+    q = urllib.parse.quote(base_symbol)
+    url = f"{HALAL_API_URL}?search={q}"
+    for attempt in range(retries + 1):
+        if attempt:
+            time.sleep(0.3)
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                payload = json.loads(resp.read().decode("utf-8"))
+        except Exception:
+            continue
+        return _parse_items(payload).get(base_symbol)
+    return None
 
 
 def fetch_verdicts(max_pages: int = 3, timeout: int = 20,
