@@ -1,22 +1,5 @@
 [
   {
-    "signature": "TRXUSDT|adx|1790222400000",
-    "symbol": "TRXUSDT",
-    "indicator": "adx",
-    "entry": "0.3436",
-    "sl": "0.3420",
-    "tp": "0.3468",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790222400000,
-    "signal_close_ms": 1790225999999,
-    "deadline_ms": 1790830799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1790240399999,
-    "hit_price": 0.3404,
-    "created_ms": 1790226190859,
-    "source": "simulation"
-  },
-  {
     "signature": "TSLABUSDT|adx|1790222400000",
     "symbol": "TSLABUSDT",
     "indicator": "adx",
@@ -3189,9 +3172,9 @@
     "signal_open_ms": 1790226000000,
     "signal_close_ms": 1790229599999,
     "deadline_ms": 1790834399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790281540284,
+    "hit_price": 0.4627,
     "created_ms": 1790229759274,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790280208656,
+    "source": "simulation"
+  },
+  {
+    "signature": "NFLXBUSDT|adx|1790276400000",
+    "symbol": "NFLXBUSDT",
+    "indicator": "adx",
+    "entry": "71.80",
+    "sl": "71.32",
+    "tp": "72.76",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790276400000,
+    "signal_close_ms": 1790279999999,
+    "deadline_ms": 1790884799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790281633836,
     "source": "simulation"
   }
 ]
