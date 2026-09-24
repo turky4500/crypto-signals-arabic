@@ -1,9 +1,10 @@
-"""اختبارات عميل Telegram: الحمولة + Retry + الفشل النهائي + ping."""
+"""اختبارات عميل Telegram: الحمولة + Retry + الفشل النهائي + ping + منع التكرار."""
+import json
 import time
 
 import requests
 
-from src.notify.telegram import TelegramClient
+from src.notify.telegram import TelegramClient, _text_hash
 
 
 class FakeResponse:
@@ -83,13 +84,39 @@ def test_final_failure_returns_error(monkeypatch):
     assert "HTTP 500" in res["error"]
 
 
-def test_request_exception_handled(monkeypatch):
+def test_bare_connection_error_is_ambiguous_no_retry(monkeypatch):
+    """ConnectionError عام بدون سلسلة أسباب تثبت عدم الوصول = غامض → لا إعادة (يمنع التكرار)."""
     monkeypatch.setattr(time, "sleep", lambda s: None)
-    sess = FakeSession([requests.ConnectionError("net down")] * 2)
-    c = _client(sess, max_retries=2)
+    sess = FakeSession([requests.ConnectionError("net down")])
+    c = _client(sess, max_retries=3)
     res = c.send("msg")
     assert res["ok"] is False
-    assert "net down" in res["error"]
+    assert res["attempts"] == 1
+    assert "AMBIGUOUS" in res["error"]
+    assert len(sess.calls) == 1
+
+
+def test_connection_refused_chain_is_retried(monkeypatch):
+    """سلسلة أسباب تثبت الرفض قبل الإرسال (ConnectionRefusedError) → إعادة آمنة."""
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    err = requests.ConnectionError("refused")
+    err.__cause__ = ConnectionRefusedError("refused")
+    sess = FakeSession([err, FakeResponse(200)])
+    c = _client(sess, max_retries=3)
+    res = c.send("msg")
+    assert res["ok"] is True
+    assert res["attempts"] == 2
+
+
+def test_chunked_encoding_error_is_ambiguous_no_retry(monkeypatch):
+    """انقطاع أثناء قراءة الاستجابة بعد الإرسال (ChunkedEncodingError) = غامض → لا إعادة."""
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    sess = FakeSession([requests.exceptions.ChunkedEncodingError("stream broken")])
+    c = _client(sess, max_retries=3)
+    res = c.send("msg")
+    assert res["ok"] is False
+    assert "AMBIGUOUS" in res["error"]
+    assert len(sess.calls) == 1
 
 
 def test_read_timeout_no_retry(monkeypatch):
@@ -125,6 +152,65 @@ def test_http200_ok_false_is_retried(monkeypatch):
     res = c.send("msg")
     assert res["ok"] is True
     assert res["attempts"] == 2
+
+
+def test_dedup_blocks_identical_text_same_chat(tmp_path, monkeypatch):
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    dedup = str(tmp_path / "telegram_sent.json")
+    sess = FakeSession([FakeResponse(200), FakeResponse(200)])
+    c = _client(sess, dedup_file=dedup)
+    r1 = c.send("مرحبًا JST")
+    assert r1["ok"] is True and r1.get("deduped") is not True
+    r2 = c.send("مرحبًا JST")
+    assert r2["ok"] is True
+    assert r2.get("deduped") is True
+    assert len(sess.calls) == 1  # الثانية لم تُرسل أصلًا
+    with open(dedup, encoding="utf-8") as fh:
+        data = json.load(fh)
+    assert len(data["sent"]) == 1
+
+
+def test_dedup_allows_different_chat_or_text(tmp_path, monkeypatch):
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    dedup = str(tmp_path / "ts.json")
+    sess = FakeSession([FakeResponse(200), FakeResponse(200), FakeResponse(200)])
+    c = _client(sess, dedup_file=dedup)
+    c.send("نص أول")
+    c2 = TelegramClient(token="123:tok123", chat_id="555111", backoff=0.001, dedup_file=dedup)
+    c2.session = sess
+    r_other_chat = c2.send("نص أول")   # محادثة مختلفة
+    assert r_other_chat["ok"] is True and r_other_chat.get("deduped") is not True
+    r_other_text = c.send("نص ثانٍ")   # نص مختلف
+    assert r_other_text["ok"] is True and r_other_text.get("deduped") is not True
+    assert len(sess.calls) == 3
+
+
+def test_dedup_expires_when_outside_window(tmp_path, monkeypatch):
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    dedup = str(tmp_path / "ts.json")
+    old = int(time.time() * 1000) - 2 * 60 * 60 * 1000  # قبل ساعتين (خارج نافذة 90 دقيقة)
+    with open(dedup, "w", encoding="utf-8") as fh:
+        json.dump({"sent": [{"ts": old, "chat_id": "987654321",
+                             "text_hash": _text_hash("987654321", "msg")}]}, fh)
+    sess = FakeSession([FakeResponse(200)])
+    c = _client(sess, dedup_file=dedup)
+    res = c.send("msg")
+    assert res.get("deduped") is not True
+    assert res["ok"] is True
+    assert len(sess.calls) == 1
+
+
+def test_ambiguous_records_sent_in_ledger(tmp_path, monkeypatch):
+    """الغموض يُسجَّل كمرسلة في الدفتر حتى لا يعيد أي تشغيل لاحق نفس الرسالة."""
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    dedup = str(tmp_path / "ts.json")
+    sess = FakeSession([requests.exceptions.ReadTimeout("slow")])
+    c = _client(sess, dedup_file=dedup)
+    res = c.send("msg")
+    assert "AMBIGUOUS" in res["error"]
+    with open(dedup, encoding="utf-8") as fh:
+        data = json.load(fh)
+    assert len(data["sent"]) == 1
 
 
 def test_delivered_helper():

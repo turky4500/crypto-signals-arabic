@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="أرشيف الرسائل المرسلة — كل رسالة أرسلها البوت: المعاينات والمقارنات والإشارات ورسائل الحسم ولفات الوقف والتقارير" />
+  <title>الرسائل المرسلة</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📨</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="logo">📨</span>
+        <div>
+          <h1>الرسائل المرسلة</h1>
+          <span class="sub">أرشيف كل رسالة يرسلها البوت: معاينات · مقارنات · إشارات · حسم · لمسة وقف · تقارير</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="btn primary">← العودة للوحة</a>
+      </div>
+    </header>
+
+    <div class="notice">
+      كل إرسال منطقي يُسجَّل هنا لحظة حدوثه من <code>notification_logs.json</code>.
+      أي محاولة مكررة لنفس المحتوى ونفس المحادثة خلال 90 دقيقة تُحجب تلقائيًا وتظهر «محجوب».
+    </div>
+
+    <section class="toolbar">
+      <input id="search" type="search" placeholder="🔍 ابحث عن عملة (مثال: JST) أو نص الرسالة..." autocomplete="off" />
+      <div class="filter-btns" id="kind-filter">
+        <button data-filter="all" class="active">الكل</button>
+        <button data-filter="preview">🔎 معاينات</button>
+        <button data-filter="preview_comparison">مقارنات</button>
+        <button data-filter="signal">إشارات</button>
+        <button data-filter="resolve">حسم ولفات وقف</button>
+        <button data-filter="report">تقارير</button>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <div class="table-head">
+        <h2>سجل الإرسال</h2>
+        <span class="table-count" id="tableCount">— رسالة</span>
+      </div>
+      <div class="table-scroll">
+        <table id="messagesTable">
+          <thead>
+            <tr>
+              <th>النوع</th>
+              <th>العملة</th>
+              <th>وقت الإرسال</th>
+              <th>المرجع</th>
+              <th>القناة</th>
+              <th>النتيجة</th>
+              <th>الرسالة</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <button id="loadMore">عرض المزيد</button>
+
+    <footer>تُدار البيانات عبر GitHub Actions · توقيت السعودية · الأرشيف من سجل الإشعارات الفعلي</footer>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/messages.js"></script>
+</body>
+</html>

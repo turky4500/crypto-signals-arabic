@@ -139,7 +139,8 @@ class Monitor:
         chat_id = env.get("TELEGRAM_CHAT_ID")
         if not (token and chat_id):
             return None
-        return TelegramClient(token, chat_id)
+        return TelegramClient(token, chat_id,
+                              dedup_file=os.path.join(self.data_dir, "telegram_sent.json"))
 
     # ------------------------------------------------------------------ #
     def _telegram_owner(self, env: dict) -> TelegramClient | None:
@@ -155,7 +156,8 @@ class Monitor:
         chat_id = env.get("TELEGRAM_OWNER_CHAT_ID")
         if not (token and chat_id):
             return None
-        return TelegramClient(token, chat_id)
+        return TelegramClient(token, chat_id,
+                              dedup_file=os.path.join(self.data_dir, "telegram_sent.json"))
 
     # ------------------------------------------------------------------ #
     def _deliver(self, msg: str, wa, tg, wa_ok: bool) -> tuple[dict, str | None]:
@@ -1072,6 +1074,7 @@ class Monitor:
                             "message": pv_msg,
                             "ok": res_owner.get("ok"),
                             "error": res_owner.get("error"),
+                            "attempts": res_owner.get("attempts"),
                             "channel": "telegram_owner",
                         },
                         500,
@@ -1111,6 +1114,7 @@ class Monitor:
                                 "message": pv_cmp_msg,
                                 "ok": cres.get("ok"),
                                 "error": cres.get("error"),
+                                "attempts": cres.get("attempts"),
                                 "channel": "telegram_owner",
                             },
                             500,

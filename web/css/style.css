@@ -245,9 +245,18 @@ td.price { font-weight: 700; }
 .kv strong { font-weight: 700; }
 
 /* ---------- الإشعارات ---------- */
-.notice { padding: 12px 16px; border-radius: 12px; font-size: .88rem; }
+.notice { padding: 12px 16px; border-radius: 12px; font-size: .88rem;
+  background: var(--primary-soft); color: var(--primary); margin-bottom: 14px; }
+.notice code { background: rgba(0,0,0,.08); padding: 1px 6px; border-radius: 6px; direction: ltr; display: inline-block; }
 .notice.warn { background: var(--orange-soft); color: var(--orange); }
 .notice.error { background: var(--red-soft); color: var(--red); }
+
+/* ---------- صفحة الرسائل المرسلة ---------- */
+.msg-cell { min-width: 260px; }
+.msg-short { font-size: .85rem; color: var(--text); margin-bottom: 4px; }
+.msg-full { font-size: .8rem; white-space: pre-wrap; background: rgba(0,0,0,.045);
+  padding: 8px 10px; border-radius: 8px; margin-top: 4px; line-height: 1.6; }
+.msg-toggle { font-size: .75rem; padding: 2px 8px; }
 
 /* ---------- صفحتا السجل والإعدادات ---------- */
 .page-head { margin-bottom: 14px; }
