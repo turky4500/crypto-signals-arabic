@@ -1378,9 +1378,9 @@
     "signal_open_ms": 1789959600000,
     "signal_close_ms": 1789963199999,
     "deadline_ms": 1790567999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790272799999,
+    "hit_price": 0.001398,
     "created_ms": 1789963430071,
     "filtered": true,
     "whatsapp_status": "sent"
@@ -3955,5 +3955,23 @@
     "created_ms": 1790269587411,
     "filtered": true,
     "whatsapp_status": "failed"
+  },
+  {
+    "signature": "XPLUSDT|ai|BUY|1790269200000",
+    "symbol": "XPLUSDT",
+    "indicator": "ai",
+    "entry": "0.10126",
+    "sl": "0.09472",
+    "tp": "0.11434",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790269200000,
+    "signal_close_ms": 1790272799999,
+    "deadline_ms": 1790877599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790272999264,
+    "filtered": true,
+    "whatsapp_status": "sent"
   }
 ]
