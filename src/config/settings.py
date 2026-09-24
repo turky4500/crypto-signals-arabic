@@ -82,6 +82,9 @@ DEFAULT_SETTINGS = {
         "enabled": True,
         "candles_limit": 60,
         "max_per_day": 25,
+        # أدنى فاصل بين معاينتين لنفس العملة (حتى عبر شمعتين 15m مختلفتين) —
+        # يمنع ما يبدو تكرارًا لنفس العملة في وقت قصير.
+        "min_gap_minutes": 60,
         "lead_minutes_max": 180,  # نافذة ربط المعاينة بالتوصية الرسمية للمقارنة
         "weekly_summary": {
             "enabled": True,

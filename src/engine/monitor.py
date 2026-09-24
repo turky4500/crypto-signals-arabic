@@ -25,8 +25,8 @@ from ..notify.weekly_report import (build_weekly_report_message,
 from ..notify.whatsapp import WhatsAppClient
 from .previews import (
     build_comparison_message, build_preview_message, build_weekly_summary_message,
-    count_today, find_flip, find_matching_preview, load_state, mark_matched,
-    mark_sent, preview_signature, save_state,
+    count_today, find_flip, find_matching_preview, last_sent_ts, load_state,
+    mark_matched, mark_sent, preview_signature, save_state,
 )
 from ..storage.store import append_capped, load_json, save_json
 from .detector import build_bollinger_signal, build_signal
@@ -1005,40 +1005,6 @@ class Monitor:
         status["market_data_connected"] = bool(monitored) and processed > 0
         status["monitoring_active"] = True
 
-        # ---- المعاينات الاستكشافية (15m) — للمالك فقط، لا القناة ولا واتساب ----
-        pv_cfg = self.settings.get("previews", {})
-        pv_state = load_state(self.data_dir)
-        pv_stats = {"sent": 0, "comparisons": 0}
-        if tg_owner is not None and pv_cfg.get("enabled", True) and monitored:
-            pv_max = int(pv_cfg.get("max_per_day", 25))
-            pv_lim = int(pv_cfg.get("candles_limit", 60))
-            st_cfg = self.settings.get("supertrend", {})
-            pv_today = count_today(pv_state, now_ms)
-            for s_info in monitored:
-                if pv_today >= pv_max:
-                    break
-                try:
-                    series = self.client.kline_series(s_info.symbol, pv_lim, interval="15m")
-                except Exception:
-                    continue
-                flip = find_flip(
-                    series["open"], series["high"], series["low"],
-                    series["close"], series["open_time"], series["close_time"],
-                    st_cfg, server_now,
-                )
-                if flip is None:
-                    continue
-                sig = preview_signature(s_info.symbol, flip["candle_open_ms"])
-                if sig in (pv_state.get("sent") or {}):
-                    continue
-                res_owner = tg_owner.send(build_preview_message(s_info.symbol, flip))
-                if res_owner.get("ok"):
-                    mark_sent(pv_state, sig, flip["close"], now_ms)
-                    pv_today += 1
-                    pv_stats["sent"] += 1
-                    time.sleep(0.3)  # لطفٌ مع Telegram
-            save_state(self.data_dir, pv_state)
-
         # ---- WhatsApp + تسجيل الإشارات الجديدة ----
         notifications = load_json(os.path.join(self.data_dir, "notification_logs.json"), []) or []
         halal_cfg = self.settings.get("halal", {})
@@ -1054,6 +1020,63 @@ class Monitor:
             if halal_enabled:
                 return ensure_verdict(self.data_dir, sym, halal_verdicts)
             return verdict_label(halal_verdicts, sym)
+
+        # ---- المعاينات الاستكشافية (15m) — للمالك فقط، لا القناة ولا واتساب ----
+        # السجّل التدقيقي يكتب في notification_logs.json ليبقى أثرًا دائمًا قابلاً
+        # للتحقق: كل معاينة تُرسل مرة واحدة لكل (عملة|شمعة 15m)، ولا تكرار لنفس
+        # العملة قبل اكتمال min_gap_minutes حتى عبر شمعة مختلفة.
+        pv_cfg = self.settings.get("previews", {})
+        pv_state = load_state(self.data_dir)
+        pv_stats = {"sent": 0, "comparisons": 0}
+        if tg_owner is not None and pv_cfg.get("enabled", True) and monitored:
+            pv_max = int(pv_cfg.get("max_per_day", 25))
+            pv_lim = int(pv_cfg.get("candles_limit", 60))
+            pv_gap_ms = int(pv_cfg.get("min_gap_minutes", 60)) * 60000
+            st_cfg = self.settings.get("supertrend", {})
+            pv_today = count_today(pv_state, now_ms)
+            for s_info in monitored:
+                if pv_today >= pv_max:
+                    break
+                # لا تكرار لنفس العملة: إن سبقتها معاينة قريبة (داخل min_gap_minutes)
+                # نتخطى حتى اكتمال الفجوة — يحميك من ضجيج شمعتين 15m متتاليتين.
+                last_ts = last_sent_ts(pv_state, s_info.symbol)
+                if last_ts and now_ms - last_ts < pv_gap_ms:
+                    continue
+                try:
+                    series = self.client.kline_series(s_info.symbol, pv_lim, interval="15m")
+                except Exception:
+                    continue
+                flip = find_flip(
+                    series["open"], series["high"], series["low"],
+                    series["close"], series["open_time"], series["close_time"],
+                    st_cfg, server_now,
+                )
+                if flip is None:
+                    continue
+                sig = preview_signature(s_info.symbol, flip["candle_open_ms"])
+                if sig in (pv_state.get("sent") or {}):
+                    continue
+                pv_msg = build_preview_message(s_info.symbol, flip)
+                res_owner = tg_owner.send(pv_msg)
+                if res_owner.get("ok"):
+                    mark_sent(pv_state, sig, flip["close"], now_ms)
+                    pv_today += 1
+                    pv_stats["sent"] += 1
+                    notifications = append_capped(
+                        notifications,
+                        {
+                            "ts": int(now_ms),
+                            "symbol": s_info.symbol,
+                            "kind": "preview",
+                            "candle_open_ms": flip["candle_open_ms"],
+                            "message": pv_msg,
+                            "ok": True,
+                            "channel": "telegram_owner",
+                        },
+                        500,
+                    )
+                    time.sleep(0.3)  # لطفٌ مع Telegram
+            save_state(self.data_dir, pv_state)
 
         for sig in new_signals:
             msg = build_alert_message(
@@ -1073,10 +1096,23 @@ class Monitor:
                         "entry": sig.entry,
                         "signal_close_ms": sig.candle_close_ms,
                     }
-                    cres = tg_owner.send(build_comparison_message(sig.symbol, pv_ev, official))
+                    pv_cmp_msg = build_comparison_message(sig.symbol, pv_ev, official)
+                    cres = tg_owner.send(pv_cmp_msg)
                     if cres.get("ok"):
                         mark_matched(pv_state, pv_sig, official, pv_ev)
                         pv_stats["comparisons"] += 1
+                        notifications = append_capped(
+                            notifications,
+                            {
+                                "ts": int(time.time() * 1000),
+                                "symbol": sig.symbol,
+                                "kind": "preview_comparison",
+                                "message": pv_cmp_msg,
+                                "ok": True,
+                                "channel": "telegram_owner",
+                            },
+                            500,
+                        )
             res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"))
             sig.whatsapp_status = "sent" if res.get("ok") else "failed"
             sig.whatsapp_sent_at = int(time.time() * 1000) if res.get("ok") else None

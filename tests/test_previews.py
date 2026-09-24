@@ -8,8 +8,8 @@ import numpy as np
 
 from src.engine.previews import (
     build_comparison_message, build_preview_message, build_weekly_summary_message,
-    count_today, find_flip, find_matching_preview, mark_matched, mark_sent,
-    preview_signature,
+    count_today, find_flip, find_matching_preview, last_sent_ts, mark_matched,
+    mark_sent, preview_signature,
 )
 from src.indicators.supertrend import compute
 
@@ -133,6 +133,18 @@ def test_count_today_resets_daily():
     # يوم لاحق -> عدّاد جديد
     later = day1 + 30 * 3600_000
     assert count_today(state, later) == 0
+
+
+def test_last_sent_ts_per_symbol():
+    state = {}
+    mark_sent(state, preview_signature("XRPUSDT", START), 1.0, now_ms=START)
+    mark_sent(state, preview_signature("XRPUSDT", START + Q), 1.1,
+              now_ms=START + 2 * Q)
+    mark_sent(state, preview_signature("BTCUSDT", START), 99.0, now_ms=START + Q)
+    # آخر معاينة لكل عملة (أحدث ts) و0 للعملة التي لم تُرسل
+    assert last_sent_ts(state, "XRPUSDT") == START + 2 * Q
+    assert last_sent_ts(state, "BTCUSDT") == START + Q
+    assert last_sent_ts(state, "SOLUSDT") == 0
 
 
 def test_find_matching_preview_window_and_matched():

@@ -183,6 +183,23 @@ def mark_sent(state: dict, sig: str, price: float, now_ms: int) -> None:
             sent.pop(k, None)
 
 
+def last_sent_ts(state: dict, symbol: str) -> int:
+    """آخر وقت أُرسلت فيه معاينة لهذه العملة (0 إن لم تكن أُرسلت بعد).
+
+    أساس حماية «لا تكرار لنفس العملة»: حتى لو انقلبت شمعتان مختلفتان 15m لنفس
+    الرمز قريبًا، يمنع min_gap_minutes إرسال معاينة جديدة قبل اكتمال الفجوة.
+    """
+    prefix = f"{symbol}|"
+    best = 0
+    for sig, ev in (state.get("sent") or {}).items():
+        if not sig.startswith(prefix):
+            continue
+        t = int(ev.get("ts") or 0)
+        if t > best:
+            best = t
+    return best
+
+
 def find_matching_preview(state: dict, symbol: str, official_close_ms: int,
                           lead_minutes_max: int) -> Optional[tuple[str, dict]]:
     """يرجع أقرب معاينة (sig, event) لنفس الرمز وقعت قبل التوصية الرسمية ضمن
