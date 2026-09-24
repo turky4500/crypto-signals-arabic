@@ -1,22 +1,5 @@
 [
   {
-    "signature": "HEIUSDT|macd|1790204400000",
-    "symbol": "HEIUSDT",
-    "indicator": "macd",
-    "entry": "0.1482",
-    "sl": "0.1396",
-    "tp": "0.1654",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790204400000,
-    "signal_close_ms": 1790207999999,
-    "deadline_ms": 1790812799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790208123007,
-    "source": "simulation"
-  },
-  {
     "signature": "HOODBUSDT|adx|1790204400000",
     "symbol": "HOODBUSDT",
     "indicator": "adx",
@@ -35591,9 +35574,9 @@
     "signal_open_ms": 1790244000000,
     "signal_close_ms": 1790247599999,
     "deadline_ms": 1790852399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790261999999,
+    "hit_price": 1.974,
     "created_ms": 1790248016302,
     "source": "simulation"
   },
@@ -36424,9 +36407,9 @@
     "signal_open_ms": 1790247600000,
     "signal_close_ms": 1790251199999,
     "deadline_ms": 1790855999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790273446779,
+    "hit_price": 0.2138,
     "created_ms": 1790251265335,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790272997473,
+    "source": "simulation"
+  },
+  {
+    "signature": "RPLUSDT|adx|1790269200000",
+    "symbol": "RPLUSDT",
+    "indicator": "adx",
+    "entry": "1.983",
+    "sl": "1.936",
+    "tp": "2.077",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790269200000,
+    "signal_close_ms": 1790272799999,
+    "deadline_ms": 1790877599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790273544905,
     "source": "simulation"
   }
 ]
