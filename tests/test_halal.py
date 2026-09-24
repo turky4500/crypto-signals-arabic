@@ -8,9 +8,11 @@ import json
 from src.notify.halal import (
     NO_RULING,
     _parse_items,
+    ensure_verdict,
     fetch_verdicts,
     load_cached_verdicts,
     refresh_if_stale,
+    search_judgement,
     verdict_label,
 )
 
@@ -84,6 +86,110 @@ def test_fetch_verdicts_failure_returns_none(monkeypatch):
 
     monkeypatch.setattr("src.notify.halal.urllib.request.urlopen", boom)
     assert fetch_verdicts() is None
+
+
+# ---------------- سد فجوة القائمة بالبحث الفردي (؟search=) ----------------
+
+
+def test_fetch_verdicts_searches_uncovered_symbols(monkeypatch):
+    """الموقع يعرض قائمة جزئية (مثل الـ51) عن قاعدة أكبر — مثل VTHO غير المدرج فيها."""
+    calls = []
+    list_payload = {"data": {"items": [{"symbol": "BTC", "judgement": 0}],
+                             "meta": {"last_page": 1}}}
+
+    def fake_urlopen(req, timeout):
+        calls.append(req.full_url)
+        if "search=" in req.full_url:
+            q = req.full_url.split("search=")[1].split("&")[0]
+            hit = {"VTHO": [{"symbol": "VTHO", "judgement": 0}],
+                   "XRP": [{"symbol": "XRP", "judgement": 0}]}.get(q, [])
+            return _FakeResp({"data": {"items": hit}})
+        return _FakeResp(list_payload)
+
+    monkeypatch.setattr("src.notify.halal.urllib.request.urlopen", fake_urlopen)
+    v = fetch_verdicts(symbols=["BTCUSDT", "XRPUSDT", "VTHOUSDT", "PROVEUSDT"])
+
+    assert v == {"BTC": 0, "XRP": 0, "VTHO": 0}
+    searched = [c for c in calls if "search=" in c]
+    assert any("search=PROVE" in c for c in searched)   # حاولنا الـغير مغطى
+    assert not any("search=BTC" in c for c in searched)  # لم نبحث عن المغطى
+    # رموز مكررة لا تسبب بحثًا مضاعفًا
+    v2_calls = []
+    monkeypatch.setattr("src.notify.halal.urllib.request.urlopen",
+                        lambda req, timeout: (v2_calls.append(req.full_url) or _FakeResp(list_payload)))
+    fetch_verdicts(symbols=["BTCUSDT", "BTCUSDT"])
+    assert not any("search=" in c for c in v2_calls)
+
+
+def test_search_judgement_normalizes_and_matches_exact(monkeypatch):
+    """البحث الجزئي قد يرجع عملات مشابهة -> نأخذ التطابق الدقيق للرمز فقط."""
+
+    def fake_urlopen(req, timeout):
+        assert req.full_url.endswith("search=VTHO")
+        return _FakeResp({"data": {"items": [
+            {"symbol": "VTHO", "judgement": 0},
+            {"symbol": "OTHERVTHO", "judgement": 1},
+        ]}})
+
+    monkeypatch.setattr("src.notify.halal.urllib.request.urlopen", fake_urlopen)
+    assert search_judgement("VTHOUSDT") == 0
+
+
+def test_search_judgement_no_exact_match_returns_none(monkeypatch):
+    """مثال حقيقي: gram يرجع GRAM وDFG — رمز آخر بدون تطابق دقيق -> لا حكم."""
+    monkeypatch.setattr("src.notify.halal.urllib.request.urlopen",
+                        lambda req, timeout: _FakeResp(
+                            {"data": {"items": [{"symbol": "DFG", "judgement": 0}]}}))
+    assert search_judgement("GRAM") is None
+
+
+def test_search_judgement_failure_returns_none(monkeypatch):
+    monkeypatch.setattr("src.notify.halal.urllib.request.urlopen",
+                        lambda req, timeout: (_ for _ in ()).throw(OSError("down")))
+    assert search_judgement("VTHO") is None
+
+
+# ---------------- الحل اللحظي عند الإشارة (ensure_verdict) ----------------
+
+
+def test_ensure_verdict_uses_cache_without_network(tmp_path, monkeypatch):
+    data_dir = str(tmp_path)
+    with open(f"{data_dir}/halal_verdicts.json", "w", encoding="utf-8") as f:
+        json.dump({"vendor": "cryptohalal.cc", "fetched_at_ms": 1,
+                   "judgements": {"XRP": 0}}, f, ensure_ascii=False)
+
+    def boom(req, timeout):
+        raise AssertionError("لا يجوز بحث شبكي والحكم مخزّن")
+
+    monkeypatch.setattr("src.notify.halal.urllib.request.urlopen", boom)
+    assert ensure_verdict(data_dir, "XRPUSDT", {"XRP": 0}) == "✅ مباح"
+
+
+def test_ensure_verdict_live_resolves_and_persists(tmp_path, monkeypatch):
+    """سيناريو VTHO: خارج القائمة المعروضة لكنه مباح في قاعدة الموقع."""
+    data_dir = str(tmp_path)
+    with open(f"{data_dir}/halal_verdicts.json", "w", encoding="utf-8") as f:
+        json.dump({"vendor": "cryptohalal.cc", "fetched_at_ms": 1,
+                   "judgements": {}}, f, ensure_ascii=False)
+
+    def fake_urlopen(req, timeout):
+        assert "search=VTHO" in req.full_url
+        return _FakeResp({"data": {"items": [{"symbol": "VTHO", "judgement": 0}]}})
+
+    monkeypatch.setattr("src.notify.halal.urllib.request.urlopen", fake_urlopen)
+
+    verdicts = {}
+    assert ensure_verdict(data_dir, "VTHOUSDT", verdicts) == "✅ مباح"
+    assert verdicts == {"VTHO": 0}
+    # الحكم المحلول لحظيًا يُحفظ ليستفيد منه التحديث الدوري
+    assert load_cached_verdicts(data_dir) == {"VTHO": 0}
+
+
+def test_ensure_verdict_not_found_keeps_no_ruling(tmp_path, monkeypatch):
+    data_dir = str(tmp_path)
+    monkeypatch.setattr("src.notify.halal.urllib.request.urlopen",
+                        lambda req, timeout: _FakeResp({"data": {"items": []}}))
+    assert ensure_verdict(data_dir, "PROVEUSDT", {}) == NO_RULING
 
 
 # ---------------- التخزين المؤقت والخروج الآمن ----------------

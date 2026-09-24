@@ -17,7 +17,7 @@ from ..notify.daily_report import build_daily_report_message, compute_daily_repo
 from ..notify.formatter import (build_alert_message, build_resolution_message,
                                 build_sl_touch_message, format_time_12h,
                                 ts_to_riyadh)
-from ..notify.halal import refresh_if_stale, verdict_label
+from ..notify.halal import ensure_verdict, refresh_if_stale, verdict_label
 from ..notify.telegram import TelegramClient
 from ..notify.weekly_report import (build_weekly_report_message,
                                     compute_weekly_analysis,
@@ -943,14 +943,23 @@ class Monitor:
         # ---- WhatsApp + تسجيل الإشارات الجديدة ----
         notifications = load_json(os.path.join(self.data_dir, "notification_logs.json"), []) or []
         halal_cfg = self.settings.get("halal", {})
+        halal_enabled = bool(halal_cfg.get("enabled", False))
         halal_verdicts = refresh_if_stale(
             self.data_dir,
             max_age_hours=int(halal_cfg.get("refresh_hours", 6)),
-        ) if halal_cfg.get("enabled", False) else {}
+            symbols=[s.symbol for s in monitored],
+        ) if halal_enabled else {}
+
+        def get_verdict(sym: str) -> str:
+            """حكم الإشارة: إن كان الرمز خارج القائمة المعروضة يُحلّ بحثًا لحظيًا."""
+            if halal_enabled:
+                return ensure_verdict(self.data_dir, sym, halal_verdicts)
+            return verdict_label(halal_verdicts, sym)
+
         for sig in new_signals:
             msg = build_alert_message(
                 sig.to_dict(),
-                halal_verdict=verdict_label(halal_verdicts, sig.symbol),
+                halal_verdict=get_verdict(sig.symbol),
             )
             res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"))
             sig.whatsapp_status = "sent" if res.get("ok") else "failed"
