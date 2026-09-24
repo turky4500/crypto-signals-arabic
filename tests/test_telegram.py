@@ -7,9 +7,15 @@ from src.notify.telegram import TelegramClient
 
 
 class FakeResponse:
-    def __init__(self, status, text="ok"):
+    def __init__(self, status, text="ok", json_body=None):
         self.status_code = status
         self.text = text
+        self._json_body = json_body
+
+    def json(self):
+        if self._json_body is None:
+            raise ValueError("no json body")
+        return self._json_body
 
 
 class FakeSession:
@@ -84,6 +90,49 @@ def test_request_exception_handled(monkeypatch):
     res = c.send("msg")
     assert res["ok"] is False
     assert "net down" in res["error"]
+
+
+def test_read_timeout_no_retry(monkeypatch):
+    """ReadTimeout غامض: قد تكون الرسالة وصلت — لا إعادة أبدًا (يمنع الإرسال المزدوج)."""
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    sess = FakeSession([requests.exceptions.ReadTimeout("slow response")])
+    c = _client(sess, max_retries=3)
+    res = c.send("msg")
+    assert res["ok"] is False
+    assert res["attempts"] == 1
+    assert "AMBIGUOUS" in res["error"]
+    assert len(sess.calls) == 1  # محاولة واحدة فقط
+
+
+def test_connect_timeout_is_retried_safely(monkeypatch):
+    """ConnectTimeout: الطلب لم يصل أصلًا — الإعادة آمنة ولا تسبب تكرارًا."""
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    sess = FakeSession([requests.exceptions.ConnectTimeout("no route"), FakeResponse(200)])
+    c = _client(sess, max_retries=3)
+    res = c.send("msg")
+    assert res["ok"] is True
+    assert res["attempts"] == 2
+
+
+def test_http200_ok_false_is_retried(monkeypatch):
+    """HTTP 200 مع ok:false → لم تُرسل → إعادة آمنة."""
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    sess = FakeSession([
+        FakeResponse(200, json_body={"ok": False, "description": "unknown"}),
+        FakeResponse(200, json_body={"ok": True}),
+    ])
+    c = _client(sess, max_retries=3)
+    res = c.send("msg")
+    assert res["ok"] is True
+    assert res["attempts"] == 2
+
+
+def test_delivered_helper():
+    from src.notify.telegram import delivered
+    assert delivered({"ok": True}) is True
+    assert delivered({"ok": False, "error": "AMBIGUOUS_READ_TIMEOUT_NO_RETRY: قد وصلت"}) is True
+    assert delivered({"ok": False, "error": "HTTP 500: boom"}) is False
+    assert delivered({"ok": False}) is False
 
 
 def test_missing_config_raises():

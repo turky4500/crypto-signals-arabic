@@ -18,7 +18,7 @@ from ..notify.formatter import (build_alert_message, build_resolution_message,
                                 build_sl_touch_message, format_time_12h,
                                 ts_to_riyadh)
 from ..notify.halal import ensure_verdict, refresh_if_stale, verdict_label
-from ..notify.telegram import TelegramClient
+from ..notify.telegram import TelegramClient, delivered
 from ..notify.weekly_report import (build_weekly_report_message,
                                     compute_weekly_analysis,
                                     compute_weekly_report, week_bounds)
@@ -234,7 +234,7 @@ class Monitor:
         )
         save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
 
-        if res.get("ok"):
+        if delivered(res):
             state["last_report_date"] = yesterday
             save_json(self._daily_report_state_path(), state)
         return {
@@ -323,7 +323,7 @@ class Monitor:
         )
         save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
 
-        if res.get("ok"):
+        if delivered(res):
             state["last_report_week"] = week_start
             save_json(self._weekly_report_state_path(), state)
         return {
@@ -369,7 +369,7 @@ class Monitor:
             return {"sent": False, "reason": "empty"}
 
         res = tg_owner.send(msg)
-        if res.get("ok"):
+        if delivered(res):
             pv_state["last_weekly_summary"] = week_key
             save_state(self.data_dir, pv_state)
         return {"sent": bool(res.get("ok")), "week": week_key,
@@ -443,7 +443,7 @@ class Monitor:
             )
             save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
 
-            if res.get("ok"):
+            if delivered(res):
                 notified.add(rec.get("signature"))
                 sent += 1
             else:
@@ -517,7 +517,7 @@ class Monitor:
             )
             save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
 
-            if res.get("ok"):
+            if delivered(res):
                 notified.add(rec.get("signature"))
                 sent += 1
             else:
@@ -1058,7 +1058,7 @@ class Monitor:
                     continue
                 pv_msg = build_preview_message(s_info.symbol, flip)
                 res_owner = tg_owner.send(pv_msg)
-                if res_owner.get("ok"):
+                if delivered(res_owner):
                     mark_sent(pv_state, sig, flip["close"], now_ms)
                     pv_today += 1
                     pv_stats["sent"] += 1
@@ -1070,7 +1070,8 @@ class Monitor:
                             "kind": "preview",
                             "candle_open_ms": flip["candle_open_ms"],
                             "message": pv_msg,
-                            "ok": True,
+                            "ok": res_owner.get("ok"),
+                            "error": res_owner.get("error"),
                             "channel": "telegram_owner",
                         },
                         500,
@@ -1098,7 +1099,7 @@ class Monitor:
                     }
                     pv_cmp_msg = build_comparison_message(sig.symbol, pv_ev, official)
                     cres = tg_owner.send(pv_cmp_msg)
-                    if cres.get("ok"):
+                    if delivered(cres):
                         mark_matched(pv_state, pv_sig, official, pv_ev)
                         pv_stats["comparisons"] += 1
                         notifications = append_capped(
@@ -1108,16 +1109,17 @@ class Monitor:
                                 "symbol": sig.symbol,
                                 "kind": "preview_comparison",
                                 "message": pv_cmp_msg,
-                                "ok": True,
+                                "ok": cres.get("ok"),
+                                "error": cres.get("error"),
                                 "channel": "telegram_owner",
                             },
                             500,
                         )
             res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"))
-            sig.whatsapp_status = "sent" if res.get("ok") else "failed"
-            sig.whatsapp_sent_at = int(time.time() * 1000) if res.get("ok") else None
+            sig.whatsapp_status = "sent" if delivered(res) else "failed"
+            sig.whatsapp_sent_at = int(time.time() * 1000) if delivered(res) else None
             sig.created_at_ms = int(time.time() * 1000)
-            if res.get("ok"):
+            if delivered(res):
                 sig.time_text = format_time_12h(ts_to_riyadh(sig.candle_close_ms))
 
             notifications = append_capped(

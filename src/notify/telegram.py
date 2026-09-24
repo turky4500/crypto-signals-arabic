@@ -17,6 +17,16 @@ class TelegramError(RuntimeError):
     pass
 
 
+def delivered(res: dict) -> bool:
+    """هل الرسالة مُسلّمة (ولن تُعاد)؟
+
+    النجاح مؤكد (ok) أو التسليم غامض (ReadTimeout: قد تكون وصلت فعلًا) — في
+    الحالتين لا نُعيد الإرسال مستقبلًا حتى لا يظهر تكرار لدى المستلم. الفشل
+    المؤكد فقط (لم تصل) لا يُعتبر مُسلّمًا فيُعاد.
+    """
+    return bool(res.get("ok")) or "AMBIGUOUS" in str(res.get("error") or "")
+
+
 class TelegramClient:
     def __init__(
         self,
@@ -55,7 +65,16 @@ class TelegramClient:
             return False, str(exc)[:200]
 
     def send(self, message: str) -> dict:
-        """إرسال رسالة نصية إلى chat_id مع Retry محدود — يمنع الإرسال المتكرر لنفس الفشل."""
+        """إرسال رسالة نصية إلى chat_id — سياسة «إرسال واحد مؤكد» بلا تكرار.
+
+        تلغرام لا يوفّر مفتاح تكرار (idempotency)، فالإعادة العمياء عند تأخر
+        الاستجابة تُوصّل نفس الرسالة مرتين للمستلم. القاعدة:
+        - HTTP 2xx مع ok:true → نجاح (وصلت مرة واحدة).
+        - HTTP غير 2xx أو ok:false → لم تصل أصلًا → إعادة آمنة.
+        - ConnectTimeout / ConnectionError → الطلب لم يصل → إعادة آمنة.
+        - ReadTimeout → غامض (الرسالة قد تكون وصلت) → لا إعادة أبدًا، ونُبلّغ
+          AMBIGUOUS ليُثبّت المرسل الشمعة كمرسلة ويُحبط تكرارًا محتملاً.
+        """
         payload = {"chat_id": self.chat_id, "text": message}
         last_error = "unknown"
         for attempt in range(1, self.max_retries + 1):
@@ -63,14 +82,34 @@ class TelegramClient:
                 resp = self.session.post(
                     self._method_url("sendMessage"),
                     json=payload,
-                    timeout=self.timeout,
+                    timeout=(10.0, self.timeout),  # (connect, read)
                 )
                 body = resp.text[:500]
-                if resp.status_code < 300:
+                ok_json = None
+                try:
+                    ok_json = bool(resp.json().get("ok", False))
+                except Exception:
+                    ok_json = None  # لا جسم JSON (مثل وسيط/اختبار) — نتعامل كنجاح مع 2xx
+                if resp.status_code < 300 and ok_json is not False:
                     logger.info("Telegram sent (attempt %s): HTTP %s", attempt, resp.status_code)
                     return {"ok": True, "attempts": attempt, "code": resp.status_code, "body": body}
-                last_error = f"HTTP {resp.status_code}: {body}"
-                logger.warning("Telegram HTTP %s (attempt %s)", resp.status_code, attempt)
+                # HTTP 2xx لكن ok:false (نادر) أو HTTP خطأ: لم تصل أصلًا → إعادة آمنة
+                if resp.status_code < 300:
+                    last_error = f"Telegram ok=false: {body}"
+                    logger.warning("Telegram ok=false (attempt %s)", attempt)
+                else:
+                    last_error = f"HTTP {resp.status_code}: {body}"
+                    logger.warning("Telegram HTTP %s (attempt %s)", resp.status_code, attempt)
+            except requests.exceptions.Timeout as exc:
+                # ConnectTimeout: الطلب لم يصل → إعادة آمنة.
+                # ReadTimeout: غامض (قد تكون الرسالة وصلت) → لا إعادة لتجنّب التكرار.
+                if isinstance(exc, requests.exceptions.ConnectTimeout):
+                    last_error = str(exc)
+                    logger.warning("Telegram connect timeout (attempt %s)", attempt)
+                else:
+                    logger.error("Telegram read timeout — غامض، لا إعادة لتجنّب التكرار")
+                    return {"ok": False, "attempts": attempt,
+                            "error": "AMBIGUOUS_READ_TIMEOUT_NO_RETRY: قد تكون الرسالة وصلت"}
             except requests.RequestException as exc:
                 last_error = str(exc)
                 logger.warning("Telegram request failed (attempt %s): %s", attempt, exc)
