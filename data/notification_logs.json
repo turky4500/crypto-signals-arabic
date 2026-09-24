@@ -1,23 +1,5 @@
 [
   {
-    "ts": 1789675994943,
-    "symbol": "RIFUSDT",
-    "indicator": "supertrend",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: RIFUSDT\n📊 الفريم: 1H\n📌 المؤشر: Supertrend\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.0827\n🎯 سعر الدخول: 0.0827\n🛑 وقف الخسارة: 0.0802\n🎯 الهدف: 0.0877\n📈 R:R: 1:2\n🕐 وقت الإشارة: 10:59 مساءً\n🇸🇦 توقيت السعودية",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fbcf4c4b020>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fbcf4c4bad0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fbcf4c4bda0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
-    "ts": 1789675608557,
-    "kind": "daily_report",
-    "day": "2026-09-16",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-16 (الأربعاء)\n\n🚨 إجمالي الإشارات: 8\n✅ تحقق الهدف: 3\n❌ ضرب الوقف: 2\n⏳ لم تُحسم بعد: 3\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 60.0% (من أصل 5 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 5 (✅1 ❌2 ⏳2)\n• AI Market Reader: 3 (✅2 ❌0 ⏳1)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fbcf58d8f80>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fbcf4a41ca0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fbcf4a42a80>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789676973922,
     "kind": "daily_report",
     "day": "2026-09-16",
@@ -4881,5 +4863,27 @@
     "error": null,
     "attempts": 1,
     "channel": "telegram"
+  },
+  {
+    "ts": 1790294077676,
+    "symbol": "CVCUSDT",
+    "kind": "preview",
+    "candle_open_ms": 1790292600000,
+    "message": "🔎 معاينة استكشافية\n🪙 العملة: CVCUSDT\n📊 سعر 15m: 0.03056\n🕐 وقت الشمعة: 2:44 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram_owner"
+  },
+  {
+    "ts": 1790294077676,
+    "symbol": "XUSDUSDT",
+    "kind": "preview",
+    "candle_open_ms": 1790292600000,
+    "message": "🔎 معاينة استكشافية\n🪙 العملة: XUSDUSDT\n📊 سعر 15m: 1.0006\n🕐 وقت الشمعة: 2:44 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram_owner"
   }
 ]
