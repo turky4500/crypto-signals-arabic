@@ -1,22 +1,5 @@
 [
   {
-    "signature": "STOUSDT|adx|1790150400000",
-    "symbol": "STOUSDT",
-    "indicator": "adx",
-    "entry": "0.0441",
-    "sl": "0.0428",
-    "tp": "0.0467",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790150400000,
-    "signal_close_ms": 1790153999999,
-    "deadline_ms": 1790758799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1790197199999,
-    "hit_price": 0.0423,
-    "created_ms": 1790154172390,
-    "source": "simulation"
-  },
-  {
     "signature": "STRAXUSDT|adx|1790150400000",
     "symbol": "STRAXUSDT",
     "indicator": "adx",
@@ -24524,9 +24507,9 @@
     "signal_open_ms": 1790161200000,
     "signal_close_ms": 1790164799999,
     "deadline_ms": 1790769599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790226333869,
+    "hit_price": 0.1748,
     "created_ms": 1790164869638,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790226208202,
+    "source": "simulation"
+  },
+  {
+    "signature": "SFPUSDT|macd|1790222400000",
+    "symbol": "SFPUSDT",
+    "indicator": "macd",
+    "entry": "0.2968",
+    "sl": "0.2893",
+    "tp": "0.3118",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790222400000,
+    "signal_close_ms": 1790225999999,
+    "deadline_ms": 1790830799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790226455914,
     "source": "simulation"
   }
 ]
