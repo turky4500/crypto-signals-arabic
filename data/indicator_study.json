@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ALABBUSDT|ichimoku|1790157600000",
-    "symbol": "ALABBUSDT",
-    "indicator": "ichimoku",
-    "entry": "357.96",
-    "sl": "352.62",
-    "tp": "368.64",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790157600000,
-    "signal_close_ms": 1790161199999,
-    "deadline_ms": 1790765999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790161265806,
-    "source": "simulation"
-  },
-  {
     "signature": "ALABBUSDT|adx|1790157600000",
     "symbol": "ALABBUSDT",
     "indicator": "adx",
@@ -56212,9 +56195,9 @@
     "signal_open_ms": 1790204400000,
     "signal_close_ms": 1790207999999,
     "deadline_ms": 1790812799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790239273927,
+    "hit_price": 35.61,
     "created_ms": 1790208186890,
     "source": "simulation"
   },
@@ -57657,9 +57640,9 @@
     "signal_open_ms": 1790208000000,
     "signal_close_ms": 1790211599999,
     "deadline_ms": 1790816399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790239273927,
+    "hit_price": 35.16,
     "created_ms": 1790211781113,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790237077517,
+    "source": "simulation"
+  },
+  {
+    "signature": "CTKUSDT|adx|1790233200000",
+    "symbol": "CTKUSDT",
+    "indicator": "adx",
+    "entry": "0.1305",
+    "sl": "0.1272",
+    "tp": "0.1371",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790233200000,
+    "signal_close_ms": 1790236799999,
+    "deadline_ms": 1790841599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790239315061,
     "source": "simulation"
   }
 ]
