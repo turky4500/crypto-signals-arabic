@@ -1,23 +1,5 @@
 [
   {
-    "ts": 1789703414116,
-    "kind": "daily_report",
-    "day": "2026-09-17",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-17 (الخميس)\n\n🚨 إجمالي الإشارات: 13\n✅ تحقق الهدف: 4\n❌ ضرب الوقف: 1\n⏳ لم تُحسم بعد: 8\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 80.0% (من أصل 5 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 6 (✅1 ❌0 ⏳5)\n• AI Market Reader: 7 (✅3 ❌1 ⏳3)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f0b83e60470>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f0b83e60f20>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f0b8415b650>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
-    "ts": 1789704739511,
-    "symbol": "1INCHUSDT",
-    "indicator": "ai",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: 1INCHUSDT\n📊 الفريم: 1H\n📌 المؤشر: AI Market Reader\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.0930\n🎯 سعر الدخول: 0.0930\n🛑 وقف الخسارة: 0.0908\n🎯 الهدف: 0.0974\n📈 R:R: 1:2\n🤖 ثقة AI: 100.0%\n🕐 وقت الإشارة: 6:59 صباحًا\n🇸🇦 توقيت السعودية",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3f8780f440>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3f878b8860>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3f87ab35f0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789705006175,
     "symbol": "CRVUSDT",
     "indicator": "ai",
@@ -4935,6 +4917,30 @@
     "indicator": "ai",
     "status": "pending",
     "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: SOMIUSDT\nوصلت العملة إلى سعر الوقف (0.1929) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.1935\n🎯 سعر الدخول: 0.1976\n🛑 سعر الوقف: 0.1929\n🎯 الهدف: 0.2070\n🕐 وقت اللمسة: 5:59 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790306732619,
+    "kind": "sl_touch",
+    "symbol": "GENIUSUSDT",
+    "indicator": "ai",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: GENIUSUSDT\nوصلت العملة إلى سعر الوقف (0.3459) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.3459\n🎯 سعر الدخول: 0.3593\n🛑 سعر الوقف: 0.3459\n🎯 الهدف: 0.3861\n🕐 وقت اللمسة: 6:25 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790306732619,
+    "kind": "sl_touch",
+    "symbol": "MIRAUSDT",
+    "indicator": "ai",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: MIRAUSDT\nوصلت العملة إلى سعر الوقف (0.05416) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.05414\n🎯 سعر الدخول: 0.05638\n🛑 سعر الوقف: 0.05416\n🎯 الهدف: 0.06082\n🕐 وقت اللمسة: 6:25 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
