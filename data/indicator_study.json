@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BEAMXUSDT|rsi50|1790254800000",
-    "symbol": "BEAMXUSDT",
-    "indicator": "rsi50",
-    "entry": "0.001951",
-    "sl": "0.001851",
-    "tp": "0.002151",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790254800000,
-    "signal_close_ms": 1790258399999,
-    "deadline_ms": 1790863199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790258495639,
-    "source": "simulation"
-  },
-  {
     "signature": "BEAMXUSDT|adx|1790254800000",
     "symbol": "BEAMXUSDT",
     "indicator": "adx",
@@ -29250,9 +29233,9 @@
     "signal_open_ms": 1790265600000,
     "signal_close_ms": 1790269199999,
     "deadline_ms": 1790873999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790295337289,
+    "hit_price": 199.03,
     "created_ms": 1790269459502,
     "source": "simulation"
   },
@@ -38379,9 +38362,9 @@
     "signal_open_ms": 1790269200000,
     "signal_close_ms": 1790272799999,
     "deadline_ms": 1790877599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790295337289,
+    "hit_price": 198.66,
     "created_ms": 1790272934763,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790294835917,
+    "source": "simulation"
+  },
+  {
+    "signature": "AWEUSDT|adx|1790290800000",
+    "symbol": "AWEUSDT",
+    "indicator": "adx",
+    "entry": "0.06483",
+    "sl": "0.06360",
+    "tp": "0.06729",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790290800000,
+    "signal_close_ms": 1790294399999,
+    "deadline_ms": 1790899199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790295359282,
     "source": "simulation"
   }
 ]
