@@ -1,4 +1,4 @@
-﻿"""اختبار تكاملي للمركّب (Monitor) بعميل Binance وهمي:
+"""اختبار تكاملي للمركّب (Monitor) بعميل Binance وهمي:
 - الشمعة المغلقة فقط (تجاهل قيد التكوّن)
 - منع الإرسال المكرر عبر تشغيلين
 - ملفات البيانات/الحالة/الإحصاءات
@@ -118,7 +118,8 @@ def make_flip_candles(n=140, start=500.0, step=2.0):
     return ks
 
 
-def _make_monitor(tmp_path, candles, server=None, filter_enabled=False):
+def _make_monitor(tmp_path, candles, server=None, filter_enabled=False,
+                  one_open_per_symbol=True):
     data_dir = tmp_path / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "settings.json").write_text(
@@ -126,6 +127,7 @@ def _make_monitor(tmp_path, candles, server=None, filter_enabled=False):
             "monitoring": {
                 "history_candles": 200,
                 "min_24h_quote_volume_usdt": 1.0,
+                "one_open_per_symbol": one_open_per_symbol,
             },
             "momentum_filter": {"enabled": filter_enabled,
                 "h4_ret5_max_supertrend": 100.0},
@@ -756,3 +758,155 @@ def test_whatsapp_down_without_telegram_fails_honestly(tmp_path):
     sig_logs = [ln for ln in logs if ln.get("symbol") == "BTCUSDT"]
     assert sig_logs and all(ln.get("ok") is False for ln in sig_logs)
     assert all(ln.get("channel") is None for ln in sig_logs)
+
+
+# ------------- توصية واحدة مفتوحة لكل عملة (one_open_per_symbol) ------------- #
+def _seed_open_rec(data_dir, symbol="BTCUSDT", status="pending", wa="sent",
+                   deadline_offset_ms=6 * 86_400_000, tp=10_000_000.0, sl=0.0001):
+    """توصية سابقة على العملة (افتراضيًا: وصلت المشترك وما زالت معلّقة)."""
+    now = int(time.time() * 1000)
+    open_ms = now - 5 * 3_600_000
+    rec = {
+        "signature": f"{symbol}|ai|BUY|{open_ms}",
+        "symbol": symbol, "indicator": "ai",
+        "entry": "5.0", "sl": str(sl), "tp": str(tp), "rr_ratio": 2.0,
+        "signal_open_ms": open_ms, "signal_close_ms": open_ms + 3_599_999,
+        "deadline_ms": now + deadline_offset_ms,
+        "status": status, "resolved_at_ms": None, "hit_price": None,
+        "created_ms": now - 4 * 3_600_000, "filtered": True,
+        "whatsapp_status": wa,
+    }
+    (data_dir / "performance.json").write_text(json.dumps([rec]), encoding="utf-8")
+    return rec
+
+
+def _signals(data_dir):
+    p = data_dir / "signals.json"
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
+
+
+def _blocked_candidates(data_dir):
+    cands = json.loads((data_dir / "candidate_study.json").read_text(encoding="utf-8"))
+    return [c for c in cands if c.get("reason") == "open_position"]
+
+
+def test_open_recommendation_blocks_new_signal_same_symbol(tmp_path):
+    """توصية مفتوحة (وصلت ولم تُحسم) -> لا تُرسل توصية جديدة لنفس العملة."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"])
+    rec = _seed_open_rec(data_dir)
+    summary = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    assert summary["ok"] is True
+    assert summary["new_signals"] == 0
+    assert summary["open_position_blocked"] == 1
+    assert _signals(data_dir) == []
+    blocked = _blocked_candidates(data_dir)
+    assert len(blocked) == 1
+    assert blocked[0]["verdict"] == "blocked"
+    assert blocked[0]["blocked_by"] == rec["signature"]
+    # لوحة التحكم لا تعرض دخولًا لإشارة محجوبة
+    rows = json.loads((data_dir / "current_signals.json").read_text(encoding="utf-8"))
+    assert rows[0]["entry"] == "—" and rows[0]["blocked_reason"] == "open_position"
+    # التوصية الأولى ما زالت معلّقة
+    assert _rec_for(data_dir, rec["signature"])["status"] == "pending"
+
+
+def test_undelivered_open_recommendation_does_not_block(tmp_path):
+    """توصية فشل تسليمها لم يرها المشترك -> لا تحجب."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"])
+    _seed_open_rec(data_dir, wa="failed")
+    summary = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    assert summary["new_signals"] == 1
+    assert _blocked_candidates(data_dir) == []
+
+
+def test_resolved_recommendation_does_not_block(tmp_path):
+    """التوصية السابقة حققت الهدف -> العملة متاحة لتوصية جديدة."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"])
+    _seed_open_rec(data_dir, status="tp_hit")
+    assert mon.run(env={}, limit_symbols=1, no_whatsapp=True)["new_signals"] == 1
+
+
+def test_expired_recommendation_does_not_block(tmp_path):
+    """انتهت مدة التوصية السابقة (تجاوزت المهلة) -> لا تحجب حتى قبل تعليمها expired."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"])
+    _seed_open_rec(data_dir, deadline_offset_ms=-60_000)
+    assert mon.run(env={}, limit_symbols=1, no_whatsapp=True)["new_signals"] == 1
+
+
+def test_recommendation_resolving_in_same_run_frees_symbol(tmp_path):
+    """التوصية السابقة تحقق هدفها في نفس التشغيل -> تُحسم أولًا ثم تُرسل الجديدة."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"])
+    live = float(candles["BTCUSDT"][-1]["close"])
+    rec = _seed_open_rec(data_dir, tp=round(live * 0.95, 2))
+    summary = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    assert summary["new_signals"] == 1
+    assert _rec_for(data_dir, rec["signature"])["status"] == "tp_hit"
+
+
+def test_open_recommendation_on_other_symbol_does_not_block(tmp_path):
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"])
+    _seed_open_rec(data_dir, symbol="ETHUSDT")
+    assert mon.run(env={}, limit_symbols=1, no_whatsapp=True)["new_signals"] == 1
+
+
+def test_one_open_per_symbol_can_be_disabled(tmp_path):
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"],
+                                  one_open_per_symbol=False)
+    _seed_open_rec(data_dir)
+    assert mon.run(env={}, limit_symbols=1, no_whatsapp=True)["new_signals"] == 1
+
+
+def test_blocked_signal_is_never_sent_late(tmp_path):
+    """حُجبت الإشارة، ثم حُسمت التوصية الأولى قبل التشغيل التالي لنفس الشمعة
+    -> لا تُرسل الإشارة المحجوبة متأخرة بسعر دخول قديم."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    server = candles["BTCUSDT"][-1]["close_time"]
+    mon, data_dir = _make_monitor(tmp_path, candles, server=server)
+    rec = _seed_open_rec(data_dir)
+    assert mon.run(env={}, limit_symbols=1, no_whatsapp=True)["new_signals"] == 0
+
+    perf = json.loads((data_dir / "performance.json").read_text(encoding="utf-8"))
+    for r in perf:
+        if r["signature"] == rec["signature"]:
+            r.update({"status": "tp_hit", "resolved_at_ms": int(time.time() * 1000),
+                      "hit_price": float(r["tp"])})
+    (data_dir / "performance.json").write_text(json.dumps(perf), encoding="utf-8")
+
+    mon2, _ = _make_monitor(tmp_path, candles, server=server)
+    summary2 = mon2.run(env={}, limit_symbols=1, no_whatsapp=True)
+    assert summary2["new_signals"] == 0
+    assert _signals(data_dir) == []
+    assert len(_blocked_candidates(data_dir)) == 1
+
+
+def test_two_sources_same_symbol_same_run_sends_only_first(tmp_path):
+    """مصدران على نفس العملة في نفس التشغيل -> تُرسل الأولى فقط وتُحجب الثانية."""
+    import dataclasses
+
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles, server=candles["BTCUSDT"][-1]["close_time"])
+    real = mon._process_symbol
+
+    def twice(*a, **kw):
+        row, signals_out, panel, paper, candidates_out = real(*a, **kw)
+        if signals_out:
+            s2 = dataclasses.replace(signals_out[0], indicator="bollinger")
+            c2 = dict(candidates_out[0], signature=s2.signature(), indicator="bollinger")
+            signals_out = list(signals_out) + [s2]
+            candidates_out = list(candidates_out) + [c2]
+        return row, signals_out, panel, paper, candidates_out
+
+    mon._process_symbol = twice
+    summary = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    assert summary["new_signals"] == 1
+    assert summary["open_position_blocked"] == 1
+    assert len(_signals(data_dir)) == 1
+    blocked = _blocked_candidates(data_dir)
+    assert len(blocked) == 1 and blocked[0]["indicator"] == "bollinger"

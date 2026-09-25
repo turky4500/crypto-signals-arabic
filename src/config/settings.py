@@ -8,6 +8,11 @@ DEFAULT_SETTINGS = {
         "history_candles": 400,
         "min_24h_quote_volume_usdt": 100000,
         "timezone": "Asia/Riyadh",
+        # توصية واحدة مفتوحة لكل عملة: لا تُرسل توصية جديدة لعملة لديها توصية
+        # وصلت المشترك وما زالت معلّقة (لم تحقق الهدف، ولم تضرب الوقف، ولم تنتهِ
+        # مدتها). الإشارة المحجوبة تُسجَّل في دراسة المرشّحات بسبب open_position
+        # ولا تُرسل لاحقًا متأخرة. للإيقاف: false في data/settings.json.
+        "one_open_per_symbol": True,
     },
     "supertrend": {
         "atr_period": 10,

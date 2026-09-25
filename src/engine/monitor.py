@@ -104,6 +104,25 @@ def _empty_stats():
     }
 
 
+def _open_recommendation(recs: list, now_ms: int) -> dict | None:
+    """أول توصية «مفتوحة» لعملة: وصلت المشترك (whatsapp_status == sent) وما زالت
+    معلّقة — لم تحقق الهدف، ولم تضرب الوقف، ولم تنتهِ مدتها (deadline).
+
+    - التوصية التي فشل تسليمها لا تحجب: المشترك لم يرها، فلا لبس.
+    - تجاوز المهلة يُعامل كانتهاء فورًا (mark_expired يعلّمها آخر التشغيل فقط).
+    """
+    for r in recs or []:
+        if r.get("status") != "pending":
+            continue
+        if r.get("whatsapp_status") != "sent":
+            continue
+        deadline = r.get("deadline_ms")
+        if deadline is not None and int(deadline) <= int(now_ms):
+            continue
+        return r
+    return None
+
+
 class Monitor:
     def __init__(self, base_dir: str):
         self.base_dir = base_dir
@@ -923,6 +942,12 @@ class Monitor:
             if _r.get("status") == "pending":
                 perf_pending_map.setdefault(_r["symbol"], []).append(_r)
 
+        # ---- توصية واحدة مفتوحة لكل عملة (يقلل الرسائل ويزيل اللبس) ----
+        one_open = bool(self.settings.get("monitoring", {})
+                        .get("one_open_per_symbol", True))
+        opened_this_run: set = set()  # عملات نُشرت لها توصية في هذا التشغيل
+        open_blocked = 0
+
         # ---- سجل دراسة المؤشرات (صفقات محاكاة) ----
         study_cfg = self.settings.get("indicators_study", {})
         study_enabled = study_cfg.get("enabled", True)
@@ -941,6 +966,13 @@ class Monitor:
         for _r in candidates_study:
             if _r.get("status") == "pending":
                 candidates_pending_map.setdefault(_r["symbol"], []).append(_r)
+
+        # الإشارة التي حُجبت بسبب توصية مفتوحة لا تُرسل لاحقًا متأخرة (بسعر دخول
+        # قديم) إن حُسمت التوصية الأولى في تشغيل تالٍ لنفس الشمعة.
+        suppressed_sigs = {
+            _r.get("signature") for _r in candidates_study
+            if _r.get("reason") == "open_position" and _r.get("signature")
+        }
 
         rows_map = {}
         new_signals = []
@@ -999,12 +1031,44 @@ class Monitor:
                             if _p.get("signature") not in study_seen:
                                 study_seen.add(_p.get("signature"))
                                 study.append(_p)
+                blocked_here = False
                 for sig in signals_out:
-                    if not guard.is_duplicate(sig.signature()):
-                        guard.add(sig.signature())
-                        new_signals.append(sig)
+                    key = sig.signature()
+                    if key in suppressed_sigs:
+                        blocked_here = True  # حُجبت سابقًا — تبقى محجوبة
+                        continue
+                    if guard.is_duplicate(key):
+                        continue
+                    guard.add(key)
+                    if one_open:
+                        blocker = _open_recommendation(
+                            perf_pending_map.get(s_info.symbol, []), now_ms)
+                        if blocker is not None or s_info.symbol in opened_this_run:
+                            blocked_here = True
+                            open_blocked += 1
+                            suppressed_sigs.add(key)
+                            for _c in candidates_out:
+                                if _c is not None and _c.get("signature") == key:
+                                    _c["verdict"] = "blocked"
+                                    _c["reason"] = "open_position"
+                                    _c["blocked_by"] = (blocker or {}).get("signature")
+                            logger.info(
+                                "%s: حُجبت إشارة %s — توجد توصية مفتوحة على العملة (%s)",
+                                s_info.symbol, sig.indicator,
+                                (blocker or {}).get("signature") or "نُشرت في هذا التشغيل",
+                            )
+                            continue
+                    new_signals.append(sig)
+                    opened_this_run.add(s_info.symbol)
+                # لوحة التحكم: لا تعرض دخولًا/هدفًا لإشارة محجوبة كأنها أُرسلت
+                if blocked_here and s_info.symbol not in opened_this_run:
+                    row = dict(row)
+                    row.update({"entry": "—", "sl": "—", "tp": "—",
+                                "blocked_reason": "open_position"})
+                    rows_map[s_info.symbol] = row
 
         status["market_data_connected"] = bool(monitored) and processed > 0
+        status["open_position_blocked"] = open_blocked
         status["monitoring_active"] = True
 
         # ---- WhatsApp + تسجيل الإشارات الجديدة ----
@@ -1310,6 +1374,7 @@ class Monitor:
             "errors": errors,
             "errors_count": len(errors),
             "new_signals": len(new_signals),
+            "open_position_blocked": open_blocked,
             "whatsapp_connected": status["whatsapp_connected"],
             "telegram_connected": status.get("telegram_connected", False),
             "duration_s": round(time.time() - started, 2),
