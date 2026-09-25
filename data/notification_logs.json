@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789705514260,
-    "symbol": "ZILUSDT",
-    "indicator": "ai",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: ZILUSDT\n📊 الفريم: 1H\n📌 المؤشر: AI Market Reader\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.002953\n🎯 سعر الدخول: 0.002953\n🛑 وقف الخسارة: 0.002839\n🎯 الهدف: 0.003181\n📈 R:R: 1:2\n🤖 ثقة AI: 76.8%\n🕐 وقت الإشارة: 6:59 صباحًا\n🇸🇦 توقيت السعودية",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3f878b8b00>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3f8780e6c0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3f87889550>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789704306921,
     "kind": "daily_report",
     "day": "2026-09-17",
@@ -4943,6 +4934,18 @@
     "symbol": "VIRTUALUSDT",
     "indicator": "ai",
     "message": "🚨 إشارة شراء جديدة\n🪙 العملة: VIRTUALUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.7584\n🎯 سعر الدخول: 0.7584\n🛑 وقف الخسارة: 0.7167\n🎯 الهدف: 0.8418\n📈 R:R: 1:2\n🕐 وقت الإشارة: 8:59 صباحًا\n─────────────\nالحكم الشرعي: ℹ️ لا يوجد حكم",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790316929687,
+    "kind": "sl_touch",
+    "symbol": "CHIPUSDT",
+    "indicator": "ai",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: CHIPUSDT\nوصلت العملة إلى سعر الوقف (0.04581) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.04578\n🎯 سعر الدخول: 0.04860\n🛑 سعر الوقف: 0.04581\n🎯 الهدف: 0.05418\n🕐 وقت اللمسة: 9:15 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
