@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789751555453,
-    "symbol": "MTLUSDT",
-    "indicator": "ai",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: MTLUSDT\n📊 الفريم: 1H\n📌 المؤشر: AI Market Reader\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.293\n🎯 سعر الدخول: 0.293\n🛑 وقف الخسارة: 0.285\n🎯 الهدف: 0.309\n📈 R:R: 1:2\n🤖 ثقة AI: 88.7%\n🕐 وقت الإشارة: 7:59 مساءً\n🇸🇦 توقيت السعودية",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fb5d9ee2b70>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fb5d9ee3620>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fb5d9ee34a0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789751144648,
     "kind": "daily_report",
     "day": "2026-09-17",
@@ -5043,6 +5034,18 @@
     "indicator": "ai",
     "status": "tp_hit",
     "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: SPELLUSDT\n💰 سعر الدخول: 0.0000930\n🎯 الهدف: تحقق عند 9.78e-05\n📈 الأرباح: +2R (+5.16%)\n⏱ المدة: 21 ساعة و10 دقائق\n🕐 وقت الإشارة: 9:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790353234459,
+    "kind": "resolution",
+    "symbol": "SPKUSDT",
+    "indicator": "ai",
+    "status": "tp_hit",
+    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: SPKUSDT\n💰 سعر الدخول: 0.022372\n🎯 الهدف: تحقق عند 0.025112\n📈 الأرباح: +2R (+12.25%)\n⏱ المدة: 8 ساعات و20 دقيقة\n🕐 وقت الإشارة: 10:59 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
