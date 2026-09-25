@@ -1,33 +1,33 @@
 {
   "monitored_symbols": 481,
-  "signals_today": 21,
-  "supertrend_today": 4,
-  "ai_today": 17,
+  "signals_today": 25,
+  "supertrend_today": 5,
+  "ai_today": 20,
   "strong_today": 0,
   "bollinger_today": 0,
   "last_signal": {
-    "symbol": "VIRTUALUSDT",
+    "symbol": "SPKUSDT",
     "indicator": "ai",
     "signal_type": "BUY",
-    "candle_open_ms": 1790312400000,
-    "candle_close_ms": 1790315999999,
-    "signal_price": 0.7584,
-    "entry": "0.7584",
-    "sl": "0.7167",
-    "tp": "0.8418",
+    "candle_open_ms": 1790319600000,
+    "candle_close_ms": 1790323199999,
+    "signal_price": 0.022372,
+    "entry": "0.022372",
+    "sl": "0.021002",
+    "tp": "0.025112",
     "rr_ratio": 2.0,
-    "confidence": 0.7594,
+    "confidence": 0.9162,
     "ema_trend": "bullish",
     "volume_ok": true,
-    "time_text": "8:59 صباحًا",
-    "created_at_ms": 1790316204988,
+    "time_text": "10:59 صباحًا",
+    "created_at_ms": 1790323427541,
     "whatsapp_status": "sent",
-    "whatsapp_sent_at": 1790316204988,
+    "whatsapp_sent_at": 1790323427541,
     "filter_rejected": false,
     "filter_info": {
-      "h4_ret5": 2.14,
+      "h4_ret5": 10.82,
       "h4_ret5_min": 2.0,
-      "h1_rsi": 29.7,
+      "h1_rsi": 45.1,
       "h1_rsi_max": 70.0,
       "d1_above_ema50": true,
       "h4_in_uptrend": true,
@@ -35,20 +35,20 @@
       "h1_rsi_ok": true,
       "accepted": true
     },
-    "signature": "VIRTUALUSDT|ai|BUY|1790312400000"
+    "signature": "SPKUSDT|ai|BUY|1790319600000"
   },
-  "last_check": 1790322924323,
+  "last_check": 1790323242545,
   "data_date": "2026-09-25",
   "filter_meta": {
     "enabled": true,
     "activated_ms": 1789124605224,
     "filtered_stats": {
-      "total": 251,
-      "tp_hit": 87,
+      "total": 255,
+      "tp_hit": 88,
       "sl_hit": 37,
-      "pending": 124,
+      "pending": 127,
       "expired": 3,
-      "win_rate": 70.2,
+      "win_rate": 70.4,
       "activated_ms": 1789124605224
     }
   },
@@ -56,78 +56,78 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 490,
-        "tp_hit": 30,
-        "sl_hit": 20,
-        "pending": 440,
+        "total": 486,
+        "tp_hit": 26,
+        "sl_hit": 17,
+        "pending": 443,
         "expired": 0,
-        "win_rate": 60.0
+        "win_rate": 60.5
       },
       "awesome": {
-        "total": 94,
-        "tp_hit": 1,
+        "total": 80,
+        "tp_hit": 3,
         "sl_hit": 3,
-        "pending": 90,
+        "pending": 74,
         "expired": 0,
-        "win_rate": 25.0
+        "win_rate": 50.0
       },
       "macd": {
-        "total": 79,
+        "total": 97,
         "tp_hit": 2,
-        "sl_hit": 4,
-        "pending": 73,
+        "sl_hit": 5,
+        "pending": 90,
         "expired": 0,
-        "win_rate": 33.3
+        "win_rate": 28.6
       },
       "bollinger": {
-        "total": 16,
+        "total": 19,
         "tp_hit": 0,
         "sl_hit": 0,
-        "pending": 16,
+        "pending": 19,
         "expired": 0,
         "win_rate": null
       },
       "rsi50": {
-        "total": 298,
-        "tp_hit": 1,
-        "sl_hit": 1,
-        "pending": 296,
+        "total": 344,
+        "tp_hit": 2,
+        "sl_hit": 3,
+        "pending": 339,
         "expired": 0,
-        "win_rate": 50.0
+        "win_rate": 40.0
       },
       "adx": {
-        "total": 4023,
-        "tp_hit": 141,
-        "sl_hit": 82,
-        "pending": 3800,
+        "total": 3974,
+        "tp_hit": 139,
+        "sl_hit": 71,
+        "pending": 3764,
         "expired": 0,
-        "win_rate": 63.2
+        "win_rate": 66.2
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
-    "total": 4495,
+    "added_this_run": 9,
+    "total": 4504,
     "no_filter": {
-      "total": 4495,
-      "resolved": 3506,
-      "pending": 949,
+      "total": 4504,
+      "resolved": 3509,
+      "pending": 955,
       "expired": 40,
-      "tp_hit": 2470,
+      "tp_hit": 2473,
       "sl_hit": 1036,
-      "win_rate": 0.7045,
-      "ev_per_trade": 1.1135
+      "win_rate": 0.7048,
+      "ev_per_trade": 1.1144
     },
     "with_filter": {
-      "total": 222,
-      "resolved": 96,
-      "pending": 124,
+      "total": 226,
+      "resolved": 97,
+      "pending": 127,
       "expired": 2,
-      "tp_hit": 76,
+      "tp_hit": 77,
       "sl_hit": 20,
-      "win_rate": 0.7917,
-      "ev_per_trade": 1.3751
+      "win_rate": 0.7938,
+      "ev_per_trade": 1.3814
     },
     "with_consensus_ge3": {
       "total": 150,
@@ -140,20 +140,20 @@
       "ev_per_trade": 1.2422
     },
     "blocked": {
-      "total": 4273,
-      "resolved": 3410,
-      "pending": 825,
+      "total": 4278,
+      "resolved": 3412,
+      "pending": 828,
       "expired": 38,
-      "tp_hit": 2394,
+      "tp_hit": 2396,
       "sl_hit": 1016,
-      "win_rate": 0.7021,
-      "ev_per_trade": 1.1063
+      "win_rate": 0.7022,
+      "ev_per_trade": 1.1066
     },
     "by_reason": {
       "bollinger_live_off": {
-        "total": 1186,
+        "total": 1189,
         "resolved": 788,
-        "pending": 398,
+        "pending": 401,
         "expired": 0,
         "tp_hit": 551,
         "sl_hit": 237,
@@ -161,24 +161,24 @@
         "ev_per_trade": 1.0976
       },
       "filter": {
-        "total": 3052,
-        "resolved": 2616,
+        "total": 3054,
+        "resolved": 2618,
         "pending": 398,
         "expired": 38,
-        "tp_hit": 1839,
+        "tp_hit": 1841,
         "sl_hit": 777,
-        "win_rate": 0.703,
-        "ev_per_trade": 1.109
+        "win_rate": 0.7032,
+        "ev_per_trade": 1.1096
       },
       "filter_ok": {
-        "total": 222,
-        "resolved": 96,
-        "pending": 124,
+        "total": 226,
+        "resolved": 97,
+        "pending": 127,
         "expired": 2,
-        "tp_hit": 76,
+        "tp_hit": 77,
         "sl_hit": 20,
-        "win_rate": 0.7917,
-        "ev_per_trade": 1.3751
+        "win_rate": 0.7938,
+        "ev_per_trade": 1.3814
       },
       "supertrend_momentum_cap": {
         "total": 35,
