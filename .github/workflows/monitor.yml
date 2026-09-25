@@ -37,6 +37,18 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Sync to latest main (قاعدة طازجة تمنع الجولات الشبح)
+        run: |
+          # الجولات تُنفَّذ متسلسلة، لكن checkout يثبّت نسخة لحظة الاستدعاء —
+          # فإن تحرك main بعدها (جولة سابقة دفعت متأخرة) أصبح الدفع مرفوضًا
+          # والـ rebase متصادمًا حتمًا (نفس ملفات JSON تُكتب كل جولة) فتضيع
+          # البيانات بصمت بعد أن تكون الرسائل قد أُرسلت فعلًا (جولة شبح →
+          # رسائل مكررة). المزامنة هنا لحظة بدء التنفيذ تضمن قاعدة طازجة
+          # ودفع fast-forward ناجحًا دائمًا (كاتب واحد متسلسل).
+          git fetch origin main -q
+          git reset --hard origin/main -q
+          echo "base: $(git rev-parse --short HEAD) $(git log -1 --format=%ad --date=format:'%H:%M:%S')"
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -54,9 +66,9 @@ jobs:
           DIFF=$(( (NOW - LAST) / 1000 ))
           echo "diff_seconds=$DIFF"
           if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$DIFF" -lt 270 ]; then
-            echo "STILL_FRESH=true"
+            echo "STILL_FRESH=true" >> "$GITHUB_OUTPUT"
           else
-            echo "STILL_FRESH=false"
+            echo "STILL_FRESH=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run monitor
@@ -82,11 +94,14 @@ jobs:
           # الدفع الآمن: نلتزم تغييراتنا (data فقط) ثم ندفع، وإن سبقنا أحد (دفعة
           # خارجية أو دورة أخرى) نُعيد تطبيق التزامنا عبر pull --rebase بدلًا من
           # reset --soft — حتى لا نُرجع أبدًا src/ أو بيانات غيّرها غيرنا.
+          # مهم: الفشل هنا يُفشل الجولة صراحةً (exit 1) — فلا ضياع صامت للبيانات
+          # بعد إرسال الرسائل (الجولات الشبح كانت تنجح ظاهريًا وتسبب التكرار).
           git add data/
           git diff --cached --quiet && { echo "no data changes"; exit 0; }
           git commit -q -m "chore(data): تحديث بيانات المراقبة والإشارات" || true
+          PUSHED=false
           for i in 1 2 3; do
-            if git push origin HEAD:main -q; then echo "data committed"; break; fi
+            if git push origin HEAD:main -q; then echo "data committed"; PUSHED=true; break; fi
             echo "push race — pull --rebase ثم إعادة المحاولة ($i)"
             git fetch origin main -q
             if ! git pull --rebase origin main -q; then
@@ -94,6 +109,10 @@ jobs:
               sleep 5
             fi
           done
+          if [ "$PUSHED" != "true" ]; then
+            echo "::error::فشل دفع بيانات data/ بعد 3 محاولات — البيانات غير محفوظة!"
+            exit 1
+          fi
 
       - name: Assemble static site (web + data)
         if: steps.freshness.outputs.STILL_FRESH != 'true'
