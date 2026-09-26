@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ARKMUSDT|macd|1790406000000",
-    "symbol": "ARKMUSDT",
-    "indicator": "macd",
-    "entry": "0.1382",
-    "sl": "0.1334",
-    "tp": "0.1478",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790406000000,
-    "signal_close_ms": 1790409599999,
-    "deadline_ms": 1791014399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790409666037,
-    "source": "simulation"
-  },
-  {
     "signature": "ARKMUSDT|adx|1790406000000",
     "symbol": "ARKMUSDT",
     "indicator": "adx",
@@ -9377,9 +9360,9 @@
     "signal_open_ms": 1790409600000,
     "signal_close_ms": 1790413199999,
     "deadline_ms": 1791017999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790442338238,
+    "hit_price": 0.01699,
     "created_ms": 1790413284334,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790442184824,
+    "source": "simulation"
+  },
+  {
+    "signature": "BANDUSDT|adx|1790438400000",
+    "symbol": "BANDUSDT",
+    "indicator": "adx",
+    "entry": "0.2284",
+    "sl": "0.2252",
+    "tp": "0.2348",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790438400000,
+    "signal_close_ms": 1790441999999,
+    "deadline_ms": 1791046799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790442360665,
     "source": "simulation"
   }
 ]
