@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789822188003,
-    "kind": "daily_report",
-    "day": "2026-09-18",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-18 (الجمعة)\n\n🚨 إجمالي الإشارات: 22\n✅ تحقق الهدف: 12\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 10\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 12 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 7 (✅1 ❌0 ⏳6)\n• AI Market Reader: 15 (✅11 ❌0 ⏳4)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fefd2ae4980>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fefd2ae5430>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fefd2aaf530>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789823025207,
     "kind": "daily_report",
     "day": "2026-09-18",
@@ -5238,6 +5229,18 @@
     "indicator": "supertrend",
     "status": "sl_hit",
     "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: AVAUSDT\n💰 سعر الدخول: 0.2714\n🛑 الوقف: ضُرب عند 0.2499\n📉 الخسارة: -1R (-7.92%)\n⏱ المدة: يوم واحد و6 ساعات\n🕐 وقت الإشارة: 3:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790452528098,
+    "kind": "resolution",
+    "symbol": "IOSTUSDT",
+    "indicator": "supertrend",
+    "status": "tp_hit",
+    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: IOSTUSDT\n💰 سعر الدخول: 0.000929\n🎯 الهدف: تحقق عند 0.001023\n📈 الأرباح: +2R (+10.12%)\n⏱ المدة: يوم واحد و21 ساعة\n🕐 وقت الإشارة: 12:59 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
