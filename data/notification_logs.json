@@ -1,23 +1,5 @@
 [
   {
-    "ts": 1789820456392,
-    "kind": "daily_report",
-    "day": "2026-09-18",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-18 (الجمعة)\n\n🚨 إجمالي الإشارات: 22\n✅ تحقق الهدف: 11\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 11\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 11 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 7 (✅1 ❌0 ⏳6)\n• AI Market Reader: 15 (✅10 ❌0 ⏳5)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fa1986b3c20>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fa1986f07a0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fa1986b2d80>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
-    "ts": 1789821305802,
-    "kind": "daily_report",
-    "day": "2026-09-18",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-18 (الجمعة)\n\n🚨 إجمالي الإشارات: 22\n✅ تحقق الهدف: 11\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 11\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 11 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 7 (✅1 ❌0 ⏳6)\n• AI Market Reader: 15 (✅10 ❌0 ⏳5)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3bf98bbda0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3bf98f4860>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3bf98bbf50>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789822188003,
     "kind": "daily_report",
     "day": "2026-09-18",
@@ -5232,6 +5214,30 @@
     "indicator": "ai",
     "status": "tp_hit",
     "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: CUSDT\n💰 سعر الدخول: 0.0841\n🎯 الهدف: تحقق عند 0.0903\n📈 الأرباح: +2R (+7.37%)\n⏱ المدة: 23 ساعة و5 دقائق\n🕐 وقت الإشارة: 8:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790449246030,
+    "kind": "resolution",
+    "symbol": "SHELLUSDT",
+    "indicator": "supertrend",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: SHELLUSDT\n💰 سعر الدخول: 0.02862\n🛑 الوقف: ضُرب عند 0.02677\n📉 الخسارة: -1R (-6.46%)\n⏱ المدة: يوم واحد و23 ساعة\n🕐 وقت الإشارة: 10:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790449246030,
+    "kind": "resolution",
+    "symbol": "AVAUSDT",
+    "indicator": "supertrend",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: AVAUSDT\n💰 سعر الدخول: 0.2714\n🛑 الوقف: ضُرب عند 0.2499\n📉 الخسارة: -1R (-7.92%)\n⏱ المدة: يوم واحد و6 ساعات\n🕐 وقت الإشارة: 3:59 مساءً",
     "ok": true,
     "error": null,
     "attempts": 1,
