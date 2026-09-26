@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789808313502,
-    "kind": "daily_report",
-    "day": "2026-09-18",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-18 (الجمعة)\n\n🚨 إجمالي الإشارات: 22\n✅ تحقق الهدف: 7\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 15\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 7 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 7 (✅0 ❌0 ⏳7)\n• AI Market Reader: 15 (✅7 ❌0 ⏳8)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1c642e0a10>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1c642e1be0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f1c645043b0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789809197064,
     "kind": "daily_report",
     "day": "2026-09-18",
@@ -5189,6 +5180,18 @@
     "symbol": "TREEUSDT",
     "indicator": "ai",
     "message": "🚨 إشارة شراء جديدة\n🪙 العملة: TREEUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.0491\n🎯 سعر الدخول: 0.0491\n🛑 وقف الخسارة: 0.0476\n🎯 الهدف: 0.0521\n📈 R:R: 1:2\n🕐 وقت الإشارة: 2:59 مساءً\n─────────────\nالحكم الشرعي: ℹ️ لا يوجد حكم",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790424930355,
+    "kind": "resolution",
+    "symbol": "BANANAUSDT",
+    "indicator": "supertrend",
+    "status": "tp_hit",
+    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: BANANAUSDT\n💰 سعر الدخول: 4.046\n🎯 الهدف: تحقق عند 4.342\n📈 الأرباح: +2R (+7.32%)\n⏱ المدة: 5 أيام و8 ساعات\n🕐 وقت الإشارة: 6:59 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
