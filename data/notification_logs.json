@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789799457051,
-    "kind": "daily_report",
-    "day": "2026-09-18",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-18 (الجمعة)\n\n🚨 إجمالي الإشارات: 22\n✅ تحقق الهدف: 6\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 16\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 6 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 7 (✅0 ❌0 ⏳7)\n• AI Market Reader: 15 (✅6 ❌0 ⏳9)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3009c4b050>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3009edd040>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f3009c49a00>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789800299724,
     "kind": "daily_report",
     "day": "2026-09-18",
@@ -5167,6 +5158,18 @@
     "symbol": "FLUXUSDT",
     "indicator": "supertrend",
     "message": "🚨 إشارة شراء جديدة\n🪙 العملة: FLUXUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.0735\n🎯 سعر الدخول: 0.0735\n🛑 وقف الخسارة: 0.0689\n🎯 الهدف: 0.0827\n📈 R:R: 1:2\n🕐 وقت الإشارة: 9:59 صباحًا\n─────────────\nالحكم الشرعي: ✅ مباح",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790407524635,
+    "kind": "resolution",
+    "symbol": "TNSRUSDT",
+    "indicator": "supertrend",
+    "status": "tp_hit",
+    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: TNSRUSDT\n💰 سعر الدخول: 0.0379\n🎯 الهدف: تحقق عند 0.0417\n📈 الأرباح: +2R (+10.03%)\n⏱ المدة: يوم واحد و15 ساعة\n🕐 وقت الإشارة: 6:59 مساءً",
     "ok": true,
     "error": null,
     "attempts": 1,
