@@ -5145,7 +5145,10 @@
     "hit_price": null,
     "created_ms": 1790341412955,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790438399999,
+    "sl_touch_low": 0.2538,
+    "sl_touch_notified": true
   },
   {
     "signature": "UNIUSDT|ai|BUY|1790337600000",
@@ -5450,6 +5453,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790424208030,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "HEIUSDT|supertrend|BUY|1790434800000",
+    "symbol": "HEIUSDT",
+    "indicator": "supertrend",
+    "entry": "0.1463",
+    "sl": "0.1390",
+    "tp": "0.1609",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790434800000,
+    "signal_close_ms": 1790438399999,
+    "deadline_ms": 1791043199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790438587590,
     "filtered": true,
     "whatsapp_status": "sent"
   }
