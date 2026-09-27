@@ -234,8 +234,13 @@ def compute_weekly_analysis(records: list[dict], signals_by_sig: dict | None,
     }
 
 
-def build_weekly_report_message(stats: dict) -> str:
-    """رسالة التقرير الأسبوعي — تنسيق مطابق للتقرير اليومي مع توزيع أيام الأسبوع."""
+def build_weekly_report_message(stats: dict, include_notes: bool = False) -> str:
+    """رسالة التقرير الأسبوعي — تنسيق مطابق للتقرير اليومي مع توزيع أيام الأسبوع.
+
+    include_notes=False (الافتراضي): لا تُدرَج الملاحظات الاسترشادية إطلاقًا —
+    تُرسَل للمالك وحده عبر build_weekly_notes_message. تُمرَّر True فقط عند
+    تعطيل notes_owner_only في الإعدادات (استرجاع السلوك القديم).
+    """
     start_dt = datetime.fromisoformat(stats["week_start"])
     end_dt = datetime.fromisoformat(stats["week_end"])
     start_txt = f"{stats['week_start']} ({AR_DAY_NAMES[start_dt.weekday()]})"
@@ -297,10 +302,43 @@ def build_weekly_report_message(stats: dict) -> str:
                 f"{d['win_rate'] * 100:.1f}%"
             )
         if a["suggestions"]:
-            lines.append("💡 ملاحظات أداء (استرشادية):")
-            for s_ in a["suggestions"]:
-                lines.append(f"• {s_}")
-            lines.append("⚠️ عينة صغيرة — يُرجى التراكم قبل إقرار أي تعديل")
+            if include_notes:
+                lines.append("💡 ملاحظات أداء (استرشادية):")
+                for s_ in a["suggestions"]:
+                    lines.append(f"• {s_}")
+                lines.append("⚠️ عينة صغيرة — يُرجى التراكم قبل إقرار أي تعديل")
+            # افتراضيًا: الملاحظات لا تُرسل للمشتركين إطلاقًا — تُرسَل
+            # للمالك وحده عبر build_weekly_notes_message.
 
     lines.append("")
+    return "\n".join(lines)
+
+
+def build_weekly_notes_message(stats: dict) -> str | None:
+    """ملاحظات الأداء الاسترشادية الأسبوعية — رسالة خاصة بالمالك وحده.
+
+    لا تُرسل عبر قناة المشتركين إطلاقًا: يذهبها Monitor إلى بوت المالك
+    (telegram_owner) فقط. تُرجع None إن لم توجد اقتراحات (عيّنة صغيرة أو
+    قياسات فلتر ناقصة) — فلا تُرسل رسالة فارغة.
+    """
+    analysis = stats.get("analysis") or {}
+    suggestions = analysis.get("suggestions") or []
+    if not suggestions:
+        return None
+
+    start_dt = datetime.fromisoformat(stats["week_start"])
+    end_dt = datetime.fromisoformat(stats["week_end"])
+    start_txt = f"{stats['week_start']} ({AR_DAY_NAMES[start_dt.weekday()]})"
+    end_txt = f"{stats['week_end']} ({AR_DAY_NAMES[end_dt.weekday()]})"
+
+    lines = [
+        "🔬 *ملاحظات أداء أسبوعية — خاصة*",
+        "",
+        f"🗓️ من {start_txt} إلى {end_txt}",
+        "",
+        "💡 ملاحظات أداء (استرشادية):",
+    ]
+    for s_ in suggestions:
+        lines.append(f"• {s_}")
+    lines.append("⚠️ عينة صغيرة — يُرجى التراكم قبل إقرار أي تعديل")
     return "\n".join(lines)

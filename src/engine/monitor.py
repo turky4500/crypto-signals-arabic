@@ -19,7 +19,8 @@ from ..notify.formatter import (build_alert_message, build_resolution_message,
                                 ts_to_riyadh)
 from ..notify.halal import ensure_verdict, refresh_if_stale, verdict_label
 from ..notify.telegram import TelegramClient, delivered
-from ..notify.weekly_report import (build_weekly_report_message,
+from ..notify.weekly_report import (build_weekly_notes_message,
+                                    build_weekly_report_message,
                                     compute_weekly_analysis,
                                     compute_weekly_report, week_bounds)
 from ..notify.whatsapp import WhatsAppClient
@@ -271,13 +272,20 @@ class Monitor:
 
     def _maybe_send_weekly_report(self, perf: list, now_ms: int,
                                   notifications: list, wa, deliver=None,
-                                  signals: list | None = None) -> dict:
+                                  signals: list | None = None,
+                                  tg_owner=None) -> dict:
         """إرسال التقرير الأسبوعي: أسبوع تقويمي (الأحد → السبت) يُرسل يوم الأحد
         بعد منتصف الليل (افتراضي 00:05) عن أسبوع السبت المنتهي — مرة واحدة لكل
         أسبوع عبر weekly_report_state.json (الفشل يُعاد في تشغيل لاحق).
 
         القناة عبر deliver(msg)->(res,channel): واتساب إن متصل، وإلا تلغرام.
         signals يزوّد التحليل الذاتي بقياسات الفلتر (filter_info).
+
+        ملاحظات الأداء الاسترشادية («💡 ملاحظات أداء») لا تُرسل للمشتركين:
+        تُرسَل للمالك وحده عبر tg_owner (بوته الشخصي)، ولكلٍّ من التقرير
+        والملاحظات مفتاح حالة مستقل (last_report_week / last_report_notes_week)
+        حتى لا يؤدي فشل أحدهما إلى إعادة إرسال الآخر. لاسترجاع سلوك الإرسال
+        الموحّد: notes_owner_only=false في weekly_report.
         """
         wr_cfg = self.settings.get("whatsapp", {}).get("weekly_report", {})
         if not wr_cfg.get("enabled", True):
@@ -301,10 +309,16 @@ class Monitor:
         week_start, week_end = week_bounds(saturday)
 
         state = load_json(self._weekly_report_state_path(), None) or {}
-        if state.get("last_report_week") == week_start:
-            return {"sent": False, "reason": "already_sent"}
 
         stats = compute_weekly_report(perf, week_start, week_end, tz=self.tz)
+        if stats["total"] == 0:
+            state["last_report_week"] = week_start
+            state["last_report_notes_week"] = week_start
+            save_json(self._weekly_report_state_path(), state)
+            return {"sent": False, "reason": "no_signals",
+                    "week_start": week_start, "week_end": week_end,
+                    "notes_sent": False, "notes_reason": "no_signals"}
+
         # التحليل الذاتي الأسبوعي: دقة الحسم + مقارنة قياسات الفلتر للتوصيات
         analysis = None
         if signals:
@@ -314,44 +328,100 @@ class Monitor:
             )
             if analysis:
                 stats["analysis"] = analysis
-        if stats["total"] == 0:
-            state["last_report_week"] = week_start
-            save_json(self._weekly_report_state_path(), state)
-            return {"sent": False, "reason": "no_signals",
-                    "week_start": week_start, "week_end": week_end}
 
-        msg = build_weekly_report_message(stats)
-        if deliver is not None:
-            res, channel = deliver(msg)
-        else:
-            res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
-            channel = None
+        # مفتاحان مستقلان: التقرير العام (للمشتركين) والملاحظات (للمالك وحده)،
+        # حتى لا يؤدي فشل أحدهما إلى إعادة إرسال الآخر.
+        # notes_owner_only=false = سلوك قديم: الملاحظات داخل تقرير القناة فقط.
+        notes_private = wr_cfg.get("notes_owner_only", True)
+        need_report = state.get("last_report_week") != week_start
+        need_notes = (notes_private
+                      and state.get("last_report_notes_week") != week_start
+                      and bool(analysis and analysis.get("suggestions")))
+        if not need_report and not need_notes:
+            return {"sent": False, "reason": "already_sent",
+                    "week_start": week_start, "week_end": week_end,
+                    "notes_sent": False, "notes_reason": "already_sent"}
 
-        notifications = append_capped(
-            notifications,
-            {
-                "ts": now_ms,
-                "kind": "weekly_report",
-                "week_start": week_start,
-                "week_end": week_end,
-                "message": msg,
-                "ok": res.get("ok"),
-                "error": res.get("error"),
-                "attempts": res.get("attempts"),
-                "channel": channel,
-            },
-            500,
-        )
-        save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
+        sent = False
+        error = None
+        if need_report:
+            # الملاحظات الاسترشادية لا تُدرَج في تقرير المشتركين ما لم يُعطَّل
+            # notes_owner_only صراحةً (استرجاع السلوك السابق عند الحاجة).
+            include_notes = not notes_private
+            msg = build_weekly_report_message(stats, include_notes=include_notes)
+            if deliver is not None:
+                res, channel = deliver(msg)
+            else:
+                res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
+                channel = None
 
-        if delivered(res):
-            state["last_report_week"] = week_start
-            save_json(self._weekly_report_state_path(), state)
+            notifications = append_capped(
+                notifications,
+                {
+                    "ts": now_ms,
+                    "kind": "weekly_report",
+                    "week_start": week_start,
+                    "week_end": week_end,
+                    "message": msg,
+                    "ok": res.get("ok"),
+                    "error": res.get("error"),
+                    "attempts": res.get("attempts"),
+                    "channel": channel,
+                },
+                500,
+            )
+            save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
+
+            if delivered(res):
+                state["last_report_week"] = week_start
+                save_json(self._weekly_report_state_path(), state)
+            sent = bool(res.get("ok"))
+            error = res.get("error")
+
+        # ملاحظات الأداء الاسترشادية: بوت المالك وحده (لا قناة ولا مشتركون)
+        notes_sent = False
+        notes_error = None
+        notes_reason = None
+        if need_notes:
+            if tg_owner is None:
+                notes_reason = "no_owner"
+            else:
+                notes_msg = build_weekly_notes_message(stats)
+                if notes_msg is None:
+                    notes_reason = "no_suggestions"
+                else:
+                    nres = tg_owner.send(notes_msg)
+                    notifications = append_capped(
+                        notifications,
+                        {
+                            "ts": now_ms,
+                            "kind": "weekly_report",
+                            "week_start": week_start,
+                            "week_end": week_end,
+                            "message": notes_msg,
+                            "ok": nres.get("ok"),
+                            "error": nres.get("error"),
+                            "attempts": nres.get("attempts"),
+                            "channel": "telegram_owner",
+                        },
+                        500,
+                    )
+                    save_json(os.path.join(self.data_dir, "notification_logs.json"),
+                              notifications)
+                    if delivered(nres):
+                        state["last_report_notes_week"] = week_start
+                        save_json(self._weekly_report_state_path(), state)
+                    notes_sent = bool(nres.get("ok"))
+                    notes_error = nres.get("error")
+
         return {
-            "sent": bool(res.get("ok")),
+            "sent": sent,
             "week_start": week_start,
             "week_end": week_end,
-            "error": res.get("error"),
+            "error": error,
+            "notes_sent": notes_sent,
+            "notes_error": notes_error,
+            "notes_reason": notes_reason,
             **stats,
         }
 
@@ -1344,6 +1414,7 @@ class Monitor:
             perf, now_ms, notifications, wa,
             deliver=lambda m: self._deliver(m, wa, tg, status.get("whatsapp_connected")),
             signals=signals,
+            tg_owner=tg_owner,
         )
 
         # ---- ملخص المعاينات الأسبوعي (للمالك فقط — لا يُرسل للقناة) ----

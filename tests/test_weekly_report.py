@@ -1,4 +1,4 @@
-"""اختبارات التقرير الأسبوعي: حدود الأسبوع التقويمي (الأحد→السبت) + الإحصاءات
+﻿"""اختبارات التقرير الأسبوعي: حدود الأسبوع التقويمي (الأحد→السبت) + الإحصاءات
 + بناء الرسالة + الإرسال مرة واحدة يوم الأحد عن أسبوع السبت المنتهي."""
 import json
 
@@ -251,3 +251,174 @@ def test_weekly_message_includes_analysis_section():
     assert "دقة المؤشرات" not in msg  # تفاصيل المؤشرات تبقى للمالك على الصفحة
     assert "Supertrend" not in msg
     assert "AI Market Reader" not in msg
+
+
+# ---------- ملاحظات الأداء الاسترشادية: للمالك وحده (لا للمشتركين) ----------
+
+def _week_with_suggestions():
+    """أسبوع فيه اقتراحات مضمونة: 5 رابحين (زخم قوي) + 5 خاسرين (زخم ضعيف)."""
+    from src.notify.weekly_report import (compute_weekly_analysis,
+                                          compute_weekly_report)
+    perf, sigs = [], {}
+    for i in range(5):
+        r = _rec(f"W{i}", "supertrend", "tp_hit", _ms_riyadh(2026, 9, 13 + i % 6, 10, 0))
+        r["whatsapp_status"] = "sent"
+        perf.append(r)
+        sigs[r["signature"]] = _sig_for(r, h4=5.5, rsi=55.0)
+    for i in range(5):
+        r = _rec(f"L{i}", "supertrend", "sl_hit", _ms_riyadh(2026, 9, 14 + i % 6, 10, 0))
+        r["whatsapp_status"] = "sent"
+        perf.append(r)
+        sigs[r["signature"]] = _sig_for(r, h4=1.5, rsi=75.0)
+    st = compute_weekly_report(perf, "2026-09-13", "2026-09-19")
+    st["analysis"] = compute_weekly_analysis(perf, sigs, "2026-09-13", "2026-09-19")
+    return perf, sigs, st
+
+
+def test_weekly_public_message_excludes_advisory_notes():
+    _perf, _sigs, st = _week_with_suggestions()
+    assert st["analysis"]["suggestions"], "الحالة يجب أن تنتج اقتراحات"
+    msg = build_weekly_report_message(st)  # الافتراضي: خاص
+    assert "🔬 *التحليل الذاتي الأسبوعي*" in msg
+    assert "💡 ملاحظات أداء" not in msg
+    assert "عينة صغيرة" not in msg
+    for s_ in st["analysis"]["suggestions"]:
+        assert s_ not in msg
+
+
+def test_weekly_public_message_can_restore_notes_via_flag():
+    _perf, _sigs, st = _week_with_suggestions()
+    msg = build_weekly_report_message(st, include_notes=True)
+    assert "💡 ملاحظات أداء (استرشادية):" in msg
+    assert "⚠️ عينة صغيرة" in msg
+    for s_ in st["analysis"]["suggestions"]:
+        assert s_ in msg
+
+
+def test_build_weekly_notes_message_private_content():
+    from src.notify.weekly_report import build_weekly_notes_message
+    _perf, _sigs, st = _week_with_suggestions()
+    msg = build_weekly_notes_message(st)
+    assert msg is not None
+    assert "ملاحظات أداء أسبوعية — خاصة" in msg
+    assert "2026-09-13 (الأحد)" in msg and "2026-09-19 (السبت)" in msg
+    assert "💡 ملاحظات أداء (استرشادية):" in msg
+    assert "⚠️ عينة صغيرة — يُرجى التراكم قبل إقرار أي تعديل" in msg
+    for s_ in st["analysis"]["suggestions"]:
+        assert s_ in msg
+    # لا تكرار لبيانات التقرير العام
+    assert "إجمالي الإشارات" not in msg
+    assert "نسبة النجاح" not in msg
+
+
+def test_build_weekly_notes_message_none_without_suggestions():
+    from src.notify.weekly_report import build_weekly_notes_message
+    st = {"week_start": "2026-09-13", "week_end": "2026-09-19",
+          "analysis": {"suggestions": []}}
+    assert build_weekly_notes_message(st) is None
+    assert build_weekly_notes_message({"week_start": "2026-09-13",
+                                       "week_end": "2026-09-19"}) is None
+
+
+class FakeOwner:
+    def __init__(self, ok=True):
+        self.sent = []
+        self._ok = ok
+
+    def send(self, msg):
+        self.sent.append(msg)
+        return ({"ok": True, "error": None, "attempts": 1} if self._ok
+                else {"ok": False, "error": "boom", "attempts": 3})
+
+
+def test_weekly_notes_go_to_owner_only(tmp_path):
+    perf, sigs, _st = _week_with_suggestions()
+    mon, data_dir = _make_monitor(tmp_path)
+    wa, owner = FakeWhatsApp(), FakeOwner()
+    now = _ms_riyadh(2026, 9, 20, 0, 6)
+    out = mon._maybe_send_weekly_report(perf, now, [], wa, signals=list(sigs.values()),
+                                       tg_owner=owner)
+    assert out["sent"] is True and out["notes_sent"] is True
+    # التقرير العام: بلا ملاحظات
+    assert len(wa.sent) == 1
+    assert "💡 ملاحظات أداء" not in wa.sent[0]
+    assert "عينة صغيرة" not in wa.sent[0]
+    # الملاحظات: في بوت المالك فقط
+    assert len(owner.sent) == 1
+    assert "💡 ملاحظات أداء (استرشادية):" in owner.sent[0]
+    assert "⚠️ عينة صغيرة" in owner.sent[0]
+    # الحالة: مفتاحان مستقلان
+    state = json.loads((data_dir / "weekly_report_state.json").read_text(encoding="utf-8"))
+    assert state["last_report_week"] == "2026-09-13"
+    assert state["last_report_notes_week"] == "2026-09-13"
+    # السجل: مدخلان، والخاص بقناة telegram_owner
+    logs = json.loads((data_dir / "notification_logs.json").read_text(encoding="utf-8"))
+    wr = [e for e in logs if e["kind"] == "weekly_report"]
+    assert len(wr) == 2
+    assert {e["channel"] for e in wr} == {None, "telegram_owner"}
+    assert "ملاحظات أداء" in [e for e in wr if e["channel"] == "telegram_owner"][0]["message"]
+
+    # إعادة نفس الأسبوع: لا شيء يُرسل ثانيًا
+    out2 = mon._maybe_send_weekly_report(perf, now, [], wa, signals=list(sigs.values()),
+                                         tg_owner=owner)
+    assert out2["sent"] is False and out2["notes_sent"] is False
+    assert len(wa.sent) == 1 and len(owner.sent) == 1
+
+
+def test_weekly_notes_failure_retried_without_resending_report(tmp_path):
+    perf, sigs, _st = _week_with_suggestions()
+    mon, data_dir = _make_monitor(tmp_path)
+    wa, owner = FakeWhatsApp(), FakeOwner(ok=False)
+    now = _ms_riyadh(2026, 9, 20, 0, 6)
+    out = mon._maybe_send_weekly_report(perf, now, [], wa, signals=list(sigs.values()),
+                                       tg_owner=owner)
+    assert out["sent"] is True
+    assert out["notes_sent"] is False and out["notes_error"] == "boom"
+    state = json.loads((data_dir / "weekly_report_state.json").read_text(encoding="utf-8"))
+    assert state.get("last_report_week") == "2026-09-13"
+    assert "last_report_notes_week" not in state
+
+    # إعادة المحاولة: التقرير العام لا يُعاد، الملاحظات فقط
+    owner2 = FakeOwner()
+    out2 = mon._maybe_send_weekly_report(perf, now, [], wa, signals=list(sigs.values()),
+                                         tg_owner=owner2)
+    assert len(wa.sent) == 1
+    assert len(owner2.sent) == 1 and out2["notes_sent"] is True
+
+
+def test_weekly_notes_skipped_without_owner(tmp_path):
+    perf, sigs, _st = _week_with_suggestions()
+    mon, data_dir = _make_monitor(tmp_path)
+    wa = FakeWhatsApp()
+    now = _ms_riyadh(2026, 9, 20, 0, 6)
+    out = mon._maybe_send_weekly_report(perf, now, [], wa, signals=list(sigs.values()),
+                                       tg_owner=None)
+    assert out["sent"] is True
+    assert out["notes_sent"] is False and out["notes_reason"] == "no_owner"
+    state = json.loads((data_dir / "weekly_report_state.json").read_text(encoding="utf-8"))
+    assert "last_report_notes_week" not in state  # يُعاد المحاولة في تشغيل لاحق
+
+
+def test_weekly_notes_owner_only_setting_default(tmp_path):
+    """notes_owner_only افتراضي True: لا ملاحظات في تقرير القناة."""
+    perf, sigs, _st = _week_with_suggestions()
+    mon, data_dir = _make_monitor(tmp_path)
+    wa, owner = FakeWhatsApp(), FakeOwner()
+    now = _ms_riyadh(2026, 9, 20, 0, 6)
+    mon._maybe_send_weekly_report(perf, now, [], wa, signals=list(sigs.values()), tg_owner=owner)
+    assert "💡 ملاحظات أداء" not in wa.sent[0]
+
+    # إيقاف notes_owner_only يعيد السلوك القديم: الملاحظات داخل تقرير القناة
+    mon2, _ = _make_monitor(tmp_path)  # يكتب settings.json الافتراضي
+    (data_dir / "settings.json").write_text(
+        json.dumps({"whatsapp": {"enabled": True,
+                                 "weekly_report": {"enabled": True,
+                                                   "notes_owner_only": False}}}),
+        encoding="utf-8",
+    )
+    mon2.settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
+    (data_dir / "weekly_report_state.json").unlink()  # أسبوع جديد غير مُرسَل بعد
+    wa2, owner2 = FakeWhatsApp(), FakeOwner()
+    mon2._maybe_send_weekly_report(perf, now, [], wa2, signals=list(sigs.values()), tg_owner=owner2)
+    assert "💡 ملاحظات أداء" in wa2.sent[0]
+    assert len(owner2.sent) == 0
