@@ -1024,8 +1024,8 @@
     "signal_open_ms": 1789916400000,
     "signal_close_ms": 1789919999999,
     "deadline_ms": 1790524799999,
-    "status": "pending",
-    "resolved_at_ms": null,
+    "status": "expired",
+    "resolved_at_ms": 1790524799999,
     "hit_price": null,
     "created_ms": 1789920206093,
     "filtered": true,
@@ -1063,8 +1063,8 @@
     "signal_open_ms": 1789916400000,
     "signal_close_ms": 1789919999999,
     "deadline_ms": 1790524799999,
-    "status": "pending",
-    "resolved_at_ms": null,
+    "status": "expired",
+    "resolved_at_ms": 1790524799999,
     "hit_price": null,
     "created_ms": 1789920206423,
     "filtered": true,
@@ -3540,7 +3540,10 @@
     "hit_price": null,
     "created_ms": 1790266003538,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790524799999,
+    "sl_touch_low": 8.68e-06,
+    "sl_touch_notified": true
   },
   {
     "signature": "YFIUSDT|supertrend|BUY|1790262000000",
@@ -5274,7 +5277,10 @@
     "hit_price": null,
     "created_ms": 1790377401303,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790524799999,
+    "sl_touch_low": 0.0010073,
+    "sl_touch_notified": true
   },
   {
     "signature": "AVAXUSDT|ai|BUY|1790384400000",
@@ -5517,7 +5523,10 @@
     "hit_price": null,
     "created_ms": 1790481796822,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790524799999,
+    "sl_touch_low": 23.74,
+    "sl_touch_notified": true
   },
   {
     "signature": "BARDUSDT|supertrend|BUY|1790492400000",
