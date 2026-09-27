@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789867246565,
-    "symbol": "XPLUSDT",
-    "indicator": "supertrend",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: XPLUSDT\n📊 الفريم: 1H\n📌 المؤشر: Supertrend\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.09418\n🎯 سعر الدخول: 0.09418\n🛑 وقف الخسارة: 0.08862\n🎯 الهدف: 0.10530\n📈 R:R: 1:2\n🕐 وقت الإشارة: 3:59 صباحًا\n🇸🇦 توقيت السعودية",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fea7d053c80>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fea7d052420>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7fea7d053650>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789866849228,
     "kind": "daily_report",
     "day": "2026-09-19",
@@ -5358,6 +5349,18 @@
     "indicator": "ai",
     "status": "sl_hit",
     "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: BCHUSDT\n💰 سعر الدخول: 345.8\n🛑 الوقف: ضُرب عند 332.6\n📉 الخسارة: -1R (-3.82%)\n⏱ المدة: 7 ساعات\n🕐 وقت الإشارة: 10:59 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790522727399,
+    "kind": "resolution",
+    "symbol": "JUVUSDT",
+    "indicator": "ai",
+    "status": "tp_hit",
+    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: JUVUSDT\n💰 سعر الدخول: 0.321\n🎯 الهدف: تحقق عند 0.341\n📈 الأرباح: +2R (+6.23%)\n⏱ المدة: يومان و13 ساعة\n🕐 وقت الإشارة: 4:59 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
