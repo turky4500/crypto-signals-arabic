@@ -37,7 +37,7 @@
     },
     "signature": "CHRUSDT|supertrend|BUY|1790474400000"
   },
-  "last_check": 1790479528109,
+  "last_check": 1790479839365,
   "data_date": "2026-09-27",
   "filter_meta": {
     "enabled": true,
@@ -81,11 +81,11 @@
       },
       "bollinger": {
         "total": 133,
-        "tp_hit": 0,
+        "tp_hit": 1,
         "sl_hit": 2,
-        "pending": 131,
+        "pending": 130,
         "expired": 0,
-        "win_rate": 0.0
+        "win_rate": 33.3
       },
       "rsi50": {
         "total": 375,
@@ -97,11 +97,11 @@
       },
       "adx": {
         "total": 2620,
-        "tp_hit": 107,
+        "tp_hit": 109,
         "sl_hit": 504,
-        "pending": 2009,
+        "pending": 2007,
         "expired": 0,
-        "win_rate": 17.5
+        "win_rate": 17.8
       }
     }
   },
@@ -111,13 +111,13 @@
     "total": 4985,
     "no_filter": {
       "total": 4985,
-      "resolved": 4002,
-      "pending": 929,
+      "resolved": 4003,
+      "pending": 928,
       "expired": 54,
-      "tp_hit": 2911,
+      "tp_hit": 2912,
       "sl_hit": 1091,
-      "win_rate": 0.7274,
-      "ev_per_trade": 1.1822
+      "win_rate": 0.7275,
+      "ev_per_trade": 1.1825
     },
     "with_filter": {
       "total": 272,
@@ -141,24 +141,24 @@
     },
     "blocked": {
       "total": 4713,
-      "resolved": 3843,
-      "pending": 819,
+      "resolved": 3844,
+      "pending": 818,
       "expired": 51,
-      "tp_hit": 2775,
+      "tp_hit": 2776,
       "sl_hit": 1068,
-      "win_rate": 0.7221,
-      "ev_per_trade": 1.1663
+      "win_rate": 0.7222,
+      "ev_per_trade": 1.1666
     },
     "by_reason": {
       "bollinger_live_off": {
         "total": 1406,
-        "resolved": 1014,
-        "pending": 392,
+        "resolved": 1015,
+        "pending": 391,
         "expired": 0,
-        "tp_hit": 760,
+        "tp_hit": 761,
         "sl_hit": 254,
-        "win_rate": 0.7495,
-        "ev_per_trade": 1.2485
+        "win_rate": 0.7498,
+        "ev_per_trade": 1.2494
       },
       "filter": {
         "total": 3264,
