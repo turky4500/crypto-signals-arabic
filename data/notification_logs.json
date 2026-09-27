@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789869695962,
-    "kind": "daily_report",
-    "day": "2026-09-19",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-19 (السبت)\n\n🚨 إجمالي الإشارات: 2\n✅ تحقق الهدف: 1\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 1\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 1 محسومة)\n\n📌 حسب المؤشر:\n• AI Market Reader: 2 (✅1 ❌0 ⏳1)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f7e420b26c0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f7e420b3ec0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f7e420b30e0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789870547340,
     "kind": "daily_report",
     "day": "2026-09-19",
@@ -5370,6 +5361,16 @@
     "indicator": "supertrend",
     "status": "pending",
     "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: COMPUSDT\nوصلت العملة إلى سعر الوقف (23.75) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 23.89\n🎯 سعر الدخول: 24.92\n🛑 سعر الوقف: 23.75\n🎯 الهدف: 27.26\n🕐 وقت اللمسة: 6:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790528616108,
+    "symbol": "NOMUSDT",
+    "indicator": "supertrend",
+    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: NOMUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.002150\n🎯 سعر الدخول: 0.002150\n🛑 وقف الخسارة: 0.001977\n🎯 الهدف: 0.002496\n📈 R:R: 1:2\n🕐 وقت الإشارة: 7:59 مساءً\n─────────────\nالحكم الشرعي: ℹ️ لا يوجد حكم",
     "ok": true,
     "error": null,
     "attempts": 1,
