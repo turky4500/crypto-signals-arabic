@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789860536072,
-    "symbol": "AAVEUSDT",
-    "indicator": "bollinger",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: AAVEUSDT\n📊 الفريم: 1H\n📌 المؤشر: bollinger\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 141.33\n🎯 سعر الدخول: 141.33\n🛑 وقف الخسارة: 136.42\n🎯 الهدف: 151.15\n📈 R:R: 1:2\n🕐 وقت الإشارة: 1:59 صباحًا\n🇸🇦 توقيت السعودية",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f917ca48560>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f917cb354f0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f917ca48b90>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789860788555,
     "symbol": "OPUSDT",
     "indicator": "bollinger",
@@ -5331,6 +5322,18 @@
     "indicator": "supertrend",
     "status": "pending",
     "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: ATUSDT\nوصلت العملة إلى سعر الوقف (0.1494) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.1497\n🎯 سعر الدخول: 0.1570\n🛑 سعر الوقف: 0.1494\n🎯 الهدف: 0.1722\n🕐 وقت اللمسة: 11:59 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790503281752,
+    "kind": "sl_touch",
+    "symbol": "ALLOUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: ALLOUSDT\nوصلت العملة إلى سعر الوقف (0.2845) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.2891\n🎯 سعر الدخول: 0.3008\n🛑 سعر الوقف: 0.2845\n🎯 الهدف: 0.3334\n🕐 وقت اللمسة: 12:59 مساءً",
     "ok": true,
     "error": null,
     "attempts": 1,
