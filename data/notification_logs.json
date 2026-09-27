@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789849120577,
-    "kind": "daily_report",
-    "day": "2026-09-18",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-18 (الجمعة)\n\n🚨 إجمالي الإشارات: 22\n✅ تحقق الهدف: 12\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 10\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 12 محسومة)\n\n📌 حسب المؤشر:\n• Supertrend: 7 (✅1 ❌0 ⏳6)\n• AI Market Reader: 15 (✅11 ❌0 ⏳4)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f7f4ac7d460>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f7f4ac7df40>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f7f4b0f54f0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789849991719,
     "kind": "daily_report",
     "day": "2026-09-18",
@@ -5304,6 +5295,18 @@
     "symbol": "COMPUSDT",
     "indicator": "supertrend",
     "message": "🚨 إشارة شراء جديدة\n🪙 العملة: COMPUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 24.92\n🎯 سعر الدخول: 24.92\n🛑 وقف الخسارة: 23.75\n🎯 الهدف: 27.26\n📈 R:R: 1:2\n🕐 وقت الإشارة: 6:59 صباحًا\n─────────────\nالحكم الشرعي: ⛔ غير مباح",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790484631320,
+    "kind": "resolution",
+    "symbol": "HEIUSDT",
+    "indicator": "supertrend",
+    "status": "tp_hit",
+    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: HEIUSDT\n💰 سعر الدخول: 0.1463\n🎯 الهدف: تحقق عند 0.1609\n📈 الأرباح: +2R (+9.98%)\n⏱ المدة: 12 ساعة و50 دقيقة\n🕐 وقت الإشارة: 6:59 مساءً",
     "ok": true,
     "error": null,
     "attempts": 1,
