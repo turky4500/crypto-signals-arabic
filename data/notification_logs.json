@@ -1,14 +1,5 @@
 [
   {
-    "ts": 1789860788555,
-    "symbol": "OPUSDT",
-    "indicator": "bollinger",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: OPUSDT\n📊 الفريم: 1H\n📌 المؤشر: bollinger\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.1206\n🎯 سعر الدخول: 0.1206\n🛑 وقف الخسارة: 0.1136\n🎯 الهدف: 0.1346\n📈 R:R: 1:2\n🕐 وقت الإشارة: 1:59 صباحًا\n🇸🇦 توقيت السعودية",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f917ca49730>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f917ca4a1e0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f917ccee4b0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789860115227,
     "kind": "daily_report",
     "day": "2026-09-19",
@@ -5334,6 +5325,18 @@
     "indicator": "supertrend",
     "status": "pending",
     "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: ALLOUSDT\nوصلت العملة إلى سعر الوقف (0.2845) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.2891\n🎯 سعر الدخول: 0.3008\n🛑 سعر الوقف: 0.2845\n🎯 الهدف: 0.3334\n🕐 وقت اللمسة: 12:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790509526566,
+    "kind": "resolution",
+    "symbol": "FIDAUSDT",
+    "indicator": "supertrend",
+    "status": "tp_hit",
+    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: FIDAUSDT\n💰 سعر الدخول: 0.02115\n🎯 الهدف: تحقق عند 0.02291\n📈 الأرباح: +2R (+8.32%)\n⏱ المدة: 6 أيام و10 ساعات\n🕐 وقت الإشارة: 3:59 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
