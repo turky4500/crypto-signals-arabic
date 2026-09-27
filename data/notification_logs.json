@@ -1,23 +1,5 @@
 [
   {
-    "ts": 1789873489076,
-    "symbol": "STRAXUSDT",
-    "indicator": "ai",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: STRAXUSDT\n📊 الفريم: 1H\n📌 المؤشر: AI Market Reader\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.01085\n🎯 سعر الدخول: 0.01085\n🛑 وقف الخسارة: 0.01055\n🎯 الهدف: 0.01145\n📈 R:R: 1:2\n🤖 ثقة AI: 64.7%\n🕐 وقت الإشارة: 4:59 صباحًا\n🇸🇦 توقيت السعودية",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f930d2e2390>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f930d2e0590>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f930d2f9460>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
-    "ts": 1789873090509,
-    "kind": "daily_report",
-    "day": "2026-09-19",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-09-19 (السبت)\n\n🚨 إجمالي الإشارات: 2\n✅ تحقق الهدف: 1\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 1\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 1 محسومة)\n\n📌 حسب المؤشر:\n• AI Market Reader: 2 (✅1 ❌0 ⏳1)\n\n🇸🇦 توقيت السعودية — نهاية اليوم",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f930ce713a0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f930ce72d80>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)')); HTTPSConnectionPool(host='wats-saas.duckdns.org', port=443): Max retries exceeded with url: /api/v1/send (Caused by ConnectTimeoutError(<HTTPSConnection(host='wats-saas.duckdns.org', port=443) at 0x7f930ce73dd0>, 'Connection to wats-saas.duckdns.org timed out. (connect timeout=25.0)'))",
-    "attempts": 3
-  },
-  {
     "ts": 1789874200655,
     "kind": "daily_report",
     "day": "2026-09-19",
@@ -5378,6 +5360,28 @@
     "symbol": "KERNELUSDT",
     "indicator": "ai",
     "message": "🚨 إشارة شراء جديدة\n🪙 العملة: KERNELUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.0567\n🎯 سعر الدخول: 0.0567\n🛑 وقف الخسارة: 0.0551\n🎯 الهدف: 0.0599\n📈 R:R: 1:2\n🕐 وقت الإشارة: 9:59 مساءً\n─────────────\nالحكم الشرعي: ℹ️ لا يوجد حكم",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790539381600,
+    "symbol": "SNXUSDT",
+    "indicator": "supertrend",
+    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: SNXUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.2729\n🎯 سعر الدخول: 0.2729\n🛑 وقف الخسارة: 0.2581\n🎯 الهدف: 0.3025\n📈 R:R: 1:2\n🕐 وقت الإشارة: 10:59 مساءً\n─────────────\nالحكم الشرعي: ⛔ غير مباح",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1790539244298,
+    "kind": "resolution",
+    "symbol": "ZECUSDT",
+    "indicator": "supertrend",
+    "status": "expired",
+    "message": "📭 انتهت المهلة — لم تُحسم خلال 7 أيام\n🪙 العملة: ZECUSDT\n💰 سعر الدخول: 1515.47\n🎯 الهدف: 1707.83\n🛑 الوقف: 1419.29\n⏱ المدة: 7 أيام\n🕐 وقت الإشارة: 10:59 مساءً",
     "ok": true,
     "error": null,
     "attempts": 1,
