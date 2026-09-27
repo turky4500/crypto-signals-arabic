@@ -180,18 +180,41 @@ class Monitor:
                               dedup_file=os.path.join(self.data_dir, "telegram_sent.json"))
 
     # ------------------------------------------------------------------ #
-    def _deliver(self, msg: str, wa, tg, wa_ok: bool) -> tuple[dict, str | None]:
-        """اختيار قناة الإرسال الفعلية لرسالة (إشارة أو تقرير):
+    def _channel_mode(self) -> str:
+        """وضع الإرسال المعتمد من الإعدادات: telegram (الافتراضي) أو none.
 
-        - واتساب إن كان متصلاً (whatsapp_connected=true) → يُرسل واتساب فقط.
-        - وإلا → تلغرام فورًا إن كان مهيأ (قناة احتياطية؛ لا ازدواج بين القناتين).
-        - دون أي قناة متاحة → فشل موثّق في سجل التنبيهات.
+        المسار القديم whatsapp_first ما زال مقبولًا إن ضُبط صريحًا. أي قيمة
+        غير معروفة تُعامل كـ telegram حتى لا تنقطع التوصيات بصمت.
+        """
+        mode = self.settings.get("delivery", {}).get("channel_mode", "telegram")
+        if mode not in ("telegram", "none", "whatsapp_first"):
+            return "telegram"
+        return mode
+
+    # ------------------------------------------------------------------ #
+    def _deliver(self, msg: str, wa, tg, wa_ok: bool) -> tuple[dict, str | None]:
+        """اختيار قناة الإرسال الفعلية لرسالة (إشارة أو تقرير) عبر
+        delivery.channel_mode:
+
+        - "telegram" (الافتراضي): تلغرام وحده. واتساب لا يُستخدم إطلاقًا ولو
+          كان متصلًا — لا ازدواج ولا رجوع صامت إلى قناة غير معتمدة.
+        - "none": لا إرسال إطلاقًا (وضع صيانة) مع تسجيل السبب في سجل التنبيهات.
+        - "whatsapp_first" (مسار قديم غير معتمد): واتساب إن كان متصلاً، وإلا
+          تلغرام، وإلا فشل موثّق.
         ترجع (النتيجة, اسم القناة) لتسجيل القناة الحاملة للرسالة في السجلات."""
-        if wa is not None and wa_ok:
+        mode = self._channel_mode()
+        if mode == "none":
+            return ({"ok": False, "attempts": 0,
+                     "error": "الإرسال معطّل (delivery.channel_mode=none)"}, None)
+        if mode == "whatsapp_first" and wa is not None and wa_ok:
             return wa.send(msg), "whatsapp"
         if tg is not None:
             return tg.send(msg), "telegram"
-        return ({"ok": False, "error": "whatsapp معطّل ولا تلغرام مهيأ", "attempts": 0}, None)
+        if mode == "telegram":
+            return ({"ok": False, "attempts": 0,
+                     "error": "تلغرام غير مهيأ (telegram_connected=false)"}, None)
+        return ({"ok": False, "attempts": 0,
+                 "error": "واتساب معطّل ولا تلغرام مهيأ"}, None)
 
     # ------------------------------------------------------------------ #
     def _daily_report_state_path(self) -> str:

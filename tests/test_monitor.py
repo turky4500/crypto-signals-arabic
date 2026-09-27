@@ -694,25 +694,66 @@ def test_telegram_builder_requires_env(tmp_path):
 
 
 def test_deliver_route_table(tmp_path):
-    """جدول اختيار القناة: واتساب متصل -> واتساب فقط؛ معطّل -> تلغرام؛ بلا قناتين -> فشل."""
+    """جدول اختيار القناة في الوضع الافتراضي telegram: تلغرام وحده دائمًا.
+
+    واتساب المتصل لا يُستخدم، ولا بديل عند تعطّل تلغرام (فشل موثّق)،
+    والوضع none يمنع الإرسال تمامًا.
+    """
     candles = {"BTCUSDT": make_uptrend_candles()}
     mon, _ = _make_monitor(tmp_path, candles)
     wa_ok = FakeNotifyClient(connected=True)
     wa_down = FakeNotifyClient(connected=False)
     tg = FakeNotifyClient(connected=True)
 
+    # واتساب متصل + تلغرام مهيأ -> تلغرام فقط
     res, ch = mon._deliver("m", wa_ok, tg, True)
-    assert ch == "whatsapp" and res["ok"] is True and wa_ok.sent == ["m"] and tg.sent == []
+    assert ch == "telegram" and res["ok"] is True and tg.sent == ["m"] and wa_ok.sent == []
 
+    # واتساب معطّل + تلغرام مهيأ -> تلغرام (لا فرق)
     res, ch = mon._deliver("m", wa_down, tg, False)
-    assert ch == "telegram" and res["ok"] is True and wa_down.sent == [] and tg.sent == ["m"]
+    assert ch == "telegram" and res["ok"] is True and wa_down.sent == [] and tg.sent == ["m", "m"]
 
-    res, ch = mon._deliver("m", None, None, False)
+    # بلا تلغرام -> فشل موثّق بلا انهيار، ولا رجوع إلى واتساب
+    res, ch = mon._deliver("m", wa_ok, None, True)
+    assert ch is None and res["ok"] is False and wa_ok.sent == []
+
+
+def test_deliver_mode_none_blocks_delivery(tmp_path):
+    """الوضع none: لا إرسال لأي قناة، مع سبب واضح في النتيجة."""
+    candles = {"BTCUSDT": make_uptrend_candles()}
+    mon, _ = _make_monitor(tmp_path, candles)
+    wa = FakeNotifyClient(connected=True)
+    tg = FakeNotifyClient(connected=True)
+    mon.settings["delivery"]["channel_mode"] = "none"
+    res, ch = mon._deliver("m", wa, tg, True)
     assert ch is None and res["ok"] is False
+    assert "none" in res["error"]
+    assert wa.sent == [] and tg.sent == []
 
 
-def test_whatsapp_connected_sends_whatsapp_only(tmp_path):
-    """واتساب يعمل -> الإشارات تُرسل واتساب فقط، ولا شيء للتلغرام."""
+def test_deliver_mode_whatsapp_first_is_opt_in(tmp_path):
+    """المسار القديم whatsapp_first يعمل فقط بضبط صريح (غير معتمد افتراضيًا)."""
+    candles = {"BTCUSDT": make_uptrend_candles()}
+    mon, _ = _make_monitor(tmp_path, candles)
+    wa = FakeNotifyClient(connected=True)
+    tg = FakeNotifyClient(connected=True)
+    mon.settings["delivery"]["channel_mode"] = "whatsapp_first"
+    res, ch = mon._deliver("m", wa, tg, True)
+    assert ch == "whatsapp" and res["ok"] is True and wa.sent == ["m"] and tg.sent == []
+
+
+def test_deliver_unknown_mode_falls_back_to_telegram(tmp_path):
+    """قيمة وضع غير معروفة -> تلغرام (لا انقطاع صامت للتوصيات)."""
+    candles = {"BTCUSDT": make_uptrend_candles()}
+    mon, _ = _make_monitor(tmp_path, candles)
+    tg = FakeNotifyClient(connected=True)
+    mon.settings["delivery"]["channel_mode"] = "typo_mode"
+    res, ch = mon._deliver("m", None, tg, False)
+    assert ch == "telegram" and res["ok"] is True and tg.sent == ["m"]
+
+
+def test_whatsapp_connected_still_sends_telegram_only(tmp_path):
+    """واتساب يعمل لكن الوضع telegram -> كل شيء لتلغرام، ولا شيء لواتساب."""
     mon, data_dir = _fallback_monitor(tmp_path)
     wa = FakeNotifyClient(connected=True)
     tg = FakeNotifyClient(connected=True)
@@ -720,14 +761,18 @@ def test_whatsapp_connected_sends_whatsapp_only(tmp_path):
     mon._telegram = lambda env: tg
     run = mon.run(env={}, limit_symbols=1, no_whatsapp=False)
     assert run["new_signals"] >= 1
-    assert len(wa.sent) >= run["new_signals"]
-    assert tg.sent == []
+    assert len(tg.sent) >= run["new_signals"]
+    assert wa.sent == []
     status = json.loads((data_dir / "status.json").read_text(encoding="utf-8"))
     assert status["whatsapp_connected"] is True
+    assert status["telegram_connected"] is True
+    logs = json.loads((data_dir / "notification_logs.json").read_text(encoding="utf-8"))
+    sig_logs = [ln for ln in logs if ln.get("channel")]
+    assert sig_logs and all(ln["channel"] == "telegram" for ln in sig_logs)
 
 
-def test_whatsapp_down_falls_back_to_telegram(tmp_path):
-    """واتساب معطّل (ping فاشل) -> نفس الرسالة تُرسل تلغرام مع تسجيل القناة."""
+def test_whatsapp_down_still_sends_telegram(tmp_path):
+    """واتساب معطّل (ping فاشل) -> تلغرام مع تسجيل القناة (بلا تغيير سلوكي)."""
     mon, data_dir = _fallback_monitor(tmp_path)
     wa = FakeNotifyClient(connected=False)
     tg = FakeNotifyClient(connected=True)
@@ -745,8 +790,28 @@ def test_whatsapp_down_falls_back_to_telegram(tmp_path):
     assert sig_logs and all(ln["channel"] == "telegram" for ln in sig_logs)
 
 
+def test_mode_none_run_sends_nothing_but_completes(tmp_path):
+    """الوضع none في تشغيل كامل: لا إرسال للقناة، لكن التشغيل يكمل ويُسجَّل السبب."""
+    mon, data_dir = _fallback_monitor(tmp_path)
+    wa = FakeNotifyClient(connected=True)
+    tg = FakeNotifyClient(connected=True)
+    mon._whatsapp = lambda env: wa
+    mon._telegram = lambda env: tg
+    mon.settings["delivery"]["channel_mode"] = "none"
+    run = mon.run(env={}, limit_symbols=1, no_whatsapp=False)
+    assert run["new_signals"] >= 1
+    assert wa.sent == [] and tg.sent == []
+    logs = json.loads((data_dir / "notification_logs.json").read_text(encoding="utf-8"))
+    sig_logs = [ln for ln in logs if ln.get("symbol") and "kind" not in ln]
+    assert sig_logs and all(ln["ok"] is False for ln in sig_logs)
+    assert all("none" in (ln.get("error") or "") for ln in sig_logs)
+
+
 def test_whatsapp_down_without_telegram_fails_honestly(tmp_path):
-    """واتساب معطّل ولا تلغرام مهيأ -> التوقيع وحده بلا قناة: فشل موثّق دون انهيار."""
+    """لا قناة مهيأة إطلاقًا (الوضع telegram بلا تلغرام) -> فشل موثّق دون انهيار.
+
+    لا رجوع إلى واتساب ولو كان متصلًا: لا صمت ولا ازدواج.
+    """
     mon, data_dir = _fallback_monitor(tmp_path)
     wa = FakeNotifyClient(connected=False)
     mon._whatsapp = lambda env: wa
