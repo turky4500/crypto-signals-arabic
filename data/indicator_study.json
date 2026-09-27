@@ -1,22 +1,5 @@
 [
   {
-    "signature": "STRAXUSDT|adx|1790485200000",
-    "symbol": "STRAXUSDT",
-    "indicator": "adx",
-    "entry": "0.01205",
-    "sl": "0.01185",
-    "tp": "0.01245",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790485200000,
-    "signal_close_ms": 1790488799999,
-    "deadline_ms": 1791093599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790488962512,
-    "source": "simulation"
-  },
-  {
     "signature": "STRKUSDT|rsi50|1790485200000",
     "symbol": "STRKUSDT",
     "indicator": "rsi50",
@@ -2475,9 +2458,9 @@
     "signal_open_ms": 1790488800000,
     "signal_close_ms": 1790492399999,
     "deadline_ms": 1791097199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790531999999,
+    "hit_price": 0.3479,
     "created_ms": 1790492481173,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790535809474,
+    "source": "simulation"
+  },
+  {
+    "signature": "BNTUSDT|rsi50|1790532000000",
+    "symbol": "BNTUSDT",
+    "indicator": "rsi50",
+    "entry": "0.3511",
+    "sl": "0.3454",
+    "tp": "0.3625",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790532000000,
+    "signal_close_ms": 1790535599999,
+    "deadline_ms": 1791140399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790537478385,
     "source": "simulation"
   }
 ]
