@@ -3264,7 +3264,10 @@
     "hit_price": null,
     "created_ms": 1790265951997,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790625599999,
+    "sl_touch_low": 0.0884,
+    "sl_touch_notified": true
   },
   {
     "signature": "OPGUSDT|supertrend|BUY|1790262000000",
@@ -5362,9 +5365,9 @@
     "signal_open_ms": 1790362800000,
     "signal_close_ms": 1790366399999,
     "deadline_ms": 1790971199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790625599999,
+    "hit_price": 0.00927,
     "created_ms": 1790366613008,
     "filtered": true,
     "whatsapp_status": "sent",
