@@ -1,22 +1,5 @@
 [
   {
-    "signature": "FFUSDT|rsi50|1790532000000",
-    "symbol": "FFUSDT",
-    "indicator": "rsi50",
-    "entry": "0.13210",
-    "sl": "0.12844",
-    "tp": "0.13942",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790532000000,
-    "signal_close_ms": 1790535599999,
-    "deadline_ms": 1791140399999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1790564399999,
-    "hit_price": 0.12669,
-    "created_ms": 1790535706115,
-    "source": "simulation"
-  },
-  {
     "signature": "FIDAUSDT|ichimoku|1790532000000",
     "symbol": "FIDAUSDT",
     "indicator": "ichimoku",
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790622201476,
+    "source": "simulation"
+  },
+  {
+    "signature": "GPROBUSDT|adx|1790618400000",
+    "symbol": "GPROBUSDT",
+    "indicator": "adx",
+    "entry": "1.33",
+    "sl": "1.29",
+    "tp": "1.41",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790618400000,
+    "signal_close_ms": 1790621999999,
+    "deadline_ms": 1791226799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790622705825,
     "source": "simulation"
   }
 ]
