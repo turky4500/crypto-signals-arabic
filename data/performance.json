@@ -4371,7 +4371,10 @@
     "hit_price": null,
     "created_ms": 1790294948507,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790566538370,
+    "sl_touch_low": 0.1187,
+    "sl_touch_notified": true
   },
   {
     "signature": "CETUSUSDT|supertrend|BUY|1790294400000",
@@ -4914,7 +4917,10 @@
     "hit_price": null,
     "created_ms": 1790330633885,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790566538370,
+    "sl_touch_low": 0.00912,
+    "sl_touch_notified": true
   },
   {
     "signature": "TAOUSDT|ai|BUY|1790326800000",
@@ -5230,9 +5236,9 @@
     "signal_open_ms": 1790352000000,
     "signal_close_ms": 1790355599999,
     "deadline_ms": 1790960399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790560799999,
+    "hit_price": 76.86,
     "created_ms": 1790355832841,
     "filtered": true,
     "whatsapp_status": "sent"
