@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ARUSDT|adx|1790517600000",
-    "symbol": "ARUSDT",
-    "indicator": "adx",
-    "entry": "4.889",
-    "sl": "4.705",
-    "tp": "5.257",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790517600000,
-    "signal_close_ms": 1790521199999,
-    "deadline_ms": 1791125999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1790549999999,
-    "hit_price": 4.63,
-    "created_ms": 1790521267279,
-    "source": "simulation"
-  },
-  {
     "signature": "ASRUSDT|adx|1790517600000",
     "symbol": "ASRUSDT",
     "indicator": "adx",
@@ -61516,9 +61499,9 @@
     "signal_open_ms": 1790557200000,
     "signal_close_ms": 1790560799999,
     "deadline_ms": 1791165599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790595644212,
+    "hit_price": 149.82,
     "created_ms": 1790560968485,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790593488856,
+    "source": "simulation"
+  },
+  {
+    "signature": "NFLXBUSDT|adx|1790589600000",
+    "symbol": "NFLXBUSDT",
+    "indicator": "adx",
+    "entry": "71.71",
+    "sl": "71.37",
+    "tp": "72.39",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790589600000,
+    "signal_close_ms": 1790593199999,
+    "deadline_ms": 1791197999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790595798700,
     "source": "simulation"
   }
 ]
