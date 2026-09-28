@@ -1528,8 +1528,8 @@
     "signal_open_ms": 1789963200000,
     "signal_close_ms": 1789966799999,
     "deadline_ms": 1790571599999,
-    "status": "pending",
-    "resolved_at_ms": null,
+    "status": "expired",
+    "resolved_at_ms": 1790571599999,
     "hit_price": null,
     "created_ms": 1789966995637,
     "filtered": true,
@@ -1546,8 +1546,8 @@
     "signal_open_ms": 1789963200000,
     "signal_close_ms": 1789966799999,
     "deadline_ms": 1790571599999,
-    "status": "pending",
-    "resolved_at_ms": null,
+    "status": "expired",
+    "resolved_at_ms": 1790571599999,
     "hit_price": null,
     "created_ms": 1789966995773,
     "filtered": true,
@@ -5034,7 +5034,10 @@
     "hit_price": null,
     "created_ms": 1790337819143,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790571599999,
+    "sl_touch_low": 0.2119,
+    "sl_touch_notified": true
   },
   {
     "signature": "CFXUSDT|ai|BUY|1790334000000",
@@ -5733,6 +5736,9 @@
     "hit_price": null,
     "created_ms": 1790547195620,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790571599999,
+    "sl_touch_low": 0.0237,
+    "sl_touch_notified": true
   }
 ]
