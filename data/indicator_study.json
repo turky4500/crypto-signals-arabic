@@ -1,22 +1,5 @@
 [
   {
-    "signature": "CRCLBUSDT|adx|1790510400000",
-    "symbol": "CRCLBUSDT",
-    "indicator": "adx",
-    "entry": "89.90",
-    "sl": "89.34",
-    "tp": "91.02",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790510400000,
-    "signal_close_ms": 1790513999999,
-    "deadline_ms": 1791118799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1790521199999,
-    "hit_price": 89.05,
-    "created_ms": 1790514092176,
-    "source": "simulation"
-  },
-  {
     "signature": "CVCUSDT|rsi50|1790510400000",
     "symbol": "CVCUSDT",
     "indicator": "rsi50",
@@ -74997,9 +74980,9 @@
     "signal_open_ms": 1790564400000,
     "signal_close_ms": 1790567999999,
     "deadline_ms": 1791172799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790579740677,
+    "hit_price": 0.345,
     "created_ms": 1790568123861,
     "source": "simulation"
   },
@@ -78346,9 +78329,9 @@
     "signal_open_ms": 1790568000000,
     "signal_close_ms": 1790571599999,
     "deadline_ms": 1791176399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790579740677,
+    "hit_price": 0.341,
     "created_ms": 1790571795210,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790579033970,
+    "source": "simulation"
+  },
+  {
+    "signature": "COHRBUSDT|bollinger|1790575200000",
+    "symbol": "COHRBUSDT",
+    "indicator": "bollinger",
+    "entry": "286.84",
+    "sl": "282.95",
+    "tp": "294.62",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790575200000,
+    "signal_close_ms": 1790578799999,
+    "deadline_ms": 1791183599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790579791246,
     "source": "simulation"
   }
 ]
