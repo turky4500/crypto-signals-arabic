@@ -3033,7 +3033,10 @@
     "hit_price": null,
     "created_ms": 1790265939534,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790607599999,
+    "sl_touch_low": 0.2132,
+    "sl_touch_notified": true
   },
   {
     "signature": "BLURUSDT|supertrend|BUY|1790262000000",
@@ -4176,7 +4179,10 @@
     "hit_price": null,
     "created_ms": 1790276630434,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790607599999,
+    "sl_touch_low": 0.02558,
+    "sl_touch_notified": true
   },
   {
     "signature": "SHELLUSDT|supertrend|BUY|1790276400000",
@@ -5395,9 +5401,9 @@
     "signal_open_ms": 1790384400000,
     "signal_close_ms": 1790387999999,
     "deadline_ms": 1790992799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790607599999,
+    "hit_price": 10.246,
     "created_ms": 1790388215819,
     "filtered": true,
     "whatsapp_status": "sent",
@@ -5416,9 +5422,9 @@
     "signal_open_ms": 1790391600000,
     "signal_close_ms": 1790395199999,
     "deadline_ms": 1790999999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790607599999,
+    "hit_price": 0.2416,
     "created_ms": 1790395394692,
     "filtered": true,
     "whatsapp_status": "sent",
