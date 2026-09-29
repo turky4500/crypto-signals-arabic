@@ -14,11 +14,16 @@ from ..indicators import supertrend
 
 
 def rsi(closes: list[float], period: int = 14) -> float:
-    """RSI (Wilder) — الرابحون دخلوا RSI أدنى من الخاسرين."""
-    if len(closes) < period + 1:
+    """RSI (Wilder) — الرابحون دخلوا RSI أدنى من الخاسرين.
+
+    يُحسب على آخر `period` شمعة (الأحدث) لا على أقدم `period` شمعة في السلسلة:
+    السلسلة المُمرَّرة كاملة (400 شمعة)، فأول 14 كانت قراءة قبل ~16 يومًا.
+    """
+    n = len(closes)
+    if n < period + 1:
         return 100.0
     gains = losses = 0.0
-    for i in range(1, period + 1):
+    for i in range(n - period, n):
         d = closes[i] - closes[i - 1]
         gains += max(d, 0.0)
         losses += max(-d, 0.0)

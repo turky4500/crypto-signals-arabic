@@ -27,7 +27,7 @@ function kindLabel(e) {
 
 function kindGroup(e) {
   const k = e.kind || "signal";
-  if (k === "preview" || k === "preview_comparison") return "preview_comparison";
+  if (k === "preview" || k === "preview_comparison") return k;
   if (k === "resolution" || k === "sl_touch") return "resolve";
   if (k === "daily_report" || k === "weekly_report") return "report";
   return "signal";

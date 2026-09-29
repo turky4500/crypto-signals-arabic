@@ -44,6 +44,55 @@ def test_rsi_falling_trend():
     assert r < 30
 
 
+def test_rsi_uses_recent_window_not_oldest():
+    """الأحدث يحسم: صعود قديم ثم هبوط أخير -> RSI منخفض (لا 100).
+
+    قبل الإصلاح كانت rsi تقرأ closes[1..period] أي أقدم 14 شمعة في سلسلة
+    400 شمعة ≈ قراءة قبل ~16 يومًا.
+    """
+    old_up = [100.0 + i for i in range(30)]          # صعود حاد في التاريخ البعيد
+    recent_down = [old_up[-1] - 3.0 * i for i in range(1, 15)]  # هبوط في 14 الأخيرة
+    r = rsi(old_up + recent_down)
+    assert r < 30
+
+
+def test_rsi_unaffected_by_older_history():
+    """إضافة تاريخ قديم لا تغيّر RSI إطلاقًا — النافذة هي آخر period شمعة فقط."""
+    tail = [100.0]
+    for i in range(40):
+        tail.append(tail[-1] * (1.01 if i % 2 == 0 else 0.995))
+    short = rsi(tail)
+    long = rsi([50.0 + i for i in range(400)] + tail)
+    assert short == long
+
+
+def test_filter_gate_uses_recent_candles():
+    """بوابة h1_rsi تعتمد آخر 14 شمعة: صعود قديم ثم هبوط أخير -> تُقبل."""
+    h1_closes = _uptrend(100, 100.0, 1.0) + [199.0 - 3.0 * i for i in range(1, 15)]
+    h1 = _series(h1_closes)
+    h4 = _series(_uptrend(120, 80.0, 1.0))
+    d1 = _series(_uptrend(120, 70.0, 1.5))
+    res = evaluate_filter(h1, h4, d1)
+    assert res["h4_ret5_ok"] is True and res["d1_above_ema50"] is True
+    assert res["h4_in_uptrend"] is True
+    assert res["h1_rsi"] < 30
+    assert res["h1_rsi_ok"] is True
+    assert res["accepted"] is True
+
+
+def test_filter_gate_rejects_recent_overbought():
+    """الطريق المقابل: هبوط قديم ثم صعود حاد أخير -> تُرفض حماية «غير مشبع»."""
+    base = [300.0 - 2.0 * i for i in range(30)]      # هبوط في التاريخ البعيد
+    recent_up = [base[-1] + 3.0 * i for i in range(1, 15)]  # صعود في 14 الأخيرة
+    h1 = _series(base + recent_up)
+    h4 = _series(_uptrend(120, 80.0, 1.0))
+    d1 = _series(_uptrend(120, 70.0, 1.5))
+    res = evaluate_filter(h1, h4, d1)
+    assert res["h1_rsi"] >= 70
+    assert res["h1_rsi_ok"] is False
+    assert res["accepted"] is False
+
+
 def test_ret_pct_positive():
     xs = [100.0 + i * 10 for i in range(10)]
     # last = 190, قبل 6 خطوات = 130 -> (190/130-1)*100 = 46.15%
