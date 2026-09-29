@@ -133,7 +133,8 @@ def _make_monitor(tmp_path, candles, server=None, filter_enabled=False,
                 "one_open_per_symbol": one_open_per_symbol,
             },
             "momentum_filter": {"enabled": filter_enabled,
-                "h4_ret5_max_supertrend": 100.0},
+                "h4_ret5_max_supertrend": 100.0,
+                "supertrend_confidence_max": 1.01},
             "ai_reader": {
                 "neighbors_count": 8, "max_window": 300,
                 "min_ai_score": 0.60, "use_distance_weight": True,
@@ -567,7 +568,7 @@ def test_bollinger_not_published_by_default(tmp_path):
 def test_supertrend_momentum_cap_blocks_high_momentum(tmp_path):
     """سقف الزخم الخاص بـ supertrend: إشارة ذات h4_ret5 فوق السقف تُرفض
     ولا تُرسل، بينما تُسجَّل بعلامة السبب في مرشّح الدراسة."""
-    h1 = make_flip_candles()  # الشمعة الأخيرة تقفز 30% -> h4_ret5 مرتفع
+    h1 = make_flip_candles()  # الشمعة الأخيرة تقفز 25% -> h4_ret5 مرتفع
     d1 = h1
 
     def make_run(cap_dir, cap):
@@ -588,6 +589,41 @@ def test_supertrend_momentum_cap_blocks_high_momentum(tmp_path):
     assert run["new_signals"] == 0
     cands = json.loads((data_dir / "candidate_study.json").read_text(encoding="utf-8"))
     assert any(c.get("reason") == "supertrend_momentum_cap" for c in cands)
+
+
+def test_supertrend_confidence_cap_blocks_saturated_confidence(tmp_path):
+    """سقف الثقة الخاص بـ supertrend: ثقة مشبعة (1.0) تُرفض ولا تُرسل،
+    وتُسجَّل بعلامة السبب في مرشّح الدراسة. ai غير مقيَّد."""
+    h1 = make_flip_candles()
+    d1 = h1
+
+    def make_run(cap_dir, cap):
+        mon, data_dir = _make_filter_monitor(cap_dir, h1, d1)
+        settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
+        settings["momentum_filter"]["supertrend_confidence_max"] = cap
+        (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
+        mon.settings = load_settings(str(data_dir / "settings.json"))
+        run = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+        return run, data_dir
+
+    # سقف معطّل (1.01) -> يُقبل (كما الاختبارات الأساسية)
+    run, data_dir = make_run(tmp_path / "hi", 1.01)
+    assert run["new_signals"] >= 1
+
+    # سقف 0.0 -> أي ثقة تُرفض بسبب السقف
+    run, data_dir = make_run(tmp_path / "lo", 0.0)
+    assert run["new_signals"] == 0
+    cands = json.loads((data_dir / "candidate_study.json").read_text(encoding="utf-8"))
+    assert any(c.get("reason") == "supertrend_confidence_cap" for c in cands)
+
+
+def test_supertrend_confidence_cap_default_is_099():
+    """الافتراضي في الإعدادات = 0.99 أي استبعاد القراءة المشبعة 1.0 فقط."""
+    from src.config.settings import DEFAULT_SETTINGS
+    mf = DEFAULT_SETTINGS["momentum_filter"]
+    assert mf["supertrend_confidence_max"] == 0.99
+    # ai غير مقيَّد: لا يوجد له سقف ثقة
+    assert "ai_confidence_max" not in mf
 
 
 def test_momentum_filter_disabled_respects_settings(tmp_path):

@@ -829,6 +829,7 @@ class Monitor:
                 })
             mf_cfg = self.settings.get("momentum_filter", {})
             st_cap = float(mf_cfg.get("h4_ret5_max_supertrend", 5.0))
+            st_conf_cap = float(mf_cfg.get("supertrend_confidence_max", 0.99))
             for src in sources:
                 fi = filter_info
                 # سياسة خاصة بالعرض فقط (دون تغيير قياسات الفلتر):
@@ -850,6 +851,19 @@ class Monitor:
                     fi = dict(fi)
                     fi["accepted"] = False
                     fi["reason"] = "bollinger_live_off"
+                # 3) سقف ثقة supertrend: `confidence` هي احتمال القارئ الذكي
+                #    صعودًا محسوب لكل المؤشرات، وثقة 1.0 على توصية supertrend
+                #    (أي supertrend وحده دون ai) تعني قارئًا 100% صاعدًا لم
+                #    تشترطه بوّابة الشراء — سوق في أقصى امتداد، والدخول متأخر.
+                #    38.6% نجاح مقابل 69.7% لغير المشبع. ai غير مقيَّد.
+                elif src.indicator == "supertrend" and fi.get("accepted") \
+                        and src.confidence is not None \
+                        and float(src.confidence) >= st_conf_cap:
+                    fi = dict(fi)
+                    fi["accepted"] = False
+                    fi["reason"] = "supertrend_confidence_cap"
+                    fi["confidence"] = round(float(src.confidence), 4)
+                    fi["confidence_max"] = st_conf_cap
                 src.filter_info = fi
                 src.filter_rejected = not bool(fi.get("accepted"))
                 if fi.get("accepted"):
