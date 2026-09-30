@@ -3250,9 +3250,9 @@
     "signal_open_ms": 1790262000000,
     "signal_close_ms": 1790265599999,
     "deadline_ms": 1790870399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790805599999,
+    "hit_price": 3.28,
     "created_ms": 1790265951795,
     "filtered": true,
     "whatsapp_status": "sent",
@@ -3429,7 +3429,10 @@
     "hit_price": null,
     "created_ms": 1790265995449,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790805599999,
+    "sl_touch_low": 0.0415,
+    "sl_touch_notified": true
   },
   {
     "signature": "SUIUSDT|supertrend|BUY|1790262000000",
@@ -6319,9 +6322,9 @@
     "signal_open_ms": 1790726400000,
     "signal_close_ms": 1790729999999,
     "deadline_ms": 1791334799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790805599999,
+    "hit_price": 0.009575,
     "created_ms": 1790730194844,
     "filtered": true,
     "whatsapp_status": "sent",
@@ -6399,6 +6402,9 @@
     "hit_price": null,
     "created_ms": 1790784236210,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1790805599999,
+    "sl_touch_low": 0.278,
+    "sl_touch_notified": true
   }
 ]
