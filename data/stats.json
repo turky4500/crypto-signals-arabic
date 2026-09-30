@@ -1,33 +1,33 @@
 {
-  "monitored_symbols": 472,
-  "signals_today": 3,
-  "supertrend_today": 0,
+  "monitored_symbols": 473,
+  "signals_today": 4,
+  "supertrend_today": 1,
   "ai_today": 3,
   "strong_today": 0,
   "bollinger_today": 0,
   "last_signal": {
-    "symbol": "BABYUSDT",
-    "indicator": "ai",
+    "symbol": "JSTUSDT",
+    "indicator": "supertrend",
     "signal_type": "BUY",
-    "candle_open_ms": 1790751600000,
-    "candle_close_ms": 1790755199999,
-    "signal_price": 0.01434,
-    "entry": "0.01434",
-    "sl": "0.01345",
-    "tp": "0.01612",
+    "candle_open_ms": 1790766000000,
+    "candle_close_ms": 1790769599999,
+    "signal_price": 0.1294,
+    "entry": "0.12940",
+    "sl": "0.12539",
+    "tp": "0.13742",
     "rr_ratio": 2.0,
-    "confidence": 0.7709,
+    "confidence": 0.8857,
     "ema_trend": "bullish",
-    "volume_ok": true,
-    "time_text": "10:59 صباحًا",
-    "created_at_ms": 1790755413413,
+    "volume_ok": false,
+    "time_text": "2:59 مساءً",
+    "created_at_ms": 1790769822786,
     "whatsapp_status": "sent",
-    "whatsapp_sent_at": 1790755413413,
+    "whatsapp_sent_at": 1790769822786,
     "filter_rejected": false,
     "filter_info": {
-      "h4_ret5": 4.6,
+      "h4_ret5": 3.02,
       "h4_ret5_min": 2.0,
-      "h1_rsi": 59.2,
+      "h1_rsi": 58.3,
       "h1_rsi_max": 70.0,
       "d1_above_ema50": true,
       "h4_in_uptrend": true,
@@ -35,18 +35,18 @@
       "h1_rsi_ok": true,
       "accepted": true
     },
-    "signature": "BABYUSDT|ai|BUY|1790751600000"
+    "signature": "JSTUSDT|supertrend|BUY|1790766000000"
   },
-  "last_check": 1790769356210,
+  "last_check": 1790769652678,
   "data_date": "2026-09-30",
   "filter_meta": {
     "enabled": true,
     "activated_ms": 1789124605224,
     "filtered_stats": {
-      "total": 337,
+      "total": 338,
       "tp_hit": 170,
       "sl_hit": 112,
-      "pending": 40,
+      "pending": 41,
       "expired": 15,
       "win_rate": 60.3,
       "activated_ms": 1789124605224
@@ -56,78 +56,78 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 206,
-        "tp_hit": 26,
-        "sl_hit": 11,
-        "pending": 169,
+        "total": 218,
+        "tp_hit": 30,
+        "sl_hit": 12,
+        "pending": 176,
         "expired": 0,
-        "win_rate": 70.3
+        "win_rate": 71.4
       },
       "awesome": {
-        "total": 243,
-        "tp_hit": 25,
-        "sl_hit": 16,
-        "pending": 202,
+        "total": 245,
+        "tp_hit": 23,
+        "sl_hit": 9,
+        "pending": 213,
         "expired": 0,
-        "win_rate": 61.0
+        "win_rate": 71.9
       },
       "macd": {
-        "total": 453,
-        "tp_hit": 26,
-        "sl_hit": 5,
-        "pending": 422,
+        "total": 461,
+        "tp_hit": 32,
+        "sl_hit": 10,
+        "pending": 419,
         "expired": 0,
-        "win_rate": 83.9
+        "win_rate": 76.2
       },
       "bollinger": {
         "total": 85,
         "tp_hit": 4,
-        "sl_hit": 3,
-        "pending": 78,
+        "sl_hit": 2,
+        "pending": 79,
         "expired": 0,
-        "win_rate": 57.1
+        "win_rate": 66.7
       },
       "rsi50": {
-        "total": 968,
-        "tp_hit": 53,
-        "sl_hit": 20,
-        "pending": 895,
+        "total": 977,
+        "tp_hit": 55,
+        "sl_hit": 21,
+        "pending": 901,
         "expired": 0,
-        "win_rate": 72.6
+        "win_rate": 72.4
       },
       "adx": {
-        "total": 3045,
-        "tp_hit": 277,
-        "sl_hit": 415,
-        "pending": 2353,
+        "total": 3014,
+        "tp_hit": 286,
+        "sl_hit": 340,
+        "pending": 2388,
         "expired": 0,
-        "win_rate": 40.0
+        "win_rate": 45.7
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
+    "added_this_run": 23,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 3887,
-      "pending": 1023,
+      "resolved": 3869,
+      "pending": 1041,
       "expired": 90,
-      "tp_hit": 2236,
+      "tp_hit": 2218,
       "sl_hit": 1651,
-      "win_rate": 0.5753,
-      "ev_per_trade": 0.7259
+      "win_rate": 0.5733,
+      "ev_per_trade": 0.7199
     },
     "with_filter": {
       "total": 286,
-      "resolved": 235,
-      "pending": 39,
+      "resolved": 234,
+      "pending": 40,
       "expired": 12,
-      "tp_hit": 145,
+      "tp_hit": 144,
       "sl_hit": 90,
-      "win_rate": 0.617,
-      "ev_per_trade": 0.851
+      "win_rate": 0.6154,
+      "ev_per_trade": 0.8462
     },
     "with_consensus_ge3": {
       "total": 153,
@@ -141,19 +141,19 @@
     },
     "blocked": {
       "total": 4714,
-      "resolved": 3652,
-      "pending": 984,
+      "resolved": 3635,
+      "pending": 1001,
       "expired": 78,
-      "tp_hit": 2091,
+      "tp_hit": 2074,
       "sl_hit": 1561,
-      "win_rate": 0.5726,
-      "ev_per_trade": 0.7178
+      "win_rate": 0.5706,
+      "ev_per_trade": 0.7118
     },
     "by_reason": {
       "bollinger_live_off": {
-        "total": 2530,
+        "total": 2531,
         "resolved": 2049,
-        "pending": 469,
+        "pending": 470,
         "expired": 12,
         "tp_hit": 1092,
         "sl_hit": 957,
@@ -161,24 +161,24 @@
         "ev_per_trade": 0.5987
       },
       "filter": {
-        "total": 2108,
-        "resolved": 1564,
-        "pending": 481,
+        "total": 2107,
+        "resolved": 1547,
+        "pending": 497,
         "expired": 63,
-        "tp_hit": 978,
+        "tp_hit": 961,
         "sl_hit": 586,
-        "win_rate": 0.6253,
-        "ev_per_trade": 0.8759
+        "win_rate": 0.6212,
+        "ev_per_trade": 0.8636
       },
       "filter_ok": {
         "total": 286,
-        "resolved": 235,
-        "pending": 39,
+        "resolved": 234,
+        "pending": 40,
         "expired": 12,
-        "tp_hit": 145,
+        "tp_hit": 144,
         "sl_hit": 90,
-        "win_rate": 0.617,
-        "ev_per_trade": 0.851
+        "win_rate": 0.6154,
+        "ev_per_trade": 0.8462
       },
       "open_position": {
         "total": 13,
