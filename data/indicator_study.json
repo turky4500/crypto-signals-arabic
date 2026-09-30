@@ -1,22 +1,5 @@
 [
   {
-    "signature": "INITUSDT|ichimoku|1790719200000",
-    "symbol": "INITUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.10166",
-    "sl": "0.09425",
-    "tp": "0.11648",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790719200000,
-    "signal_close_ms": 1790722799999,
-    "deadline_ms": 1791327599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790722871561,
-    "source": "simulation"
-  },
-  {
     "signature": "INITUSDT|adx|1790719200000",
     "symbol": "INITUSDT",
     "indicator": "adx",
@@ -112,9 +95,9 @@
     "signal_open_ms": 1790719200000,
     "signal_close_ms": 1790722799999,
     "deadline_ms": 1791327599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1790791199999,
+    "hit_price": 40.94,
     "created_ms": 1790722874045,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790795002928,
+    "source": "simulation"
+  },
+  {
+    "signature": "IRENBUSDT|bollinger|1790791200000",
+    "symbol": "IRENBUSDT",
+    "indicator": "bollinger",
+    "entry": "41.28",
+    "sl": "40.24",
+    "tp": "43.36",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790791200000,
+    "signal_close_ms": 1790794799999,
+    "deadline_ms": 1791399599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790796725549,
     "source": "simulation"
   }
 ]
