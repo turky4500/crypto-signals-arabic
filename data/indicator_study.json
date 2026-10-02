@@ -1,22 +1,5 @@
 [
   {
-    "signature": "DRAMBUSDT|rsi50|1790874000000",
-    "symbol": "DRAMBUSDT",
-    "indicator": "rsi50",
-    "entry": "61.68",
-    "sl": "59.44",
-    "tp": "66.16",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790874000000,
-    "signal_close_ms": 1790877599999,
-    "deadline_ms": 1791482399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790877719464,
-    "source": "simulation"
-  },
-  {
     "signature": "DUSKUSDT|adx|1790874000000",
     "symbol": "DUSKUSDT",
     "indicator": "adx",
@@ -5875,9 +5858,9 @@
     "signal_open_ms": 1790877600000,
     "signal_close_ms": 1790881199999,
     "deadline_ms": 1791485999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1790934043935,
+    "hit_price": 0.002142,
     "created_ms": 1790881284529,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1790931825130,
+    "source": "simulation"
+  },
+  {
+    "signature": "MSFTBUSDT|adx|1790928000000",
+    "symbol": "MSFTBUSDT",
+    "indicator": "adx",
+    "entry": "516.95",
+    "sl": "513.85",
+    "tp": "523.15",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1790928000000,
+    "signal_close_ms": 1790931599999,
+    "deadline_ms": 1791536399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1790934127085,
     "source": "simulation"
   }
 ]
