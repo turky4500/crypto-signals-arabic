@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SOXSBUSDT|macd|1790967600000",
-    "symbol": "SOXSBUSDT",
-    "indicator": "macd",
-    "entry": "29.76",
-    "sl": "28.48",
-    "tp": "32.32",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790967600000,
-    "signal_close_ms": 1790971199999,
-    "deadline_ms": 1791575999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1790971399489,
-    "source": "simulation"
-  },
-  {
     "signature": "SPCXBUSDT|ichimoku|1790967600000",
     "symbol": "SPCXBUSDT",
     "indicator": "ichimoku",
@@ -24303,9 +24286,9 @@
     "signal_open_ms": 1790989200000,
     "signal_close_ms": 1790992799999,
     "deadline_ms": 1791597599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1791044442594,
+    "hit_price": 0.014,
     "created_ms": 1790992994885,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1791043414745,
+    "source": "simulation"
+  },
+  {
+    "signature": "KGSTUSDT|adx|1791039600000",
+    "symbol": "KGSTUSDT",
+    "indicator": "adx",
+    "entry": "0.011305",
+    "sl": "0.011257",
+    "tp": "0.011401",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1791039600000,
+    "signal_close_ms": 1791043199999,
+    "deadline_ms": 1791647999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1791044522538,
     "source": "simulation"
   }
 ]
