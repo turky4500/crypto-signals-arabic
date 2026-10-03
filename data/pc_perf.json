@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "generated_at_ms": 1791053658771,
+  "indicator": {
+    "name": "قمم وقيعان مؤكدة",
+    "reversal_mode": "متوازن",
+    "timeframe": "1H",
+    "settings": {
+      "reversal_mode": "متوازن",
+      "ema_fast_len": 20,
+      "ema_mid_len": 50,
+      "ema_slow_len": 200,
+      "rsi_len": 14,
+      "rsi_oversold": 32.0,
+      "rsi_overbought": 68.0,
+      "stoch_len": 14,
+      "stoch_oversold": 25.0,
+      "stoch_overbought": 75.0,
+      "bb_len": 20,
+      "bb_mult": 2.0,
+      "volume_len": 20,
+      "min_hourly_quote_vol": 20000.0,
+      "target_pct": 2.0,
+      "commission_per_side_pct": 0.1,
+      "atr_len": 14,
+      "stop_buffer_atr": 0.2,
+      "max_stop_pct": 2.5,
+      "min_reward_risk": 0.75,
+      "use_trend_filter": true,
+      "use_adx_filter": true,
+      "adx_len": 14,
+      "adx_threshold": 25.0,
+      "min_bars_between_pivots": 10,
+      "use_breakeven": true
+    },
+    "risk_math": {
+      "net_target_pct": 1.8,
+      "max_stop_pct_nominal": 2.5,
+      "max_risk_pct_effective": 2.4,
+      "binding_filter": "min_reward_risk"
+    },
+    "hit_rules": "الهدف: لمس السعر (high >= target) — له الأولوية. الوقف: إغلاق الشمعة تحت الوقف (close < stop)."
+  },
+  "summary": {
+    "symbols": 0,
+    "closed": 0,
+    "open": 0,
+    "tp": 0,
+    "sl": 0,
+    "exit": 0,
+    "win_rate": null,
+    "r_total": 0,
+    "r_avg": null,
+    "expectancy_r": null,
+    "profit_factor": null,
+    "avg_net_pct": null,
+    "avg_bars_held": null,
+    "in_trade": 0
+  },
+  "symbols": {},
+  "open_trades": [],
+  "trades": []
+}

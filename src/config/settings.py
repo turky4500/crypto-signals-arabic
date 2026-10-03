@@ -104,6 +104,30 @@ DEFAULT_SETTINGS = {
     # معاينات استكشافية على شموع 15m تُرسل للمالك فقط (وليس للقناة ولا واتساب):
     # تبكير بـ15-45 دقيقة قبل التوصية الرسمية 1H بغرض المراجعة الذاتية والتعلّم.
     # المعرّف الشخصي يأتي من سرّ TELEGRAM_OWNER_CHAT_ID (لا يُسجَّل في المستودع).
+    # ─────────────────────────────────────────────────────────────────
+    # «قمم وقيعان مؤكدة» — مؤشّر مستقل تمامًا (قمم/قيعان + تباعد RSI على 1H).
+    #
+    # عزله مقصود بالكامل: لا يدخل detector ولا momentum_filter ولا supertrend
+    # ولا ai_reader، ولا يُقاس في performance.json ولا indicator_study.json ولا
+    # candidate_study.json ولا filter_log. حالته في data/pc_state.json وسجل
+    # صفقاته في data/pc_perf.json، ورسائله للمالك وحده (TELEGRAM_OWNER_CHAT_ID)
+    # ولا تصل القناة ولا واتساب إطلاقًا.
+    #
+    # القيم أدناه نسخة حرفية من مدخلات PineScript في الوضع «متوازن». لتغيير أي
+    # مدخل يُعدَّل هنا فقط؛ انظر src/indicators/pivot_confirm.py.
+    # ─────────────────────────────────────────────────────────────────
+    "pivot_confirm": {
+        "enabled": True,
+        # أيقسم الأسلوب: مبكر (score≥2, pivot 2/1) · متوازن (score≥2, pivot 3/2)
+        # · مؤكد (score≥3, pivot 5/3).
+        "reversal_mode": "متوازن",
+        "target_pct": 2.0,            # هدف الربح % لكل صفقة
+        "commission_per_side_pct": 0.1,  # عمولة كل جهة % — تُخصم مرتين
+        "stop_buffer_atr": 0.20,      # هامش ATR خارج القاع عند الدخول
+        "use_breakeven": True,        # نقل الوقف للتعادل عند 1:1
+        "min_hourly_quote_vol": 20000.0,  # سيولة كل شمعة 1H
+    },
+
     "previews": {
         "enabled": True,
         "candles_limit": 60,

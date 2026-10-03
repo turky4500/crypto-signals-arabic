@@ -131,6 +131,33 @@ body {
 .stat-value.orange { color: var(--orange); }
 .stat-label { color: var(--muted); font-size: .78rem; margin-top: 2px; }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   قمم وقيعان مؤكدة — تنسيقات مستقلة فقط.
+   لا تُعدّل أي قاعدة قائمة أعلاه؛ كلها أسماء جديدة.
+   ══════════════════════════════════════════════════════════════════════════ */
+.stat-sub {
+  display: block; color: var(--muted); font-size: .7rem;
+  margin-top: 4px; line-height: 1.5;
+}
+.sub-tabs { margin-top: 14px; }
+.pc-view { margin-top: 14px; }
+.pc-view .empty { text-align: center; color: var(--muted); padding: 22px 0; }
+
+.badge.st-open   { background: var(--primary-soft); color: var(--primary); }
+.badge.st-watch  { background: var(--orange-soft); color: var(--orange); }
+.badge.st-top    { background: var(--red-soft);    color: var(--red); }
+.badge.st-wait   { background: var(--gray-soft);   color: var(--muted); }
+
+.num.pos { color: var(--green); font-weight: 700; }
+.num.neg { color: var(--red);   font-weight: 700; }
+td.sym  { font-weight: 700; direction: ltr; text-align: left; }
+td.num  { direction: ltr; }
+
+.tie-dot {
+  color: var(--orange); font-weight: 800; cursor: help;
+}
+.pill.err { background: var(--red-soft); color: var(--red); }
+
 /* ---------- نتائج الإشارات ---------- */
 .perf-card { margin-bottom: 20px; }
 .perf-chips {
