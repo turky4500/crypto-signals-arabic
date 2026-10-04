@@ -1,17 +1,6 @@
 [
   {
     "ts": 1790899222121,
-    "symbol": "KMNOUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1790898300000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: KMNOUSDT\n📊 سعر 15m: 0.0412\n🕐 وقت الشمعة: 2:59 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1790899222121,
     "kind": "resolution",
     "symbol": "SUPERUSDT",
     "indicator": "supertrend",
@@ -7905,6 +7894,25 @@
     "stop": 0.07906742170836752,
     "target": 0.0803658,
     "exit_price": 0.0803658,
+    "ok": true,
+    "suppressed": false,
+    "live_touch": true,
+    "deduped": false,
+    "channel": "telegram_owner",
+    "error": null
+  },
+  {
+    "ts": 1791099999733,
+    "symbol": "AEROUSDT",
+    "indicator": "pivot_confirm",
+    "event": "tp",
+    "reason": "هدف الربح",
+    "signature": "pc|AEROUSDT|tp|1791100799999",
+    "close_time": 1791100799999,
+    "entry": 0.8319,
+    "stop": 0.8327319,
+    "target": 0.848538,
+    "exit_price": 0.848538,
     "ok": true,
     "suppressed": false,
     "live_touch": true,
