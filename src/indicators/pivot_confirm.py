@@ -26,7 +26,35 @@ supertrend ولا ai_market_reader ولا performance ولا indicator_study. ي
 
 هذان الشرطان يطابقان قاعدة performance.evaluate_candles في النظام القائم.
 أُبقي شرط Pine الثالث كما هو: نقل التعادل يُطبَّق بعد حساب stopWasHit بالوقف
-القديم، فالشمعة التي ترفع الوقف للتعادل لا تُحسم في نفسها.
+القديم، فالشمعة التي ترفع الوقف للتعادل لا تُحسم في نفسه.
+
+---------------------------------------------------------------------------
+ثلاث إشارات فقط — ثبتها ثم ابن عليها الرسائل — أمر المالك
+---------------------------------------------------------------------------
+«المؤشر من البداية يطلق ثلاث إشارات: دخول ووقف وهدف — ثبتها ثم ابن عليها
+الرسائل» · «أرسل ما أصدره المؤشر ولا تحسب من عندك أنه متحرك أو غير ذلك»
+· «لا تتدخل في الوقف — أصدر العلامة كما أصدرها المؤشر».
+
+    الدخول  = close
+    الهدف   = close * (1 + targetPct / 100)
+    الوقف   = pivotLow - ATR[right] * stopBufferAtr
+
+كما يُصدرها المؤشر حرفيًّا: بلا توسعة تحت قاع شمعة الدخول، وبلا أرضية
+0.40%، وبلأ تقريب على شبكة Tick — أيٌّ منها يعدّل الرقم عما صدره المؤشر.
+وحُذفت كلّها بأمر المالك، مع أن تقريب الشبكة كان له سبب مقيس سابق
+(113 من 118 هدفًا خارج الشبكة) فسقط ذلك الطلب أيضًا.
+
+ثم البوابة والرسالة تُبنى على الثلاث نفسها — buyRiskOK من Pine كما هي:
+
+    buyRiskPct   = (close - pivotStopCandidate) / close * 100
+    netTargetPct = max(targetPct - 2*commissionPerSidePct, 0) = 1.80
+    buyRiskOK    = 0 < buyRiskPct <= maxStopPct
+                   and netTargetPct / buyRiskPct >= minRewardRisk
+
+قياس على 90 رمزًا × 20 يومًا: الطرفان 1087 · تكسبها بوابة Pine 0 ·
+تفقدها 198 (pine_risk <= 0) — لا تُضاف ولا تُفقد علامة TradingView واحدة.
+
+والخروج كما اتفقنا: إغلاق أسفل الوقف = خسارة، ولمس الهدف = ربح.
 
 ---------------------------------------------------------------------------
 دقّة ta.stdev (سبب كتابة نسخة خاصة)
@@ -74,17 +102,9 @@ DEFAULTS: dict = {
     "atr_len": 14,
     "stop_buffer_atr": 0.20,
     "max_stop_pct": 2.5,
-    # أرضية المسافة بين الوقف والدخول. السبب مقيس لا مخترع: العمولة ذهابًا
-    # وإيابًا 0.20% ثابتة، و fee_in_R = 0.20 / risk_pct، فكلما ضاق الوقف
-    # انتفخت نسبة الرسوم داخل وحدة R. قِسنا على 56 صفقة حيّة: الصفقات
-    # التي risk_pct < 1.0% عددها 28 ومجموعها -61.80R بنسبة فوز 25.0%، بينما
-    # risk_pct >= 0.40% عددها 43 ومجموعها +19.97R بنسبة فوز 55.8%.
-    # ف 0.40% = ضعف العمولة. ومقيسًا على 18 عملة محدثة: أسوأ fee_in_R نزل من 80.53R إلى 0.48R، والمداخل نزلت من 481 إلى 465، ومنها 223 وقفًا مُوسَّعًا تحت قاع الشمعة.
-    "min_stop_pct": 0.40,
-    # أمر المالك: الوقف المتحرك لا يكون قاع شمعة الدخول. إن جاء أضيق من
-    # قاع شمعة الإشارة نُوسّعه إليه فتبقى الصفقة ولا يُقاس R على
-    # مسافة أضيق من مدى الشمعة نفسها — وإلا صار قياس R غير مفهومًا.
-    "stop_below_entry_candle_low": True,
+    # أمر المالك: «ثلاث إشارات فقط كما يُصدرها المؤشر». فحُذفت من هنا
+    # `min_stop_pct` (أرضية 0.40%) و`stop_below_entry_candle_low` (توسعة
+    # الوقف تحت قاع شمعة الدخول) — كان لهما سبب مقيس سابق فسقط الطلب.
     "min_reward_risk": 0.75,
     "use_trend_filter": True,
     "use_adx_filter": True,
@@ -303,29 +323,6 @@ def _valid(*vals) -> bool:
     return all(v is not None and v == v for v in vals)
 
 
-def to_tick_down(price: float, tick: float) -> float:
-    """يقرّب السعر لأسفل إلى أقرب وحدة سعرية (tick) — أمر المالك.
-
-    الهدف المحسوب حسابيًا (`close * (1 + target_pct)`) يقع غالبًا **بين**
-    سعرين قابلين للتنفيذ، فيصبح سعرًا لا يقدر أي أمر على بلوغه.
-    القياس على 118 مدخلًا: 113 هدفًا (95.8%) خارج شبكة Tick.
-    وحالة GMTUSDT: `0.00885 * 1.02 = 0.009027` و tick = `0.00001`، فالأسعار
-    القابلة للتنفيذ `0.009020` و`0.009030` فقط — والهدف غير قابل للتنفيذ،
-    والشمعة التالية بلغت `0.009020` أي ناقصةً 0.0775% ثم لم تُحتسب.
-
-    التقريب لأسفل (لا لأقرب) مقصود: الهدف لا يصعب بل يُيسَّر، والوقف لا
-    يضيق بل يتّسع — فلا تقترب مسافة المخاطرة من الأرضية `min_stop_pct`
-    من جهة الرفض، ولا تتجاوز السقف `max_stop_pct` إلا بزيادة مسافة.
-    """
-    p, t = float(price), float(tick or 0.0)
-    if t <= 0 or p <= 0 or p != p:
-        return p
-    return math.floor(p / t + 1e-9) * t
-
-
-# --------------------------------------------------------------------------- #
-# حالة المؤشر — Pine عند أول شمعة من تاريخه
-# --------------------------------------------------------------------------- #
 def new_state() -> dict:
     return {
         "ema200": None,
@@ -427,33 +424,35 @@ def step(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
 
     # ---------------- إدارة المخاطر والفلترة ----------------
     atr_p = _f(ctx["atr"], i - right)
+
+    # ===== ثلاث إشارات فقط — ثبَّتها ثم ابن عليها كل شيء آخر =====
+    # أمر المالك: «المؤشر يطلق ثلاث إشارات دخول ووقف وهدف — ثبتها ثم
+    # ابن عليها الرسائل» · «أرسل ما أصدره المؤشر ولا تحسب من عندك أنه
+    # متحرك أو غير ذلك» · «لا تتدخل في الوقف — أصدر العلامة كما أصدرها
+    # المؤشر».
+    #
+    #   الدخول = close
+    #   الهدف  = close * (1 + targetPct / 100)
+    #   الوقف  = pivotLow - ATR[right] * stopBufferAtr
+    #
+    # بلا توسعة تحت قاع شمعة الدخول، وبلا أرضية 0.40%، وبلا تقريب على
+    # شبكة Tick: أيٌّ منها يعدّل الرقم عما صدره المؤشر، ولا شيء بعدها
+    # يعدّل هذه الثلاثة — الرسالة تُبنى عليها كما هي.
     stop_candidate = None
     if has_pl and atr_p is not None:
         stop_candidate = float(ctx["pivot_low"][i]) - atr_p * float(cfg["stop_buffer_atr"])
+    target_price = c * (1.0 + float(cfg["target_pct"]) / 100.0)
+    buy_risk_pct = ((c - stop_candidate) / c * 100.0) \
+        if (c > 0 and stop_candidate is not None) else None
+    net_target_pct = max(
+        float(cfg["target_pct"]) - 2.0 * float(cfg["commission_per_side_pct"]), 0.0)
+    rr = (net_target_pct / buy_risk_pct) \
+        if (buy_risk_pct is not None and buy_risk_pct > 0) else None
 
-    # أمر المالك: الهدف سعر يُغلَق عليه فعلًا، فيجب أن يكون قابلًا للتنفيذ.
-    # نقرّبه لأسفل على شبكة Tick ثم نحسب الصافي منه — لا من 2.00% المجرّدة —
-    # فيطابق rr ما يُعرض في الرسالة وما يمكن بلوغه.
-    target_price = to_tick_down(c * (1.0 + float(cfg["target_pct"]) / 100.0), tick)
-    gross_target_pct = ((target_price / c - 1.0) * 100.0) if c > 0 else 0.0
-    net_target_pct = max(gross_target_pct - 2.0 * float(cfg["commission_per_side_pct"]), 0.0)
-    # أمر المالك: لا يُقاس R على مسافة أضيق من مدى شمعة الدخول نفسها.
-    # إن جاء الوقف أقرب من قاع الشمعة نُوسّعه إليه (فلا تُفقد الصفقة)،
-    # وبعدها يُختبر على الأرضية المحسوبة من الوقف المُوسَّع لا الأصلي.
-    stop_widened = False
-    if (stop_candidate is not None and cfg.get("stop_below_entry_candle_low")
-            and stop_candidate > lo):
-        stop_candidate = lo - tick
-        stop_widened = True
-    # والآن إلى شبكة Tick: التقريب لأسفل لا يضيق الوقف أبدًا، فلا تقترب
-    # مسافة المخاطرة من الأرضية min_stop_pct من جهة الرفض.
-    if stop_candidate is not None:
-        stop_candidate = to_tick_down(stop_candidate, tick)
-    buy_risk_pct = ((c - stop_candidate) / c * 100.0) if (c > 0 and stop_candidate is not None) else None
-    rr = (net_target_pct / buy_risk_pct) if (buy_risk_pct is not None and buy_risk_pct > 0) else None
-    # الأرضية تستبعد الصفقات شديدة الضيق، والسقف قائم كما كان.
+    # ===== ثم البوابة تُبنى على الثلاث نفسها — buyRiskOK من Pine حرفيًّا =====
     risk_ok = (buy_risk_pct is not None
-               and float(cfg["min_stop_pct"]) <= buy_risk_pct <= float(cfg["max_stop_pct"])
+               and buy_risk_pct > 0
+               and buy_risk_pct <= float(cfg["max_stop_pct"])
                and rr is not None and rr >= float(cfg["min_reward_risk"]))
 
     enough = bar_index > int(cfg["ema_slow_len"]) + left + right + 10
@@ -503,9 +502,11 @@ def step(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
                 "rsi": rv, "rel_volume": rel_vol, "adx": adx_v,
                 "divergence": "إيجابي" if bull_div else "—",
                 "pivot_low": float(ctx["pivot_low"][i]),
+                # كما بُنيت في كتلة الثلاث — لا تعديل بعدها ولا قبلها.
+                # كما بُنيت في كتلة الثلاث — لا تعديل بعدها ولا قبلها.
                 "risk_pct": buy_risk_pct, "reward_risk": rr,
-                "entry_candle_low": lo,
-                "stop_widened": stop_widened,
+                # كما بُنيت في كتلة الثلاث — لا تعديل بعدها ولا قبلها.
+                # كما بُنيت في كتلة الثلاث — لا تعديل بعدها ولا قبلها.
             }
         elif top_setup:
             event = {
@@ -603,8 +604,7 @@ def snapshot(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
 
     stop_candidate = None
     if pl_i >= 0 and atr_p is not None:
-        stop_candidate = to_tick_down(
-            float(ctx["pivot_low"][i]) - atr_p * float(cfg["stop_buffer_atr"]), tick)
+        stop_candidate = float(ctx["pivot_low"][i]) - atr_p * float(cfg["stop_buffer_atr"])
     pma = _f(ctx["prior_vol_ma"], i)
     rel_vol = (float(ctx["volume"][i]) / pma) if (pma and pma > 0) else None
 
@@ -702,18 +702,12 @@ def risk_pct_math(cfg: dict) -> dict:
     mr = float(cfg["min_reward_risk"])
     eff = net / mr if mr > 0 else None
     nominal = float(cfg["max_stop_pct"])
-    floor = float(cfg.get("min_stop_pct") or 0.0)
-    fee_pct = 2.0 * float(cfg["commission_per_side_pct"])
     return {
         "net_target_pct": net,
         "max_stop_pct_nominal": nominal,
         "max_risk_pct_effective": eff,
         "binding_filter": ("min_reward_risk" if (eff is not None and eff < nominal)
                            else "max_stop_pct"),
-        # أمر المالك: المسافة لها حدّان الآن لا حدّ أعلى فقط.
-        "min_stop_pct": floor,
-        "fee_pct": fee_pct,
-        # عند الأرضية، كم من وحدة R تلتهمه الرسوم؟ هذا ما كانت تنهار منه.
-        "fee_in_r_at_floor": (fee_pct / floor) if floor > 0 else None,
-        "stop_below_entry_candle_low": bool(cfg.get("stop_below_entry_candle_low")),
+        # أمر المالك: ثلاث إشارات فقط بلا أرضية ولا توسعة ولا تقريب،
+        # فلم يبقَ في المسافة إلا حدّ الحاجب الأعلى.
     }

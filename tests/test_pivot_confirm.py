@@ -261,7 +261,11 @@ def test_risk_math_reports_the_binding_filter():
 
 
 def test_entry_stop_risk_never_exceeds_the_effective_cap():
-    """كل دخول مُنتَج يلتزم بالحدّ الحاجب (2.4%)، لا بالاسمي 2.5%."""
+    """كل دخول مُنتَج يلتزم بالحدّ الحاجب (2.4%)، لا بالاسمي 2.5%.
+
+    وبعد أمر المالك «ثلاث إشارات فقط كما يُصدرها المؤشر» صارت المسافة
+    المُعلنة هي نفسها التي اختُبرت في buyRiskOK — لا فرق بينهما بعد.
+    """
     conf = pc.merge_cfg({"use_trend_filter": False, "use_adx_filter": False,
                          "min_hourly_quote_vol": 0.0})
     cap = pc.risk_pct_math(conf)["max_risk_pct_effective"]
@@ -286,13 +290,41 @@ def test_entry_stop_risk_never_exceeds_the_effective_cap():
                 found += 1
                 risk = (ev["entry"] - ev["stop"]) / ev["entry"] * 100.0
                 assert risk <= cap + 1e-6, f"تجاوز {risk} > {cap}"
+                assert ev["reward_risk"] >= float(conf["min_reward_risk"]) - 1e-9, ev
                 assert ev["target"] > ev["entry"] > ev["stop"]
     assert found > 0, "لم يُنتج أي دخول على 40 سلسلة — الاختبار لا يتحقق من شيء"
 
 
-# --------------------------------------------------------------------------- #
-# 5) سجل الصفقات: R من وقف الدخول
-# --------------------------------------------------------------------------- #
+def test_the_three_signals_are_exactly_what_the_indicator_issues():
+    """أمر المالك: «ثلاث إشارات — ثبّتها ثم ابن عليها الرسائل».
+
+    فلا توسعة تحت قاع شمعة الدخول، ولا أرضية 0.40%، ولا تقريب على شبكة
+    Tick — أيٌّ منها يعدّل الرقم عما صدره المؤشر. ويُتحقق من الثلاثة بصيغ
+    Pine نفسها على كل مدخل مُنتَج، لا على مثال واحد:
+
+        الدخول = close
+        الهدف  = close * (1 + targetPct / 100)
+        الوقف  = pivotLow - ATR[right] * stopBufferAtr
+    """
+    conf = pc.merge_cfg({})
+    st0, context, i, ema, tick, ev0 = _walk_until_buy(conf, lambda e: True)
+
+    atr_p = float(context["atr"][i - int(context["pivot_right"])])
+    pivot_low = float(context["pivot_low"][i])
+    buffer = float(conf["stop_buffer_atr"])
+    tp = float(conf["target_pct"]) / 100.0
+
+    assert ev0["entry"] == pytest.approx(float(context["close"][i]))
+    assert ev0["target"] == pytest.approx(ev0["close"] * (1.0 + tp))
+    assert ev0["stop"] == pytest.approx(pivot_low - atr_p * buffer)
+
+    # ولا شيء يعدّلها بعد البناء: المسافة المُعلنة هي التي اختُبرت في البوابة
+    risk = (ev0["entry"] - ev0["stop"]) / ev0["entry"] * 100.0
+    assert ev0["risk_pct"] == pytest.approx(risk, abs=1e-9)
+    assert ev0["reward_risk"] >= float(conf["min_reward_risk"]) - 1e-9
+
+
+
 def test_r_uses_entry_stop_not_the_ratcheted_exit_stop():
     ev = {"symbol": "TUSDT", "kind": "sl", "reason": pc.EXIT_SL,
           "close_time": 1000, "entry": 100.0, "target": 102.0,
@@ -777,186 +809,9 @@ def _walk_until_buy(conf: dict, pred, seeds=(20260903, 4242, 777, 31337, 5)):
     raise AssertionError("لم يُعثر على مدخل يحقّق الشرط في كل البذور")
 
 
-def test_moving_stop_never_sits_on_the_entry_candle_low():
-    """قرار المالك: الوقف لا يكون قاع شمعة الدخول، ولا يُقاس على مسافة أضيق.
-
-    يُفحص كشرط على كل مدخل مُنتَج عبر 600 شمعة، لا على مثال واحد:
-    وقف كل مدخل تحت قاع شمعة الدخول تمامًا، والمسافة المُعلنة محسوبة
-    من الوقف نفسه لا من الوقف الأصلي.
-    """
-    conf = cfg(min_stop_pct=0.0, stop_below_entry_candle_low=True)
-    rng = np.random.default_rng(4242)
-    n = 600
-    base = 100.0 + np.cumsum(rng.normal(0, 0.8, n))
-    o = base - rng.uniform(0.01, 0.4, n)
-    h = np.maximum(base, o) + rng.uniform(0.05, 1.2, n)
-    l = np.minimum(base, o) - rng.uniform(0.05, 1.2, n)
-    c = base + rng.normal(0, 0.2, n)
-    v = rng.uniform(500, 9000, n)
-    context = ctx_from(list(o), list(h), list(l), list(c), list(v), conf)
-    st = pc.new_state()
-    st.update({"ema200": 100.0, "bar_index": 1000, "last_close_time": 10 ** 12})
-    ema = 100.0
-    buys = []
-    for i in range(n):
-        ema = pc.ema200_step(ema, float(c[i]), 200)
-        ev = pc.step(st, context, i, conf, ema, 0.01)
-        if ev and ev["kind"] == "buy":
-            buys.append(ev)
-    assert buys, "لم يُنتج أي دخول — الشرط لم يُختبر"
-
-    for ev in buys:
-        assert ev["stop"] < ev["entry_candle_low"], ev
-        assert ev["risk_pct"] == pytest.approx(
-            (ev["entry"] - ev["stop"]) / ev["entry"] * 100.0, abs=1e-9)
-        assert ev["risk_pct"] > 0.0
-    # على الأقل واحد توسّع فعلًا، وإلا صار الاختبار بلا مضمون
-    assert any(ev["stop_widened"] for ev in buys)
-
-
-def test_min_stop_floor_rejects_thin_entries_with_an_inclusive_boundary():
-    """أرضية 0.40% (= ضعف العمولة)، والحدّ شامل عند المسافة بالضبط.
-
-    تُختبر على نفس النقطة نفسها ثلاث مرات بإعدادات مختلفة فناتجها حتمي.
-    بلا الأرضية كانت fee_in_r = 0.20 / risk_pct تصل إلى 80.53R في إعادة
-    تشغيل على شموع حيّة، وتنزل إلى 0.48R معها.
-    """
-    # العزل: نُطفئ قاعدة قاع الشمعة في كل حالات هذا الاختبار، وإلا لتغيّرت
-    # المسافة نفسها بتغيّر الأرضية وصار لا يُقاس شيء.
-    def iso(floor):
-        return cfg(min_stop_pct=floor, stop_below_entry_candle_low=False)
-
-    base = iso(0.0)
-    st0, context, i, ema, tick, ev0 = _walk_until_buy(
-        base, lambda e: e["risk_pct"] < 0.40)
-
-    risk = ev0["risk_pct"]
-    assert risk < 0.40, f"السلسلة لم تنتج مسافة تحت الأرضية ({risk})"
-
-    # 1) بلا أرضية: المدخل يمرّ
-    again = pc.step(_clone(st0), context, i, base, ema, tick)
-    assert again is not None and again["kind"] == "buy"
-    assert again["risk_pct"] == pytest.approx(risk)
-
-    # 2) الأرضية عند المسافة بالضبط: شاملة، فيمرّ
-    at = pc.step(_clone(st0), context, i, iso(risk), ema, tick)
-    assert at is not None and at["kind"] == "buy", "الحدّ يجب أن يكون شاملًا"
-
-    # 3) الأرضية فوق المسافة بقليل: تُسقط الإشارة بالكامل
-    over = pc.step(_clone(st0), context, i, iso(risk + 1e-6), ema, tick)
-    assert over is None, "أرضية أعلى من المسافة يجب أن تمنع المدخل"
-
-    # 4) القيم الافتراضية في الكود، وما تعنيه من نسبة رسوم
-    rm = pc.risk_pct_math(pc.merge_cfg({}))
-    assert rm["min_stop_pct"] == pytest.approx(0.40)
-    assert rm["fee_pct"] == pytest.approx(0.20)
-    assert rm["fee_in_r_at_floor"] == pytest.approx(0.50)
-    assert rm["stop_below_entry_candle_low"] is True
-
-
-def test_the_floor_is_measured_after_the_entry_candle_stop_is_widened():
-    """ترتيب المالك: يُثبَّت الوقف تحت قاع الشمعة أولًا، ثم تُختبر الأرضية عليه.
-
-    والترتيب الخاطئ هو اختبار الأرضية على المسافة الأصلية ثم توسيع الوقف،
-    فيدخل ما كان يجب أن يُرفض. هنا نقيس المسافة بعد التوسيع صراحةً.
-    """
-    def on(floor):
-        return cfg(min_stop_pct=floor, stop_below_entry_candle_low=True)
-
-    st0, context, i, ema, tick, ev0 = _walk_until_buy(
-        cfg(min_stop_pct=0.0, stop_below_entry_candle_low=True),
-        lambda e: e["stop_widened"])
-
-    # المسافة بعد التوسيع، كما مُنحت فعلًا
-    wide = ev0["risk_pct"]
-    assert ev0["stop"] == pytest.approx(
-        pc.to_tick_down(ev0["entry_candle_low"] - 0.01, tick))
-    assert ev0["stop"] < ev0["entry_candle_low"]
-    assert ev0["risk_pct"] == pytest.approx(
-        (ev0["entry"] - ev0["stop"]) / ev0["entry"] * 100.0, abs=1e-9)
-
-    # الأرضية على المسافة المُوسَّعة بالضبط: شاملة
-    ok = pc.step(_clone(st0), context, i, on(wide), ema, tick)
-    assert ok is not None and ok["kind"] == "buy"
-    assert ok["risk_pct"] == pytest.approx(wide)
-
-    # وأعلى منها بقليل: يُرفض رغم أن المسافة الأصلية كانت أضيق منها بمراحل
-    rejected = pc.step(_clone(st0), context, i, on(wide + 1e-6), ema, tick)
-    assert rejected is None, "الأرضية تُقاس على المسافة بعد التوسيع لا قبله"
-
-
 def T_cfg_off():
     """إعدادات بلا أرضية وبلا قاعدة قاع الشمعة: القاعدة وحدها هي المتغيّر."""
     return cfg(min_stop_pct=0.0, stop_below_entry_candle_low=False)
-
-
-def test_turning_the_entry_candle_rule_on_only_widens_the_stop():
-    """قاعدة المالك توسّع الوقف ولا تُضيّقه، والمُنشِط هنا مقيس لا افتراضي.
-
-    يُبحث عن مدخل وقع وقفه فوق قاع شمعة الدخول فعلًا، فيجب أن يُوسَّع إلى ما
-    تحت القاع. والتوسيع يجعل المسافة بين الوقف والدخول أعرض لا أضيق.
-    """
-    st0, context, i, ema, tick, before = _walk_until_buy(
-        T_cfg_off(), lambda e: e["stop"] > e["entry_candle_low"])
-    assert before["stop_widened"] is False, "المُنشِط اختار مدخلًا موسَّعًا أصلًا"
-
-    on = pc.step(_clone(st0), context, i,
-                 cfg(min_stop_pct=0.0, stop_below_entry_candle_low=True),
-                 ema, tick)
-    assert on is not None and on["kind"] == "buy"
-    assert on["stop_widened"] is True
-    assert on["entry_candle_low"] == pytest.approx(before["entry_candle_low"])
-    # تحت القاع تمامًا لا عنده. والتوقّع مقرَّب لأسفل على شبكة Tick:
-    #{OHLC} من Binance على الشبكة تمامًا (قِست 20000 قيمة على 10 رموز
-    # وخارجها 0)، فالتقريب لا أثر له هناك — لكنه ظاهر في سلسلة اختبارية
-    # اصطناعية قاعها خارج الشبكة.
-    assert on["stop"] == pytest.approx(
-        pc.to_tick_down(before["entry_candle_low"] - 0.01, tick))
-    assert on["stop"] < before["entry_candle_low"]
-    assert on["stop"] < before["stop"]                     # توسيع لا تضيق
-    assert on["risk_pct"] > before["risk_pct"]             # والمسافة أعرض
-    assert on["risk_pct"] == pytest.approx(
-        (on["entry"] - on["stop"]) / on["entry"] * 100.0, abs=1e-9)
-
-
-def test_the_entry_candle_rule_changes_nothing_when_the_stop_is_already_below():
-    """إذا كان الوقف تحت القاع أصلًا فلا تغيير: لا مسافة ولا رفض ولا حدث."""
-    st0, context, i, ema, tick, before = _walk_until_buy(
-        T_cfg_off(), lambda e: e["stop"] <= e["entry_candle_low"])
-
-    on = pc.step(_clone(st0), context, i,
-                 cfg(min_stop_pct=0.0, stop_below_entry_candle_low=True),
-                 ema, tick)
-    assert on is not None and on["kind"] == "buy"
-    assert on["stop_widened"] is False
-    assert on["stop"] == pytest.approx(before["stop"])
-    assert on["risk_pct"] == pytest.approx(before["risk_pct"])
-
-
-def test_the_target_and_the_stop_land_on_prices_the_market_can_trade():
-    """أمر المالك: ما يُعرض في الرسالة يجب أن يكون سعرًا قابلًا للتنفيذ.
-
-    قبل التقريب كان الهدف = `close * 1.02` حسابًا مجردًا: قِست 113 من 118
-    هدفًا (95.8%) خارج شبكة Tick، وحالة GMTUSDT هدفه 0.009027 بين
-    0.009020 و0.009030 فلا يقدر أي أمر على بلوغه. والوقف المُحسوب من ATR
-    كان خارج الشبكة أيضًا في 115 من 118 مدخلًا.
-    """
-    o, h, l, c, v = _random_series(n=600)
-    conf = cfg()
-    context = ctx_from(o, h, l, c, v, conf)
-    st = pc.new_state()
-    st.update({"ema200": 100.0, "bar_index": 1000, "last_close_time": 10 ** 12})
-    ema, tick, checked = 100.0, 0.01, 0
-    for i in range(len(c)):
-        ema = pc.ema200_step(ema, float(c[i]), 200)
-        ev = pc.step(st, context, i, conf, ema, tick)
-        if ev and ev["kind"] == "buy":
-            checked += 1
-            # الدخول نفسه إغلاق شمعة حقيقية فهو على الشبكة؛ أما الهدف
-            # والوقف فيحسبهما الكود فيصيران خارجها بلا تقريب.
-            for px in (ev["target"], ev["stop"]):
-                assert pc.to_tick_down(px, tick) == pytest.approx(px), (px, tick, ev)
-    assert checked, "لم يُنتج أي دخول — الشرط لم يُختبر"
 
 
 def test_rounding_the_target_down_never_makes_the_ordered_goal_harder():
@@ -983,16 +838,6 @@ def test_the_reward_is_measured_from_the_rounded_target_not_the_ideal_two_percen
     gross = (ev["target"] / ev["entry"] - 1.0) * 100.0
     assert ev["reward_risk"] == pytest.approx(
         (gross - fee) / ev["risk_pct"], rel=1e-9), ev
-
-
-def test_to_tick_down_leaves_the_price_alone_when_the_tick_is_unknown():
-    """بلا tick معروف لا نخترع سعرًا: نعيد القيمة كما هي."""
-    for tick in (0.0, None, -1.0):
-        assert pc.to_tick_down(0.009027, tick) == pytest.approx(0.009027)
-    assert pc.to_tick_down(0.0, 0.01) == pytest.approx(0.0)
-
-
-
 
 
 def test_engine_writes_only_its_own_files(tmp_path):
