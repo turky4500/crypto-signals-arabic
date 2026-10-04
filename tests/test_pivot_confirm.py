@@ -739,6 +739,195 @@ def test_summary_profit_factor_uses_one_consistent_unit():
 
 
 
+def _clone(st: dict) -> dict:
+    import copy
+    return copy.deepcopy(st)
+
+
+def _random_series(n: int = 400, seed: int = 20260903, scale: float = 0.6):
+    rng = np.random.default_rng(seed)
+    base = 100.0 + np.cumsum(rng.normal(0, scale, n))
+    o = base - rng.uniform(0.01, 0.3, n)
+    h = np.maximum(base, o) + rng.uniform(0.05, 1.0, n)
+    l = np.minimum(base, o) - rng.uniform(0.05, 1.0, n)
+    c = base + rng.normal(0, 0.2, n)
+    return list(o), list(h), list(l), list(c), list(rng.uniform(500, 9000, n))
+
+
+def _walk_until_buy(conf: dict, pred, seeds=(20260903, 4242, 777, 31337, 5)):
+    """يبحث في عدة سلاسل ثابتة البذرة عن أول مدخل يحقّق pred.
+
+    يعيد (الحالة قبل الخطوة، السياق، رقم الشمعة، المتوسط المتحرك، الفارق، الحدث).
+    الحالة منسوخة عميقًا لأن step يغيّرها، فيمكن إعادة التشغيل على نفس النقطة
+    بإعدادات مختلفة ويكون الناتج حتميًا بلا أي أثر لحالة سابقة.
+    """
+    import copy
+    for seed in seeds:
+        o, h, l, c, v = _random_series(seed=seed)
+        context = ctx_from(o, h, l, c, v, conf)
+        st = pc.new_state()
+        st.update({"ema200": 100.0, "bar_index": 1000, "last_close_time": 10 ** 12})
+        ema = 100.0
+        for i in range(len(c)):
+            ema = pc.ema200_step(ema, float(c[i]), 200)
+            before = copy.deepcopy(st)
+            ev = pc.step(st, context, i, conf, ema, 0.01)
+            if ev and ev["kind"] == "buy" and pred(ev):
+                return before, context, i, ema, 0.01, ev
+    raise AssertionError("لم يُعثر على مدخل يحقّق الشرط في كل البذور")
+
+
+def test_moving_stop_never_sits_on_the_entry_candle_low():
+    """قرار المالك: الوقف لا يكون قاع شمعة الدخول، ولا يُقاس على مسافة أضيق.
+
+    يُفحص كشرط على كل مدخل مُنتَج عبر 600 شمعة، لا على مثال واحد:
+    وقف كل مدخل تحت قاع شمعة الدخول تمامًا، والمسافة المُعلنة محسوبة
+    من الوقف نفسه لا من الوقف الأصلي.
+    """
+    conf = cfg(min_stop_pct=0.0, stop_below_entry_candle_low=True)
+    rng = np.random.default_rng(4242)
+    n = 600
+    base = 100.0 + np.cumsum(rng.normal(0, 0.8, n))
+    o = base - rng.uniform(0.01, 0.4, n)
+    h = np.maximum(base, o) + rng.uniform(0.05, 1.2, n)
+    l = np.minimum(base, o) - rng.uniform(0.05, 1.2, n)
+    c = base + rng.normal(0, 0.2, n)
+    v = rng.uniform(500, 9000, n)
+    context = ctx_from(list(o), list(h), list(l), list(c), list(v), conf)
+    st = pc.new_state()
+    st.update({"ema200": 100.0, "bar_index": 1000, "last_close_time": 10 ** 12})
+    ema = 100.0
+    buys = []
+    for i in range(n):
+        ema = pc.ema200_step(ema, float(c[i]), 200)
+        ev = pc.step(st, context, i, conf, ema, 0.01)
+        if ev and ev["kind"] == "buy":
+            buys.append(ev)
+    assert buys, "لم يُنتج أي دخول — الشرط لم يُختبر"
+
+    for ev in buys:
+        assert ev["stop"] < ev["entry_candle_low"], ev
+        assert ev["risk_pct"] == pytest.approx(
+            (ev["entry"] - ev["stop"]) / ev["entry"] * 100.0, abs=1e-9)
+        assert ev["risk_pct"] > 0.0
+    # على الأقل واحد توسّع فعلًا، وإلا صار الاختبار بلا مضمون
+    assert any(ev["stop_widened"] for ev in buys)
+
+
+def test_min_stop_floor_rejects_thin_entries_with_an_inclusive_boundary():
+    """أرضية 0.40% (= ضعف العمولة)، والحدّ شامل عند المسافة بالضبط.
+
+    تُختبر على نفس النقطة نفسها ثلاث مرات بإعدادات مختلفة فناتجها حتمي.
+    بلا الأرضية كانت fee_in_r = 0.20 / risk_pct تصل إلى 80.53R في إعادة
+    تشغيل على شموع حيّة، وتنزل إلى 0.48R معها.
+    """
+    # العزل: نُطفئ قاعدة قاع الشمعة في كل حالات هذا الاختبار، وإلا لتغيّرت
+    # المسافة نفسها بتغيّر الأرضية وصار لا يُقاس شيء.
+    def iso(floor):
+        return cfg(min_stop_pct=floor, stop_below_entry_candle_low=False)
+
+    base = iso(0.0)
+    st0, context, i, ema, tick, ev0 = _walk_until_buy(
+        base, lambda e: e["risk_pct"] < 0.40)
+
+    risk = ev0["risk_pct"]
+    assert risk < 0.40, f"السلسلة لم تنتج مسافة تحت الأرضية ({risk})"
+
+    # 1) بلا أرضية: المدخل يمرّ
+    again = pc.step(_clone(st0), context, i, base, ema, tick)
+    assert again is not None and again["kind"] == "buy"
+    assert again["risk_pct"] == pytest.approx(risk)
+
+    # 2) الأرضية عند المسافة بالضبط: شاملة، فيمرّ
+    at = pc.step(_clone(st0), context, i, iso(risk), ema, tick)
+    assert at is not None and at["kind"] == "buy", "الحدّ يجب أن يكون شاملًا"
+
+    # 3) الأرضية فوق المسافة بقليل: تُسقط الإشارة بالكامل
+    over = pc.step(_clone(st0), context, i, iso(risk + 1e-6), ema, tick)
+    assert over is None, "أرضية أعلى من المسافة يجب أن تمنع المدخل"
+
+    # 4) القيم الافتراضية في الكود، وما تعنيه من نسبة رسوم
+    rm = pc.risk_pct_math(pc.merge_cfg({}))
+    assert rm["min_stop_pct"] == pytest.approx(0.40)
+    assert rm["fee_pct"] == pytest.approx(0.20)
+    assert rm["fee_in_r_at_floor"] == pytest.approx(0.50)
+    assert rm["stop_below_entry_candle_low"] is True
+
+
+def test_the_floor_is_measured_after_the_entry_candle_stop_is_widened():
+    """ترتيب المالك: يُثبَّت الوقف تحت قاع الشمعة أولًا، ثم تُختبر الأرضية عليه.
+
+    والترتيب الخاطئ هو اختبار الأرضية على المسافة الأصلية ثم توسيع الوقف،
+    فيدخل ما كان يجب أن يُرفض. هنا نقيس المسافة بعد التوسيع صراحةً.
+    """
+    def on(floor):
+        return cfg(min_stop_pct=floor, stop_below_entry_candle_low=True)
+
+    st0, context, i, ema, tick, ev0 = _walk_until_buy(
+        cfg(min_stop_pct=0.0, stop_below_entry_candle_low=True),
+        lambda e: e["stop_widened"])
+
+    # المسافة بعد التوسيع، كما مُنحت فعلًا
+    wide = ev0["risk_pct"]
+    assert ev0["stop"] == pytest.approx(ev0["entry_candle_low"] - 0.01)
+    assert ev0["risk_pct"] == pytest.approx(
+        (ev0["entry"] - ev0["stop"]) / ev0["entry"] * 100.0, abs=1e-9)
+
+    # الأرضية على المسافة المُوسَّعة بالضبط: شاملة
+    ok = pc.step(_clone(st0), context, i, on(wide), ema, tick)
+    assert ok is not None and ok["kind"] == "buy"
+    assert ok["risk_pct"] == pytest.approx(wide)
+
+    # وأعلى منها بقليل: يُرفض رغم أن المسافة الأصلية كانت أضيق منها بمراحل
+    rejected = pc.step(_clone(st0), context, i, on(wide + 1e-6), ema, tick)
+    assert rejected is None, "الأرضية تُقاس على المسافة بعد التوسيع لا قبله"
+
+
+def T_cfg_off():
+    """إعدادات بلا أرضية وبلا قاعدة قاع الشمعة: القاعدة وحدها هي المتغيّر."""
+    return cfg(min_stop_pct=0.0, stop_below_entry_candle_low=False)
+
+
+def test_turning_the_entry_candle_rule_on_only_widens_the_stop():
+    """قاعدة المالك توسّع الوقف ولا تُضيّقه، والمُنشِط هنا مقيس لا افتراضي.
+
+    يُبحث عن مدخل وقع وقفه فوق قاع شمعة الدخول فعلًا، فيجب أن يُوسَّع إلى ما
+    تحت القاع. والتوسيع يجعل المسافة بين الوقف والدخول أعرض لا أضيق.
+    """
+    st0, context, i, ema, tick, before = _walk_until_buy(
+        T_cfg_off(), lambda e: e["stop"] > e["entry_candle_low"])
+    assert before["stop_widened"] is False, "المُنشِط اختار مدخلًا موسَّعًا أصلًا"
+
+    on = pc.step(_clone(st0), context, i,
+                 cfg(min_stop_pct=0.0, stop_below_entry_candle_low=True),
+                 ema, tick)
+    assert on is not None and on["kind"] == "buy"
+    assert on["stop_widened"] is True
+    assert on["entry_candle_low"] == pytest.approx(before["entry_candle_low"])
+    # تحت القاع تمامًا لا عنده
+    assert on["stop"] == pytest.approx(before["entry_candle_low"] - 0.01)
+    assert on["stop"] < before["stop"]                     # توسيع لا تضيق
+    assert on["risk_pct"] > before["risk_pct"]             # والمسافة أعرض
+    assert on["risk_pct"] == pytest.approx(
+        (on["entry"] - on["stop"]) / on["entry"] * 100.0, abs=1e-9)
+
+
+def test_the_entry_candle_rule_changes_nothing_when_the_stop_is_already_below():
+    """إذا كان الوقف تحت القاع أصلًا فلا تغيير: لا مسافة ولا رفض ولا حدث."""
+    st0, context, i, ema, tick, before = _walk_until_buy(
+        T_cfg_off(), lambda e: e["stop"] <= e["entry_candle_low"])
+
+    on = pc.step(_clone(st0), context, i,
+                 cfg(min_stop_pct=0.0, stop_below_entry_candle_low=True),
+                 ema, tick)
+    assert on is not None and on["kind"] == "buy"
+    assert on["stop_widened"] is False
+    assert on["stop"] == pytest.approx(before["stop"])
+    assert on["risk_pct"] == pytest.approx(before["risk_pct"])
+
+
+
+
 def test_engine_writes_only_its_own_files(tmp_path):
     data_dir = str(tmp_path)
     pce.save_state(data_dir, {"version": pce.STATE_VERSION,

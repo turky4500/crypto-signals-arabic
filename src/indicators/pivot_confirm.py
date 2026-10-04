@@ -72,6 +72,17 @@ DEFAULTS: dict = {
     "atr_len": 14,
     "stop_buffer_atr": 0.20,
     "max_stop_pct": 2.5,
+    # أرضية المسافة بين الوقف والدخول. السبب مقيس لا مخترع: العمولة ذهابًا
+    # وإيابًا 0.20% ثابتة، و fee_in_R = 0.20 / risk_pct، فكلما ضاق الوقف
+    # انتفخت نسبة الرسوم داخل وحدة R. قِسنا على 56 صفقة حيّة: الصفقات
+    # التي risk_pct < 1.0% عددها 28 ومجموعها -61.80R بنسبة فوز 25.0%، بينما
+    # risk_pct >= 0.40% عددها 43 ومجموعها +19.97R بنسبة فوز 55.8%.
+    # ف 0.40% = ضعف العمولة. ومقيسًا على 18 عملة محدثة: أسوأ fee_in_R نزل من 80.53R إلى 0.48R، والمداخل نزلت من 481 إلى 465، ومنها 223 وقفًا مُوسَّعًا تحت قاع الشمعة.
+    "min_stop_pct": 0.40,
+    # أمر المالك: الوقف المتحرك لا يكون قاع شمعة الدخول. إن جاء أضيق من
+    # قاع شمعة الإشارة نُوسّعه إليه فتبقى الصفقة ولا يُقاس R على
+    # مسافة أضيق من مدى الشمعة نفسها — وإلا صار قياس R غير مفهومًا.
+    "stop_below_entry_candle_low": True,
     "min_reward_risk": 0.75,
     "use_trend_filter": True,
     "use_adx_filter": True,
@@ -399,9 +410,19 @@ def step(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
         stop_candidate = float(ctx["pivot_low"][i]) - atr_p * float(cfg["stop_buffer_atr"])
 
     net_target_pct = max(float(cfg["target_pct"]) - 2.0 * float(cfg["commission_per_side_pct"]), 0.0)
+    # أمر المالك: لا يُقاس R على مسافة أضيق من مدى شمعة الدخول نفسها.
+    # إن جاء الوقف أقرب من قاع الشمعة نُوسّعه إليه (فلا تُفقد الصفقة)،
+    # وبعدها يُختبر على الأرضية المحسوبة من الوقف المُوسَّع لا الأصلي.
+    stop_widened = False
+    if (stop_candidate is not None and cfg.get("stop_below_entry_candle_low")
+            and stop_candidate > lo):
+        stop_candidate = lo - tick
+        stop_widened = True
     buy_risk_pct = ((c - stop_candidate) / c * 100.0) if (c > 0 and stop_candidate is not None) else None
     rr = (net_target_pct / buy_risk_pct) if (buy_risk_pct is not None and buy_risk_pct > 0) else None
-    risk_ok = (buy_risk_pct is not None and 0 < buy_risk_pct <= float(cfg["max_stop_pct"])
+    # الأرضية تستبعد الصفقات شديدة الضيق، والسقف قائم كما كان.
+    risk_ok = (buy_risk_pct is not None
+               and float(cfg["min_stop_pct"]) <= buy_risk_pct <= float(cfg["max_stop_pct"])
                and rr is not None and rr >= float(cfg["min_reward_risk"]))
 
     enough = bar_index > int(cfg["ema_slow_len"]) + left + right + 10
@@ -452,6 +473,8 @@ def step(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
                 "divergence": "إيجابي" if bull_div else "—",
                 "pivot_low": float(ctx["pivot_low"][i]),
                 "risk_pct": buy_risk_pct, "reward_risk": rr,
+                "entry_candle_low": lo,
+                "stop_widened": stop_widened,
             }
         elif top_setup:
             event = {
@@ -646,10 +669,18 @@ def risk_pct_math(cfg: dict) -> dict:
     mr = float(cfg["min_reward_risk"])
     eff = net / mr if mr > 0 else None
     nominal = float(cfg["max_stop_pct"])
+    floor = float(cfg.get("min_stop_pct") or 0.0)
+    fee_pct = 2.0 * float(cfg["commission_per_side_pct"])
     return {
         "net_target_pct": net,
         "max_stop_pct_nominal": nominal,
         "max_risk_pct_effective": eff,
         "binding_filter": ("min_reward_risk" if (eff is not None and eff < nominal)
                            else "max_stop_pct"),
+        # أمر المالك: المسافة لها حدّان الآن لا حدّ أعلى فقط.
+        "min_stop_pct": floor,
+        "fee_pct": fee_pct,
+        # عند الأرضية، كم من وحدة R تلتهمه الرسوم؟ هذا ما كانت تنهار منه.
+        "fee_in_r_at_floor": (fee_pct / floor) if floor > 0 else None,
+        "stop_below_entry_candle_low": bool(cfg.get("stop_below_entry_candle_low")),
     }

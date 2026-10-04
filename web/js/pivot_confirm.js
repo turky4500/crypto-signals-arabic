@@ -168,6 +168,19 @@ function pcRenderStats() {
         ? `العائد/المخاطرة (الاسمي ${pcNum(rm.max_stop_pct_nominal, 2)}%)`
         : "المسافة القصوى الاسمية"}`));
   }
+  // أدنى وقف فعلي: المسافة لها حدّان الآن — أرضية وسقف.
+  // ولما نكتفها لولا عرضنا سيقول بأن وقفًا 0.0048% ممًا مسموحاً.
+  if (rm.min_stop_pct) {
+    const parts = [
+      `الرسوم ذهابًا وإيابًا ${pcNum(rm.fee_pct, 2, "—")}%`,
+      `= ${pcNum(rm.fee_in_r_at_floor, 2, "—")}R عند هذه الأرضية`,
+    ];
+    if (rm.stop_below_entry_candle_low) parts.push("والوقف تحت قاع شمعة الدخول");
+    grid.insertAdjacentHTML("beforeend", pcStatCard(
+      "أدنى وقف فعلي",
+      `${pcNum(rm.min_stop_pct, 2, "—")}%`,
+      parts.join(" · ")));
+  }
   if (ind.hit_rules) {
     grid.insertAdjacentHTML("beforeend", pcStatCard("قاعدة الحسم", "—", ind.hit_rules));
   }
