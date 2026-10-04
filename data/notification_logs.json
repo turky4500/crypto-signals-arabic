@@ -1,17 +1,5 @@
 [
   {
-    "ts": 1790899222121,
-    "kind": "resolution",
-    "symbol": "SUPERUSDT",
-    "indicator": "supertrend",
-    "status": "tp_hit",
-    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: SUPERUSDT\n💰 سعر الدخول: 0.2095\n🎯 الهدف: تحقق عند 0.2353\n📈 الأرباح: +2R (+12.32%)\n⏱ المدة: 6 ساعات\n🕐 وقت الإشارة: 8:59 مساءً",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram"
-  },
-  {
     "ts": 1790902849553,
     "kind": "resolution",
     "symbol": "CETUSUSDT",
@@ -7913,6 +7901,25 @@
     "stop": 0.8327319,
     "target": 0.848538,
     "exit_price": 0.848538,
+    "ok": true,
+    "suppressed": false,
+    "live_touch": true,
+    "deduped": false,
+    "channel": "telegram_owner",
+    "error": null
+  },
+  {
+    "ts": 1791100231014,
+    "symbol": "ZAMAUSDT",
+    "indicator": "pivot_confirm",
+    "event": "tp",
+    "reason": "هدف الربح",
+    "signature": "pc|ZAMAUSDT|tp|1791100799999",
+    "close_time": 1791100799999,
+    "entry": 0.08894,
+    "stop": 0.08682037194230188,
+    "target": 0.0907188,
+    "exit_price": 0.0907188,
     "ok": true,
     "suppressed": false,
     "live_touch": true,
