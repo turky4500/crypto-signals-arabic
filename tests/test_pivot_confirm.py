@@ -869,7 +869,9 @@ def test_the_floor_is_measured_after_the_entry_candle_stop_is_widened():
 
     # المسافة بعد التوسيع، كما مُنحت فعلًا
     wide = ev0["risk_pct"]
-    assert ev0["stop"] == pytest.approx(ev0["entry_candle_low"] - 0.01)
+    assert ev0["stop"] == pytest.approx(
+        pc.to_tick_down(ev0["entry_candle_low"] - 0.01, tick))
+    assert ev0["stop"] < ev0["entry_candle_low"]
     assert ev0["risk_pct"] == pytest.approx(
         (ev0["entry"] - ev0["stop"]) / ev0["entry"] * 100.0, abs=1e-9)
 
@@ -904,8 +906,13 @@ def test_turning_the_entry_candle_rule_on_only_widens_the_stop():
     assert on is not None and on["kind"] == "buy"
     assert on["stop_widened"] is True
     assert on["entry_candle_low"] == pytest.approx(before["entry_candle_low"])
-    # تحت القاع تمامًا لا عنده
-    assert on["stop"] == pytest.approx(before["entry_candle_low"] - 0.01)
+    # تحت القاع تمامًا لا عنده. والتوقّع مقرَّب لأسفل على شبكة Tick:
+    #{OHLC} من Binance على الشبكة تمامًا (قِست 20000 قيمة على 10 رموز
+    # وخارجها 0)، فالتقريب لا أثر له هناك — لكنه ظاهر في سلسلة اختبارية
+    # اصطناعية قاعها خارج الشبكة.
+    assert on["stop"] == pytest.approx(
+        pc.to_tick_down(before["entry_candle_low"] - 0.01, tick))
+    assert on["stop"] < before["entry_candle_low"]
     assert on["stop"] < before["stop"]                     # توسيع لا تضيق
     assert on["risk_pct"] > before["risk_pct"]             # والمسافة أعرض
     assert on["risk_pct"] == pytest.approx(
@@ -924,6 +931,66 @@ def test_the_entry_candle_rule_changes_nothing_when_the_stop_is_already_below():
     assert on["stop_widened"] is False
     assert on["stop"] == pytest.approx(before["stop"])
     assert on["risk_pct"] == pytest.approx(before["risk_pct"])
+
+
+def test_the_target_and_the_stop_land_on_prices_the_market_can_trade():
+    """أمر المالك: ما يُعرض في الرسالة يجب أن يكون سعرًا قابلًا للتنفيذ.
+
+    قبل التقريب كان الهدف = `close * 1.02` حسابًا مجردًا: قِست 113 من 118
+    هدفًا (95.8%) خارج شبكة Tick، وحالة GMTUSDT هدفه 0.009027 بين
+    0.009020 و0.009030 فلا يقدر أي أمر على بلوغه. والوقف المُحسوب من ATR
+    كان خارج الشبكة أيضًا في 115 من 118 مدخلًا.
+    """
+    o, h, l, c, v = _random_series(n=600)
+    conf = cfg()
+    context = ctx_from(o, h, l, c, v, conf)
+    st = pc.new_state()
+    st.update({"ema200": 100.0, "bar_index": 1000, "last_close_time": 10 ** 12})
+    ema, tick, checked = 100.0, 0.01, 0
+    for i in range(len(c)):
+        ema = pc.ema200_step(ema, float(c[i]), 200)
+        ev = pc.step(st, context, i, conf, ema, tick)
+        if ev and ev["kind"] == "buy":
+            checked += 1
+            # الدخول نفسه إغلاق شمعة حقيقية فهو على الشبكة؛ أما الهدف
+            # والوقف فيحسبهما الكود فيصيران خارجها بلا تقريب.
+            for px in (ev["target"], ev["stop"]):
+                assert pc.to_tick_down(px, tick) == pytest.approx(px), (px, tick, ev)
+    assert checked, "لم يُنتج أي دخول — الشرط لم يُختبر"
+
+
+def test_rounding_the_target_down_never_makes_the_ordered_goal_harder():
+    """التقريب لأسفل مقصود: الهدف لا يصعب بل يُيسَّر، ولا يُضيّع أكثر من Tick."""
+    st0, context, i, ema, tick, _ = _walk_until_buy(cfg(), lambda e: True)
+    ev = pc.step(_clone(st0), context, i, cfg(), ema, tick)
+    assert ev is not None and ev["kind"] == "buy"
+    ideal = ev["entry"] * 1.02
+    assert ev["target"] <= ideal + 1e-12, ev
+    assert 0.0 <= ideal - ev["target"] < tick, ev
+
+
+def test_the_reward_is_measured_from_the_rounded_target_not_the_ideal_two_percent():
+    """rr يُقاس على ما يُبلَغ فعلًا، لا على 2.00% المجرّدة.
+
+    وإلا صار rr معروضًا في الرسالة أفضل من الواقع على العملات ذات
+    المقاس الخشن (tick كبير نسبيًا من السعر) —— و RADUSDT tick = 0.001 على سعر
+    0.262، فالتick الواحد 0.38% من السعر.
+    """
+    st0, context, i, ema, tick, _ = _walk_until_buy(cfg(), lambda e: True)
+    ev = pc.step(_clone(st0), context, i, cfg(), ema, tick)
+    assert ev is not None and ev["kind"] == "buy"
+    fee = 2.0 * float(pc.merge_cfg({})["commission_per_side_pct"])
+    gross = (ev["target"] / ev["entry"] - 1.0) * 100.0
+    assert ev["reward_risk"] == pytest.approx(
+        (gross - fee) / ev["risk_pct"], rel=1e-9), ev
+
+
+def test_to_tick_down_leaves_the_price_alone_when_the_tick_is_unknown():
+    """بلا tick معروف لا نخترع سعرًا: نعيد القيمة كما هي."""
+    for tick in (0.0, None, -1.0):
+        assert pc.to_tick_down(0.009027, tick) == pytest.approx(0.009027)
+    assert pc.to_tick_down(0.0, 0.01) == pytest.approx(0.0)
+
 
 
 

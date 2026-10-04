@@ -40,6 +40,8 @@ from __future__ import annotations
 
 from typing import Optional
 
+import math
+
 import numpy as np
 
 from .dmi import compute as _dmi_compute
@@ -301,6 +303,26 @@ def _valid(*vals) -> bool:
     return all(v is not None and v == v for v in vals)
 
 
+def to_tick_down(price: float, tick: float) -> float:
+    """يقرّب السعر لأسفل إلى أقرب وحدة سعرية (tick) — أمر المالك.
+
+    الهدف المحسوب حسابيًا (`close * (1 + target_pct)`) يقع غالبًا **بين**
+    سعرين قابلين للتنفيذ، فيصبح سعرًا لا يقدر أي أمر على بلوغه.
+    القياس على 118 مدخلًا: 113 هدفًا (95.8%) خارج شبكة Tick.
+    وحالة GMTUSDT: `0.00885 * 1.02 = 0.009027` و tick = `0.00001`، فالأسعار
+    القابلة للتنفيذ `0.009020` و`0.009030` فقط — والهدف غير قابل للتنفيذ،
+    والشمعة التالية بلغت `0.009020` أي ناقصةً 0.0775% ثم لم تُحتسب.
+
+    التقريب لأسفل (لا لأقرب) مقصود: الهدف لا يصعب بل يُيسَّر، والوقف لا
+    يضيق بل يتّسع — فلا تقترب مسافة المخاطرة من الأرضية `min_stop_pct`
+    من جهة الرفض، ولا تتجاوز السقف `max_stop_pct` إلا بزيادة مسافة.
+    """
+    p, t = float(price), float(tick or 0.0)
+    if t <= 0 or p <= 0 or p != p:
+        return p
+    return math.floor(p / t + 1e-9) * t
+
+
 # --------------------------------------------------------------------------- #
 # حالة المؤشر — Pine عند أول شمعة من تاريخه
 # --------------------------------------------------------------------------- #
@@ -409,7 +431,12 @@ def step(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
     if has_pl and atr_p is not None:
         stop_candidate = float(ctx["pivot_low"][i]) - atr_p * float(cfg["stop_buffer_atr"])
 
-    net_target_pct = max(float(cfg["target_pct"]) - 2.0 * float(cfg["commission_per_side_pct"]), 0.0)
+    # أمر المالك: الهدف سعر يُغلَق عليه فعلًا، فيجب أن يكون قابلًا للتنفيذ.
+    # نقرّبه لأسفل على شبكة Tick ثم نحسب الصافي منه — لا من 2.00% المجرّدة —
+    # فيطابق rr ما يُعرض في الرسالة وما يمكن بلوغه.
+    target_price = to_tick_down(c * (1.0 + float(cfg["target_pct"]) / 100.0), tick)
+    gross_target_pct = ((target_price / c - 1.0) * 100.0) if c > 0 else 0.0
+    net_target_pct = max(gross_target_pct - 2.0 * float(cfg["commission_per_side_pct"]), 0.0)
     # أمر المالك: لا يُقاس R على مسافة أضيق من مدى شمعة الدخول نفسها.
     # إن جاء الوقف أقرب من قاع الشمعة نُوسّعه إليه (فلا تُفقد الصفقة)،
     # وبعدها يُختبر على الأرضية المحسوبة من الوقف المُوسَّع لا الأصلي.
@@ -418,6 +445,10 @@ def step(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
             and stop_candidate > lo):
         stop_candidate = lo - tick
         stop_widened = True
+    # والآن إلى شبكة Tick: التقريب لأسفل لا يضيق الوقف أبدًا، فلا تقترب
+    # مسافة المخاطرة من الأرضية min_stop_pct من جهة الرفض.
+    if stop_candidate is not None:
+        stop_candidate = to_tick_down(stop_candidate, tick)
     buy_risk_pct = ((c - stop_candidate) / c * 100.0) if (c > 0 and stop_candidate is not None) else None
     rr = (net_target_pct / buy_risk_pct) if (buy_risk_pct is not None and buy_risk_pct > 0) else None
     # الأرضية تستبعد الصفقات شديدة الضيق، والسقف قائم كما كان.
@@ -452,7 +483,7 @@ def step(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
         if buy_setup and cooldown_ok:
             st["in_trade"] = True
             st["entry"] = c
-            st["target"] = c * (1.0 + float(cfg["target_pct"]) / 100.0)
+            st["target"] = target_price
             st["stop"] = stop_candidate
             st["exit_price"] = None
             st["exit_reason"] = None
@@ -571,7 +602,8 @@ def snapshot(st: dict, ctx: dict, i: int, cfg: dict, ema200: float,
 
     stop_candidate = None
     if pl_i >= 0 and atr_p is not None:
-        stop_candidate = float(ctx["pivot_low"][i]) - atr_p * float(cfg["stop_buffer_atr"])
+        stop_candidate = to_tick_down(
+            float(ctx["pivot_low"][i]) - atr_p * float(cfg["stop_buffer_atr"]), tick)
     pma = _f(ctx["prior_vol_ma"], i)
     rel_vol = (float(ctx["volume"][i]) / pma) if (pma and pma > 0) else None
 
