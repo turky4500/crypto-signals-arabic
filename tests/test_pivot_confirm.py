@@ -387,7 +387,12 @@ def test_summarize_from_closed_records_only():
     assert s["closed"] == 2 and s["tp"] == 1 and s["sl"] == 1
     assert s["win_rate"] == pytest.approx(50.0)
     assert s["r_total"] == pytest.approx(-0.1, abs=1e-9)
-    assert s["profit_factor"] == pytest.approx(1.0)
+    # قرار المالك: عامل الربح على r_net مع r_net (1.0 / 1.1)،
+    # والنسخة الإجمالية تبقى متاحة للمقارنة فقط ولا تُعرض كعامل ربح.
+    assert s["profit_factor"] == pytest.approx(round(1.0 / 1.1, 3))
+    assert s["profit_factor_gross"] == pytest.approx(1.0)
+    assert s["net_pct_total"] == pytest.approx(-0.4, abs=1e-9)
+    assert s["net_pct_avg"] == pytest.approx(-0.2, abs=1e-9)
     assert s["avg_net_pct"] == pytest.approx(-0.2, abs=1e-9)
 
 
@@ -618,14 +623,18 @@ def test_pc_message_never_leaks_indicator_identity_to_subscribers():
 def test_pc_owner_receives_entry_target_stop_only_never_defensive_exit(tmp_path):
     """قرار المالك: ثلاث رسائل فقط — دخول · هدف · وقف.
 
-    «الخروج الاحترازي» (kind="exit") يُسجَّل في notification_logs.json
-    لكن لا رسالة تصل للمالك. نتحقق من الحالتين:
-      1) الإرسال لا يقع للأحداث المحظورة إطلاقًا (ولا اتصال ولا تحضير).
-      2) السجل يبقى كاملًا فالتدقيق ممكن.
+    كل ما عداهما صامت (PC_SILENT_KINDS = exit · top):
+      exit = الخروج الاحترازي — يُغلق الصفقة ويُحسب في R بلا رسالة.
+      top  = إشارة قمة مؤكدة بلا صفقة مفتوحة — ليست دخولًا أصلًا.
+    نتحقق من الحالتين:
+      1) لا اتصال ولا تحضير رسالة للأحداث الصامتة إطلاقًا.
+      2) السجل يبقى كاملًا في notification_logs.json فالتدقيق ممكن.
     """
     import json
 
-    from src.engine.monitor import Monitor
+    from src.engine.monitor import PC_SILENT_KINDS, Monitor
+
+    assert PC_SILENT_KINDS == frozenset({"exit", "top"})
 
     data_dir = str(tmp_path)
     mon = Monitor.__new__(Monitor)
@@ -656,43 +665,78 @@ def test_pc_owner_receives_entry_target_stop_only_never_defensive_exit(tmp_path)
         {**base, "kind": "exit", "reason": pc.EXIT_CAUTION, "entry": 100.0,
          "target": 102.0, "stop": 99.0, "exit_price": 99.5,
          "gross_pct": -0.5, "net_pct": -0.7, "bars_held": 2},
+        {**base, "kind": "top", "close": 105.0, "score": 3, "rsi": 71.0,
+         "rel_volume": 1.1, "adx": 28.0, "divergence": "سلبي"},
     ]
 
     notifications: list[dict] = []
     sent = mon._send_pc_events(events, _Tg(), lambda s: "حلال",
                                notifications, 1_700_000_000_000)
 
-    # (1) ثلاث رسائل فقط، ولا واحدة للأحداث المحظورة
+    # (1) ثلاث رسائل فقط من ستة أحداث
     assert sent == 3
     assert len(calls) == 3
     joined = "\n".join(c["msg"] for c in calls)
     assert "BTCUSDT" in joined
     for label in ("دخول", "هدف", "وقف"):
         assert label in joined
+    assert "الحكم الشرعي" in joined
 
-    # (2) لا تصل أي رسالة خروج احترازي. ملاحظة: كلمة «خروج» نفسها مشروعة
-    # في رسالة الهدف والوقف (ترويسة «🔻 خروج» و«سعر الخروج») لأن الصفقة
-    # خرجت فعلًا — فالمحظور هو الوسمان المحوريان لا اللفظ.
+    # (2) لا تصل رسالة خروج احترازي ولا رسالة قمة مؤكدة. ملاحظة: كلمة
+    # «خروج» نفسها مشروعة في رسالة الهدف والوقف (ترويسة «🔻 خروج» و«سعر
+    # الخروج») لأن الصفقة خرجت فعلًا — فالمحظور هو الوسم لا اللفظ.
     assert all(c["msg"] for c in calls)
     assert "احترازي" not in joined
     assert "قمة مؤكدة" not in joined
     for e in events:
-        if e["kind"] == "exit":
-            assert e["reason"] in (pc.EXIT_TOP, pc.EXIT_CAUTION)
-            assert e["reason"] not in joined
+        if e["kind"] in ("exit", "top"):
+            assert e["kind"] in PC_SILENT_KINDS
 
-    # (3) السجل يوثّق الخمسة أحداث كاملة مع علامة suppression
-    assert len(notifications) == 5
-    kinds = [n["event"] for n in notifications]
-    assert kinds == ["buy", "tp", "sl", "exit", "exit"]
-    supp = [n["suppressed"] for n in notifications]
-    assert supp == [False, False, False, True, True]
-    assert [n["ok"] for n in notifications] == [True, True, True, False, False]
+    # (3) السجل يوثّق الأحداث الستة كاملة مع علامة suppression
+    assert len(notifications) == 6
+    assert [n["event"] for n in notifications] == [
+        "buy", "tp", "sl", "exit", "exit", "top"]
+    assert [n["suppressed"] for n in notifications] == [
+        False, False, False, True, True, True]
+    assert [n["ok"] for n in notifications] == [
+        True, True, True, False, False, False]
     assert all(n["channel"] == "telegram_owner" for n in notifications)
 
     on_disk = json.load(open(os.path.join(data_dir, "notification_logs.json"),
                              encoding="utf-8"))
-    assert len(on_disk) == 5
+    assert len(on_disk) == 6
+
+
+def test_summary_profit_factor_uses_one_consistent_unit():
+    """خلل صريح أُصلح: كان التقسيم بـ r_net والجمع بـ r_gross.
+
+    النتيجة عامل ربح 9.71 بينما مجموع R = ‎-49.4R — تناقض مستحيل،
+    لأن 11 صفقة كانت «خاسرة بالعمولة» وr_gross فيها موجب، فتدخل المقام
+    بمقام أخفض بكثير وتضخّم النسبة. الآن r_net مع r_net.
+    """
+    closed = [
+        # رابحة صافية كبيرة، وخاسرتان صافيتان صغيرتان
+        {"outcome": "tp", "r_gross": 3.0, "r_net": 2.8, "net_pct": 2.0, "bars_held": 5},
+        {"outcome": "sl", "r_gross": -1.0, "r_net": -0.5, "net_pct": -0.4, "bars_held": 2},
+        {"outcome": "sl", "r_gross": -1.0, "r_net": -0.5, "net_pct": -0.4, "bars_held": 3},
+        # الفخ: رابحة إجمالًا لكنها خاسرة بعد العمولة — كانت تضخّم المقام
+        {"outcome": "exit", "r_gross": 0.4, "r_net": -0.4, "net_pct": -0.05, "bars_held": 4},
+    ]
+    s = pce.summarize(closed, [], {})
+
+    net_win = sum(r["r_net"] for r in closed if r["r_net"] > 0)
+    net_loss = abs(sum(r["r_net"] for r in closed if r["r_net"] < 0))
+    assert s["profit_factor"] == round(net_win / net_loss, 3)
+    # الصفقة الرابعة لا يجوز أن تُحتسب رابحة في المقام
+    assert s["profit_factor"] != round(
+        sum(r["r_gross"] for r in closed if r["r_net"] > 0)
+        / abs(sum(r["r_gross"] for r in closed if r["r_net"] < 0)), 3)
+    assert s["r_total"] == round(sum(r["r_net"] for r in closed), 3)
+    assert s["net_pct_total"] == round(sum(r["net_pct"] for r in closed), 4)
+    assert s["net_pct_avg"] == round(sum(r["net_pct"] for r in closed) / 4, 4)
+    # النسخة الإجمالية تبقى متاحة للمقارنة فقط
+    assert s["profit_factor_gross"] == round(3.4 / 2.0, 3)
+
 
 
 def test_engine_writes_only_its_own_files(tmp_path):

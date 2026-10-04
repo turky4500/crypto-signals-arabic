@@ -265,20 +265,32 @@ function pcChip(value, label, tone = "") {
 }
 
 /* رابحة/خاسرة تُقاس من R المُسجَّل لكل صفقة مغلقة (r_net > 0 رابحة).
-   لا نعتمد على tp/sl وحدهما: «الخروج الاحترافي» قد يُغلق صفقة رابحة أو
-   خاسرة، والعدّ الحقيقي هو إشارة R لا نوع سبب الإغلاق. */
+   لا نعتمد على tp/sl وحدهما: «الخروج الاحترازي» قد يُغلق صفقة رابحة أو
+   خاسرة، والعدّ الحقيقي هو إشارة R لا نوع سبب الإغلاق.
+   ونجمع معها % لأن R وحده لا يقارن بين صفقتين فاصل مخاطرتهما مختلف. */
 function pcWinLoss(trades) {
   let wins = 0, loss = 0, sumW = 0, sumL = 0;
+  let pct = 0, wPct = 0, lPct = 0;
   trades.forEach((t) => {
+    const p = Number(t.net_pct);
+    if (Number.isFinite(p)) { pct += p; if (p > 0) wPct += p; else lPct += Math.abs(p); }
     const r = Number(t.r_net);
     if (!Number.isFinite(r)) return;
     if (r > 0) { wins += 1; sumW += r; } else { loss += 1; sumL += Math.abs(r); }
   });
   return {
-    wins, loss,
+    wins, loss, pct,
     avgWin: wins ? sumW / wins : 0,
     avgLoss: loss ? sumL / loss : 0,
+    avgWinPct: wins ? wPct / wins : 0,
+    avgLossPct: loss ? lPct / loss : 0,
   };
+}
+
+/* نبرة الرقم: موجب أخضر، سالب أحمر، صفر بلا تلوين. */
+function pcTone(v) {
+  const n = Number(v);
+  return !Number.isFinite(n) || n === 0 ? "" : n > 0 ? "green" : "red";
 }
 
 function pcRenderPerfStats() {
@@ -299,14 +311,16 @@ function pcRenderPerfStats() {
   const rateTxt = rate === null ? "—" : rate.toFixed(1) + "%";
   const rateTone = rate === null ? "" : rate >= 50 ? "green" : rate >= 30 ? "orange" : "red";
 
-  // التوقع بالوسطين المقيسَين فعليًا: نسبة الفوز × متوسط ربح R ناقص
-  // نسبة الخسارة × متوسط خسارة R. الافتراض بخسارة = 1.00R دائمًا يعطي رقمًا كاذبًا
-  // النتيجة لأن وقف التعادل يجعل الخسارة جزئية (قِسنا 0.8562R عند n=9).
+  /* التوقع = نسبة الفوز × متوسط الربح ناقص نسبة الخسارة × متوسط الخسارة،
+     بنفس وحدة كل رقاعة. الافتراض بخسارة = 1.00R دائمًا يعطي رقمًا كاذبًا
+     لأن وقف التعادل يجعل الخسارة جزئية. */
+  const evPct = judged ? (wl.wins / judged) * wl.avgWinPct - (wl.loss / judged) * wl.avgLossPct : null;
   const evR = judged ? (wl.wins / judged) * wl.avgWin - (wl.loss / judged) * wl.avgLoss : null;
-  const evTxt = evR === null ? "—" : `${evR.toFixed(2)}R`;
-  const evTone = evR === null ? "" : evR >= 0 ? "green" : "red";
-
-  const rTone = Number(s.r_total) > 0 ? "green" : Number(s.r_total) < 0 ? "red" : "";
+  const sgn = (x) => (x >= 0 ? "+" : "");
+  const evPctTxt = evPct === null ? "—" : `${sgn(evPct)}${evPct.toFixed(3)}%`;
+  const evRTxt = evR === null ? "—" : `${sgn(evR)}${evR.toFixed(2)}R`;
+  const pctTxt = `${sgn(wl.pct)}${wl.pct.toFixed(2)}%`;
+  const avgPctTxt = judged ? `${sgn(wl.pct / judged)}${(wl.pct / judged).toFixed(3)}%` : "—";
 
   grid.innerHTML = [
     `<div class="perf-chips">`,
@@ -314,12 +328,14 @@ function pcRenderPerfStats() {
     pcChip(wl.wins, "صفقات رابحة", "green"),
     pcChip(wl.loss, "صفقات خاسرة", "red"),
     pcChip(rateTxt, "نسبة النجاح", rateTone),
+    pcChip(pctTxt, "مجموع الصافي %", pcTone(wl.pct)),
+    pcChip(evPctTxt, "القيمة المتوقعة %", pcTone(evPct)),
+    pcChip(pcNum(s.profit_factor, 2), "عامل الربح (صافي)"),
+    pcChip(avgPctTxt, "متوسط الصافي % للصفقة"),
     pcChip(open, "صفقات مفتوحة", "blue"),
-    pcChip(pcR(s.r_total), "مجموع R", rTone),
-    pcChip(pcNum(s.profit_factor, 2), "عامل الربح"),
-    pcChip(evTxt, "القيمة المتوقعة (EV)", evTone),
+    pcChip(pcR(s.r_total), "مجموع R (بتقييم ثابت)", pcTone(s.r_total)),
+    pcChip(evRTxt, "القيمة المتوقعة R", pcTone(evR)),
     pcChip(`${pcNum(s.avg_bars_held, 1, "—")}`, "متوسط المدة (شمعة)"),
-    pcChip(pcPct(s.avg_net_pct), "متوسط الصافي %"),
     // تفصيل أسباب الإغلاق — للتدقيق فقط: لا رسالة له (بأمر المالك)
     pcChip(tp, "أغلق عند الهدف"),
     pcChip(sl, "أغلق عند الوقف"),
@@ -335,8 +351,8 @@ function pcRenderPerfStats() {
         <span>${open} ⏳ مفتوحة</span>
       </div>
       <div class="pg-sub">` +
-      `${wl.wins ? `متوسط ربح ${wl.avgWin.toFixed(2)}R · ` : ""}` +
-      `${wl.loss ? `متوسط خسارة ${wl.avgLoss.toFixed(2)}R · ` : ""}` +
+      `${wl.wins ? `متوسط ربح ${sgn(wl.avgWinPct)}${wl.avgWinPct.toFixed(3)}% · ` : ""}` +
+      `${wl.loss ? `متوسط خسارة −${wl.avgLossPct.toFixed(3)}% · ` : ""}` +
       `${closed} صفقة مغلقة · ${Number(s.symbols) || 0} عملة مرصودة</div>
     </div></div>`,
   ].join("");

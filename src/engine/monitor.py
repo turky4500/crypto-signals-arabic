@@ -44,6 +44,12 @@ logger = logging.getLogger("monitor")
 
 MIN_HISTORY = 100  # حد أدنى من الشموع المغلقة لإجراء الحساب
 
+# أحداث «قمم وقيعان» التي لا تُرسل رسالة للمالك — بأمر المالك.
+#   exit = الخروج الاحترازي (يغلق الصفقة ويُحسب في R لكن لا إزعاج)
+#   top  = إشارة قمة مؤكدة بلا صفقة مفتوحة (ليست دخولًا: لا تفتح صفقة)
+# الوارد للرسائل ثلاثة فقط: buy · tp · sl
+PC_SILENT_KINDS = frozenset({"exit", "top"})
+
 
 def _load_receivers(data_dir: str) -> list:
     """قراءة أرقام الاستقبال من data/receivers.txt — كل رقم في سطر.
@@ -208,8 +214,9 @@ class Monitor:
         """إرسال أحداث «قمم وقيعان مؤكدة» للمالك — لا قناة ولا واتساب.
 
         الرسائل ثلاث فقط بأمر المالك: دخول · تحقيق هدف · وقف خسارة.
-        «الخروج الاحترازي» (kind="exit") يُسجَّل في notification_logs.json
-        ويغلق الصفقة ويُحسب في R، لكن **لا رسالة** — قرار المالك.
+        كل ما عدا ذلك (PC_SILENT_KINDS = exit · top) يُسجَّل في
+        notification_logs.json مع علامة suppressed=true، لكن **بلا رسالة**:
+        يبقى إغلاق الصفقة وحساب R كما هو ولا يتغيّر سلوك التداول.
 
         كل حدث رسالة واحدة تُرسل مرة واحدة لكل (عملة | نوع حدث | شمعة إغلاق)،
         ويميّزها signature مستقل عن إشارات النظام فلا يحجب أحدهما الآخر.
@@ -220,7 +227,7 @@ class Monitor:
             sym = ev.get("symbol") or "-"
             kind = ev.get("kind")
             sig = f"pc|{sym}|{kind}|{ev.get('close_time')}"
-            suppressed = (kind == "exit")
+            suppressed = kind in PC_SILENT_KINDS
             if suppressed:
                 # بلا تحضير رسالة ولا اتصال: الخروج الاحترافي لا يُبلَّغ.
                 res = {"ok": False, "suppressed": True, "error": None}

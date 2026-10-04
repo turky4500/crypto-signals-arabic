@@ -332,8 +332,15 @@ def summarize(closed: list[dict], open_recs: list[dict], symbols: dict) -> dict:
     ex = sum(1 for r in closed if r.get("outcome") == "exit")
     wins = [r for r in closed if (r.get("r_net") or 0) > 0]
     losses = [r for r in closed if (r.get("r_net") or 0) < 0]
-    gross_win = sum(r["r_gross"] for r in wins) if wins else 0.0
-    gross_loss = abs(sum(r["r_gross"] for r in losses)) if losses else 0.0
+    # التقسيم والمقياس لازم يكونا نفس الوحدة: كنا نقسم بـ r_net ثم نجمع
+    # r_gross، فكانت 11 صفقة «خاسرة بالعمولة»[r_gross موجب] تدخل المقام
+    # ويُطلع عامل ربح 9.71 بينما مجموع R = ‎-49.4R — تناقض مستحيل.
+    # القرار: r_net مع r_net (الصافي هو ما يعنيه المالك: ربح صافٍ بعد الرسوم).
+    net_win = sum(r["r_net"] for r in wins) if wins else 0.0
+    net_loss = abs(sum(r["r_net"] for r in losses)) if losses else 0.0
+    # نسخة إجمالي (قبل الرسوم) تُبقيها للصفحة进行比较 فقط — لا تُعرض كـ PF.
+    gross_win = sum(r["r_gross"] for r in closed if (r.get("r_gross") or 0) > 0)
+    gross_loss = abs(sum(r["r_gross"] for r in closed if (r.get("r_gross") or 0) < 0))
     r_net_total = sum(r.get("r_net") or 0.0 for r in closed)
     return {
         "symbols": len(symbols),
@@ -344,7 +351,11 @@ def summarize(closed: list[dict], open_recs: list[dict], symbols: dict) -> dict:
         "r_total": round(r_net_total, 3),
         "r_avg": round(r_net_total / total, 4) if total else None,
         "expectancy_r": round(r_net_total / total, 4) if total else None,
-        "profit_factor": round(gross_win / gross_loss, 3) if gross_loss > 0 else None,
+        "profit_factor": round(net_win / net_loss, 3) if net_loss > 0 else None,
+        "profit_factor_gross": round(gross_win / gross_loss, 3) if gross_loss > 0 else None,
+        "net_pct_total": round(sum(r.get("net_pct") or 0.0 for r in closed), 4),
+        "net_pct_avg": round(sum(r.get("net_pct") or 0.0 for r in closed) / total, 4)
+        if total else None,
         "avg_net_pct": round(sum(r.get("net_pct") or 0.0 for r in closed) / total, 4)
         if total else None,
         "avg_bars_held": round(sum(r.get("bars_held") or 0 for r in closed) / total, 2)
