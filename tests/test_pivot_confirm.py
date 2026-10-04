@@ -1154,3 +1154,85 @@ def test_live_message_says_it_arrived_before_the_close(tmp_path):
     # حدث الإغلاق العادي (بلا العلامة) لا يحمل هذا السطر
     closed = {k: v for k, v in ev.items() if k != "live_touch"}
     assert "⚡ رُصد لحظيًا" not in formatter_pc.message_for(closed, None)
+
+
+# --------------------------------------------------------------------------- #
+# دقة عرض الأسعار — الهدف لا يُطبع مساويًا للدخول أبدًا
+# --------------------------------------------------------------------------- #
+def _prices_in(msg: str) -> list[str]:
+    """الأسعار الثلاثة كما تظهر فعلًا في نص الرسالة."""
+    import re
+    out = []
+    for label in ("سعر الدخول", "سعر الخروج", "هدف الربح", "وقف الخسارة"):
+        m = re.search(rf"{label}: (\S+)", msg)
+        if m:
+            out.append(m.group(1))
+    return out
+
+
+def test_price_decimals_covers_every_price_not_only_the_entry():
+    """الجذر: المنازل كانت تؤخذ من الدخول وحده ثم تُطبع بها كل الأسعار."""
+    from src.notify import formatter_pc as fp
+    assert fp._dec_for(1.2, 1.224, 1.176) == 3
+    assert fp._dec_for(0.13, 0.1326, 0.1274) == 4
+    assert fp._dec_for(0.000004, 0.00000408, 0.0000038) == 8
+
+
+def test_scientific_prices_are_not_truncated_to_six_decimals():
+    """format(x, "f") بلا دقة يُثبّت ستّ منازل: 4.08e-06 ← «0.000004»."""
+    from src.notify import formatter_pc as fp
+    assert fp._dec(4.08e-06) == 8
+    assert fp._dec(3.9066e-06) == 10
+    assert fp._p(4.08e-06, fp._dec(4.08e-06)) == "0.00000408"
+
+
+def test_the_three_measured_broken_coins_now_render_distinctly():
+    """BONKUSDT و AXSUSDT و OPGUSDT: الحالات الثلاث المقيسة في الدفتر."""
+    from src.notify import formatter_pc as fp
+    cases = [
+        (0.000004, 0.00000408, 0.0000038),      # BONKUSDT من السجل
+        (3.83e-06, 3.9066e-06, 3.83383e-06),    # BONKUSDT كما في الإشعار
+        (1.2, 1.224, 1.176),                    # AXSUSDT
+        (0.13, 0.1326, 0.1274),                 # OPGUSDT
+    ]
+    for entry, target, stop in cases:
+        ev = {"kind": "tp", "reason": "هدف الربح", "symbol": "X",
+              "entry": entry, "exit_price": target, "target": target,
+              "stop": stop, "gross_pct": 2.0, "net_pct": 1.8, "bars_held": 1,
+              "close_time": 1791100799999}
+        prices = _prices_in(fp.message_for(ev, None))
+        assert len(prices) >= 3, prices
+        assert len(set(prices)) >= 3, f"تكرار في الأسعار: {prices}"
+
+
+def test_a_two_percent_gap_survives_on_a_whole_number_entry():
+    """دخول 1.2 بمنازل واحدة كان يطبع الهدف 1.224 «1.2»."""
+    from src.notify import formatter_pc as fp
+    dec = fp._dec_for(1.2, 1.224, 1.176)
+    assert fp._p(1.2, dec) != fp._p(1.224, dec)
+
+
+def test_distinct_prices_never_render_equal_up_to_twelve_decimals():
+    """الضمان المقصود: سعران مختلفان لا يتحوّلان إلى رقم واحد."""
+    from src.notify import formatter_pc as fp
+    import itertools
+    probes = [1.2, 1.224, 0.13, 0.1326, 4e-06, 4.08e-06, 3.9066e-06,
+              0.0001, 99.99, 100.0, 1.0, 0.07879, 0.0803658]
+    for a, b in itertools.permutations(probes, 2):
+        dec = fp._dec_for(a, b)
+        assert fp._p(a, dec) != fp._p(b, dec), f"{a} و {b} طُبِعا كـ {dec}"
+
+
+def test_entry_and_exit_messages_both_share_the_decimals():
+    """رسالة الدخول ورسالة الخروج كلتاهما تؤخذ منها المنازل مشتركة."""
+    from src.notify import formatter_pc as fp
+    base = {"symbol": "BONKUSDT", "entry": 3.83e-06,
+            "target": 3.9066e-06, "stop": 3.83383e-06,
+            "close_time": 1791100799999}
+    entry_msg = fp.build_entry_message(dict(base, score=4, rsi=31.0), None)
+    exit_msg = fp.build_exit_message(
+        dict(base, kind="tp", reason="هدف الربح", exit_price=3.9066e-06,
+             gross_pct=2.0, net_pct=1.8, bars_held=3), None)
+    for msg in (entry_msg, exit_msg):
+        prices = _prices_in(msg)
+        assert len(set(prices)) >= 3, f"تكرار في: {prices}"

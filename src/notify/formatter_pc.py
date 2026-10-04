@@ -31,7 +31,10 @@ def _dec(price) -> int:
         return 4
     s = str(price)
     if "e" in s or "E" in s:
-        s = format(float(price), "f")
+        # format(x, "f") بلا دقة يُثبّت ستّ منازل ويُقصّ الصغرى:
+        # 4.08e-06 ← "0.000004" فيفقد الرقم نفسه. 12 منزلة تكفي
+        # كل ما هو أصغر من 1e-4 ثم يُجبَر منتصف min أدناه.
+        s = format(float(price), ".12f")
     if "." not in s:
         return 2
     return min(len(s.split(".")[1].rstrip("0")), 10) or 2
@@ -44,6 +47,32 @@ def _p(price, dec: int) -> str:
         return f"{float(price):.{dec}f}"
     except (TypeError, ValueError):
         return str(price)
+
+
+def _dec_for(*prices) -> int:
+    """عدد منازل يُظهر كل الأسعار المعطاة تدقيقًا — فلا يتساوى هدفٌ مع دخول.
+
+    الخلل كان أن _dec تؤخذ منازلها من سعر واحد (الدخول) ثم تُطبع بها كل
+    الأسعار: دخول 1.2 ⇒ منازلها 1 ⇒ هدف 1.224 يُطبع «1.2». ومثله دخول
+    0.13 ⇒ هدف 0.1326 يُطبع «0.13»، ودخول 0.000004 ⇒ هدف 0.00000408
+    يُطبع «0.000004». قِست على الدفتر: 7 من 208 صفقة (3.4%)، وعلى
+    السجلّ 4 من 126.
+
+    الجذر أن _dec ترجع عدد منازل التمثيل الأقصر الذي يُعيد السعر نفسه،
+    فأخذ أقصاها بين كل الأسعار يجعل كلًّا منها يُطبع دون أي تقريب —
+    والأسعار المختلفة لا تحتمل أن تتطابق حين لا يُستبعد منها شيء.
+
+    ومع ذلك يبقى التساوي ممنوعًا بأمرٍ صريح: إن ظلّ سعران مختلفان
+    يُطبعان متساويين تُزاد المنازل حتى يفترقا (سقف 12 منزلة).
+    """
+    vals = [p for p in prices if p is not None]
+    if not vals:
+        return 4
+    dec = max(_dec(p) for p in vals)
+    distinct = {float(v) for v in vals}
+    while dec < 12 and len({_p(v, dec) for v in vals}) < len(distinct):
+        dec += 1
+    return dec
 
 
 def _t(close_ms: int) -> str:
@@ -67,7 +96,7 @@ def _score_line(ev: dict) -> str:
 def build_entry_message(ev: dict, halal_verdict: str | None = None) -> str:
     """رسالة الدخول كما يسجّلها المؤشر: سعر الدخول والهدف والوقف."""
     symbol = ev.get("symbol", "-")
-    dec = _dec(ev.get("entry"))
+    dec = _dec_for(ev.get("entry"), ev.get("target"), ev.get("stop"))
     head = "🟢 شراء قاع قوي مؤكد" if ev.get("strong") else "🟢 شراء قاع مؤكد"
     lines = [
         f"{head} — قمم وقيعان مؤكدة",
@@ -101,7 +130,8 @@ def build_exit_message(ev: dict, halal_verdict: str | None = None) -> str:
     symbol = ev.get("symbol", "-")
     reason = ev.get("reason") or EXIT_CAUTION
     head = _REASON_TAG.get(reason, "🔻 خروج")
-    dec = _dec(ev.get("entry"))
+    dec = _dec_for(ev.get("entry"), ev.get("exit_price"),
+                   ev.get("target"), ev.get("stop"))
     lines = [
         f"{head} — قمم وقيعان مؤكدة",
         f"🪙 العملة: {symbol}",
