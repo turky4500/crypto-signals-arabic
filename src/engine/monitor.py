@@ -207,23 +207,31 @@ class Monitor:
                         get_verdict, notifications: list, now_ms: int) -> int:
         """إرسال أحداث «قمم وقيعان مؤكدة» للمالك — لا قناة ولا واتساب.
 
+        الرسائل ثلاث فقط بأمر المالك: دخول · تحقيق هدف · وقف خسارة.
+        «الخروج الاحترازي» (kind="exit") يُسجَّل في notification_logs.json
+        ويغلق الصفقة ويُحسب في R، لكن **لا رسالة** — قرار المالك.
+
         كل حدث رسالة واحدة تُرسل مرة واحدة لكل (عملة | نوع حدث | شمعة إغلاق)،
         ويميّزها signature مستقل عن إشارات النظام فلا يحجب أحدهما الآخر.
-        السجل الدقيق يكتب في notification_logs.json كما يفعل بقية المسارات،
-        فيبقى الأثر دائمًا قابلًا للتحقق.
         """
         sent = 0
         new_logs: list[dict] = []
         for ev in events:
             sym = ev.get("symbol") or "-"
-            sig = f"pc|{sym}|{ev.get('kind')}|{ev.get('close_time')}"
-            try:
-                verdict = get_verdict(sym) or None
-                msg = formatter_pc.message_for(ev, verdict)
-                res = tg_pc.send(msg)
-            except Exception as exc:
-                logger.warning("pc: فشل تحضير/إرسال %s (%s)", sig, exc)
-                res = {"ok": False, "error": str(exc)}
+            kind = ev.get("kind")
+            sig = f"pc|{sym}|{kind}|{ev.get('close_time')}"
+            suppressed = (kind == "exit")
+            if suppressed:
+                # بلا تحضير رسالة ولا اتصال: الخروج الاحترافي لا يُبلَّغ.
+                res = {"ok": False, "suppressed": True, "error": None}
+            else:
+                try:
+                    verdict = get_verdict(sym) or None
+                    msg = formatter_pc.message_for(ev, verdict)
+                    res = tg_pc.send(msg)
+                except Exception as exc:
+                    logger.warning("pc: فشل تحضير/إرسال %s (%s)", sig, exc)
+                    res = {"ok": False, "error": str(exc)}
             is_ok = bool(res.get("ok"))
             if is_ok:
                 sent += 1
@@ -231,7 +239,7 @@ class Monitor:
                 "ts": now_ms,
                 "symbol": sym,
                 "indicator": "pivot_confirm",
-                "event": ev.get("kind"),
+                "event": kind,
                 "reason": ev.get("reason"),
                 "signature": sig,
                 "close_time": ev.get("close_time"),
@@ -240,14 +248,19 @@ class Monitor:
                 "target": ev.get("target"),
                 "exit_price": ev.get("exit_price"),
                 "ok": is_ok,
+                "suppressed": suppressed,
                 "deduped": bool(res.get("deduped")),
                 "channel": "telegram_owner",
                 "error": res.get("error"),
             })
         if new_logs:
+            # notifications قائمة يملكها run()، فنعدّلها في المكان (extend)
+            # لا بإسناد局部ي — وإلا لم يرها المُنادي. ثم نفس سقف 500
+            # المطبَّق في بقية المسارات، ثم الحفظ بـ save_json.
             notifications.extend(new_logs)
-            append_capped(os.path.join(self.data_dir, "notification_logs.json"),
-                          notifications, 500)
+            if len(notifications) > 500:
+                del notifications[:-500]
+            save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
         return sent
 
     # ------------------------------------------------------------------ #

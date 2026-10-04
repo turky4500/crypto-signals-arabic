@@ -613,6 +613,88 @@ def test_pc_message_never_leaks_indicator_identity_to_subscribers():
     # بدون حكم شرعي يجب أن يظهر النص المحايد لا "None"
     assert "الحكم الشرعي" in msg
     assert "None" not in msg
+
+
+def test_pc_owner_receives_entry_target_stop_only_never_defensive_exit(tmp_path):
+    """قرار المالك: ثلاث رسائل فقط — دخول · هدف · وقف.
+
+    «الخروج الاحترازي» (kind="exit") يُسجَّل في notification_logs.json
+    لكن لا رسالة تصل للمالك. نتحقق من الحالتين:
+      1) الإرسال لا يقع للأحداث المحظورة إطلاقًا (ولا اتصال ولا تحضير).
+      2) السجل يبقى كاملًا فالتدقيق ممكن.
+    """
+    import json
+
+    from src.engine.monitor import Monitor
+
+    data_dir = str(tmp_path)
+    mon = Monitor.__new__(Monitor)
+    mon.data_dir = data_dir
+    mon.settings = {"pivot_confirm": {"enabled": True}}
+
+    calls: list[dict] = []
+
+    class _Tg:
+        def send(self, msg):
+            calls.append({"msg": msg})
+            return {"ok": True}
+
+    base = {"symbol": "BTCUSDT", "close_time": 1_700_000_000_000}
+    events = [
+        {**base, "kind": "buy", "entry": 100.0, "target": 102.0, "stop": 98.5,
+         "score": 3, "strong": True, "rsi": 28.4, "rel_volume": 1.2,
+         "adx": 30.0, "divergence": "إيجابي", "risk_pct": 1.5, "reward_risk": 1.2},
+        {**base, "kind": "tp", "reason": pc.EXIT_TP, "entry": 100.0,
+         "target": 102.0, "stop": 100.1, "exit_price": 102.0,
+         "gross_pct": 2.0, "net_pct": 1.8, "bars_held": 5},
+        {**base, "kind": "sl", "reason": pc.EXIT_SL, "entry": 100.0,
+         "target": 102.0, "stop": 98.5, "exit_price": 98.5,
+         "gross_pct": -1.5, "net_pct": -1.7, "bars_held": 3},
+        {**base, "kind": "exit", "reason": pc.EXIT_TOP, "entry": 100.0,
+         "target": 102.0, "stop": 100.1, "exit_price": 100.8,
+         "gross_pct": 0.8, "net_pct": 0.6, "bars_held": 6},
+        {**base, "kind": "exit", "reason": pc.EXIT_CAUTION, "entry": 100.0,
+         "target": 102.0, "stop": 99.0, "exit_price": 99.5,
+         "gross_pct": -0.5, "net_pct": -0.7, "bars_held": 2},
+    ]
+
+    notifications: list[dict] = []
+    sent = mon._send_pc_events(events, _Tg(), lambda s: "حلال",
+                               notifications, 1_700_000_000_000)
+
+    # (1) ثلاث رسائل فقط، ولا واحدة للأحداث المحظورة
+    assert sent == 3
+    assert len(calls) == 3
+    joined = "\n".join(c["msg"] for c in calls)
+    assert "BTCUSDT" in joined
+    for label in ("دخول", "هدف", "وقف"):
+        assert label in joined
+
+    # (2) لا تصل أي رسالة خروج احترازي. ملاحظة: كلمة «خروج» نفسها مشروعة
+    # في رسالة الهدف والوقف (ترويسة «🔻 خروج» و«سعر الخروج») لأن الصفقة
+    # خرجت فعلًا — فالمحظور هو الوسمان المحوريان لا اللفظ.
+    assert all(c["msg"] for c in calls)
+    assert "احترازي" not in joined
+    assert "قمة مؤكدة" not in joined
+    for e in events:
+        if e["kind"] == "exit":
+            assert e["reason"] in (pc.EXIT_TOP, pc.EXIT_CAUTION)
+            assert e["reason"] not in joined
+
+    # (3) السجل يوثّق الخمسة أحداث كاملة مع علامة suppression
+    assert len(notifications) == 5
+    kinds = [n["event"] for n in notifications]
+    assert kinds == ["buy", "tp", "sl", "exit", "exit"]
+    supp = [n["suppressed"] for n in notifications]
+    assert supp == [False, False, False, True, True]
+    assert [n["ok"] for n in notifications] == [True, True, True, False, False]
+    assert all(n["channel"] == "telegram_owner" for n in notifications)
+
+    on_disk = json.load(open(os.path.join(data_dir, "notification_logs.json"),
+                             encoding="utf-8"))
+    assert len(on_disk) == 5
+
+
 def test_engine_writes_only_its_own_files(tmp_path):
     data_dir = str(tmp_path)
     pce.save_state(data_dir, {"version": pce.STATE_VERSION,

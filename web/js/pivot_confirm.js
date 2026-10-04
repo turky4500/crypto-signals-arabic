@@ -255,7 +255,7 @@ function pcRenderTrades() {
   }
 }
 
-/* ---------- لوح�� قياس الأداء: نفس نمط تبويب «النتائج» في المشروع الأساسي ----------
+/* ---------- لوحة قياس الأداء: نفس نمط تبويب «النتائج» في المشروع الأساسي ----------
    نفس الأصناف تمامًا (.perf-chips / .perf-chip / .perf-v / .perf-l /
    .perf-groups / .perf-group / .pg-head / .pg-rate / .pg-bar / .pg-cols / .pg-sub)
    بلا قاعدة CSS جديدة: الشكل مطابق للوحة الأساسية بالبناء لا بالمحاكاة. */
@@ -264,25 +264,45 @@ function pcChip(value, label, tone = "") {
     `<span class="perf-l">${pcEsc(label)}</span></div>`;
 }
 
+/* رابحة/خاسرة تُقاس من R المُسجَّل لكل صفقة مغلقة (r_net > 0 رابحة).
+   لا نعتمد على tp/sl وحدهما: «الخروج الاحترافي» قد يُغلق صفقة رابحة أو
+   خاسرة، والعدّ الحقيقي هو إشارة R لا نوع سبب الإغلاق. */
+function pcWinLoss(trades) {
+  let wins = 0, loss = 0, sumW = 0, sumL = 0;
+  trades.forEach((t) => {
+    const r = Number(t.r_net);
+    if (!Number.isFinite(r)) return;
+    if (r > 0) { wins += 1; sumW += r; } else { loss += 1; sumL += Math.abs(r); }
+  });
+  return {
+    wins, loss,
+    avgWin: wins ? sumW / wins : 0,
+    avgLoss: loss ? sumL / loss : 0,
+  };
+}
+
 function pcRenderPerfStats() {
   const d = pcState.data || {};
   const s = d.summary || {};
   const grid = pcQs("#pcPerfGrid");
   if (!grid) return;
 
+  const trades = d.trades || [];
+  const wl = pcWinLoss(trades);
   const closed = Number(s.closed) || 0;
   const tp = Number(s.tp) || 0;
   const sl = Number(s.sl) || 0;
   const exit = Number(s.exit) || 0;
   const open = Number(s.open) || 0;
-  const resolved = tp + sl;
-  const rate = resolved ? (tp / resolved) * 100 : null;
+  const judged = wl.wins + wl.loss;
+  const rate = judged ? (wl.wins / judged) * 100 : null;
   const rateTxt = rate === null ? "—" : rate.toFixed(1) + "%";
   const rateTone = rate === null ? "" : rate >= 50 ? "green" : rate >= 30 ? "orange" : "red";
 
-  // التوقع = (نسبة الفوز × متوسط ربح) − (نسبة الخسارة × 1) — بالوحدات R
-  const evR = rate === null ? null : (rate / 100) * (Math.abs(Number(s.r_avg)) || 0)
-    - (1 - rate / 100) * 1;
+  // التوقع بالوسطين المقيسَين فعليًا: نسبة الفوز × متوسط ربح R ناقص
+  // نسبة الخسارة × متوسط خسارة R. الافتراض بخسارة = 1.00R دائمًا يعطي رقمًا كاذبًا
+  // النتيجة لأن وقف التعادل يجعل الخسارة جزئية (قِسنا 0.8562R عند n=9).
+  const evR = judged ? (wl.wins / judged) * wl.avgWin - (wl.loss / judged) * wl.avgLoss : null;
   const evTxt = evR === null ? "—" : `${evR.toFixed(2)}R`;
   const evTone = evR === null ? "" : evR >= 0 ? "green" : "red";
 
@@ -290,29 +310,34 @@ function pcRenderPerfStats() {
 
   grid.innerHTML = [
     `<div class="perf-chips">`,
-    pcChip(closed, "صفقات مغلقة"),
+    pcChip(closed, "إجمالي الصفقات المغلقة"),
+    pcChip(wl.wins, "صفقات رابحة", "green"),
+    pcChip(wl.loss, "صفقات خاسرة", "red"),
+    pcChip(rateTxt, "نسبة النجاح", rateTone),
     pcChip(open, "صفقات مفتوحة", "blue"),
-    pcChip(tp, "تحقق الهدف", "green"),
-    pcChip(sl, "ضرب الوقف", "red"),
-    pcChip(exit, "خروج يدوي", "blue"),
-    pcChip(rateTxt, "نسبة الربح", rateTone),
     pcChip(pcR(s.r_total), "مجموع R", rTone),
     pcChip(pcNum(s.profit_factor, 2), "عامل الربح"),
     pcChip(evTxt, "القيمة المتوقعة (EV)", evTone),
     pcChip(`${pcNum(s.avg_bars_held, 1, "—")}`, "متوسط المدة (شمعة)"),
     pcChip(pcPct(s.avg_net_pct), "متوسط الصافي %"),
+    // تفصيل أسباب الإغلاق — للتدقيق فقط: لا رسالة له (بأمر المالك)
+    pcChip(tp, "أغلق عند الهدف"),
+    pcChip(sl, "أغلق عند الوقف"),
+    pcChip(exit, "خروج احترازي (بلا رسالة)"),
     `</div>`,
     // بطاقة تجميعية واحدة، كـ .perf-group في تبويب النتائج
     `<div class="perf-groups"><div class="perf-group">
       <div class="pg-head"><span class="pg-name">⛰️ قمم وقيعان مؤكدة · فريم 1H</span>` +
       `<span class="pg-rate ${rateTone}">${rateTxt}</span></div>
-      <div class="pg-bar"><i style="width:${resolved ? Math.round((tp / resolved) * 100) : 0}%"></i></div>
+      <div class="pg-bar"><i style="width:${judged ? Math.round((wl.wins / judged) * 100) : 0}%"></i></div>
       <div class="pg-cols">
-        <span>${tp} ✅ هدف</span><span>${sl} ❌ وقف</span><span>${exit} 🔻 خروج</span>
+        <span>${wl.wins} ✅ رابحة</span><span>${wl.loss} ❌ خاسرة</span>
         <span>${open} ⏳ مفتوحة</span>
       </div>
-      <div class="pg-sub">${resolved ? `${tp} ناجحة من ${resolved} محسومة · ` : ""}` +
-      `${closed} صفقة مغلقة إجمالًا · ${Number(s.symbols) || 0} عملة مرصودة</div>
+      <div class="pg-sub">` +
+      `${wl.wins ? `متوسط ربح ${wl.avgWin.toFixed(2)}R · ` : ""}` +
+      `${wl.loss ? `متوسط خسارة ${wl.avgLoss.toFixed(2)}R · ` : ""}` +
+      `${closed} صفقة مغلقة · ${Number(s.symbols) || 0} عملة مرصودة</div>
     </div></div>`,
   ].join("");
 }
