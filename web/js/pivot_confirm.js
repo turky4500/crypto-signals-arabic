@@ -44,10 +44,12 @@ function pcDec(v) {
 
 function pcPrice(v) {
   if (v === null || v === undefined) return "—";
-  return Number(v).toLocaleString("en-US", {
-    minimumFractionDigits: pcDec(v),
-    maximumFractionDigits: pcDec(v),
-  });
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "—";
+  /* أصفار لاحقة غير معنوية — 0.018040 ← 0.01804 كما يعرضها Binance.
+     pcDec تبقى سقفًا (maximum) فتكفي للتمييز بين سعرين، وليست حدًّا أدنى
+     يُجبر صفرًا. بها كان يُطبع 306.9000 و0.0000125100. */
+  return n.toLocaleString("en-US", { maximumFractionDigits: pcDec(v) });
 }
 
 function pcPct(v, dec = 2) {

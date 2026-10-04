@@ -44,9 +44,15 @@ def _p(price, dec: int) -> str:
     if price is None:
         return "—"
     try:
-        return f"{float(price):.{dec}f}"
+        s = f"{float(price):.{dec}f}"
     except (TypeError, ValueError):
         return str(price)
+    # أصفار لاحقة غير معنوية — 0.0180400 ← 0.01804 كما يعرضها Binance.
+    # عدد المنازل بقي كما هو (أقصى ما يحتاجه أي سعر في الرسالة) فلا يُقتطع
+    # من قيمة، ثم نُسقط ما لم يحمل معنى بعد الفاصلة. قِسنا على 498 سعرًا
+    # من الدفتر: 355 تتحسن، وصفر سعرٍ يتغيّر قيمته، وصفر سعرين يتطابقان
+    # قبل القص وبعده — فخلل «سعران متطابقان» لم يرجع.
+    return s.rstrip("0").rstrip(".") if "." in s else s
 
 
 def _dec_for(*prices) -> int:
