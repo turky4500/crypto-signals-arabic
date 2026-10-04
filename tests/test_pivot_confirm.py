@@ -1042,3 +1042,115 @@ def test_perf_payload_declares_the_owner_hit_rules(tmp_path):
     assert "high >= target" in payload["indicator"]["hit_rules"]
     assert payload["summary"]["closed"] == 0
     assert payload["indicator"]["risk_math"]["binding_filter"] == "min_reward_risk"
+
+# --------------------------------------------------------------------------- #
+# اللمس اللحظي — إشعار الهدف داخل الشمعة الحيّة لا عند إغلاقها
+# --------------------------------------------------------------------------- #
+OPEN = 1_700_000_000_000
+CLOSE = OPEN + 3_600_000 - 1            # زمن إغلاق الشمعة الجارية
+
+
+class _LiveKline:
+    """الشمعة الحيّة وحدها: كل ما تحتاجه دالة اللمس."""
+
+    def __init__(self, open_time: int, high: float, close_time: int):
+        self.open_time = open_time
+        self.high = high
+        self.close_time = close_time
+
+
+class _LiveClient:
+    """عميل بلا شبكة يعيد شمعة واحدة ويعدّ طلباته (لقياس النداء)."""
+
+    def __init__(self, kline: _LiveKline):
+        self.kline = kline
+        self.calls = 0
+
+    def klines(self, symbol, interval="1h", limit=1):
+        self.calls += 1
+        return [self.kline]
+
+
+def _live_runner(tmp_path, kline, *, in_trade=True, entry=100.0,
+                 target=102.0, stop=99.0, entry_close_time=OPEN - 1):
+    client = _LiveClient(kline)
+    runner = pce.PivotConfirmRunner(str(tmp_path), pc.merge_cfg({}), client,
+                                    kline.close_time, warm=False)
+    st = pc.new_state()
+    st.update({
+        "in_trade": in_trade,
+        "entry": entry, "target": target, "stop": stop,
+        "entry_close_time": entry_close_time, "entry_bar": 0,
+        "last_close_time": entry_close_time,
+    })
+    runner.state["symbols"]["BTCUSDT"] = st
+    return runner, client
+
+
+def test_live_touch_reports_the_target_before_the_candle_closes(tmp_path):
+    """الهدف الملمس داخل الشمعة المفتوحة يُبلَّغ فورًا لا عند إغلاقها."""
+    runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
+    evs = runner.live_touches()
+    assert len(evs) == 1
+    ev = evs[0]
+    assert ev["kind"] == "tp" and ev["live_touch"] is True
+    assert ev["exit_price"] == ev["target"] == 102.0
+    assert ev["close_time"] == CLOSE
+    # لا شيء من الحساب يُستبق: الحدث يبقى لحين إغلاق الشمعة
+    assert runner.events == []
+
+
+def test_live_touch_fires_only_once_per_open_candle(tmp_path):
+    runner, client = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
+    assert len(runner.live_touches()) == 1
+    assert runner.live_touches() == []          # الجولات التالية لا تكرّر
+    assert client.calls == 2                    # طلب واحد لكل جولة لا رسالة
+    assert runner.live_signatures() == {f"pc|BTCUSDT|tp|{CLOSE}"}
+
+
+def test_live_signature_is_exactly_the_close_time_signature(tmp_path):
+    """تجنيب التكرار لا يعمل إلا إذا كانت الصيغتان حرفيًا متطابقتين."""
+    runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
+    ev = runner.live_touches()[0]
+    built = f"pc|{ev['symbol']}|{ev['kind']}|{ev['close_time']}"
+    assert built in runner.live_signatures()
+
+
+def test_live_touch_is_silent_when_the_symbol_is_flat(tmp_path):
+    runner, client = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE),
+                                  in_trade=False)
+    assert runner.live_touches() == []
+    assert client.calls == 0                    # لا طلب ولا رسالة بلا صفقة
+
+
+def test_live_touch_stays_silent_while_the_target_is_unreached(tmp_path):
+    runner, client = _live_runner(tmp_path, _LiveKline(OPEN, 101.99, CLOSE))
+    assert runner.live_touches() == []
+    assert runner.live_signatures() == set()
+    assert client.calls == 1
+
+
+def test_live_math_is_the_close_time_formula_not_a_recomputation(tmp_path):
+    """الأرقام نفسها التي كان سينتجها حدث الإغلاق — لا تقدير."""
+    runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 103.0, CLOSE),
+                             target=102.0, entry=100.0, stop=99.0)
+    ev = runner.live_touches()[0]
+    fee = float(runner.cfg["commission_per_side_pct"])
+    assert ev["gross_pct"] == (ev["exit_price"] / ev["entry"] - 1.0) * 100.0
+    assert ev["net_pct"] == ev["gross_pct"] - 2.0 * fee
+    assert ev["stop"] == 99.0                   # الوقف كما هو
+    # المدة بنفس مقدار bar_index - entry_bar عند الإغلاق
+    assert ev["bars_held"] == 1
+
+
+def test_live_message_says_it_arrived_before_the_close(tmp_path):
+    from src.notify import formatter_pc
+
+    runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
+    ev = runner.live_touches()[0]
+    msg = formatter_pc.message_for(ev, None)
+    assert "⚡ رُصد لحظيًا" in msg
+    assert "تحقق هدف الربح" in msg
+    # حدث الإغلاق العادي (بلا العلامة) لا يحمل هذا السطر
+    closed = {k: v for k, v in ev.items() if k != "live_touch"}
+    assert "⚡ رُصد لحظيًا" not in formatter_pc.message_for(closed, None)

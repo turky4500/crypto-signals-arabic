@@ -435,6 +435,82 @@ class PivotConfirmRunner:
             self.errors.append(f"{symbol}: {exc}")
             return None
 
+    # ------------------------------------------------------------------ #
+    # اللمس اللحظي — إشعار الهدف داخل الشمعة لا عند إغلاقها
+    # ------------------------------------------------------------------ #
+    def live_touches(self) -> list[dict]:
+        """رسالة «تحقق هدف» في لحظة بلغ السعر الهدف داخل الشمعة الحيّة.
+
+        قاعدة الحسم نفسها باللمس: `target_was_hit = h >= target`، فالهدف
+        الذي بلغه السعر داخل الشمعة منجز لا محالة — فالصفقة تُغلق عليه حتى
+        لو انتهى الشمعة بعد ذلك. فإنما يؤخَّر هو الإبلاغ حتى الإغلاق، وهو
+        ما جعل رسالة الهدف تصل متأخرة: قِست على شمعة GMTUSDT لُمس هدفها
+        بين 08:00 و09:00 محليًا ووصل الإشعار 09:01:05.
+
+        لا يتغيّر حساب شيء. هذه الدالة لا تضيف إلى self.events، فالحالة
+        والصفقة وR و pc_perf.json تُستمدّ كلّها من حدث الإغلاق كما اعتادت.
+        تُرسل الرسالة وترسم أثرها بعلامة `live_touch` في السجلّ، وتعين
+        `tp_live_close_time` كي يُجبَر التكرار عند الإغلاق.
+
+        الوقف لا يُفحص هنا احتمالًا: قاعدته `close < stop` بالإغلاق لا
+        باللمسة، فلا يمكن معرفته قبل أن تُغلق الشمعة بحكم القاعدة نفسها.
+        """
+        out: list[dict] = []
+        for symbol, st in (self.state.get("symbols") or {}).items():
+            if not st.get("in_trade"):
+                continue
+            entry, target = st.get("entry"), st.get("target")
+            stop = st.get("stop")
+            if not entry or not target or not stop:
+                continue
+            try:
+                rows = self.client.klines(symbol, limit=1)
+            except Exception as exc:                       # noqa: BLE001
+                logger.warning("pc: تعذّر فحص الشمعة الحيّة لـ%s (%s)",
+                               symbol, exc)
+                continue
+            if not rows:
+                continue
+            k = rows[0]
+            if float(k.high) < float(target):
+                continue
+            if st.get("tp_live_close_time") == int(k.close_time):
+                continue                      # أُبلغت في جولة سابقة لهذه الشمعة
+            entry_ct = int(st.get("entry_close_time") or k.close_time)
+            gross = (float(target) / float(entry) - 1.0) * 100.0
+            out.append({
+                "kind": "tp",
+                "reason": pc.EXIT_TP,
+                "symbol": symbol,
+                "live_touch": True,
+                "close_time": int(k.close_time),
+                "entry_close_time": entry_ct,
+                "entry": float(entry),
+                "target": float(target),
+                "stop": float(stop),
+                "exit_price": float(target),
+                "gross_pct": gross,
+                "net_pct": gross - 2.0 * float(
+                    self.cfg["commission_per_side_pct"]),
+                "bars_held": max((int(k.open_time) - (entry_ct + 1))
+                                 // 3_600_000 + 1, 1),
+            })
+            st["tp_live_close_time"] = int(k.close_time)
+        return out
+
+    def live_signatures(self) -> set[str]:
+        """توقّعات أُرسلت لحظيًا، كي تُجبَر مراجعة تكرارها عند الإغلاق.
+
+        الصيغة نفسها التي يبنيها _send_pc_events — ولا يُبنى هنا إلا ما
+        يخصّ هذا المؤشر: `pc|{رمز}|tp|{زمن إغلاق الشمعة}`.
+        """
+        out = set()
+        for symbol, st in (self.state.get("symbols") or {}).items():
+            ct = st.get("tp_live_close_time")
+            if ct:
+                out.add(f"pc|{symbol}|tp|{ct}")
+        return out
+
     def finish(self, generated_at_ms: int | None = None) -> dict:
         """يغلق دورة: يدمج الصفقات، يحفظ الحالة واللقطة، ويُرجع ملخصًا."""
         if self.events:

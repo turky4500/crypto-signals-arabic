@@ -118,6 +118,10 @@ def build_exit_message(ev: dict, halal_verdict: str | None = None) -> str:
     if ev.get("bars_held") is not None:
         lines.append(f"⏱️ المدة: {ev['bars_held']} شمعة 1H")
     lines.append(f"🕐 وقت الخروج: {_t(ev.get('close_time'))}")
+    if ev.get("live_touch"):
+        # رسالة لحظية: أُرسلت عند لمس السعر للهدف ولم تُغلق الشمعة بعد،
+        # فالوقت أعلاه موعد إغلاقها لا زمن الإرسال.
+        lines.append("⚡ رُصد لحظيًا: الشمعة ما زالت مفتوحة، والهدف باللمس محكوم")
     lines.append(FOOTER)
     lines.append(f"الحكم الشرعي: {halal_verdict or NO_RULING}")
     return "\n".join(lines)

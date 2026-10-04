@@ -210,7 +210,8 @@ class Monitor:
 
     # ------------------------------------------------------------------ #
     def _send_pc_events(self, events: list[dict], tg_pc: TelegramClient,
-                        get_verdict, notifications: list, now_ms: int) -> int:
+                        get_verdict, notifications: list, now_ms: int,
+                        skip=None) -> int:
         """إرسال أحداث «قمم وقيعان مؤكدة» للمالك — لا قناة ولا واتساب.
 
         الرسائل ثلاث فقط بأمر المالك: دخول · تحقيق هدف · وقف خسارة.
@@ -228,7 +229,12 @@ class Monitor:
             kind = ev.get("kind")
             sig = f"pc|{sym}|{kind}|{ev.get('close_time')}"
             suppressed = kind in PC_SILENT_KINDS
-            if suppressed:
+            if skip and sig in skip:
+                # أُرسلت لحظيًا عند لمس الهدف داخل الشمعة — تجنيب التكرار
+                res = {"ok": False, "suppressed": True, "deduped": True,
+                       "error": None}
+                suppressed = True
+            elif suppressed:
                 # بلا تحضير رسالة ولا اتصال: الخروج الاحترافي لا يُبلَّغ.
                 res = {"ok": False, "suppressed": True, "error": None}
             else:
@@ -256,6 +262,7 @@ class Monitor:
                 "exit_price": ev.get("exit_price"),
                 "ok": is_ok,
                 "suppressed": suppressed,
+                "live_touch": bool(ev.get("live_touch")),
                 "deduped": bool(res.get("deduped")),
                 "channel": "telegram_owner",
                 "error": res.get("error"),
@@ -1339,6 +1346,17 @@ class Monitor:
         self._pc_runner = None
         if pc_runner is not None:
             try:
+                # اللمس اللحظي قبل finish: العلامة تُحفظ مع الحالة، وأي
+                # حدث إغلاق لاحق بنفس التوقّع يُجبَر فلا تصل رسالتان.
+                pc_live = []
+                status["pc_live_sent"] = 0
+                if pc_owner_tg is not None:
+                    pc_live = pc_runner.live_touches()
+                    if pc_live:
+                        status["pc_live_sent"] = self._send_pc_events(
+                            pc_live, pc_owner_tg, get_verdict,
+                            notifications, now_ms)
+                pc_skip = pc_runner.live_signatures()
                 pc_events = list(pc_runner.events)
                 pc_payload = pc_runner.finish(now_ms)
                 s_pc = pc_payload.get("summary", {})
@@ -1351,7 +1369,11 @@ class Monitor:
                 status["pc_sent"] = 0
                 if pc_events and pc_owner_tg is not None:
                     status["pc_sent"] = self._send_pc_events(
-                        pc_events, pc_owner_tg, get_verdict, notifications, now_ms)
+                        pc_events, pc_owner_tg, get_verdict, notifications,
+                        now_ms, skip=pc_skip)
+                # ما أُبلغ لحظيًا يُضاف إلى ما أُبلغ عند الإغلاق
+                status["pc_sent"] = status.get("pc_sent", 0) + \
+                    status.get("pc_live_sent", 0)
                 status["pc_active"] = True
             except Exception as exc:
                 logger.exception("pc: فشل إغلاق الدورة")
