@@ -29,27 +29,37 @@ function pcNum(v, dec = 4, dash = "—") {
   return n.toFixed(dec);
 }
 
-/** تقدير المنازل العشرية من قيمة (الأسعار صغيرة جدًا أحيانًا). */
-function pcDec(v) {
-  if (v === null || v === undefined) return 4;
-  const n = Number(v);
-  if (!Number.isFinite(n)) return 4;
-  const a = Math.abs(n);
-  if (a >= 1000) return 2;
-  if (a >= 1) return 4;
-  if (a >= 0.01) return 6;
-  if (a >= 0.0001) return 8;
-  return 10;
+/** تحويل التمثيل العلمي إلى رقم عشري عادي بلا تقريب أو حذف منازل. */
+function pcPlainDecimal(value) {
+  const text = String(value);
+  if (!/[eE]/.test(text)) return text;
+
+  const [mantissa, exponentText] = text.toLowerCase().split("e");
+  const exponent = Number.parseInt(exponentText, 10);
+  const negative = mantissa.startsWith("-");
+  const unsigned = negative ? mantissa.slice(1) : mantissa;
+  const point = unsigned.indexOf(".");
+  const digits = unsigned.replace(".", "");
+  const newPoint = (point < 0 ? unsigned.length : point) + exponent;
+  const sign = negative ? "-" : "";
+
+  if (newPoint <= 0) return `${sign}0.${"0".repeat(-newPoint)}${digits}`;
+  if (newPoint >= digits.length) return `${sign}${digits}${"0".repeat(newPoint - digits.length)}`;
+  return `${sign}${digits.slice(0, newPoint)}.${digits.slice(newPoint)}`;
 }
 
 function pcPrice(v) {
   if (v === null || v === undefined) return "—";
   const n = Number(v);
   if (!Number.isFinite(n)) return "—";
-  /* أصفار لاحقة غير معنوية — 0.018040 ← 0.01804 كما يعرضها Binance.
-     pcDec تبقى سقفًا (maximum) فتكفي للتمييز بين سعرين، وليست حدًّا أدنى
-     يُجبر صفرًا. بها كان يُطبع 306.9000 و0.0000125100. */
-  return n.toLocaleString("en-US", { maximumFractionDigits: pcDec(v) });
+
+  /* اطبع القيمة كما يحفظها JSON/JavaScript بدل تقريبها إلى عدد منازل
+     تقديري حسب حجم السعر؛ ذلك كان يغيّر مستويات مثل 1.02051 و1.0003791874.
+     نوسّع الصيغة العلمية ونُبقي فواصل الآلاف للقراءة فقط. */
+  const plain = pcPlainDecimal(n);
+  const [integer, fraction] = plain.split(".");
+  const grouped = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return fraction === undefined ? grouped : `${grouped}.${fraction}`;
 }
 
 function pcPct(v, dec = 2) {
