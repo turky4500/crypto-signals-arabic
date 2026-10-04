@@ -1048,6 +1048,7 @@ def test_perf_payload_declares_the_owner_hit_rules(tmp_path):
 # --------------------------------------------------------------------------- #
 OPEN = 1_700_000_000_000
 CLOSE = OPEN + 3_600_000 - 1            # زمن إغلاق الشمعة الجارية
+LIVE_AT = OPEN + 1_200_000              # لحظة الرصد: 20 دقيقة داخل الشمعة
 
 
 class _LiveKline:
@@ -1090,7 +1091,7 @@ def _live_runner(tmp_path, kline, *, in_trade=True, entry=100.0,
 def test_live_touch_reports_the_target_before_the_candle_closes(tmp_path):
     """الهدف الملمس داخل الشمعة المفتوحة يُبلَّغ فورًا لا عند إغلاقها."""
     runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
-    evs = runner.live_touches()
+    evs = runner.live_touches(LIVE_AT)
     assert len(evs) == 1
     ev = evs[0]
     assert ev["kind"] == "tp" and ev["live_touch"] is True
@@ -1102,8 +1103,8 @@ def test_live_touch_reports_the_target_before_the_candle_closes(tmp_path):
 
 def test_live_touch_fires_only_once_per_open_candle(tmp_path):
     runner, client = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
-    assert len(runner.live_touches()) == 1
-    assert runner.live_touches() == []          # الجولات التالية لا تكرّر
+    assert len(runner.live_touches(LIVE_AT)) == 1
+    assert runner.live_touches(LIVE_AT) == []          # الجولات التالية لا تكرّر
     assert client.calls == 2                    # طلب واحد لكل جولة لا رسالة
     assert runner.live_signatures() == {f"pc|BTCUSDT|tp|{CLOSE}"}
 
@@ -1111,7 +1112,7 @@ def test_live_touch_fires_only_once_per_open_candle(tmp_path):
 def test_live_signature_is_exactly_the_close_time_signature(tmp_path):
     """تجنيب التكرار لا يعمل إلا إذا كانت الصيغتان حرفيًا متطابقتين."""
     runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
-    ev = runner.live_touches()[0]
+    ev = runner.live_touches(LIVE_AT)[0]
     built = f"pc|{ev['symbol']}|{ev['kind']}|{ev['close_time']}"
     assert built in runner.live_signatures()
 
@@ -1119,13 +1120,13 @@ def test_live_signature_is_exactly_the_close_time_signature(tmp_path):
 def test_live_touch_is_silent_when_the_symbol_is_flat(tmp_path):
     runner, client = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE),
                                   in_trade=False)
-    assert runner.live_touches() == []
+    assert runner.live_touches(LIVE_AT) == []
     assert client.calls == 0                    # لا طلب ولا رسالة بلا صفقة
 
 
 def test_live_touch_stays_silent_while_the_target_is_unreached(tmp_path):
     runner, client = _live_runner(tmp_path, _LiveKline(OPEN, 101.99, CLOSE))
-    assert runner.live_touches() == []
+    assert runner.live_touches(LIVE_AT) == []
     assert runner.live_signatures() == set()
     assert client.calls == 1
 
@@ -1134,7 +1135,7 @@ def test_live_math_is_the_close_time_formula_not_a_recomputation(tmp_path):
     """الأرقام نفسها التي كان سينتجها حدث الإغلاق — لا تقدير."""
     runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 103.0, CLOSE),
                              target=102.0, entry=100.0, stop=99.0)
-    ev = runner.live_touches()[0]
+    ev = runner.live_touches(LIVE_AT)[0]
     fee = float(runner.cfg["commission_per_side_pct"])
     assert ev["gross_pct"] == (ev["exit_price"] / ev["entry"] - 1.0) * 100.0
     assert ev["net_pct"] == ev["gross_pct"] - 2.0 * fee
@@ -1147,13 +1148,70 @@ def test_live_message_says_it_arrived_before_the_close(tmp_path):
     from src.notify import formatter_pc
 
     runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
-    ev = runner.live_touches()[0]
+    ev = runner.live_touches(LIVE_AT)[0]
     msg = formatter_pc.message_for(ev, None)
     assert "⚡ رُصد لحظيًا" in msg
     assert "تحقق هدف الربح" in msg
     # حدث الإغلاق العادي (بلا العلامة) لا يحمل هذا السطر
     closed = {k: v for k, v in ev.items() if k != "live_touch"}
     assert "⚡ رُصد لحظيًا" not in formatter_pc.message_for(closed, None)
+
+
+# --------------------------------------------------------------------------- #
+# المدة تُقال بالوقت (ساعة/دقيقة) — لا بعدد الشموع
+# --------------------------------------------------------------------------- #
+def _tp_event(entry_close_time=None, **armed_over) -> dict:
+    """حدث إغلاق حقيقي خرج من pc.step بعد لمس الهدف — لا قاموس مُختلَق."""
+    conf = cfg()
+    st = armed(conf, **armed_over)
+    if entry_close_time is not None:
+        st["entry_close_time"] = entry_close_time
+    ev = step_once(st, conf, h=102.5, l=98.0, c=98.5, o=100.0)
+    assert ev is not None and ev["kind"] == "tp"
+    return {**ev, "symbol": "GMTUSDT"}
+
+
+def test_close_event_carries_the_entry_close_time_the_duration_needs():
+    """الحدث يحمل زمن الدخول: منه تُحسب المدة بالوقت لا من عدد الشموع."""
+    ev = _tp_event(entry_close_time=H1 * (N - 3))
+    assert ev["entry_close_time"] == H1 * (N - 3)
+    assert ev["close_time"] - ev["entry_close_time"] == 3 * H1
+
+
+def test_exit_message_says_hours_and_never_candles():
+    """«3 ساعات» لا «3 شمعة» — بصيغة fmt_duration_ar نفسها في جداول المشروع."""
+    from src.notify import formatter_pc
+
+    msg = formatter_pc.message_for(
+        _tp_event(entry_close_time=H1 * (N - 3)), None)
+    assert "⏱️ المدة: 3 ساعات" in msg
+    assert "شمعة" not in msg          # لا يعود عدّاد الشموع أبدًا
+
+
+def test_live_message_reports_the_minutes_that_actually_passed(tmp_path):
+    """شمعة لم تُغلق: لا ندّعي ساعة كاملة قبل أن تمرّ — المنقضي هو الحقيقة."""
+    from src.notify import formatter_pc
+
+    runner, _ = _live_runner(tmp_path, _LiveKline(OPEN, 102.5, CLOSE))
+    ev = runner.live_touches(LIVE_AT)[0]
+    msg = formatter_pc.message_for(ev, None)
+    assert ev["bars_held"] == 1              # الشمعة تُعدّ ساعة عند إغلاقها
+    dur = next(ln for ln in msg.splitlines() if ln.startswith("⏱️"))
+    assert dur == "⏱️ المدة: 20 دقيقة"       # لكن المنقضي فعلًا عشرون دقيقة
+    assert "شمعة" not in dur
+    # «الشمعة ما زالت مفتوحة» وصفٌ صحيح للحالة — لا عدّاد للمدة
+
+
+def test_duration_never_renders_none_for_a_state_without_entry_close_time():
+    """حالة قديمة بلا زمن دخول: نرجع للشموع ولا نطبع None في الرسالة."""
+    from src.notify import formatter_pc
+
+    ev = _tp_event()                         # armed() لا يضبط entry_close_time
+    assert ev["entry_close_time"] is None
+    msg = formatter_pc.message_for(ev, None)
+    assert "⏱️ المدة" in msg
+    assert "None" not in msg
+    assert "شمعة" not in msg
 
 
 # --------------------------------------------------------------------------- #

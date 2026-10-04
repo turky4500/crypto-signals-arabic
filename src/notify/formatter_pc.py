@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 from ..indicators.pivot_confirm import EXIT_CAUTION, EXIT_SL, EXIT_TP, EXIT_TOP
-from .formatter import format_time_12h, ts_to_riyadh
+from .formatter import fmt_duration_ar, format_time_12h, ts_to_riyadh
 from .halal import NO_RULING
 
 FOOTER = "─────────────"
@@ -93,6 +93,29 @@ def _score_line(ev: dict) -> str:
     return " · ".join(bits)
 
 
+def _elapsed_ms(ev: dict):
+    """المدة الفعلية بين إغلاق شمعة الدخول وشمعة الخروج، بالميلي ثانية.
+
+    ليست عدد الشموع: الشمعة هنا ساعة واحدة فالقيم متساويتان عند الإغلاق،
+    لكن في رسالة اللمس اللحظي تكون الشمعة ما زالت مفتوحة فلا يصحّ أن
+    ندّعي مضيّ ساعتين. `elapsed_ms` يقدّمها المحرّك وقت الرصد حينئذٍ.
+    """
+    if ev.get("elapsed_ms") is not None:
+        try:
+            return float(ev["elapsed_ms"])
+        except (TypeError, ValueError):
+            return None
+    entry_ct, close_ct = ev.get("entry_close_time"), ev.get("close_time")
+    if entry_ct and close_ct:
+        return float(close_ct) - float(entry_ct)
+    if ev.get("bars_held") is not None:
+        try:
+            return float(ev["bars_held"]) * 3_600_000.0
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
 def build_entry_message(ev: dict, halal_verdict: str | None = None) -> str:
     """رسالة الدخول كما يسجّلها المؤشر: سعر الدخول والهدف والوقف."""
     symbol = ev.get("symbol", "-")
@@ -145,8 +168,9 @@ def build_exit_message(ev: dict, halal_verdict: str | None = None) -> str:
         lines.append(f"📈 العائد الإجمالي: {_n(ev.get('gross_pct'), 2)}%")
     if ev.get("net_pct") is not None:
         lines.append(f"💵 صافي بعد العمولة: {_n(ev.get('net_pct'), 2)}%")
-    if ev.get("bars_held") is not None:
-        lines.append(f"⏱️ المدة: {ev['bars_held']} شمعة 1H")
+    elapsed = _elapsed_ms(ev)
+    if elapsed is not None:
+        lines.append(f"⏱️ المدة: {fmt_duration_ar(elapsed)}")
     lines.append(f"🕐 وقت الخروج: {_t(ev.get('close_time'))}")
     if ev.get("live_touch"):
         # رسالة لحظية: أُرسلت عند لمس السعر للهدف ولم تُغلق الشمعة بعد،

@@ -1351,7 +1351,7 @@ class Monitor:
                 pc_live = []
                 status["pc_live_sent"] = 0
                 if pc_owner_tg is not None:
-                    pc_live = pc_runner.live_touches()
+                    pc_live = pc_runner.live_touches(now_ms)
                     if pc_live:
                         status["pc_live_sent"] = self._send_pc_events(
                             pc_live, pc_owner_tg, get_verdict,

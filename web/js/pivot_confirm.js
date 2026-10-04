@@ -92,9 +92,26 @@ function pcStatusClass(status) {
   return "";
 }
 
-/** نوع الحدث -> تسمية عربية. */
-function pcOutcomeLabel(o) {
-  return { tp: "🎯 هدف", sl: "🛑 وقف", exit: "🔻 خروج" }[o] || "—";
+/** النتيجة كما يعرضها تبويب «النتائج» الأساسي: شارة ملوّنة لا نصّ عارٍ.
+    tp → تحققت · sl → وقف · exit → سببه الحقيقي (قمة مؤكدة / خروج احترازي).
+    لا نخترع «انتهت المدة»: لهذا المؤشر قاعدة انتهاء مهلة لم تُحدَّد أصلًا. */
+function pcOutcome(t) {
+  const o = t.outcome;
+  if (o === "tp") return { label: "تحققت", tone: "green" };
+  if (o === "sl") return { label: "وقف", tone: "red" };
+  if (o === "exit") return { label: t.reason || "خروج احترازي", tone: "gray" };
+  return { label: t.reason || "—", tone: "gray" };
+}
+
+/** المدة الفعلية بالوقت بين إغلاق شمعة الدخول وشمعة الحسم — لا بالشموع.
+    الشمعة هنا ساعة واحدة فالرقمان متساويان عند الإغلاق، لكن وحدة العرض
+    تبقى ساعة/دقيقة كما يفعل fmtElapsed في تبويب النتائج. */
+function pcElapsed(t) {
+  const a = Number(t.entry_close_time);
+  const b = Number(t.exit_close_time);
+  if (Number.isFinite(a) && Number.isFinite(b) && b > a) return b - a;
+  const bars = Number(t.bars_held);
+  return Number.isFinite(bars) ? bars * 3600000 : null;
 }
 
 /* ---------- تحميل ---------- */
@@ -145,7 +162,10 @@ function pcRenderStats() {
     pcStatCard("مجموع R", pcR(s.r_total), `متوسط ${pcR(s.r_avg)} لكل صفقة`),
     pcStatCard("عامل الربح", pcNum(s.profit_factor, 2), "مجموع الربح ÷ مجموع الخسارة"),
     pcStatCard("متوسط الصافي", pcPct(s.avg_net_pct), "لكل صفقة مغلقة"),
-    pcStatCard("متوسط المدة", `${pcNum(s.avg_bars_held, 1, "—")} شمعة`, "بشموع 1H"),
+    pcStatCard("متوسط المدة",
+      s.avg_bars_held == null || s.avg_bars_held === undefined
+        ? "—" : fmtAvgElapsed(s.avg_bars_held * 3600000),
+      "من إغلاق شمعة الدخول إلى الحسم"),
   ];
   grid.innerHTML = parts.join("");
 
@@ -237,19 +257,23 @@ function pcRenderTrades() {
   pcQs("#pcTradesCount").textContent = `${trades.length} صفقة مغلقة`;
   const body = pcQs("#pcTradesTable tbody");
   if (!trades.length) {
-    body.innerHTML = `<tr><td colspan="9" class="empty">لا صفقات مغلقة بعد</td></tr>`;
+    body.innerHTML = `<tr><td colspan="10" class="empty">لا صفقات مغلقة بعد</td></tr>`;
   } else {
-    body.innerHTML = trades.map((t) => `<tr>
+    body.innerHTML = trades.map((t) => {
+      const oc = pcOutcome(t);
+      return `<tr>
       <td class="sym">${pcEsc(t.symbol)}</td>
       <td class="num">${pcPrice(t.entry)}</td>
       <td class="num">${pcPrice(t.exit_price)}</td>
-      <td>${pcOutcomeLabel(t.outcome)} ${pcEsc(t.reason || "")}</td>
+      <td>${badge(oc.label, oc.tone)}</td>
       <td class="num ${pcSignedClass(t.gross_pct)}">${pcPct(t.gross_pct)}</td>
       <td class="num ${pcSignedClass(t.net_pct)}">${pcPct(t.net_pct)}</td>
       <td class="num ${pcSignedClass(t.r_net)}">${pcR(t.r_net)}</td>
-      <td class="num">${t.bars_held ?? "—"}</td>
-      <td class="num">${pcTime(t.entry_ts || t.entry_close_time)}</td>
-    </tr>`).join("");
+      <td class="time">${fmtElapsed(pcElapsed(t))}</td>
+      <td class="time">${fmtShortTs(t.exit_close_time)}</td>
+      <td class="time">${fmtShortTs(t.entry_close_time)}</td>
+    </tr>`;
+    }).join("");
   }
 
   const open = d.open_trades || [];
@@ -342,7 +366,8 @@ function pcRenderPerfStats() {
     pcChip(avgPctTxt, "متوسط الصافي % للصفقة"),
     pcChip(open, "صفقات مفتوحة", "blue"),
     pcChip(pcR(s.r_total), "مجموع R (بتقييم ثابت)", pcTone(s.r_total)),
-    pcChip(`${pcNum(s.avg_bars_held, 1, "—")}`, "متوسط المدة (شمعة)"),
+    pcChip(s.avg_bars_held == null || s.avg_bars_held === undefined
+      ? "—" : fmtAvgElapsed(s.avg_bars_held * 3600000), "⏱ متوسط مدة الحسم"),
     // تفصيل أسباب الإغلاق — للتدقيق فقط: لا رسالة له (بأمر المالك)
     pcChip(tp, "أغلق عند الهدف"),
     pcChip(sl, "أغلق عند الوقف"),
