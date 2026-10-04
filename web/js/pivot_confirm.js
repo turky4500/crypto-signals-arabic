@@ -311,14 +311,10 @@ function pcRenderPerfStats() {
   const rateTxt = rate === null ? "—" : rate.toFixed(1) + "%";
   const rateTone = rate === null ? "" : rate >= 50 ? "green" : rate >= 30 ? "orange" : "red";
 
-  /* التوقع = نسبة الفوز × متوسط الربح ناقص نسبة الخسارة × متوسط الخسارة،
-     بنفس وحدة كل رقاعة. الافتراض بخسارة = 1.00R دائمًا يعطي رقمًا كاذبًا
-     لأن وقف التعادل يجعل الخسارة جزئية. */
-  const evPct = judged ? (wl.wins / judged) * wl.avgWinPct - (wl.loss / judged) * wl.avgLossPct : null;
-  const evR = judged ? (wl.wins / judged) * wl.avgWin - (wl.loss / judged) * wl.avgLoss : null;
+  /* ملاحظة: «القيمة المتوقعة» حُذفت بقرار المالك — هي تساوي المتوسط
+     حسابيًا عند تساوي وزن الصفقات (قِسنا EV = r_total/n بالضبط)،
+     فهي تكرار للرقم لا معلومة جديدة. */
   const sgn = (x) => (x >= 0 ? "+" : "");
-  const evPctTxt = evPct === null ? "—" : `${sgn(evPct)}${evPct.toFixed(3)}%`;
-  const evRTxt = evR === null ? "—" : `${sgn(evR)}${evR.toFixed(2)}R`;
   const pctTxt = `${sgn(wl.pct)}${wl.pct.toFixed(2)}%`;
   const avgPctTxt = judged ? `${sgn(wl.pct / judged)}${(wl.pct / judged).toFixed(3)}%` : "—";
 
@@ -329,12 +325,10 @@ function pcRenderPerfStats() {
     pcChip(wl.loss, "صفقات خاسرة", "red"),
     pcChip(rateTxt, "نسبة النجاح", rateTone),
     pcChip(pctTxt, "مجموع الصافي %", pcTone(wl.pct)),
-    pcChip(evPctTxt, "القيمة المتوقعة %", pcTone(evPct)),
     pcChip(pcNum(s.profit_factor, 2), "عامل الربح (صافي)"),
     pcChip(avgPctTxt, "متوسط الصافي % للصفقة"),
     pcChip(open, "صفقات مفتوحة", "blue"),
     pcChip(pcR(s.r_total), "مجموع R (بتقييم ثابت)", pcTone(s.r_total)),
-    pcChip(evRTxt, "القيمة المتوقعة R", pcTone(evR)),
     pcChip(`${pcNum(s.avg_bars_held, 1, "—")}`, "متوسط المدة (شمعة)"),
     // تفصيل أسباب الإغلاق — للتدقيق فقط: لا رسالة له (بأمر المالك)
     pcChip(tp, "أغلق عند الهدف"),
