@@ -1,25 +1,6 @@
 [
   {
     "ts": 1791136948076,
-    "symbol": "WALUSDT",
-    "indicator": "pivot_confirm",
-    "event": "buy",
-    "reason": null,
-    "signature": "pc|WALUSDT|buy|1791136799999",
-    "close_time": 1791136799999,
-    "entry": 0.036,
-    "stop": 0.035653108808830054,
-    "target": 0.036719999999999996,
-    "exit_price": null,
-    "ok": true,
-    "suppressed": false,
-    "live_touch": false,
-    "deduped": false,
-    "channel": "telegram_owner",
-    "error": null
-  },
-  {
-    "ts": 1791136948076,
     "symbol": "WLDUSDT",
     "indicator": "pivot_confirm",
     "event": "sl",
@@ -9280,5 +9261,17 @@
     "error": null,
     "attempts": 1,
     "channel": "telegram_owner"
+  },
+  {
+    "ts": 1791233136388,
+    "kind": "sl_touch",
+    "symbol": "MUBUSDT",
+    "indicator": "ai",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: MUBUSDT\nوصلت العملة إلى سعر الوقف (1058.61) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 1063.29\n🎯 سعر الدخول: 1097.49\n🛑 سعر الوقف: 1058.61\n🎯 الهدف: 1175.25\n🕐 وقت اللمسة: 4:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
   }
 ]
