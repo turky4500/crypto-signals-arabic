@@ -12,8 +12,7 @@ from zoneinfo import ZoneInfo
 from ..binance.client import BinanceClient
 from ..binance.models import Kline, format_price
 from ..config.settings import load_settings
-from ..indicators import ai_market_reader, pivot_confirm, supertrend
-from ..notify import formatter_pc
+from ..indicators import ai_market_reader, supertrend
 from ..notify.daily_report import build_daily_report_message, compute_daily_report
 from ..notify.formatter import (build_alert_message, build_resolution_message,
                                 build_sl_touch_message, format_time_12h,
@@ -38,18 +37,10 @@ from .indicators_panel import build_paper_records, compute_panel, panel_brief
 from .momentum_filter import evaluate_filter
 from .performance import (compute_stats, evaluate_candles, mark_expired,
                           prune_old, seed_from_signals, sl_touch_event)
-from .pivot_confirm_engine import PivotConfirmRunner
 
 logger = logging.getLogger("monitor")
 
 MIN_HISTORY = 100  # حد أدنى من الشموع المغلقة لإجراء الحساب
-
-# أحداث «قمم وقيعان» التي لا تُرسل رسالة للمالك — بأمر المالك.
-#   exit = الخروج الاحترازي (يغلق الصفقة ويُحسب في R لكن لا إزعاج)
-#   top  = إشارة قمة مؤكدة بلا صفقة مفتوحة (ليست دخولًا: لا تفتح صفقة)
-# الوارد للرسائل ثلاثة فقط: buy · tp · sl
-PC_SILENT_KINDS = frozenset({"exit", "top"})
-
 
 def _load_receivers(data_dir: str) -> list:
     """قراءة أرقام الاستقبال من data/receivers.txt — كل رقم في سطر.
@@ -138,14 +129,10 @@ class Monitor:
         self.data_dir = os.path.join(base_dir, "data")
         self.settings = load_settings(os.path.join(self.data_dir, "settings.json"))
         mon = self.settings.get("monitoring", {})
-        self.history_candles = max(int(mon.get("history_candles", 400)),
-                                   pivot_confirm.WINDOW + 5)
+        self.history_candles = int(mon.get("history_candles", 400))
         self.min_qv = float(mon.get("min_24h_quote_volume_usdt", 100000))
         self.tz = ZoneInfo(mon.get("timezone", "Asia/Riyadh"))
         self.client = BinanceClient()
-        # يُملأ في run() فقط عند تفعيل «قمم وقيعان مؤكدة»؛ يبقى None عند
-        # التعطيل فيبقى _process_symbol خاليًا من أي عمل إضافي.
-        self._pc_runner = None
 
     # ------------------------------------------------------------------ #
     def _whatsapp(self, env: dict) -> WhatsAppClient | None:
@@ -190,92 +177,6 @@ class Monitor:
             return None
         return TelegramClient(token, chat_id,
                               dedup_file=os.path.join(self.data_dir, "telegram_sent.json"))
-
-    # ------------------------------------------------------------------ #
-    def _telegram_pc_owner(self, env: dict) -> TelegramClient | None:
-        """عميل تلغرام مؤشّر «قمم وقيعان مؤكدة» — للمالك وحده.
-
-        منفصل عن عميل القناة وعن عميل المعاينات: لا يمرّ بـ_deliver أبدًا،
-        ودفتر منع التكرار خاص به فلا يتزاحم مع سجلّات القناة أو المعاينات.
-        المعرّف من سرّ TELEGRAM_OWNER_CHAT_ID (لا يُسجَّل في المستودع).
-        """
-        if not self.settings.get("pivot_confirm", {}).get("enabled", True):
-            return None
-        token = env.get("TELEGRAM_BOT_TOKEN")
-        chat_id = env.get("TELEGRAM_OWNER_CHAT_ID")
-        if not (token and chat_id):
-            return None
-        return TelegramClient(token, chat_id,
-                              dedup_file=os.path.join(self.data_dir, "telegram_sent_pc.json"))
-
-    # ------------------------------------------------------------------ #
-    def _send_pc_events(self, events: list[dict], tg_pc: TelegramClient,
-                        get_verdict, notifications: list, now_ms: int,
-                        skip=None) -> int:
-        """إرسال أحداث «قمم وقيعان مؤكدة» للمالك — لا قناة ولا واتساب.
-
-        الرسائل ثلاث فقط بأمر المالك: دخول · تحقيق هدف · وقف خسارة.
-        كل ما عدا ذلك (PC_SILENT_KINDS = exit · top) يُسجَّل في
-        notification_logs.json مع علامة suppressed=true، لكن **بلا رسالة**:
-        يبقى إغلاق الصفقة وحساب R كما هو ولا يتغيّر سلوك التداول.
-
-        كل حدث رسالة واحدة تُرسل مرة واحدة لكل (عملة | نوع حدث | شمعة إغلاق)،
-        ويميّزها signature مستقل عن إشارات النظام فلا يحجب أحدهما الآخر.
-        """
-        sent = 0
-        new_logs: list[dict] = []
-        for ev in events:
-            sym = ev.get("symbol") or "-"
-            kind = ev.get("kind")
-            sig = f"pc|{sym}|{kind}|{ev.get('close_time')}"
-            suppressed = kind in PC_SILENT_KINDS
-            if skip and sig in skip:
-                # أُرسلت لحظيًا عند لمس الهدف داخل الشمعة — تجنيب التكرار
-                res = {"ok": False, "suppressed": True, "deduped": True,
-                       "error": None}
-                suppressed = True
-            elif suppressed:
-                # بلا تحضير رسالة ولا اتصال: الخروج الاحترافي لا يُبلَّغ.
-                res = {"ok": False, "suppressed": True, "error": None}
-            else:
-                try:
-                    verdict = get_verdict(sym) or None
-                    msg = formatter_pc.message_for(ev, verdict)
-                    res = tg_pc.send(msg)
-                except Exception as exc:
-                    logger.warning("pc: فشل تحضير/إرسال %s (%s)", sig, exc)
-                    res = {"ok": False, "error": str(exc)}
-            is_ok = bool(res.get("ok"))
-            if is_ok:
-                sent += 1
-            new_logs.append({
-                "ts": now_ms,
-                "symbol": sym,
-                "indicator": "pivot_confirm",
-                "event": kind,
-                "reason": ev.get("reason"),
-                "signature": sig,
-                "close_time": ev.get("close_time"),
-                "entry": ev.get("entry"),
-                "stop": ev.get("stop"),
-                "target": ev.get("target"),
-                "exit_price": ev.get("exit_price"),
-                "ok": is_ok,
-                "suppressed": suppressed,
-                "live_touch": bool(ev.get("live_touch")),
-                "deduped": bool(res.get("deduped")),
-                "channel": "telegram_owner",
-                "error": res.get("error"),
-            })
-        if new_logs:
-            # notifications قائمة يملكها run()، فنعدّلها في المكان (extend)
-            # لا بإسناد局部ي — وإلا لم يرها المُنادي. ثم نفس سقف 500
-            # المطبَّق في بقية المسارات، ثم الحفظ بـ save_json.
-            notifications.extend(new_logs)
-            if len(notifications) > 500:
-                del notifications[:-500]
-            save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
-        return sent
 
     # ------------------------------------------------------------------ #
     def _channel_mode(self) -> str:
@@ -891,22 +792,6 @@ class Monitor:
                 )
 
         # ---- بوابة الإرسال: Supertrend/AI ثم الاتجاه ثم اتفاق ≥ min_consensus ----
-        # ---- مؤشّر «قمم وقيعان مؤكدة» (مستقل تمامًا) ----
-        # يأخذ نفس شموع هذه الدالة بالضبط (o/h/l/c/v + ct_c) فلا يجلب شيئًا
-        # جديدًا، ومخرجه محليّ يُلتقط في run(). لا يدخل أي إشارة هنا.
-        pc_snap = None
-        pc_runner = self._pc_runner
-        if pc_runner is not None:
-            try:
-                pc_snap = pc_runner.run_symbol(
-                    symbol_info.symbol, float(symbol_info.tick_size),
-                    {"open": o, "high": h, "low": l, "close": c,
-                     "volume": v, "close_time": ct_c},
-                )
-            except Exception as exc:  # لا يُسقط عملة من مراقبة النظام
-                logger.warning("pc: %s (%s)", symbol_info.symbol, exc)
-                pc_runner.errors.append(f"{symbol_info.symbol}: {exc}")
-
         first_signal = build_signal(symbol_info, candle, st_res, ai_res, st_cfg, ai_cfg)
         # ---- مصدر ثانٍ (تجربة بوليجر الحي): BUY ارتدادي بشرط اجتياز فلتر الترند ----
         boll_signal = None
@@ -1092,41 +977,12 @@ class Monitor:
         env = env or {}
         started = time.time()
         now_ms = int(time.time() * 1000)
-        self._pc_runner = None   # لا تسرّب من تشغيل سابق
         run_id = env.get("RUN_ID") or f"local-{now_ms}"
 
         status = _empty_status()
         status["run_id"] = run_id
 
         # ─────────────────────────────────────────────────────────────────
-        # «قمم وقيعان مؤكدة»: مؤشّر مستقل تمامًا.
-        # يُنشأ قبل الحلقة ليأخذ مؤشّره مخرجاته من نفس جلب الشموع الموجود
-        # داخل _process_symbol (صفر طلبات شبكة إضافية). لا موضع له في
-        # performance ولا indicator_study ولا candidate_study ولا filter_log،
-        # ولا في بوابة النشر: إشاراته لا تمرّ بـ_deliver إطلاقًا.
-        # ─────────────────────────────────────────────────────────────────
-        pc_cfg_raw = self.settings.get("pivot_confirm", {})
-        pc_cfg = pivot_confirm.merge_cfg(pc_cfg_raw)
-        pc_enabled = bool(pc_cfg_raw.get("enabled", True))
-        pc_runner = None
-        pc_owner_tg = None
-        if pc_enabled:
-            pc_runner = PivotConfirmRunner(self.data_dir, pc_cfg, self.client, now_ms)
-            self._pc_runner = pc_runner
-            pc_owner_tg = None if no_whatsapp else self._telegram_pc_owner(env)
-            if pc_owner_tg is not None:
-                status["pc_owner_bot"] = True
-                try:
-                    ok, why = pc_owner_tg.ping(timeout=8.0)
-                    status["pc_owner_connected"] = ok
-                    if not ok:
-                        logger.warning("بوت المالك لمؤشر القمم غير مهيأ: %s", why)
-                except Exception as exc:
-                    status["pc_owner_connected"] = False
-                    logger.warning("فشل اختبار بوت القمم: %s", exc)
-            else:
-                status["pc_owner_connected"] = False
-
         wa = None if no_whatsapp else self._whatsapp(env)
         if wa is not None:
             wa_ok, wa_why = wa.ping(timeout=8.0)
@@ -1338,48 +1194,6 @@ class Monitor:
             if halal_enabled:
                 return ensure_verdict(self.data_dir, sym, halal_verdicts)
             return verdict_label(halal_verdicts, sym)
-
-        # ---- إغلاق دورة «قمم وقيعان مؤكدة»: الحالة + اللقطة + رسائل المالك ----
-        # بعد الحلقة (فتكون اللقطات كاملة) وبعد تهيئة الحكم الشرعي (فتكون
-        # الرسائل حاملةً حكمها)، وقبل فروع التقارير والمعاينات. معزول تمامًا:
-        # لا يقرأ ولا يكتب أي سجل من سجلات النظام، ولا يمرّ بـ_deliver.
-        self._pc_runner = None
-        if pc_runner is not None:
-            try:
-                # اللمس اللحظي قبل finish: العلامة تُحفظ مع الحالة، وأي
-                # حدث إغلاق لاحق بنفس التوقّع يُجبَر فلا تصل رسالتان.
-                pc_live = []
-                status["pc_live_sent"] = 0
-                if pc_owner_tg is not None:
-                    pc_live = pc_runner.live_touches(now_ms)
-                    if pc_live:
-                        status["pc_live_sent"] = self._send_pc_events(
-                            pc_live, pc_owner_tg, get_verdict,
-                            notifications, now_ms)
-                pc_skip = pc_runner.live_signatures()
-                pc_events = list(pc_runner.events)
-                pc_payload = pc_runner.finish(now_ms)
-                s_pc = pc_payload.get("summary", {})
-                status["pc_symbols"] = s_pc.get("symbols", 0)
-                status["pc_open"] = s_pc.get("open", 0)
-                status["pc_closed"] = s_pc.get("closed", 0)
-                status["pc_seeded"] = pc_runner.seeded
-                status["pc_errors"] = len(pc_runner.errors)
-                status["pc_events"] = len(pc_events)
-                status["pc_sent"] = 0
-                if pc_events and pc_owner_tg is not None:
-                    status["pc_sent"] = self._send_pc_events(
-                        pc_events, pc_owner_tg, get_verdict, notifications,
-                        now_ms, skip=pc_skip)
-                # ما أُبلغ لحظيًا يُضاف إلى ما أُبلغ عند الإغلاق
-                status["pc_sent"] = status.get("pc_sent", 0) + \
-                    status.get("pc_live_sent", 0)
-                status["pc_active"] = True
-            except Exception as exc:
-                logger.exception("pc: فشل إغلاق الدورة")
-                status["pc_active"] = False
-                status["pc_error"] = str(exc)
-                errors.append(f"pivot_confirm: {exc}")
 
         # ---- المعاينات الاستكشافية (15m) — للمالك فقط، لا القناة ولا واتساب ----
         # السجّل التدقيقي يكتب في notification_logs.json ليبقى أثرًا دائمًا قابلاً

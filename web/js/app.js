@@ -570,9 +570,9 @@ async function updateLivePrices() {
 
 /* ---------- التبويبات ---------- */
 function setupTabs() {
-  // النطاق محصور بـ #tabs (شريط التبويب الرئيسي) عمدًا: التبويبات الداخلية
-  // في اللوحات تحمل class="tab" أيضًا، وربطها هنا كان يجعل dataset.view
-  // غير معرّفًا (فهو data-pcview) فيخفي qsa(".view") كل اللوحات ويفرغ الصفحة.
+  // النطاق محصور بـ #tabs (شريط التبويب الرئيسي) عمدًا: أي تبويب داخلي
+  // في اللوحات يحمل class="tab" أيضًا، وربطه هنا يجعل dataset.view
+  // غير معرّفًا فيخفي qsa(".view") كل اللوحات ويفرغ الصفحة.
   qsa("#tabs .tab").forEach((btn) => {
     btn.addEventListener("click", () => {
       qsa("#tabs .tab").forEach((b) => b.classList.toggle("active", b === btn));

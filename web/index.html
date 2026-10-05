@@ -29,107 +29,7 @@
     <nav class="tabs" id="tabs">
       <button class="tab active" data-view="live">📡 المراقبة الحية</button>
       <button class="tab" data-view="results">🏆 النتائج</button>
-      <button class="tab" data-view="pivot">⛰️ قمم وقيعان مؤكدة</button>
     </nav>
-
-    <!-- ── عرض مستقل تمامًا: مؤشّر قمم وقيعان مؤكدة ──
-         لا يشترك مع «المراقبة الحية» ولا «النتائج» في أي حالة ولا سجل ولا دالة.
-         ملفه data/pc_perf.json وحده، ومقياسه تبويبه الداخلي أدناه. -->
-    <div class="view" id="view-pivot" hidden>
-      <nav class="tabs sub-tabs" id="pcTabs">
-        <button class="tab active" data-pcview="signals">⛰️ الإشارات</button>
-        <button class="tab" data-pcview="performance">📊 قياس الأداء</button>
-      </nav>
-
-      <!-- تبويب الإشارات: كل ما يسجّله المؤشر لكل عملة -->
-      <div class="pc-view" id="pcView-signals">
-        <section class="status-bar" id="pcStatusBar">
-          <div class="status-wrap">
-            <span class="pill"><span class="dot"></span>جارٍ التحميل...</span>
-          </div>
-        </section>
-        <section class="stats-grid" id="pcStatsGrid"></section>
-        <section class="filters">
-          <input id="pcSearch" type="search" placeholder="🔍 ابحث عن عملة..." autocomplete="off" />
-          <div class="filter-btns" id="pcFilters">
-            <button data-pcfilter="all" class="active">كل العملات</button>
-            <button data-pcfilter="open">صفقات مفتوحة</button>
-            <button data-pcfilter="watch">قاع/قمة محتمل</button>
-            <button data-pcfilter="enough">بيانات كافية</button>
-          </div>
-        </section>
-        <section class="table-card">
-          <div class="table-head">
-            <h2>حالة المؤشر لكل عملة</h2>
-            <span class="table-count" id="pcTableCount">—</span>
-          </div>
-          <div class="table-scroll">
-            <table id="pcTable">
-              <thead>
-                <tr>
-                  <th>العملة</th>
-                  <th>الحالة</th>
-                  <th>السعر</th>
-                  <th>RSI</th>
-                  <th>Stoch</th>
-                  <th>ADX</th>
-                  <th>حجم نسبي</th>
-                  <th>قاع/قمة</th>
-                  <th>الدخول</th>
-                  <th>الهدف</th>
-                  <th>الوقف</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-
-      <!-- تبويب قياس الأداء: سجل صفقات هذا المؤشر وحده -->
-      <div class="pc-view" id="pcView-performance" hidden>
-        <section class="table-card perf-card" id="pcPerfGrid"></section>
-        <section class="table-card">
-          <div class="table-head">
-            <h2>سجل الصفقات</h2>
-            <span class="table-count" id="pcTradesCount">—</span>
-          </div>
-          <div class="table-scroll">
-            <table id="pcTradesTable">
-              <thead>
-                <tr>
-                  <th>العملة</th>
-                  <th>الدخول</th>
-                  <th>الخروج</th>
-                  <th>النتيجة</th>
-                  <th>% إجمالي</th>
-                  <th>% صافٍ</th>
-                  <th>R</th>
-                  <th>⏱ المدة</th>
-                  <th>وقت الحسم</th>
-                  <th>وقت الإشارة</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </section>
-        <section class="table-card">
-          <div class="table-head"><h2>صفقات مفتوحة حاليًا</h2></div>
-          <div class="table-scroll">
-            <table id="pcOpenTable">
-              <thead>
-                <tr>
-                  <th>العملة</th><th>الدخول</th><th>الهدف</th>
-                  <th>الوقف</th><th>المخاطرة %</th><th>ع/م</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-    </div>
 
     <div class="view" id="view-live">
       <section class="status-bar" id="statusBar">
@@ -224,7 +124,5 @@
 
   <script src="js/utils.js"></script>
   <script src="js/app.js"></script>
-  <!-- قمم وقيعان مؤكدة: ملف مستقل لا يمسّ حالة app.js -->
-  <script src="js/pivot_confirm.js"></script>
 </body>
 </html>
