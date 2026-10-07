@@ -1,7 +1,12 @@
 name: Crypto Monitor
 
 on:
-  # لا توجد cron في GitHub هنا؛ Google Apps Script يطلق workflow_dispatch كل 5 دقائق.
+  schedule:
+    # احتياط (شبكة أمان ثانية): كرون GitHub يغطي حالة انقطاع المنبّطات.
+    # المنبّط الأساسي هو Google Apps Script (كل 5 دقائق) ثم مهمة Windows
+    # binance-monitor-ping؛ أيّهما وصل أولًا يُطلق الدورة والآخر يتخطّاها
+    # عبر شرط «Skip if already fresh».
+    - cron: '*/5 * * * *'
   push:
     branches: [main]
   workflow_dispatch:
