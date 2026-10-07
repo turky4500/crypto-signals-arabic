@@ -1,25 +1,6 @@
 [
   {
     "ts": 1791147035921,
-    "symbol": "WALUSDT",
-    "indicator": "pivot_confirm",
-    "event": "tp",
-    "reason": "هدف الربح",
-    "signature": "pc|WALUSDT|tp|1791143999999",
-    "close_time": 1791143999999,
-    "entry": 0.036,
-    "stop": 0.036072,
-    "target": 0.036719999999999996,
-    "exit_price": 0.036719999999999996,
-    "ok": true,
-    "suppressed": false,
-    "live_touch": false,
-    "deduped": false,
-    "channel": "telegram_owner",
-    "error": null
-  },
-  {
-    "ts": 1791147035921,
     "symbol": "WIFUSDT",
     "indicator": "pivot_confirm",
     "event": "tp",
@@ -8749,5 +8730,17 @@
     "error": null,
     "attempts": 1,
     "channel": "telegram_owner"
+  },
+  {
+    "ts": 1791378024567,
+    "kind": "resolution",
+    "symbol": "THETAUSDT",
+    "indicator": "supertrend",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: THETAUSDT\n💰 سعر الدخول: 0.2314\n🛑 الوقف: ضُرب عند 0.2137\n📉 الخسارة: -1R (-7.65%)\n⏱ المدة: 4 أيام و9 ساعات\n🕐 وقت الإشارة: 6:59 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
   }
 ]
