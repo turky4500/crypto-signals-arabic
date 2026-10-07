@@ -1,44 +1,6 @@
 [
   {
     "ts": 1791147035921,
-    "symbol": "SOLUSDT",
-    "indicator": "pivot_confirm",
-    "event": "sl",
-    "reason": "وقف خسارة",
-    "signature": "pc|SOLUSDT|sl|1791143999999",
-    "close_time": 1791143999999,
-    "entry": 121.3,
-    "stop": 121.4213,
-    "target": 123.726,
-    "exit_price": 121.4213,
-    "ok": true,
-    "suppressed": false,
-    "live_touch": false,
-    "deduped": false,
-    "channel": "telegram_owner",
-    "error": null
-  },
-  {
-    "ts": 1791147035921,
-    "symbol": "SPCXBUSDT",
-    "indicator": "pivot_confirm",
-    "event": "sl",
-    "reason": "وقف خسارة",
-    "signature": "pc|SPCXBUSDT|sl|1791140399999",
-    "close_time": 1791140399999,
-    "entry": 159.13,
-    "stop": 159.12732233135975,
-    "target": 162.3126,
-    "exit_price": 159.12732233135975,
-    "ok": true,
-    "suppressed": false,
-    "live_touch": false,
-    "deduped": false,
-    "channel": "telegram_owner",
-    "error": null
-  },
-  {
-    "ts": 1791147035921,
     "symbol": "SUIUSDT",
     "indicator": "pivot_confirm",
     "event": "buy",
@@ -8837,5 +8799,28 @@
     "error": null,
     "attempts": 1,
     "channel": "telegram_owner"
+  },
+  {
+    "ts": 1791371118769,
+    "symbol": "CVXUSDT",
+    "kind": "preview",
+    "candle_open_ms": 1791369900000,
+    "message": "🔎 معاينة استكشافية\n🪙 العملة: CVXUSDT\n📊 سعر 15m: 2.118\n🕐 وقت الشمعة: 1:59 مساءً\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram_owner"
+  },
+  {
+    "ts": 1791371118769,
+    "kind": "sl_touch",
+    "symbol": "THETAUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: THETAUSDT\nوصلت العملة إلى سعر الوقف (0.2158) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.2173\n🎯 سعر الدخول: 0.2314\n🛑 سعر الوقف: 0.2158\n🎯 الهدف: 0.2626\n🕐 وقت اللمسة: 1:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
   }
 ]
