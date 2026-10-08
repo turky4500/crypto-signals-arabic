@@ -1,25 +1,5 @@
 [
   {
-    "signature": "FLOKIUSDT|ai|BUY|1790334000000",
-    "symbol": "FLOKIUSDT",
-    "indicator": "ai",
-    "entry": "0.00002885",
-    "sl": "0.00002793",
-    "tp": "0.00003069",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790334000000,
-    "signal_close_ms": 1790337599999,
-    "deadline_ms": 1790942399999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1790567999999,
-    "hit_price": 2.775e-05,
-    "created_ms": 1790337716480,
-    "consensus": 1,
-    "verdict": "blocked",
-    "reason": "filter",
-    "source": "candidate"
-  },
-  {
     "signature": "FTTUSDT|bollinger|BUY|1790334000000",
     "symbol": "FTTUSDT",
     "indicator": "bollinger",
@@ -100016,6 +99996,26 @@
     "consensus": 2,
     "verdict": "blocked",
     "reason": "bollinger_live_off",
+    "source": "candidate"
+  },
+  {
+    "signature": "CRDOBUSDT|supertrend|BUY|1791468000000",
+    "symbol": "CRDOBUSDT",
+    "indicator": "supertrend",
+    "entry": "219.76",
+    "sl": "211.86",
+    "tp": "235.56",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1791468000000,
+    "signal_close_ms": 1791471599999,
+    "deadline_ms": 1792076399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1791474070075,
+    "consensus": 3,
+    "verdict": "blocked",
+    "reason": "filter",
     "source": "candidate"
   }
 ]
