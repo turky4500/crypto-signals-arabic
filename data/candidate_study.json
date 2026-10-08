@@ -1,25 +1,5 @@
 [
   {
-    "signature": "LITEBUSDT|supertrend|BUY|1790298000000",
-    "symbol": "LITEBUSDT",
-    "indicator": "supertrend",
-    "entry": "937.59",
-    "sl": "910.44",
-    "tp": "991.89",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790298000000,
-    "signal_close_ms": 1790301599999,
-    "deadline_ms": 1790906399999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1790603999999,
-    "hit_price": 904.19,
-    "created_ms": 1790301744165,
-    "consensus": 2,
-    "verdict": "blocked",
-    "reason": "filter",
-    "source": "candidate"
-  },
-  {
     "signature": "OSMOUSDT|ai|BUY|1790298000000",
     "symbol": "OSMOUSDT",
     "indicator": "ai",
@@ -100016,6 +99996,26 @@
     "consensus": 1,
     "verdict": "blocked",
     "reason": "filter",
+    "source": "candidate"
+  },
+  {
+    "signature": "XNOUSDT|bollinger|BUY|1791453600000",
+    "symbol": "XNOUSDT",
+    "indicator": "bollinger",
+    "entry": "0.339",
+    "sl": "0.332",
+    "tp": "0.353",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1791453600000,
+    "signal_close_ms": 1791457199999,
+    "deadline_ms": 1792061999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1791459684394,
+    "consensus": 1,
+    "verdict": "blocked",
+    "reason": "bollinger_live_off",
     "source": "candidate"
   }
 ]

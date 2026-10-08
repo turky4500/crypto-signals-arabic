@@ -1,22 +1,5 @@
 [
   {
-    "signature": "EULUSDT|ichimoku|1791295200000",
-    "symbol": "EULUSDT",
-    "indicator": "ichimoku",
-    "entry": "1.475",
-    "sl": "1.434",
-    "tp": "1.557",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1791295200000,
-    "signal_close_ms": 1791298799999,
-    "deadline_ms": 1791903599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1791349199999,
-    "hit_price": 1.412,
-    "created_ms": 1791299533589,
-    "source": "simulation"
-  },
-  {
     "signature": "EULUSDT|adx|1791295200000",
     "symbol": "EULUSDT",
     "indicator": "adx",
@@ -82035,9 +82018,9 @@
     "signal_open_ms": 1791453600000,
     "signal_close_ms": 1791457199999,
     "deadline_ms": 1792061999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1791459557786,
+    "hit_price": 0.01638,
     "created_ms": 1791457481064,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1791457608177,
+    "source": "simulation"
+  },
+  {
+    "signature": "XNOUSDT|bollinger|1791453600000",
+    "symbol": "XNOUSDT",
+    "indicator": "bollinger",
+    "entry": "0.339",
+    "sl": "0.332",
+    "tp": "0.353",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1791453600000,
+    "signal_close_ms": 1791457199999,
+    "deadline_ms": 1792061999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1791459683687,
     "source": "simulation"
   }
 ]
