@@ -20,7 +20,7 @@ DEFAULT_SETTINGS = {
         "rr_ratio": 2.0,
     },
     "momentum_filter": {
-        "enabled": True,
+        "enabled": False,
         "h4_ret5_min": 2.0,
         "h1_rsi_max": 70.0,
         # سقف زخم خاص بإشارات supertrend فقط: الملاحقة فوق هذا الحد كانت
@@ -37,7 +37,7 @@ DEFAULT_SETTINGS = {
         "supertrend_confidence_max": 0.99,
     },
     "indicators_study": {
-        "enabled": True,
+        "enabled": False,
         "min_consensus": 3,
         "en_consensus_gate": False,
         "rr_ratio": 2.0,
@@ -63,17 +63,17 @@ DEFAULT_SETTINGS = {
         "atr_sl_multiplier": 1.5,
     },
     "whatsapp": {
-        "enabled": True,
+        "enabled": False,
         "max_history_signals": 2000,
         "daily_report": {
-            "enabled": True,
+            "enabled": False,
             "hour": 0,
             "minute": 5,
         },
         # تقرير أسبوعي تقويمي (الأحد → السبت) يُرسل الأحد بعد منتصف الليل
         # عن أسبوع السبت المنتهي — مرة واحدة لكل أسبوع.
         "weekly_report": {
-            "enabled": True,
+            "enabled": False,
             "hour": 0,
             "minute": 5,
             # ملاحظات الأداء الاسترشادية تُرسَل للمالك وحده عبر بوته الشخصي
@@ -83,7 +83,7 @@ DEFAULT_SETTINGS = {
         # رسالة فورية عند حسم كل توصية: ✅ تحقق الهدف / ❌ ضرب الوقف /
         # 📭 انتهاء المهلة (7 أيام بلا حسم). تُرسل مرة واحدة لكل توصية.
         "resolution_messages": {
-            "enabled": True,
+            "enabled": False,
         },
     },
     # قناة الإرسال للمشتركين: الإشارات + التقرير اليومي + التقرير الأسبوعي +
@@ -99,11 +99,11 @@ DEFAULT_SETTINGS = {
     # قناة تلغرام — القناة الفعلية للمشتركين في الوضع telegram، وهي الاحتياط
     # في المسار القديم whatsapp_first. تُنشأ فقط عند توفّر التوكن والمعرّف.
     "telegram": {
-        "enabled": True,
+        "enabled": False,
     },
 
     "previews": {
-        "enabled": True,
+        "enabled": False,
         "candles_limit": 60,
         "max_per_day": 25,
         # أدنى فاصل بين معاينتين لنفس العملة (حتى عبر شمعتين 15m مختلفتين) —
@@ -111,7 +111,7 @@ DEFAULT_SETTINGS = {
         "min_gap_minutes": 60,
         "lead_minutes_max": 180,  # نافذة ربط المعاينة بالتوصية الرسمية للمقارنة
         "weekly_summary": {
-            "enabled": True,
+            "enabled": False,
             "hour": 0,
             "minute": 5,
         },

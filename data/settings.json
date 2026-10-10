@@ -11,12 +11,12 @@
     "rr_ratio": 2.0
   },
   "momentum_filter": {
-    "enabled": true,
+    "enabled": false,
     "h4_ret5_min": 2.0,
     "h1_rsi_max": 70.0
   },
   "indicators_study": {
-    "enabled": true,
+    "enabled": false,
     "min_consensus": 3,
     "en_consensus_gate": false,
     "rr_ratio": 2.0,
@@ -39,42 +39,42 @@
     "atr_sl_multiplier": 1.5
   },
   "whatsapp": {
-    "enabled": true,
+    "enabled": false,
     "max_history_signals": 2000,
     "daily_report": {
-      "enabled": true,
+      "enabled": false,
       "hour": 0,
       "minute": 5
     },
     "weekly_report": {
-      "enabled": true,
+      "enabled": false,
       "hour": 0,
       "minute": 5
     },
     "resolution_messages": {
-      "enabled": true
+      "enabled": false
     }
   },
   "delivery": {
     "channel_mode": "telegram"
   },
   "telegram": {
-    "enabled": true
+    "enabled": false
   },
   "previews": {
-    "enabled": true,
+    "enabled": false,
     "candles_limit": 60,
     "max_per_day": 25,
     "min_gap_minutes": 60,
     "lead_minutes_max": 180,
     "weekly_summary": {
-      "enabled": true,
+      "enabled": false,
       "hour": 0,
       "minute": 5
     }
   },
   "halal": {
-    "enabled": true,
+    "enabled": false,
     "refresh_hours": 6,
     "vendor": "cryptohalal.cc"
   }
