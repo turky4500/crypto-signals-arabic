@@ -20,8 +20,8 @@ DEFAULT_SETTINGS = {
         "rr_ratio": 2.0,
     },
     "momentum_filter": {
-        "enabled": False,
-        "h4_ret5_min": 2.0,
+        "enabled": True,
+        "h4_ret5_min": 2.25,
         "h1_rsi_max": 70.0,
         # سقف زخم خاص بإشارات supertrend فقط: الملاحقة فوق هذا الحد كانت
         # خاسرة 100% (0/6 عند r5>=6) في مراجعة أسبوع 09-2026، بينما ai
@@ -52,13 +52,13 @@ DEFAULT_SETTINGS = {
     "ai_reader": {
         "neighbors_count": 8,
         "max_window": 300,
-        "min_ai_score": 0.60,
+        "min_ai_score": 0.640,
         "use_distance_weight": True,
         "use_ema_filter": True,
         "ema_fast_len": 21,
         "ema_slow_len": 50,
         "use_vol_filter": True,
-        "vol_threshold": 1.0,
+        "vol_threshold": 1.12,
         "rr_ratio": 2.0,
         "atr_sl_multiplier": 1.5,
     },
