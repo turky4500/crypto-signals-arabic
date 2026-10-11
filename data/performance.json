@@ -8676,7 +8676,10 @@
     "hit_price": null,
     "created_ms": 1791734782874,
     "filtered": true,
-    "whatsapp_status": "failed"
+    "whatsapp_status": "failed",
+    "sl_touch_ms": 1791755999999,
+    "sl_touch_low": 0.1394,
+    "sl_touch_notified": true
   },
   {
     "signature": "COWUSDT|supertrend|BUY|1791730800000",
@@ -9471,7 +9474,10 @@
     "hit_price": null,
     "created_ms": 1791738368346,
     "filtered": true,
-    "whatsapp_status": "failed"
+    "whatsapp_status": "failed",
+    "sl_touch_ms": 1791755999999,
+    "sl_touch_low": 2.713e-05,
+    "sl_touch_notified": true
   },
   {
     "signature": "HMSTRUSDT|ai|BUY|1791734400000",
@@ -9538,9 +9544,9 @@
     "signal_open_ms": 1791734400000,
     "signal_close_ms": 1791737999999,
     "deadline_ms": 1792342799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1791755999999,
+    "hit_price": 0.005525,
     "created_ms": 1791738368346,
     "filtered": true,
     "whatsapp_status": "failed",
@@ -9742,9 +9748,9 @@
     "signal_open_ms": 1791745200000,
     "signal_close_ms": 1791748799999,
     "deadline_ms": 1792353599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1791755999999,
+    "hit_price": 1.1204,
     "created_ms": 1791749196788,
     "filtered": true,
     "whatsapp_status": "failed",
