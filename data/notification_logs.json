@@ -1,25 +1,6 @@
 [
   {
     "ts": 1791158485253,
-    "symbol": "TLMUSDT",
-    "indicator": "pivot_confirm",
-    "event": "top",
-    "reason": null,
-    "signature": "pc|TLMUSDT|top|1791151199999",
-    "close_time": 1791151199999,
-    "entry": null,
-    "stop": null,
-    "target": null,
-    "exit_price": null,
-    "ok": false,
-    "suppressed": true,
-    "live_touch": false,
-    "deduped": false,
-    "channel": "telegram_owner",
-    "error": null
-  },
-  {
-    "ts": 1791158485253,
     "symbol": "TOWNSUSDT",
     "indicator": "pivot_confirm",
     "event": "tp",
@@ -7690,5 +7671,17 @@
     "error": null,
     "attempts": 1,
     "channel": "telegram_owner"
+  },
+  {
+    "ts": 1791680650545,
+    "kind": "sl_touch",
+    "symbol": "TKOUSDT",
+    "indicator": "ai",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: TKOUSDT\nوصلت العملة إلى سعر الوقف (0.0568) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.0575\n🎯 سعر الدخول: 0.0588\n🛑 سعر الوقف: 0.0568\n🎯 الهدف: 0.0628\n🕐 وقت اللمسة: 3:59 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
   }
 ]
