@@ -9900,7 +9900,10 @@
     "hit_price": null,
     "created_ms": 1791759966949,
     "filtered": true,
-    "whatsapp_status": "failed"
+    "whatsapp_status": "failed",
+    "sl_touch_ms": 1791811753434,
+    "sl_touch_low": 0.2014,
+    "sl_touch_notified": true
   },
   {
     "signature": "QQQBUSDT|ai|BUY|1791756000000",
@@ -10897,9 +10900,9 @@
     "signal_open_ms": 1791802800000,
     "signal_close_ms": 1791806399999,
     "deadline_ms": 1792411199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1791811753434,
+    "hit_price": 0.343,
     "created_ms": 1791806799482,
     "filtered": true,
     "whatsapp_status": "failed"
