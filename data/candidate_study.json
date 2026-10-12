@@ -1,25 +1,5 @@
 [
   {
-    "signature": "AIGENSYNUSDT|supertrend|BUY|1790672400000",
-    "symbol": "AIGENSYNUSDT",
-    "indicator": "supertrend",
-    "entry": "0.02064",
-    "sl": "0.01980",
-    "tp": "0.02232",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790672400000,
-    "signal_close_ms": 1790675999999,
-    "deadline_ms": 1791280799999,
-    "status": "expired",
-    "resolved_at_ms": 1791280799999,
-    "hit_price": null,
-    "created_ms": 1790676066419,
-    "consensus": 2,
-    "verdict": "blocked",
-    "reason": "filter",
-    "source": "candidate"
-  },
-  {
     "signature": "API3USDT|supertrend|BUY|1790672400000",
     "symbol": "API3USDT",
     "indicator": "supertrend",
@@ -100013,6 +99993,26 @@
     "consensus": 0,
     "verdict": "accepted",
     "reason": "filter_ok",
+    "source": "candidate"
+  },
+  {
+    "signature": "GMEBUSDT|supertrend|BUY|1791824400000",
+    "symbol": "GMEBUSDT",
+    "indicator": "supertrend",
+    "entry": "26.83",
+    "sl": "25.99",
+    "tp": "28.51",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1791824400000,
+    "signal_close_ms": 1791827999999,
+    "deadline_ms": 1792432799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1791828608530,
+    "consensus": 0,
+    "verdict": "blocked",
+    "reason": "supertrend_confidence_cap",
     "source": "candidate"
   }
 ]
