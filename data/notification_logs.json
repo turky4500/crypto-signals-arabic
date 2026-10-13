@@ -1,17 +1,6 @@
 [
   {
     "ts": 1791282774806,
-    "symbol": "BONKUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791281700000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: BONKUSDT\n📊 سعر 15m: 3.82e-06\n🕐 وقت الشمعة: 1:29 مساءً\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791282774806,
     "symbol": "DRAMBUSDT",
     "kind": "preview",
     "candle_open_ms": 1791281700000,
@@ -5179,5 +5168,17 @@
     "error": "تلغرام غير مهيأ (telegram_connected=false)",
     "attempts": 0,
     "channel": null
+  },
+  {
+    "ts": 1791876759107,
+    "kind": "sl_touch",
+    "symbol": "BMTUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: BMTUSDT\nوصلت العملة إلى سعر الوقف (0.01827) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.01881\n🎯 سعر الدخول: 0.01918\n🛑 سعر الوقف: 0.01827\n🎯 الهدف: 0.02100\n🕐 وقت اللمسة: 3:59 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
   }
 ]
