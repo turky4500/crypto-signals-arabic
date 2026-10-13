@@ -262,7 +262,10 @@ class Monitor:
             res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
             channel = None
 
-        notifications = append_capped(
+        # إسناد في المكان ([:]) حتى تتجمّع سجلات كل مراحل الإرسال في القائمة
+        # نفسها التي يحملها المستدعي، بدل أن يمحو آخر مُرسِل سجلات ما قبله عند
+        # الحفظ (إذ يُرجِع append_capped قائمة جديدة ولا يعدّل الأصل).
+        notifications[:] = append_capped(
             notifications,
             {
                 "ts": now_ms,
@@ -377,7 +380,7 @@ class Monitor:
                 res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
                 channel = None
 
-            notifications = append_capped(
+            notifications[:] = append_capped(  # في المكان: تتجمّع سجلات المراحل
                 notifications,
                 {
                     "ts": now_ms,
@@ -413,7 +416,7 @@ class Monitor:
                     notes_reason = "no_suggestions"
                 else:
                     nres = tg_owner.send(notes_msg)
-                    notifications = append_capped(
+                    notifications[:] = append_capped(  # في المكان: تتجمّع سجلات المراحل
                         notifications,
                         {
                             "ts": now_ms,
@@ -538,7 +541,7 @@ class Monitor:
                 res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
                 channel = None
 
-            notifications = append_capped(
+            notifications[:] = append_capped(  # في المكان: تتجمّع سجلات المراحل
                 notifications,
                 {
                     "ts": now_ms,
@@ -612,7 +615,7 @@ class Monitor:
                 res = wa.send(msg) if wa else {"ok": False, "error": "whatsapp غير مفعّل"}
                 channel = None
 
-            notifications = append_capped(
+            notifications[:] = append_capped(  # في المكان: تتجمّع سجلات المراحل
                 notifications,
                 {
                     "ts": now_ms,
