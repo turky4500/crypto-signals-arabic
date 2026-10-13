@@ -10810,9 +10810,9 @@
     "signal_open_ms": 1791781200000,
     "signal_close_ms": 1791784799999,
     "deadline_ms": 1792389599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1791892799999,
+    "hit_price": 0.2218,
     "created_ms": 1791785189736,
     "filtered": true,
     "whatsapp_status": "failed",
@@ -11382,7 +11382,10 @@
     "hit_price": null,
     "created_ms": 1791846376897,
     "filtered": true,
-    "whatsapp_status": "failed"
+    "whatsapp_status": "failed",
+    "sl_touch_ms": 1791892799999,
+    "sl_touch_low": 0.01257,
+    "sl_touch_notified": true
   },
   {
     "signature": "SOMIUSDT|ai|BUY|1791842400000",
@@ -13650,7 +13653,10 @@
     "hit_price": null,
     "created_ms": 1791878769843,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1791892799999,
+    "sl_touch_low": 0.07772,
+    "sl_touch_notified": true
   },
   {
     "signature": "LAZIOUSDT|ai|BUY|1791882000000",
