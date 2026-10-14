@@ -12906,7 +12906,10 @@
     "hit_price": null,
     "created_ms": 1791871580206,
     "filtered": true,
-    "whatsapp_status": "failed"
+    "whatsapp_status": "failed",
+    "sl_touch_ms": 1792015199999,
+    "sl_touch_low": 0.01728,
+    "sl_touch_notified": true
   },
   {
     "signature": "SPELLUSDT|supertrend|BUY|1791867600000",
@@ -13527,7 +13530,10 @@
     "hit_price": null,
     "created_ms": 1791875183929,
     "filtered": true,
-    "whatsapp_status": "failed"
+    "whatsapp_status": "failed",
+    "sl_touch_ms": 1792015199999,
+    "sl_touch_low": 0.3943,
+    "sl_touch_notified": true
   },
   {
     "signature": "LINEAUSDT|supertrend|BUY|1791871200000",
@@ -13781,6 +13787,24 @@
     "resolved_at_ms": 1791959659192,
     "hit_price": 0.004115,
     "created_ms": 1791950803921,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "AVNTUSDT|supertrend|BUY|1792011600000",
+    "symbol": "AVNTUSDT",
+    "indicator": "supertrend",
+    "entry": "0.1313",
+    "sl": "0.1234",
+    "tp": "0.1471",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792011600000,
+    "signal_close_ms": 1792015199999,
+    "deadline_ms": 1792619999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792015672114,
     "filtered": true,
     "whatsapp_status": "sent"
   }
