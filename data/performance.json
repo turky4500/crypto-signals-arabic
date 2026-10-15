@@ -10305,7 +10305,10 @@
     "hit_price": null,
     "created_ms": 1791777976373,
     "filtered": true,
-    "whatsapp_status": "failed"
+    "whatsapp_status": "failed",
+    "sl_touch_ms": 1792040399999,
+    "sl_touch_low": 0.9981,
+    "sl_touch_notified": true
   },
   {
     "signature": "TWTUSDT|supertrend|BUY|1791774000000",
@@ -13501,9 +13504,9 @@
     "signal_open_ms": 1791871200000,
     "signal_close_ms": 1791874799999,
     "deadline_ms": 1792479599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1792040399999,
+    "hit_price": 0.03429,
     "created_ms": 1791875183929,
     "filtered": true,
     "whatsapp_status": "failed",
