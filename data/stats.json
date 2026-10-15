@@ -1,5 +1,5 @@
 {
-  "monitored_symbols": 487,
+  "monitored_symbols": 485,
   "signals_today": 2,
   "supertrend_today": 2,
   "ai_today": 0,
@@ -37,7 +37,7 @@
     },
     "signature": "RSRUSDT|supertrend|BUY|1792033200000"
   },
-  "last_check": 1792069450457,
+  "last_check": 1792069749794,
   "data_date": "2026-10-15",
   "filter_meta": {
     "enabled": true,
@@ -81,43 +81,43 @@
       },
       "bollinger": {
         "total": 1167,
-        "tp_hit": 20,
+        "tp_hit": 24,
         "sl_hit": 538,
-        "pending": 609,
+        "pending": 605,
         "expired": 0,
-        "win_rate": 3.6
+        "win_rate": 4.3
       },
       "rsi50": {
         "total": 541,
-        "tp_hit": 25,
+        "tp_hit": 26,
         "sl_hit": 367,
-        "pending": 149,
+        "pending": 148,
         "expired": 0,
-        "win_rate": 6.4
+        "win_rate": 6.6
       },
       "adx": {
         "total": 2287,
-        "tp_hit": 201,
+        "tp_hit": 224,
         "sl_hit": 1346,
-        "pending": 740,
+        "pending": 717,
         "expired": 0,
-        "win_rate": 13.0
+        "win_rate": 14.3
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 7,
+    "added_this_run": 0,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 4192,
-      "pending": 765,
+      "resolved": 4196,
+      "pending": 761,
       "expired": 43,
-      "tp_hit": 1244,
+      "tp_hit": 1248,
       "sl_hit": 2948,
-      "win_rate": 0.2968,
-      "ev_per_trade": -0.1096
+      "win_rate": 0.2974,
+      "ev_per_trade": -0.1078
     },
     "with_filter": {
       "total": 367,
@@ -141,24 +141,24 @@
     },
     "blocked": {
       "total": 4633,
-      "resolved": 3843,
-      "pending": 748,
+      "resolved": 3847,
+      "pending": 744,
       "expired": 42,
-      "tp_hit": 1204,
+      "tp_hit": 1208,
       "sl_hit": 2639,
-      "win_rate": 0.3133,
-      "ev_per_trade": -0.0601
+      "win_rate": 0.314,
+      "ev_per_trade": -0.058
     },
     "by_reason": {
       "bollinger_live_off": {
         "total": 2872,
-        "resolved": 2201,
-        "pending": 658,
+        "resolved": 2205,
+        "pending": 654,
         "expired": 13,
-        "tp_hit": 777,
+        "tp_hit": 781,
         "sl_hit": 1424,
-        "win_rate": 0.353,
-        "ev_per_trade": 0.059
+        "win_rate": 0.3542,
+        "ev_per_trade": 0.0626
       },
       "filter": {
         "total": 1638,
