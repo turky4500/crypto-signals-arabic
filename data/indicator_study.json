@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BMTUSDT|bollinger|1791982800000",
-    "symbol": "BMTUSDT",
-    "indicator": "bollinger",
-    "entry": "0.01831",
-    "sl": "0.01763",
-    "tp": "0.01967",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1791982800000,
-    "signal_close_ms": 1791986399999,
-    "deadline_ms": 1792591199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792029599999,
-    "hit_price": 0.0176,
-    "created_ms": 1791986696462,
-    "source": "simulation"
-  },
-  {
     "signature": "CAKEUSDT|adx|1791982800000",
     "symbol": "CAKEUSDT",
     "indicator": "adx",
@@ -33738,9 +33721,9 @@
     "signal_open_ms": 1792036800000,
     "signal_close_ms": 1792040399999,
     "deadline_ms": 1792645199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792089572935,
+    "hit_price": 5.348,
     "created_ms": 1792040920143,
     "source": "simulation"
   },
@@ -36339,9 +36322,9 @@
     "signal_open_ms": 1792044000000,
     "signal_close_ms": 1792047599999,
     "deadline_ms": 1792652399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792089572935,
+    "hit_price": 0.2548,
     "created_ms": 1792047860655,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792087835592,
+    "source": "simulation"
+  },
+  {
+    "signature": "USDEBUSDT|adx|1792083600000",
+    "symbol": "USDEBUSDT",
+    "indicator": "adx",
+    "entry": "11.74",
+    "sl": "10.96",
+    "tp": "13.30",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792083600000,
+    "signal_close_ms": 1792087199999,
+    "deadline_ms": 1792691999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792089737757,
     "source": "simulation"
   }
 ]
