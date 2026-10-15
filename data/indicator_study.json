@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ZENUSDT|bollinger|1792036800000",
-    "symbol": "ZENUSDT",
-    "indicator": "bollinger",
-    "entry": "5.825",
-    "sl": "5.575",
-    "tp": "6.325",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792036800000,
-    "signal_close_ms": 1792040399999,
-    "deadline_ms": 1792645199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1792041034828,
-    "source": "simulation"
-  },
-  {
     "signature": "ZILUSDT|bollinger|1792036800000",
     "symbol": "ZILUSDT",
     "indicator": "bollinger",
@@ -15599,9 +15582,9 @@
     "signal_open_ms": 1792065600000,
     "signal_close_ms": 1792069199999,
     "deadline_ms": 1792673999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792087199999,
+    "hit_price": 56.91,
     "created_ms": 1792069558261,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792105607588,
+    "source": "simulation"
+  },
+  {
+    "signature": "PYPLBUSDT|adx|1792101600000",
+    "symbol": "PYPLBUSDT",
+    "indicator": "adx",
+    "entry": "57.01",
+    "sl": "56.61",
+    "tp": "57.81",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792101600000,
+    "signal_close_ms": 1792105199999,
+    "deadline_ms": 1792709999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792105847404,
     "source": "simulation"
   }
 ]
