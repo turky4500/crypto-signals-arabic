@@ -1,22 +1,5 @@
 [
   {
-    "signature": "RLUSDUSDT|adx|1792206000000",
-    "symbol": "RLUSDUSDT",
-    "indicator": "adx",
-    "entry": "1.0013",
-    "sl": "1.0011",
-    "tp": "1.0017",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792206000000,
-    "signal_close_ms": 1792209599999,
-    "deadline_ms": 1792814399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1792209969962,
-    "source": "simulation"
-  },
-  {
     "signature": "ROSEUSDT|macd|1792206000000",
     "symbol": "ROSEUSDT",
     "indicator": "macd",
@@ -32429,9 +32412,9 @@
     "signal_open_ms": 1792256400000,
     "signal_close_ms": 1792259999999,
     "deadline_ms": 1792864799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1792321199999,
+    "hit_price": 0.0985,
     "created_ms": 1792260449006,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792352105270,
+    "source": "simulation"
+  },
+  {
+    "signature": "PUNDIXUSDT|bollinger|1792346400000",
+    "symbol": "PUNDIXUSDT",
+    "indicator": "bollinger",
+    "entry": "0.0955",
+    "sl": "0.0942",
+    "tp": "0.0981",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792346400000,
+    "signal_close_ms": 1792349999999,
+    "deadline_ms": 1792954799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792353083808,
     "source": "simulation"
   }
 ]
