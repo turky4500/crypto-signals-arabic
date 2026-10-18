@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SPELLUSDT|adx|1792216800000",
-    "symbol": "SPELLUSDT",
-    "indicator": "adx",
-    "entry": "0.0000880",
-    "sl": "0.0000865",
-    "tp": "0.0000910",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792216800000,
-    "signal_close_ms": 1792220399999,
-    "deadline_ms": 1792825199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792252799999,
-    "hit_price": 8.57e-05,
-    "created_ms": 1792220762163,
-    "source": "simulation"
-  },
-  {
     "signature": "SPYBUSDT|macd|1792216800000",
     "symbol": "SPYBUSDT",
     "indicator": "macd",
@@ -77394,9 +77377,9 @@
     "signal_open_ms": 1792353600000,
     "signal_close_ms": 1792357199999,
     "deadline_ms": 1792961999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792363460399,
+    "hit_price": 0.8,
     "created_ms": 1792357484017,
     "source": "simulation"
   },
@@ -78108,9 +78091,9 @@
     "signal_open_ms": 1792353600000,
     "signal_close_ms": 1792357199999,
     "deadline_ms": 1792961999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792363460399,
+    "hit_price": 0.3473,
     "created_ms": 1792357534111,
     "source": "simulation"
   },
@@ -82936,9 +82919,9 @@
     "signal_open_ms": 1792357200000,
     "signal_close_ms": 1792360799999,
     "deadline_ms": 1792965599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792363460399,
+    "hit_price": 342.77,
     "created_ms": 1792361430826,
     "source": "simulation"
   },
@@ -82953,9 +82936,9 @@
     "signal_open_ms": 1792357200000,
     "signal_close_ms": 1792360799999,
     "deadline_ms": 1792965599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792363460399,
+    "hit_price": 342.77,
     "created_ms": 1792361430826,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792362965814,
+    "source": "simulation"
+  },
+  {
+    "signature": "RKLBBUSDT|rsi50|1792357200000",
+    "symbol": "RKLBBUSDT",
+    "indicator": "rsi50",
+    "entry": "50.39",
+    "sl": "49.41",
+    "tp": "52.35",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792357200000,
+    "signal_close_ms": 1792360799999,
+    "deadline_ms": 1792965599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792363609504,
     "source": "simulation"
   }
 ]
