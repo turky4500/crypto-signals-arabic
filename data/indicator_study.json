@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SENTUSDT|adx|1792216800000",
-    "symbol": "SENTUSDT",
-    "indicator": "adx",
-    "entry": "0.02145",
-    "sl": "0.02092",
-    "tp": "0.02251",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792216800000,
-    "signal_close_ms": 1792220399999,
-    "deadline_ms": 1792825199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792238399999,
-    "hit_price": 0.02082,
-    "created_ms": 1792220756974,
-    "source": "simulation"
-  },
-  {
     "signature": "SHELLUSDT|adx|1792216800000",
     "symbol": "SHELLUSDT",
     "indicator": "adx",
@@ -38226,9 +38209,9 @@
     "signal_open_ms": 1792278000000,
     "signal_close_ms": 1792281599999,
     "deadline_ms": 1792886399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792361661117,
+    "hit_price": 341.68,
     "created_ms": 1792281920314,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792361539553,
+    "source": "simulation"
+  },
+  {
+    "signature": "CRWVBUSDT|rsi50|1792357200000",
+    "symbol": "CRWVBUSDT",
+    "indicator": "rsi50",
+    "entry": "60.78",
+    "sl": "59.51",
+    "tp": "63.32",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792357200000,
+    "signal_close_ms": 1792360799999,
+    "deadline_ms": 1792965599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792361709279,
     "source": "simulation"
   }
 ]
