@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BARUSDT|adx|1792332000000",
-    "symbol": "BARUSDT",
-    "indicator": "adx",
-    "entry": "0.274",
-    "sl": "0.260",
-    "tp": "0.302",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792332000000,
-    "signal_close_ms": 1792335599999,
-    "deadline_ms": 1792940399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1792335884973,
-    "source": "simulation"
-  },
-  {
     "signature": "BFUSDUSDT|adx|1792332000000",
     "symbol": "BFUSDUSDT",
     "indicator": "adx",
@@ -13627,9 +13610,9 @@
     "signal_open_ms": 1792353600000,
     "signal_close_ms": 1792357199999,
     "deadline_ms": 1792961999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792403063409,
+    "hit_price": 0.002708,
     "created_ms": 1792357609489,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792400792628,
+    "source": "simulation"
+  },
+  {
+    "signature": "STXBUSDT|adx|1792396800000",
+    "symbol": "STXBUSDT",
+    "indicator": "adx",
+    "entry": "654.12",
+    "sl": "644.80",
+    "tp": "672.76",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792396800000,
+    "signal_close_ms": 1792400399999,
+    "deadline_ms": 1793005199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792403170916,
     "source": "simulation"
   }
 ]
