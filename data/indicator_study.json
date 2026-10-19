@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ARKUSDT|bollinger|1792346400000",
-    "symbol": "ARKUSDT",
-    "indicator": "bollinger",
-    "entry": "0.1692",
-    "sl": "0.1669",
-    "tp": "0.1738",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792346400000,
-    "signal_close_ms": 1792349999999,
-    "deadline_ms": 1792954799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1792395559188,
-    "hit_price": 0.1738,
-    "created_ms": 1792350275024,
-    "source": "simulation"
-  },
-  {
     "signature": "ATMUSDT|adx|1792346400000",
     "symbol": "ATMUSDT",
     "indicator": "adx",
@@ -26445,9 +26428,9 @@
     "signal_open_ms": 1792368000000,
     "signal_close_ms": 1792371599999,
     "deadline_ms": 1792976399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792410206202,
+    "hit_price": 64.98,
     "created_ms": 1792371662390,
     "source": "simulation"
   },
@@ -72753,9 +72736,9 @@
     "signal_open_ms": 1792396800000,
     "signal_close_ms": 1792400399999,
     "deadline_ms": 1793005199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792410206202,
+    "hit_price": 64.24,
     "created_ms": 1792400693423,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792409912027,
+    "source": "simulation"
+  },
+  {
+    "signature": "QCOMBUSDT|adx|1792404000000",
+    "symbol": "QCOMBUSDT",
+    "indicator": "adx",
+    "entry": "176.03",
+    "sl": "174.26",
+    "tp": "179.57",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792404000000,
+    "signal_close_ms": 1792407599999,
+    "deadline_ms": 1793012399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792410295712,
     "source": "simulation"
   }
 ]
