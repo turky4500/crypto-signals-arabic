@@ -1,22 +1,5 @@
 [
   {
-    "signature": "AMPUSDT|adx|1792346400000",
-    "symbol": "AMPUSDT",
-    "indicator": "adx",
-    "entry": "0.000796",
-    "sl": "0.000712",
-    "tp": "0.000964",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792346400000,
-    "signal_close_ms": 1792349999999,
-    "deadline_ms": 1792954799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1792393199999,
-    "hit_price": 0.000964,
-    "created_ms": 1792350272886,
-    "source": "simulation"
-  },
-  {
     "signature": "ARKUSDT|bollinger|1792346400000",
     "symbol": "ARKUSDT",
     "indicator": "bollinger",
@@ -81202,9 +81185,9 @@
     "signal_open_ms": 1792400400000,
     "signal_close_ms": 1792403999999,
     "deadline_ms": 1793008799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792409903302,
+    "hit_price": 1.0007,
     "created_ms": 1792404401541,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792407962266,
+    "source": "simulation"
+  },
+  {
+    "signature": "AGPUBUSDT|adx|1792404000000",
+    "symbol": "AGPUBUSDT",
+    "indicator": "adx",
+    "entry": "7.89",
+    "sl": "7.75",
+    "tp": "8.17",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792404000000,
+    "signal_close_ms": 1792407599999,
+    "deadline_ms": 1793012399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792409912027,
     "source": "simulation"
   }
 ]
