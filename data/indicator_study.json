@@ -1,22 +1,5 @@
 [
   {
-    "signature": "1MBABYDOGEUSDT|bollinger|1792353600000",
-    "symbol": "1MBABYDOGEUSDT",
-    "indicator": "bollinger",
-    "entry": "0.0003453",
-    "sl": "0.0003398",
-    "tp": "0.0003563",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792353600000,
-    "signal_close_ms": 1792357199999,
-    "deadline_ms": 1792961999999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1792366156482,
-    "hit_price": 0.0003563,
-    "created_ms": 1792357461826,
-    "source": "simulation"
-  },
-  {
     "signature": "2ZUSDT|bollinger|1792353600000",
     "symbol": "2ZUSDT",
     "indicator": "bollinger",
@@ -39416,9 +39399,9 @@
     "signal_open_ms": 1792375200000,
     "signal_close_ms": 1792378799999,
     "deadline_ms": 1792983599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792413260801,
+    "hit_price": 0.05483,
     "created_ms": 1792379237834,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792411545899,
+    "source": "simulation"
+  },
+  {
+    "signature": "QNTBUSDT|adx|1792407600000",
+    "symbol": "QNTBUSDT",
+    "indicator": "adx",
+    "entry": "37.88",
+    "sl": "36.96",
+    "tp": "39.72",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792407600000,
+    "signal_close_ms": 1792411199999,
+    "deadline_ms": 1793015999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792413354633,
     "source": "simulation"
   }
 ]
