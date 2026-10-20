@@ -1,5 +1,5 @@
 {
-  "monitored_symbols": 451,
+  "monitored_symbols": 450,
   "signals_today": 1,
   "supertrend_today": 0,
   "ai_today": 1,
@@ -37,7 +37,7 @@
     },
     "signature": "ZAMAUSDT|ai|BUY|1792450800000"
   },
-  "last_check": 1792465451561,
+  "last_check": 1792465748971,
   "data_date": "2026-10-20",
   "filter_meta": {
     "enabled": true,
@@ -81,11 +81,11 @@
       },
       "bollinger": {
         "total": 137,
-        "tp_hit": 5,
+        "tp_hit": 6,
         "sl_hit": 6,
-        "pending": 126,
+        "pending": 125,
         "expired": 0,
-        "win_rate": 45.5
+        "win_rate": 50.0
       },
       "rsi50": {
         "total": 815,
@@ -97,27 +97,27 @@
       },
       "adx": {
         "total": 3333,
-        "tp_hit": 222,
+        "tp_hit": 224,
         "sl_hit": 939,
-        "pending": 2172,
+        "pending": 2170,
         "expired": 0,
-        "win_rate": 19.1
+        "win_rate": 19.3
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 19,
+    "added_this_run": 0,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 4036,
-      "pending": 957,
+      "resolved": 4038,
+      "pending": 955,
       "expired": 7,
-      "tp_hit": 874,
+      "tp_hit": 876,
       "sl_hit": 3162,
-      "win_rate": 0.2166,
-      "ev_per_trade": -0.3502
+      "win_rate": 0.2169,
+      "ev_per_trade": -0.3493
     },
     "with_filter": {
       "total": 334,
@@ -141,24 +141,24 @@
     },
     "blocked": {
       "total": 4666,
-      "resolved": 3712,
-      "pending": 951,
+      "resolved": 3714,
+      "pending": 949,
       "expired": 3,
-      "tp_hit": 837,
+      "tp_hit": 839,
       "sl_hit": 2875,
-      "win_rate": 0.2255,
-      "ev_per_trade": -0.3235
+      "win_rate": 0.2259,
+      "ev_per_trade": -0.3223
     },
     "by_reason": {
       "bollinger_live_off": {
         "total": 3312,
-        "resolved": 2871,
-        "pending": 441,
+        "resolved": 2873,
+        "pending": 439,
         "expired": 0,
-        "tp_hit": 727,
+        "tp_hit": 729,
         "sl_hit": 2144,
-        "win_rate": 0.2532,
-        "ev_per_trade": -0.2404
+        "win_rate": 0.2537,
+        "ev_per_trade": -0.2389
       },
       "filter": {
         "total": 1262,
