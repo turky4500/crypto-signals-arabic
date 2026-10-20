@@ -1,22 +1,5 @@
 [
   {
-    "signature": "JUVUSDT|adx|1792429200000",
-    "symbol": "JUVUSDT",
-    "indicator": "adx",
-    "entry": "0.304",
-    "sl": "0.300",
-    "tp": "0.312",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792429200000,
-    "signal_close_ms": 1792432799999,
-    "deadline_ms": 1793037599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792457999999,
-    "hit_price": 0.298,
-    "created_ms": 1792433139075,
-    "source": "simulation"
-  },
-  {
     "signature": "KATUSDT|adx|1792429200000",
     "symbol": "KATUSDT",
     "indicator": "adx",
@@ -2577,9 +2560,9 @@
     "signal_open_ms": 1792432800000,
     "signal_close_ms": 1792436399999,
     "deadline_ms": 1793041199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792513763981,
+    "hit_price": 0.1688,
     "created_ms": 1792436455268,
     "source": "simulation"
   },
@@ -39790,9 +39773,9 @@
     "signal_open_ms": 1792468800000,
     "signal_close_ms": 1792472399999,
     "deadline_ms": 1793077199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792513763981,
+    "hit_price": 0.1687,
     "created_ms": 1792472703817,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792512656617,
+    "source": "simulation"
+  },
+  {
+    "signature": "DGBUSDT|adx|1792508400000",
+    "symbol": "DGBUSDT",
+    "indicator": "adx",
+    "entry": "0.00339",
+    "sl": "0.00331",
+    "tp": "0.00355",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792508400000,
+    "signal_close_ms": 1792511999999,
+    "deadline_ms": 1793116799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792513801493,
     "source": "simulation"
   }
 ]
