@@ -1,22 +1,5 @@
 [
   {
-    "signature": "LQTYUSDT|awesome|1792436400000",
-    "symbol": "LQTYUSDT",
-    "indicator": "awesome",
-    "entry": "0.1943",
-    "sl": "0.1880",
-    "tp": "0.2069",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792436400000,
-    "signal_close_ms": 1792439999999,
-    "deadline_ms": 1793044799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1792440347817,
-    "source": "simulation"
-  },
-  {
     "signature": "LSKUSDT|adx|1792436400000",
     "symbol": "LSKUSDT",
     "indicator": "adx",
@@ -19407,9 +19390,9 @@
     "signal_open_ms": 1792454400000,
     "signal_close_ms": 1792457999999,
     "deadline_ms": 1793062799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792517060687,
+    "hit_price": 0.0689,
     "created_ms": 1792458277002,
     "source": "simulation"
   },
@@ -21821,9 +21804,9 @@
     "signal_open_ms": 1792458000000,
     "signal_close_ms": 1792461599999,
     "deadline_ms": 1793066399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792517060687,
+    "hit_price": 0.06885,
     "created_ms": 1792461883347,
     "source": "simulation"
   },
@@ -41490,9 +41473,9 @@
     "signal_open_ms": 1792483200000,
     "signal_close_ms": 1792486799999,
     "deadline_ms": 1793091599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792517060687,
+    "hit_price": 0.06893,
     "created_ms": 1792487078199,
     "source": "simulation"
   },
@@ -50160,9 +50143,9 @@
     "signal_open_ms": 1792497600000,
     "signal_close_ms": 1792501199999,
     "deadline_ms": 1793105999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792517060687,
+    "hit_price": 0.0688,
     "created_ms": 1792501482744,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792516042173,
+    "source": "simulation"
+  },
+  {
+    "signature": "UMAUSDT|adx|1792512000000",
+    "symbol": "UMAUSDT",
+    "indicator": "adx",
+    "entry": "0.389",
+    "sl": "0.380",
+    "tp": "0.407",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792512000000,
+    "signal_close_ms": 1792515599999,
+    "deadline_ms": 1793120399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792517194031,
     "source": "simulation"
   }
 ]
