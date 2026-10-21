@@ -1,28 +1,6 @@
 [
   {
     "ts": 1791493448979,
-    "symbol": "SKLUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791492300000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: SKLUSDT\n📊 سعر 15m: 0.00556\n🕐 وقت الشمعة: 11:59 مساءً\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791493448979,
-    "symbol": "SLPUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791492300000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: SLPUSDT\n📊 سعر 15m: 0.000624\n🕐 وقت الشمعة: 11:59 مساءً\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791493448979,
     "symbol": "SPKUSDT",
     "kind": "preview",
     "candle_open_ms": 1791492300000,
@@ -5147,6 +5125,28 @@
   },
   {
     "ts": 1792625048047,
+    "kind": "resolution",
+    "symbol": "ZKUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792625350111,
+    "kind": "daily_report",
+    "day": "2026-10-21",
+    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-10-21 (الأربعاء)\n\n🚨 إجمالي الإشارات: 5\n✅ تحقق الهدف: 2\n❌ ضرب الوقف: 1\n⏳ لم تُحسم بعد: 2\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 66.7% (من أصل 3 محسومة)",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792625350111,
     "kind": "resolution",
     "symbol": "ZKUSDT",
     "indicator": "ai",
