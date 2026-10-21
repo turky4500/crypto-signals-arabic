@@ -1,39 +1,6 @@
 [
   {
     "ts": 1791494117145,
-    "symbol": "AUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791493200000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: AUSDT\n📊 سعر 15m: 0.0966\n🕐 وقت الشمعة: 12:14 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791494117145,
-    "symbol": "EDUUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791493200000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: EDUUSDT\n📊 سعر 15m: 0.0658\n🕐 وقت الشمعة: 12:14 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791494117145,
-    "symbol": "GENIUSUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791493200000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: GENIUSUSDT\n📊 سعر 15m: 0.3142\n🕐 وقت الشمعة: 12:14 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791494117145,
     "symbol": "NIGHTUSDT",
     "kind": "preview",
     "candle_open_ms": 1791493200000,
@@ -5153,6 +5120,40 @@
     "indicator": "ai",
     "status": "sl_hit",
     "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792626250128,
+    "kind": "daily_report",
+    "day": "2026-10-21",
+    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-10-21 (الأربعاء)\n\n🚨 إجمالي الإشارات: 5\n✅ تحقق الهدف: 2\n❌ ضرب الوقف: 1\n⏳ لم تُحسم بعد: 2\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 66.7% (من أصل 3 محسومة)",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792626250128,
+    "kind": "resolution",
+    "symbol": "ZKUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792626250128,
+    "kind": "sl_touch",
+    "symbol": "MANAUSDT",
+    "indicator": "ai",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: MANAUSDT\nوصلت العملة إلى سعر الوقف (0.0876) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.0876\n🎯 سعر الدخول: 0.0893\n🛑 سعر الوقف: 0.0876\n🎯 الهدف: 0.0927\n🕐 وقت اللمسة: 2:44 صباحًا",
     "ok": false,
     "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
     "attempts": 3,
