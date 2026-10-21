@@ -1,29 +1,5 @@
 [
   {
-    "ts": 1791480249627,
-    "kind": "sl_touch",
-    "symbol": "SANDUSDT",
-    "indicator": "ai",
-    "status": "pending",
-    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: SANDUSDT\nوصلت العملة إلى سعر الوقف (0.06656) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.06612\n🎯 سعر الدخول: 0.07408\n🛑 سعر الوقف: 0.06656\n🎯 الهدف: 0.08912\n🕐 وقت اللمسة: 8:24 مساءً",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram"
-  },
-  {
-    "ts": 1791482352073,
-    "kind": "sl_touch",
-    "symbol": "SUPERUSDT",
-    "indicator": "supertrend",
-    "status": "pending",
-    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: SUPERUSDT\nوصلت العملة إلى سعر الوقف (0.2189) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.2185\n🎯 سعر الدخول: 0.2297\n🛑 سعر الوقف: 0.2189\n🎯 الهدف: 0.2513\n🕐 وقت اللمسة: 8:59 مساءً",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram"
-  },
-  {
     "ts": 1791482651711,
     "kind": "resolution",
     "symbol": "SANDUSDT",
@@ -5151,6 +5127,28 @@
   },
   {
     "ts": 1792622649176,
+    "kind": "sl_touch",
+    "symbol": "ZKUSDT",
+    "indicator": "ai",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: ZKUSDT\nوصلت العملة إلى سعر الوقف (0.01472) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.01465\n🎯 سعر الدخول: 0.01543\n🛑 سعر الوقف: 0.01472\n🎯 الهدف: 0.01685\n🕐 وقت اللمسة: 1:44 صباحًا",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792622949777,
+    "kind": "daily_report",
+    "day": "2026-10-21",
+    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-10-21 (الأربعاء)\n\n🚨 إجمالي الإشارات: 5\n✅ تحقق الهدف: 2\n❌ ضرب الوقف: 0\n⏳ لم تُحسم بعد: 3\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 100.0% (من أصل 2 محسومة)",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792622949777,
     "kind": "sl_touch",
     "symbol": "ZKUSDT",
     "indicator": "ai",
