@@ -1,22 +1,5 @@
 [
   {
-    "signature": "AGPUBUSDT|adx|1792584000000",
-    "symbol": "AGPUBUSDT",
-    "indicator": "adx",
-    "entry": "8.49",
-    "sl": "8.24",
-    "tp": "8.99",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792584000000,
-    "signal_close_ms": 1792587599999,
-    "deadline_ms": 1793192399999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1792607306481,
-    "hit_price": 8.99,
-    "created_ms": 1792587865002,
-    "source": "simulation"
-  },
-  {
     "signature": "AIGENSYNUSDT|adx|1792584000000",
     "symbol": "AIGENSYNUSDT",
     "indicator": "adx",
@@ -4719,9 +4702,9 @@
     "signal_open_ms": 1792584000000,
     "signal_close_ms": 1792587599999,
     "deadline_ms": 1793192399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792615163981,
+    "hit_price": 0.048,
     "created_ms": 1792587932337,
     "source": "simulation"
   },
@@ -4736,9 +4719,9 @@
     "signal_open_ms": 1792584000000,
     "signal_close_ms": 1792587599999,
     "deadline_ms": 1793192399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792615163981,
+    "hit_price": 0.048,
     "created_ms": 1792587932337,
     "source": "simulation"
   },
@@ -14443,9 +14426,9 @@
     "signal_open_ms": 1792587600000,
     "signal_close_ms": 1792591199999,
     "deadline_ms": 1793195999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792615163981,
+    "hit_price": 0.02542,
     "created_ms": 1792591529985,
     "source": "simulation"
   },
@@ -14460,9 +14443,9 @@
     "signal_open_ms": 1792587600000,
     "signal_close_ms": 1792591199999,
     "deadline_ms": 1793195999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792615163981,
+    "hit_price": 0.02542,
     "created_ms": 1792591529985,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": 1792614262611,
     "hit_price": 268.03,
     "created_ms": 1792613430586,
+    "source": "simulation"
+  },
+  {
+    "signature": "FLUXUSDT|ichimoku|1792609200000",
+    "symbol": "FLUXUSDT",
+    "indicator": "ichimoku",
+    "entry": "0.0717",
+    "sl": "0.0705",
+    "tp": "0.0741",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792609200000,
+    "signal_close_ms": 1792612799999,
+    "deadline_ms": 1793217599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792615212055,
     "source": "simulation"
   }
 ]
