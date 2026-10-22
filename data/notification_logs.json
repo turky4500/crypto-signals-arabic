@@ -1,16 +1,5 @@
 [
   {
-    "ts": 1791675920340,
-    "symbol": "XUSDUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791675000000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: XUSDUSDT\n📊 سعر 15m: 1.001\n🕐 وقت الشمعة: 2:44 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
     "ts": 1791677050553,
     "symbol": "GTCUSDT",
     "kind": "preview",
@@ -5208,6 +5197,18 @@
   },
   {
     "ts": 1792635247579,
+    "kind": "resolution",
+    "symbol": "MANAUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: MANAUSDT\n💰 سعر الدخول: 0.0893\n🛑 الوقف: ضُرب عند 0.0875\n📉 الخسارة: -1R (-2.02%)\n⏱ المدة: 8 ساعات\n🕐 وقت الإشارة: 6:59 مساءً",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792635548911,
     "kind": "resolution",
     "symbol": "MANAUSDT",
     "indicator": "ai",
