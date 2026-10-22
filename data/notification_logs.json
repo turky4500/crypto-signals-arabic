@@ -1,50 +1,6 @@
 [
   {
     "ts": 1791579849869,
-    "symbol": "NXPCUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791578700000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: NXPCUSDT\n📊 سعر 15m: 0.2148\n🕐 وقت الشمعة: 11:59 مساءً\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791579849869,
-    "symbol": "RVNUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791578700000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: RVNUSDT\n📊 سعر 15m: 0.002243\n🕐 وقت الشمعة: 11:59 مساءً\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791579849869,
-    "symbol": "SOLVUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791578700000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: SOLVUSDT\n📊 سعر 15m: 0.00389\n🕐 وقت الشمعة: 11:59 مساءً\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791579849869,
-    "symbol": "SOPHUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791578700000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: SOPHUSDT\n📊 سعر 15m: 0.00365\n🕐 وقت الشمعة: 11:59 مساءً\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791579849869,
     "symbol": "SXTUSDT",
     "kind": "preview",
     "candle_open_ms": 1791578700000,
@@ -5161,6 +5117,52 @@
   },
   {
     "ts": 1792628050932,
+    "kind": "resolution",
+    "symbol": "MANAUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: MANAUSDT\n💰 سعر الدخول: 0.0893\n🛑 الوقف: ضُرب عند 0.0875\n📉 الخسارة: -1R (-2.02%)\n⏱ المدة: 8 ساعات\n🕐 وقت الإشارة: 6:59 مساءً",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792628351873,
+    "kind": "daily_report",
+    "day": "2026-10-21",
+    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-10-21 (الأربعاء)\n\n🚨 إجمالي الإشارات: 5\n✅ تحقق الهدف: 2\n❌ ضرب الوقف: 2\n⏳ لم تُحسم بعد: 1\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 50.0% (من أصل 4 محسومة)",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792628351873,
+    "kind": "resolution",
+    "symbol": "CRVUSDT",
+    "indicator": "ai",
+    "status": "tp_hit",
+    "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: CRVUSDT\n💰 سعر الدخول: 0.3605\n🎯 الهدف: تحقق عند 0.4057\n📈 الأرباح: +2R (+12.54%)\n⏱ المدة: يومان و9 ساعات\n🕐 وقت الإشارة: 5:59 مساءً",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792628351873,
+    "kind": "resolution",
+    "symbol": "ZKUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792628351873,
     "kind": "resolution",
     "symbol": "MANAUSDT",
     "indicator": "ai",
