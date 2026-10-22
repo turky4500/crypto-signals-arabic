@@ -37,7 +37,7 @@
     },
     "signature": "PHAUSDT|supertrend|BUY|1792616400000"
   },
-  "last_check": 1792626847211,
+  "last_check": 1792627150571,
   "data_date": "2026-10-22",
   "filter_meta": {
     "enabled": true,
@@ -81,11 +81,11 @@
       },
       "bollinger": {
         "total": 37,
-        "tp_hit": 0,
+        "tp_hit": 1,
         "sl_hit": 0,
-        "pending": 37,
+        "pending": 36,
         "expired": 0,
-        "win_rate": null
+        "win_rate": 100.0
       },
       "rsi50": {
         "total": 119,
@@ -111,13 +111,13 @@
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 4041,
-      "pending": 947,
+      "resolved": 4042,
+      "pending": 946,
       "expired": 12,
-      "tp_hit": 1272,
+      "tp_hit": 1273,
       "sl_hit": 2769,
-      "win_rate": 0.3148,
-      "ev_per_trade": -0.0556
+      "win_rate": 0.3149,
+      "ev_per_trade": -0.0553
     },
     "with_filter": {
       "total": 20,
@@ -141,24 +141,24 @@
     },
     "blocked": {
       "total": 4980,
-      "resolved": 4026,
-      "pending": 942,
+      "resolved": 4027,
+      "pending": 941,
       "expired": 12,
-      "tp_hit": 1264,
+      "tp_hit": 1265,
       "sl_hit": 2762,
-      "win_rate": 0.314,
-      "ev_per_trade": -0.058
+      "win_rate": 0.3141,
+      "ev_per_trade": -0.0577
     },
     "by_reason": {
       "bollinger_live_off": {
         "total": 3290,
-        "resolved": 3054,
-        "pending": 231,
+        "resolved": 3055,
+        "pending": 230,
         "expired": 5,
-        "tp_hit": 965,
+        "tp_hit": 966,
         "sl_hit": 2089,
-        "win_rate": 0.316,
-        "ev_per_trade": -0.052
+        "win_rate": 0.3162,
+        "ev_per_trade": -0.0514
       },
       "filter": {
         "total": 1683,
