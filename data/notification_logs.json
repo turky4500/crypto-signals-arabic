@@ -1,16 +1,5 @@
 [
   {
-    "ts": 1791677050553,
-    "symbol": "TQQQBUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791675900000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: TQQQBUSDT\n📊 سعر 15m: 81.31\n🕐 وقت الشمعة: 2:59 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
     "ts": 1791680650545,
     "kind": "sl_touch",
     "symbol": "TKOUSDT",
@@ -5219,6 +5208,18 @@
     "ok": false,
     "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
     "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792636449040,
+    "kind": "resolution",
+    "symbol": "MANAUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: MANAUSDT\n💰 سعر الدخول: 0.0893\n🛑 الوقف: ضُرب عند 0.0875\n📉 الخسارة: -1R (-2.02%)\n⏱ المدة: 8 ساعات\n🕐 وقت الإشارة: 6:59 مساءً",
+    "ok": false,
+    "error": "AMBIGUOUS_NO_RETRY: قد تكون الرسالة وصلت (ConnectionError)",
+    "attempts": 1,
     "channel": "telegram"
   }
 ]
