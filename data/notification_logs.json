@@ -1,27 +1,5 @@
 [
   {
-    "ts": 1791668715735,
-    "symbol": "TSLABUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791667800000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: TSLABUSDT\n📊 سعر 15m: 382.85\n🕐 وقت الشمعة: 12:44 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
-    "ts": 1791669612546,
-    "symbol": "BOMEUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791668700000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: BOMEUSDT\n📊 سعر 15m: 0.0010415\n🕐 وقت الشمعة: 12:59 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
     "ts": 1791669612546,
     "symbol": "PAXGUSDT",
     "kind": "preview",
@@ -5194,6 +5172,30 @@
   },
   {
     "ts": 1792631351294,
+    "kind": "resolution",
+    "symbol": "MANAUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: MANAUSDT\n💰 سعر الدخول: 0.0893\n🛑 الوقف: ضُرب عند 0.0875\n📉 الخسارة: -1R (-2.02%)\n⏱ المدة: 8 ساعات\n🕐 وقت الإشارة: 6:59 مساءً",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792631649639,
+    "kind": "resolution",
+    "symbol": "ZKUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
+    "ok": false,
+    "error": "AMBIGUOUS_NO_RETRY: قد تكون الرسالة وصلت (ConnectionError)",
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792631649639,
     "kind": "resolution",
     "symbol": "MANAUSDT",
     "indicator": "ai",
