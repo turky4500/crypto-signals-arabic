@@ -1,22 +1,5 @@
 [
   {
-    "signature": "AAVEUSDT|ichimoku|1792605600000",
-    "symbol": "AAVEUSDT",
-    "indicator": "ichimoku",
-    "entry": "158.14",
-    "sl": "154.95",
-    "tp": "164.52",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792605600000,
-    "signal_close_ms": 1792609199999,
-    "deadline_ms": 1793213999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792627199999,
-    "hit_price": 154.93,
-    "created_ms": 1792609415857,
-    "source": "simulation"
-  },
-  {
     "signature": "AAVEUSDT|adx|1792605600000",
     "symbol": "AAVEUSDT",
     "indicator": "adx",
@@ -19390,9 +19373,9 @@
     "signal_open_ms": 1792609200000,
     "signal_close_ms": 1792612799999,
     "deadline_ms": 1793217599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1792655999999,
+    "hit_price": 9.88,
     "created_ms": 1792613183075,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792659802283,
+    "source": "simulation"
+  },
+  {
+    "signature": "USARBUSDT|bollinger|1792656000000",
+    "symbol": "USARBUSDT",
+    "indicator": "bollinger",
+    "entry": "9.85",
+    "sl": "9.66",
+    "tp": "10.23",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792656000000,
+    "signal_close_ms": 1792659599999,
+    "deadline_ms": 1793264399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792662391305,
     "source": "simulation"
   }
 ]
