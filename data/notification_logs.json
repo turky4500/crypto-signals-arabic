@@ -1,16 +1,5 @@
 [
   {
-    "ts": 1791671414200,
-    "symbol": "RAYUSDT",
-    "kind": "preview",
-    "candle_open_ms": 1791670500000,
-    "message": "🔎 معاينة استكشافية\n🪙 العملة: RAYUSDT\n📊 سعر 15m: 2.3886\n🕐 وقت الشمعة: 1:29 صباحًا\n🔔 انقلاب Supertrend على شمعة 15m\n🎯 التوصية الرسمية 1H متوقعة عند إغلاق شمعتها إن استمر الوضع\n⚠️ غير نهائية — ليست توصية، للمراجعة الذاتية فقط (لا تتداول منها)",
-    "ok": true,
-    "error": null,
-    "attempts": 1,
-    "channel": "telegram_owner"
-  },
-  {
     "ts": 1791672550835,
     "symbol": "SOXSBUSDT",
     "kind": "preview",
@@ -5200,6 +5189,18 @@
   },
   {
     "ts": 1792632851940,
+    "kind": "resolution",
+    "symbol": "MANAUSDT",
+    "indicator": "ai",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: MANAUSDT\n💰 سعر الدخول: 0.0893\n🛑 الوقف: ضُرب عند 0.0875\n📉 الخسارة: -1R (-2.02%)\n⏱ المدة: 8 ساعات\n🕐 وقت الإشارة: 6:59 مساءً",
+    "ok": false,
+    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
+    "attempts": 3,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1792633148931,
     "kind": "resolution",
     "symbol": "MANAUSDT",
     "indicator": "ai",
