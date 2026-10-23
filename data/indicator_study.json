@@ -1,22 +1,5 @@
 [
   {
-    "signature": "OPNUSDT|bollinger|1792702800000",
-    "symbol": "OPNUSDT",
-    "indicator": "bollinger",
-    "entry": "0.0503",
-    "sl": "0.0489",
-    "tp": "0.0531",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792702800000,
-    "signal_close_ms": 1792706399999,
-    "deadline_ms": 1793311199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1792706776169,
-    "source": "simulation"
-  },
-  {
     "signature": "ORCAUSDT|adx|1792702800000",
     "symbol": "ORCAUSDT",
     "indicator": "adx",
@@ -2662,9 +2645,9 @@
     "signal_open_ms": 1792710000000,
     "signal_close_ms": 1792713599999,
     "deadline_ms": 1793318399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792769661964,
+    "hit_price": 0.001802,
     "created_ms": 1792713863341,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792768003626,
+    "source": "simulation"
+  },
+  {
+    "signature": "POWRUSDT|adx|1792764000000",
+    "symbol": "POWRUSDT",
+    "indicator": "adx",
+    "entry": "0.0534",
+    "sl": "0.0515",
+    "tp": "0.0572",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792764000000,
+    "signal_close_ms": 1792767599999,
+    "deadline_ms": 1793372399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792769757145,
     "source": "simulation"
   }
 ]
