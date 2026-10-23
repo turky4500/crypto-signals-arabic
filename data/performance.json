@@ -1,26 +1,5 @@
 [
   {
-    "signature": "PROVEUSDT|ai|BUY|1790161200000",
-    "symbol": "PROVEUSDT",
-    "indicator": "ai",
-    "entry": "0.2373",
-    "sl": "0.2268",
-    "tp": "0.2583",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1790161200000,
-    "signal_close_ms": 1790164799999,
-    "deadline_ms": 1790769599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1790243999999,
-    "hit_price": 0.2256,
-    "created_ms": 1790165006723,
-    "filtered": true,
-    "whatsapp_status": "sent",
-    "sl_touch_ms": 1790197004247,
-    "sl_touch_low": 0.2268,
-    "sl_touch_notified": true
-  },
-  {
     "signature": "NOMUSDT|supertrend|BUY|1790193600000",
     "symbol": "NOMUSDT",
     "indicator": "supertrend",
@@ -12032,6 +12011,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792735611663,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "SENTUSDT|ai|BUY|1792753200000",
+    "symbol": "SENTUSDT",
+    "indicator": "ai",
+    "entry": "0.02267",
+    "sl": "0.02155",
+    "tp": "0.02491",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792753200000,
+    "signal_close_ms": 1792756799999,
+    "deadline_ms": 1793361599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792757229058,
     "filtered": true,
     "whatsapp_status": "sent"
   }
