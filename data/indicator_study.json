@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ADBEBUSDT|ichimoku|1792756800000",
-    "symbol": "ADBEBUSDT",
-    "indicator": "ichimoku",
-    "entry": "268.82",
-    "sl": "265.09",
-    "tp": "276.28",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792756800000,
-    "signal_close_ms": 1792760399999,
-    "deadline_ms": 1793365199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792771199999,
-    "hit_price": 264.53,
-    "created_ms": 1792760667745,
-    "source": "simulation"
-  },
-  {
     "signature": "ADBEBUSDT|adx|1792756800000",
     "symbol": "ADBEBUSDT",
     "indicator": "adx",
@@ -52880,9 +52863,9 @@
     "signal_open_ms": 1792810800000,
     "signal_close_ms": 1792814399999,
     "deadline_ms": 1793419199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1792857599999,
+    "hit_price": 204.45,
     "created_ms": 1792814700413,
     "source": "simulation"
   },
@@ -55753,9 +55736,9 @@
     "signal_open_ms": 1792814400000,
     "signal_close_ms": 1792817999999,
     "deadline_ms": 1793422799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792863859572,
+    "hit_price": 0.1743,
     "created_ms": 1792818313805,
     "source": "simulation"
   },
@@ -71240,9 +71223,9 @@
     "signal_open_ms": 1792839600000,
     "signal_close_ms": 1792843199999,
     "deadline_ms": 1793447999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792863859572,
+    "hit_price": 0.1755,
     "created_ms": 1792843449397,
     "source": "simulation"
   },
@@ -73314,9 +73297,9 @@
     "signal_open_ms": 1792843200000,
     "signal_close_ms": 1792846799999,
     "deadline_ms": 1793451599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792863859572,
+    "hit_price": 0.1752,
     "created_ms": 1792847054796,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792861724404,
+    "source": "simulation"
+  },
+  {
+    "signature": "COHRBUSDT|bollinger|1792857600000",
+    "symbol": "COHRBUSDT",
+    "indicator": "bollinger",
+    "entry": "206.45",
+    "sl": "202.41",
+    "tp": "214.53",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792857600000,
+    "signal_close_ms": 1792861199999,
+    "deadline_ms": 1793465999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792863944990,
     "source": "simulation"
   }
 ]
