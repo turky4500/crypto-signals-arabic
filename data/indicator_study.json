@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ARKUSDT|ichimoku|1792778400000",
-    "symbol": "ARKUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.2203",
-    "sl": "0.1980",
-    "tp": "0.2649",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792778400000,
-    "signal_close_ms": 1792781999999,
-    "deadline_ms": 1793386799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792835999999,
-    "hit_price": 0.193,
-    "created_ms": 1792782275396,
-    "source": "simulation"
-  },
-  {
     "signature": "ARKUSDT|adx|1792778400000",
     "symbol": "ARKUSDT",
     "indicator": "adx",
@@ -60190,9 +60173,9 @@
     "signal_open_ms": 1792861200000,
     "signal_close_ms": 1792864799999,
     "deadline_ms": 1793469599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792889999999,
+    "hit_price": 0.00911,
     "created_ms": 1792864951045,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792893996254,
+    "source": "simulation"
+  },
+  {
+    "signature": "TFUELUSDT|awesome|1792890000000",
+    "symbol": "TFUELUSDT",
+    "indicator": "awesome",
+    "entry": "0.00904",
+    "sl": "0.00879",
+    "tp": "0.00954",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792890000000,
+    "signal_close_ms": 1792893599999,
+    "deadline_ms": 1793498399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792896396913,
     "source": "simulation"
   }
 ]
