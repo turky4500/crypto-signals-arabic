@@ -1,22 +1,5 @@
 [
   {
-    "signature": "TURBOUSDT|bollinger|1792864800000",
-    "symbol": "TURBOUSDT",
-    "indicator": "bollinger",
-    "entry": "0.000832",
-    "sl": "0.000804",
-    "tp": "0.000888",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792864800000,
-    "signal_close_ms": 1792868399999,
-    "deadline_ms": 1793473199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1792868795857,
-    "source": "simulation"
-  },
-  {
     "signature": "TURTLEUSDT|adx|1792864800000",
     "symbol": "TURTLEUSDT",
     "indicator": "adx",
@@ -9326,9 +9309,9 @@
     "signal_open_ms": 1792879200000,
     "signal_close_ms": 1792882799999,
     "deadline_ms": 1793487599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792951199999,
+    "hit_price": 152.55,
     "created_ms": 1792883104637,
     "source": "simulation"
   },
@@ -12437,9 +12420,9 @@
     "signal_open_ms": 1792882800000,
     "signal_close_ms": 1792886399999,
     "deadline_ms": 1793491199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792969199999,
+    "hit_price": 152.76,
     "created_ms": 1792886712045,
     "source": "simulation"
   },
@@ -22892,9 +22875,9 @@
     "signal_open_ms": 1792893600000,
     "signal_close_ms": 1792897199999,
     "deadline_ms": 1793501999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792951199999,
+    "hit_price": 152.49,
     "created_ms": 1792897507706,
     "source": "simulation"
   },
@@ -47899,9 +47882,9 @@
     "signal_open_ms": 1792929600000,
     "signal_close_ms": 1792933199999,
     "deadline_ms": 1793537999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1792951199999,
+    "hit_price": 152.63,
     "created_ms": 1792933506477,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792969615685,
+    "source": "simulation"
+  },
+  {
+    "signature": "EWYBUSDT|ichimoku|1792965600000",
+    "symbol": "EWYBUSDT",
+    "indicator": "ichimoku",
+    "entry": "152.62",
+    "sl": "151.59",
+    "tp": "154.68",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792965600000,
+    "signal_close_ms": 1792969199999,
+    "deadline_ms": 1793573999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792972821749,
     "source": "simulation"
   }
 ]
