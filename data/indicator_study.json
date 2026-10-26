@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BEAMXUSDT|rsi50|1792886400000",
-    "symbol": "BEAMXUSDT",
-    "indicator": "rsi50",
-    "entry": "0.003237",
-    "sl": "0.003133",
-    "tp": "0.003445",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792886400000,
-    "signal_close_ms": 1792889999999,
-    "deadline_ms": 1793494799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792907999999,
-    "hit_price": 0.00312,
-    "created_ms": 1792890287317,
-    "source": "simulation"
-  },
-  {
     "signature": "BEAMXUSDT|adx|1792886400000",
     "symbol": "BEAMXUSDT",
     "indicator": "adx",
@@ -28536,9 +28519,9 @@
     "signal_open_ms": 1792926000000,
     "signal_close_ms": 1792929599999,
     "deadline_ms": 1793534399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1792976399999,
+    "hit_price": 53.41,
     "created_ms": 1792929909225,
     "source": "simulation"
   },
@@ -37104,9 +37087,9 @@
     "signal_open_ms": 1792936800000,
     "signal_close_ms": 1792940399999,
     "deadline_ms": 1793545199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1792976399999,
+    "hit_price": 53.41,
     "created_ms": 1792940696994,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1792991240281,
+    "source": "simulation"
+  },
+  {
+    "signature": "CRWVBUSDT|bollinger|1792987200000",
+    "symbol": "CRWVBUSDT",
+    "indicator": "bollinger",
+    "entry": "52.76",
+    "sl": "51.26",
+    "tp": "55.76",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1792987200000,
+    "signal_close_ms": 1792990799999,
+    "deadline_ms": 1793595599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1792993824362,
     "source": "simulation"
   }
 ]
