@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ATMUSDT|adx|1793016000000",
-    "symbol": "ATMUSDT",
-    "indicator": "adx",
-    "entry": "0.966",
-    "sl": "0.953",
-    "tp": "0.992",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793016000000,
-    "signal_close_ms": 1793019599999,
-    "deadline_ms": 1793624399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793019875627,
-    "source": "simulation"
-  },
-  {
     "signature": "ATUSDT|adx|1793016000000",
     "symbol": "ATUSDT",
     "indicator": "adx",
@@ -72447,9 +72430,9 @@
     "signal_open_ms": 1793080800000,
     "signal_close_ms": 1793084399999,
     "deadline_ms": 1793689199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793096065588,
+    "hit_price": 129.96,
     "created_ms": 1793084712739,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793095886715,
+    "source": "simulation"
+  },
+  {
+    "signature": "CYPHBUSDT|rsi50|1793091600000",
+    "symbol": "CYPHBUSDT",
+    "indicator": "rsi50",
+    "entry": "2.82",
+    "sl": "2.72",
+    "tp": "3.02",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793091600000,
+    "signal_close_ms": 1793095199999,
+    "deadline_ms": 1793699999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793096098867,
     "source": "simulation"
   }
 ]
