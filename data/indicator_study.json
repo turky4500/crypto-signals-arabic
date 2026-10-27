@@ -1,22 +1,5 @@
 [
   {
-    "signature": "WBTCUSDT|rsi50|1793059200000",
-    "symbol": "WBTCUSDT",
-    "indicator": "rsi50",
-    "entry": "80099.20",
-    "sl": "79421.69",
-    "tp": "81454.22",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793059200000,
-    "signal_close_ms": 1793062799999,
-    "deadline_ms": 1793667599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793063178774,
-    "source": "simulation"
-  },
-  {
     "signature": "WDCBUSDT|ichimoku|1793059200000",
     "symbol": "WDCBUSDT",
     "indicator": "ichimoku",
@@ -39314,9 +39297,9 @@
     "signal_open_ms": 1793098800000,
     "signal_close_ms": 1793102399999,
     "deadline_ms": 1793707199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793123999999,
+    "hit_price": 0.309,
     "created_ms": 1793103879162,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793131886195,
+    "source": "simulation"
+  },
+  {
+    "signature": "ALPINEUSDT|adx|1793127600000",
+    "symbol": "ALPINEUSDT",
+    "indicator": "adx",
+    "entry": "0.308",
+    "sl": "0.304",
+    "tp": "0.316",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793127600000,
+    "signal_close_ms": 1793131199999,
+    "deadline_ms": 1793735999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793132372218,
     "source": "simulation"
   }
 ]
