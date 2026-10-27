@@ -37,7 +37,7 @@
     },
     "signature": "DASHUSDT|ai|BUY|1792936800000"
   },
-  "last_check": 1793066348813,
+  "last_check": 1793066648360,
   "data_date": "2026-10-27",
   "filter_meta": {
     "enabled": true,
@@ -56,66 +56,66 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 600,
-        "tp_hit": 41,
-        "sl_hit": 37,
-        "pending": 522,
+        "total": 662,
+        "tp_hit": 40,
+        "sl_hit": 38,
+        "pending": 584,
         "expired": 0,
-        "win_rate": 52.6
+        "win_rate": 51.3
       },
       "awesome": {
-        "total": 333,
-        "tp_hit": 38,
-        "sl_hit": 18,
-        "pending": 277,
+        "total": 348,
+        "tp_hit": 36,
+        "sl_hit": 17,
+        "pending": 295,
         "expired": 0,
         "win_rate": 67.9
       },
       "macd": {
-        "total": 619,
-        "tp_hit": 33,
+        "total": 605,
+        "tp_hit": 31,
         "sl_hit": 31,
-        "pending": 555,
+        "pending": 543,
         "expired": 0,
-        "win_rate": 51.6
+        "win_rate": 50.0
       },
       "bollinger": {
-        "total": 234,
-        "tp_hit": 28,
-        "sl_hit": 15,
-        "pending": 191,
+        "total": 155,
+        "tp_hit": 15,
+        "sl_hit": 5,
+        "pending": 135,
         "expired": 0,
-        "win_rate": 65.1
+        "win_rate": 75.0
       },
       "rsi50": {
-        "total": 1060,
-        "tp_hit": 54,
+        "total": 1035,
+        "tp_hit": 47,
         "sl_hit": 35,
-        "pending": 971,
+        "pending": 953,
         "expired": 0,
-        "win_rate": 60.7
+        "win_rate": 57.3
       },
       "adx": {
-        "total": 2154,
-        "tp_hit": 108,
-        "sl_hit": 116,
-        "pending": 1930,
+        "total": 2195,
+        "tp_hit": 112,
+        "sl_hit": 121,
+        "pending": 1962,
         "expired": 0,
-        "win_rate": 48.2
+        "win_rate": 48.1
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
+    "added_this_run": 3,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 3929,
-      "pending": 1022,
-      "expired": 49,
-      "tp_hit": 1330,
-      "sl_hit": 2599,
+      "resolved": 3932,
+      "pending": 1018,
+      "expired": 50,
+      "tp_hit": 1331,
+      "sl_hit": 2601,
       "win_rate": 0.3385,
       "ev_per_trade": 0.0155
     },
@@ -141,34 +141,34 @@
     },
     "blocked": {
       "total": 4982,
-      "resolved": 3912,
-      "pending": 1021,
-      "expired": 49,
-      "tp_hit": 1323,
-      "sl_hit": 2589,
+      "resolved": 3915,
+      "pending": 1017,
+      "expired": 50,
+      "tp_hit": 1324,
+      "sl_hit": 2591,
       "win_rate": 0.3382,
       "ev_per_trade": 0.0146
     },
     "by_reason": {
       "bollinger_live_off": {
-        "total": 3147,
-        "resolved": 2495,
-        "pending": 641,
+        "total": 3146,
+        "resolved": 2498,
+        "pending": 637,
         "expired": 11,
-        "tp_hit": 929,
-        "sl_hit": 1566,
+        "tp_hit": 930,
+        "sl_hit": 1568,
         "win_rate": 0.3723,
         "ev_per_trade": 0.1169
       },
       "filter": {
-        "total": 1826,
-        "resolved": 1415,
-        "pending": 373,
-        "expired": 38,
+        "total": 1827,
+        "resolved": 1414,
+        "pending": 374,
+        "expired": 39,
         "tp_hit": 393,
-        "sl_hit": 1022,
-        "win_rate": 0.2777,
-        "ev_per_trade": -0.1669
+        "sl_hit": 1021,
+        "win_rate": 0.2779,
+        "ev_per_trade": -0.1663
       },
       "filter_ok": {
         "total": 18,
@@ -182,13 +182,13 @@
       },
       "supertrend_confidence_cap": {
         "total": 7,
-        "resolved": 2,
-        "pending": 5,
+        "resolved": 3,
+        "pending": 4,
         "expired": 0,
         "tp_hit": 1,
-        "sl_hit": 1,
-        "win_rate": 0.5,
-        "ev_per_trade": 0.5
+        "sl_hit": 2,
+        "win_rate": 0.3333,
+        "ev_per_trade": -0.0001
       },
       "supertrend_momentum_cap": {
         "total": 2,
