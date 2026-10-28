@@ -1,22 +1,5 @@
 [
   {
-    "signature": "MVLLBUSDT|adx|1793170800000",
-    "symbol": "MVLLBUSDT",
-    "indicator": "adx",
-    "entry": "29.97",
-    "sl": "29.14",
-    "tp": "31.63",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793170800000,
-    "signal_close_ms": 1793174399999,
-    "deadline_ms": 1793779199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793174751490,
-    "source": "simulation"
-  },
-  {
     "signature": "NBISBUSDT|adx|1793170800000",
     "symbol": "NBISBUSDT",
     "indicator": "adx",
@@ -3376,9 +3359,9 @@
     "signal_open_ms": 1793170800000,
     "signal_close_ms": 1793174399999,
     "deadline_ms": 1793779199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793195999999,
+    "hit_price": 2078.0,
     "created_ms": 1793174807551,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793218474248,
+    "source": "simulation"
+  },
+  {
+    "signature": "YFIUSDT|rsi50|1793214000000",
+    "symbol": "YFIUSDT",
+    "indicator": "rsi50",
+    "entry": "2110",
+    "sl": "2072",
+    "tp": "2186",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793214000000,
+    "signal_close_ms": 1793217599999,
+    "deadline_ms": 1793822399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793218924392,
     "source": "simulation"
   }
 ]
