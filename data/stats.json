@@ -1,5 +1,5 @@
 {
-  "monitored_symbols": 456,
+  "monitored_symbols": 454,
   "signals_today": 0,
   "supertrend_today": 0,
   "ai_today": 0,
@@ -37,7 +37,7 @@
     },
     "signature": "MRNABUSDT|ai|BUY|1793127600000"
   },
-  "last_check": 1793192051021,
+  "last_check": 1793192350779,
   "data_date": "2026-10-28",
   "filter_meta": {
     "enabled": true,
@@ -89,19 +89,19 @@
       },
       "rsi50": {
         "total": 194,
-        "tp_hit": 4,
+        "tp_hit": 5,
         "sl_hit": 5,
-        "pending": 185,
+        "pending": 184,
         "expired": 0,
-        "win_rate": 44.4
+        "win_rate": 50.0
       },
       "adx": {
         "total": 3227,
-        "tp_hit": 108,
+        "tp_hit": 109,
         "sl_hit": 54,
-        "pending": 3065,
+        "pending": 3064,
         "expired": 0,
-        "win_rate": 66.7
+        "win_rate": 66.9
       }
     }
   },
@@ -111,13 +111,13 @@
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 3792,
-      "pending": 1137,
+      "resolved": 3793,
+      "pending": 1136,
       "expired": 71,
-      "tp_hit": 1451,
+      "tp_hit": 1452,
       "sl_hit": 2341,
-      "win_rate": 0.3826,
-      "ev_per_trade": 0.1478
+      "win_rate": 0.3828,
+      "ev_per_trade": 0.1484
     },
     "with_filter": {
       "total": 19,
@@ -141,13 +141,13 @@
     },
     "blocked": {
       "total": 4981,
-      "resolved": 3775,
-      "pending": 1135,
+      "resolved": 3776,
+      "pending": 1134,
       "expired": 71,
-      "tp_hit": 1444,
+      "tp_hit": 1445,
       "sl_hit": 2331,
-      "win_rate": 0.3825,
-      "ev_per_trade": 0.1475
+      "win_rate": 0.3827,
+      "ev_per_trade": 0.1481
     },
     "by_reason": {
       "bollinger_live_off": {
@@ -192,13 +192,13 @@
       },
       "supertrend_momentum_cap": {
         "total": 3,
-        "resolved": 1,
-        "pending": 2,
+        "resolved": 2,
+        "pending": 1,
         "expired": 0,
-        "tp_hit": 0,
+        "tp_hit": 1,
         "sl_hit": 1,
-        "win_rate": 0.0,
-        "ev_per_trade": -1.0
+        "win_rate": 0.5,
+        "ev_per_trade": 0.5
       }
     }
   }
