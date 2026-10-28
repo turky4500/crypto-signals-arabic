@@ -1,22 +1,5 @@
 [
   {
-    "signature": "CFGUSDT|adx|1793138400000",
-    "symbol": "CFGUSDT",
-    "indicator": "adx",
-    "entry": "0.1116",
-    "sl": "0.1072",
-    "tp": "0.1204",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793138400000,
-    "signal_close_ms": 1793141999999,
-    "deadline_ms": 1793746799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793142293315,
-    "source": "simulation"
-  },
-  {
     "signature": "CFXUSDT|ichimoku|1793138400000",
     "symbol": "CFXUSDT",
     "indicator": "ichimoku",
@@ -61720,9 +61703,9 @@
     "signal_open_ms": 1793167200000,
     "signal_close_ms": 1793170799999,
     "deadline_ms": 1793775599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793180966342,
+    "hit_price": 753.33,
     "created_ms": 1793171038005,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793180397984,
+    "source": "simulation"
+  },
+  {
+    "signature": "HOTUSDT|adx|1793174400000",
+    "symbol": "HOTUSDT",
+    "indicator": "adx",
+    "entry": "0.000351",
+    "sl": "0.000346",
+    "tp": "0.000361",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793174400000,
+    "signal_close_ms": 1793177999999,
+    "deadline_ms": 1793782799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793181028409,
     "source": "simulation"
   }
 ]
