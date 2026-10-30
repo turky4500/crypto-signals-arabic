@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BIGTIMEUSDT|adx|1793235600000",
-    "symbol": "BIGTIMEUSDT",
-    "indicator": "adx",
-    "entry": "0.00684",
-    "sl": "0.00670",
-    "tp": "0.00712",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793235600000,
-    "signal_close_ms": 1793239199999,
-    "deadline_ms": 1793843999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793260799999,
-    "hit_price": 0.00668,
-    "created_ms": 1793239486352,
-    "source": "simulation"
-  },
-  {
     "signature": "BLURUSDT|adx|1793235600000",
     "symbol": "BLURUSDT",
     "indicator": "adx",
@@ -7575,9 +7558,9 @@
     "signal_open_ms": 1793246400000,
     "signal_close_ms": 1793249999999,
     "deadline_ms": 1793854799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793307599999,
+    "hit_price": 0.1975,
     "created_ms": 1793250293200,
     "source": "simulation"
   },
@@ -11757,9 +11740,9 @@
     "signal_open_ms": 1793250000000,
     "signal_close_ms": 1793253599999,
     "deadline_ms": 1793858399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793307599999,
+    "hit_price": 0.1975,
     "created_ms": 1793253649887,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793318865755,
+    "source": "simulation"
+  },
+  {
+    "signature": "BANDUSDT|bollinger|1793314800000",
+    "symbol": "BANDUSDT",
+    "indicator": "bollinger",
+    "entry": "0.1959",
+    "sl": "0.1891",
+    "tp": "0.2095",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793314800000,
+    "signal_close_ms": 1793318399999,
+    "deadline_ms": 1793923199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793319590770,
     "source": "simulation"
   }
 ]
