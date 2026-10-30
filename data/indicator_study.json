@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SECZBUSDT|ichimoku|1793246400000",
-    "symbol": "SECZBUSDT",
-    "indicator": "ichimoku",
-    "entry": "8.15",
-    "sl": "7.87",
-    "tp": "8.71",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793246400000,
-    "signal_close_ms": 1793249999999,
-    "deadline_ms": 1793854799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1793293199999,
-    "hit_price": 8.71,
-    "created_ms": 1793250427514,
-    "source": "simulation"
-  },
-  {
     "signature": "SHAZBUSDT|ichimoku|1793246400000",
     "symbol": "SHAZBUSDT",
     "indicator": "ichimoku",
@@ -82341,9 +82324,9 @@
     "signal_open_ms": 1793329200000,
     "signal_close_ms": 1793332799999,
     "deadline_ms": 1793937599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793339360917,
+    "hit_price": 0.003859,
     "created_ms": 1793333089696,
     "source": "simulation"
   },
@@ -82358,9 +82341,9 @@
     "signal_open_ms": 1793329200000,
     "signal_close_ms": 1793332799999,
     "deadline_ms": 1793937599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793339360917,
+    "hit_price": 0.003859,
     "created_ms": 1793333089696,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793336816729,
+    "source": "simulation"
+  },
+  {
+    "signature": "IQUSDT|bollinger|1793332800000",
+    "symbol": "IQUSDT",
+    "indicator": "bollinger",
+    "entry": "0.000738",
+    "sl": "0.000685",
+    "tp": "0.000844",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793332800000,
+    "signal_close_ms": 1793336399999,
+    "deadline_ms": 1793941199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793339432415,
     "source": "simulation"
   }
 ]
