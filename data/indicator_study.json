@@ -1,22 +1,5 @@
 [
   {
-    "signature": "GENIUSUSDT|adx|1793275200000",
-    "symbol": "GENIUSUSDT",
-    "indicator": "adx",
-    "entry": "0.3190",
-    "sl": "0.3080",
-    "tp": "0.3410",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793275200000,
-    "signal_close_ms": 1793278799999,
-    "deadline_ms": 1793883599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793321999999,
-    "hit_price": 0.3018,
-    "created_ms": 1793279113010,
-    "source": "simulation"
-  },
-  {
     "signature": "GIGGLEUSDT|rsi50|1793275200000",
     "symbol": "GIGGLEUSDT",
     "indicator": "rsi50",
@@ -9071,9 +9054,9 @@
     "signal_open_ms": 1793282400000,
     "signal_close_ms": 1793285999999,
     "deadline_ms": 1793890799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793368758999,
+    "hit_price": 254.51,
     "created_ms": 1793286266652,
     "source": "simulation"
   },
@@ -16075,9 +16058,9 @@
     "signal_open_ms": 1793286000000,
     "signal_close_ms": 1793289599999,
     "deadline_ms": 1793894399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793368758999,
+    "hit_price": 255.02,
     "created_ms": 1793289879204,
     "source": "simulation"
   },
@@ -65698,9 +65681,9 @@
     "signal_open_ms": 1793336400000,
     "signal_close_ms": 1793339999999,
     "deadline_ms": 1793944799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793368758999,
+    "hit_price": 254.57,
     "created_ms": 1793343264904,
     "source": "simulation"
   },
@@ -77037,9 +77020,9 @@
     "signal_open_ms": 1793354400000,
     "signal_close_ms": 1793357999999,
     "deadline_ms": 1793962799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793368758999,
+    "hit_price": 254.31,
     "created_ms": 1793358267295,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793365632841,
+    "source": "simulation"
+  },
+  {
+    "signature": "GNOUSDT|adx|1793361600000",
+    "symbol": "GNOUSDT",
+    "indicator": "adx",
+    "entry": "107.54",
+    "sl": "105.23",
+    "tp": "112.16",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793361600000,
+    "signal_close_ms": 1793365199999,
+    "deadline_ms": 1793969999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793368825568,
     "source": "simulation"
   }
 ]
