@@ -1,22 +1,5 @@
 [
   {
-    "signature": "REQUSDT|adx|1793343600000",
-    "symbol": "REQUSDT",
-    "indicator": "adx",
-    "entry": "0.0509",
-    "sl": "0.0493",
-    "tp": "0.0541",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793343600000,
-    "signal_close_ms": 1793347199999,
-    "deadline_ms": 1793951999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793347566451,
-    "source": "simulation"
-  },
-  {
     "signature": "REUSDT|macd|1793343600000",
     "symbol": "REUSDT",
     "indicator": "macd",
@@ -32531,9 +32514,9 @@
     "signal_open_ms": 1793386800000,
     "signal_close_ms": 1793390399999,
     "deadline_ms": 1793995199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793449760248,
+    "hit_price": 0.00414,
     "created_ms": 1793390808441,
     "source": "simulation"
   },
@@ -32548,9 +32531,9 @@
     "signal_open_ms": 1793386800000,
     "signal_close_ms": 1793390399999,
     "deadline_ms": 1793995199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793449760248,
+    "hit_price": 0.00414,
     "created_ms": 1793390808441,
     "source": "simulation"
   },
@@ -67653,9 +67636,9 @@
     "signal_open_ms": 1793419200000,
     "signal_close_ms": 1793422799999,
     "deadline_ms": 1794027599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793449760248,
+    "hit_price": 0.3206,
     "created_ms": 1793423190860,
     "source": "simulation"
   },
@@ -75898,9 +75881,9 @@
     "signal_open_ms": 1793433600000,
     "signal_close_ms": 1793437199999,
     "deadline_ms": 1794041999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793449760248,
+    "hit_price": 0.02799,
     "created_ms": 1793437493554,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793448390985,
+    "source": "simulation"
+  },
+  {
+    "signature": "MOVEUSDT|rsi50|1793444400000",
+    "symbol": "MOVEUSDT",
+    "indicator": "rsi50",
+    "entry": "0.006260",
+    "sl": "0.006122",
+    "tp": "0.006536",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793444400000,
+    "signal_close_ms": 1793447999999,
+    "deadline_ms": 1794052799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793449852597,
     "source": "simulation"
   }
 ]
