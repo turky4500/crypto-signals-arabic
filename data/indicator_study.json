@@ -1,22 +1,5 @@
 [
   {
-    "signature": "NOTUSDT|adx|1793419200000",
-    "symbol": "NOTUSDT",
-    "indicator": "adx",
-    "entry": "0.000367",
-    "sl": "0.000359",
-    "tp": "0.000383",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793419200000,
-    "signal_close_ms": 1793422799999,
-    "deadline_ms": 1794027599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793423155816,
-    "source": "simulation"
-  },
-  {
     "signature": "NXPCUSDT|adx|1793419200000",
     "symbol": "NXPCUSDT",
     "indicator": "adx",
@@ -5773,9 +5756,9 @@
     "signal_open_ms": 1793426400000,
     "signal_close_ms": 1793429999999,
     "deadline_ms": 1794034799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793523561965,
+    "hit_price": 0.1758,
     "created_ms": 1793430333199,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793520387019,
+    "source": "simulation"
+  },
+  {
+    "signature": "AUSDT|rsi50|1793516400000",
+    "symbol": "AUSDT",
+    "indicator": "rsi50",
+    "entry": "0.0823",
+    "sl": "0.0813",
+    "tp": "0.0843",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793516400000,
+    "signal_close_ms": 1793519999999,
+    "deadline_ms": 1794124799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793523573394,
     "source": "simulation"
   }
 ]
