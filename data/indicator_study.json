@@ -1,22 +1,5 @@
 [
   {
-    "signature": "FFUSDT|adx|1793458800000",
-    "symbol": "FFUSDT",
-    "indicator": "adx",
-    "entry": "0.09696",
-    "sl": "0.09126",
-    "tp": "0.10836",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793458800000,
-    "signal_close_ms": 1793462399999,
-    "deadline_ms": 1794067199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793473199999,
-    "hit_price": 0.09114,
-    "created_ms": 1793462714328,
-    "source": "simulation"
-  },
-  {
     "signature": "FLUXUSDT|rsi50|1793458800000",
     "symbol": "FLUXUSDT",
     "indicator": "rsi50",
@@ -16551,9 +16534,9 @@
     "signal_open_ms": 1793476800000,
     "signal_close_ms": 1793480399999,
     "deadline_ms": 1794085199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793549959856,
+    "hit_price": 98.86,
     "created_ms": 1793480672927,
     "source": "simulation"
   },
@@ -68622,9 +68605,9 @@
     "signal_open_ms": 1793530800000,
     "signal_close_ms": 1793534399999,
     "deadline_ms": 1794139199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793549959856,
+    "hit_price": 0.000393,
     "created_ms": 1793534709858,
     "source": "simulation"
   },
@@ -76187,9 +76170,9 @@
     "signal_open_ms": 1793538000000,
     "signal_close_ms": 1793541599999,
     "deadline_ms": 1794146399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793549959856,
+    "hit_price": 0.00039,
     "created_ms": 1793541913800,
     "source": "simulation"
   },
@@ -80131,9 +80114,9 @@
     "signal_open_ms": 1793541600000,
     "signal_close_ms": 1793545199999,
     "deadline_ms": 1794149999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793549959856,
+    "hit_price": 0.000392,
     "created_ms": 1793545512815,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793549187427,
+    "source": "simulation"
+  },
+  {
+    "signature": "MRVLBUSDT|adx|1793545200000",
+    "symbol": "MRVLBUSDT",
+    "indicator": "adx",
+    "entry": "198.62",
+    "sl": "197.68",
+    "tp": "200.50",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793545200000,
+    "signal_close_ms": 1793548799999,
+    "deadline_ms": 1794153599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793550024516,
     "source": "simulation"
   }
 ]
