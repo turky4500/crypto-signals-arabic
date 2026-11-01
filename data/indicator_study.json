@@ -1,22 +1,5 @@
 [
   {
-    "signature": "RESOLVUSDT|adx|1793430000000",
-    "symbol": "RESOLVUSDT",
-    "indicator": "adx",
-    "entry": "0.01548",
-    "sl": "0.01514",
-    "tp": "0.01616",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793430000000,
-    "signal_close_ms": 1793433599999,
-    "deadline_ms": 1794038399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793433971205,
-    "source": "simulation"
-  },
-  {
     "signature": "RSRUSDT|adx|1793430000000",
     "symbol": "RSRUSDT",
     "indicator": "adx",
@@ -44567,9 +44550,9 @@
     "signal_open_ms": 1793484000000,
     "signal_close_ms": 1793487599999,
     "deadline_ms": 1794092399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793528962314,
+    "hit_price": 0.1994,
     "created_ms": 1793487933990,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793527586820,
+    "source": "simulation"
+  },
+  {
+    "signature": "TURBOUSDT|awesome|1793523600000",
+    "symbol": "TURBOUSDT",
+    "indicator": "awesome",
+    "entry": "0.000782",
+    "sl": "0.000770",
+    "tp": "0.000806",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793523600000,
+    "signal_close_ms": 1793527199999,
+    "deadline_ms": 1794131999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793529065189,
     "source": "simulation"
   }
 ]
