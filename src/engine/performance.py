@@ -135,10 +135,11 @@ def compute_stats(records: list[dict]) -> dict:
         st = r.get("status")
         if st == "tp_hit":
             tp_hit += 1
+            # متوسط R:R يُحسب للرابحة فقط؛ الخاسرة ثابتة عند −1R. إضافة R:R
+            # الخاسرة إلى المتوسط (كما كان) تُخفي أثر اختلاف نسب R:R.
             rr_sum += float(r.get("rr_ratio") or 2.0)
         elif st == "sl_hit":
             sl_hit += 1
-            rr_sum += float(r.get("rr_ratio") or 2.0)
         elif st == "expired":
             expired += 1
         else:
@@ -146,9 +147,9 @@ def compute_stats(records: list[dict]) -> dict:
 
     resolved = tp_hit + sl_hit
     win_rate = round(tp_hit / resolved, 4) if resolved else None
-    avg_rr = round(rr_sum / resolved, 4) if resolved else None
+    avg_rr = round(rr_sum / tp_hit, 4) if tp_hit else None
     ev = None
-    if resolved and win_rate is not None and avg_rr:
+    if resolved and win_rate is not None and avg_rr is not None:
         ev = round(win_rate * avg_rr - (1.0 - win_rate), 4)
 
     return {

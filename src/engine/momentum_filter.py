@@ -71,8 +71,9 @@ def _h4_in_uptrend(h4: dict) -> bool:
     return bool(h4["close"][last] > line)
 
 
-def evaluate_filter(h1: dict, h4: dict, d1: dict, *, h4_ret5_min: float = 2.0,
-                    h1_rsi_max: float = 70.0) -> dict:
+def evaluate_filter(h1: dict, h4: dict, d1: dict, *, h4_ret5_min: float | None = 2.0,
+                    h1_rsi_max: float = 70.0, require_d1_above: bool = True,
+                    require_h4_uptrend: bool = True) -> dict:
     """تقييم فلتر الزخم الموحّد. يرجع القرار + القياسات للتقييم المستقبلي.
 
     h1/h4/d1: متسلسلات شموع مغلقة (open/high/low/close/...).
@@ -86,6 +87,7 @@ def evaluate_filter(h1: dict, h4: dict, d1: dict, *, h4_ret5_min: float = 2.0,
     trend_up = d1_above_ema50(d1_close)
     h4_up = _h4_in_uptrend(h4)
 
+    require_h4_ret5 = h4_ret5_min is not None
     conditions = {
         "h4_ret5": round(h4_ret5, 2) if h4_ret5 is not None else None,
         "h4_ret5_min": h4_ret5_min,
@@ -93,14 +95,17 @@ def evaluate_filter(h1: dict, h4: dict, d1: dict, *, h4_ret5_min: float = 2.0,
         "h1_rsi_max": h1_rsi_max,
         "d1_above_ema50": trend_up,
         "h4_in_uptrend": h4_up,
-        "h4_ret5_ok": h4_ret5 is not None and h4_ret5 >= h4_ret5_min,
+        "require_d1_above": bool(require_d1_above),
+        "require_h4_uptrend": bool(require_h4_uptrend),
+        "h4_ret5_ok": (not require_h4_ret5)
+        or (h4_ret5 is not None and h4_ret5 >= h4_ret5_min),
         "h1_rsi_ok": h1_rsi_v < h1_rsi_max,
     }
     accepted = (
         conditions["h4_ret5_ok"]
         and conditions["h1_rsi_ok"]
-        and trend_up
-        and h4_up
+        and (trend_up or not require_d1_above)
+        and (h4_up or not require_h4_uptrend)
     )
     conditions["accepted"] = accepted
     return conditions

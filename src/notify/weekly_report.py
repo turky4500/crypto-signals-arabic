@@ -70,7 +70,6 @@ def compute_weekly_report(records: list[dict], week_start_iso: str,
             sl_hit += 1
             bi["sl_hit"] += 1
             bd["sl_hit"] += 1
-            rr_sum += float(r.get("rr_ratio") or 2.0)
         elif status == "expired":
             expired += 1
             bi["expired"] += 1
@@ -82,9 +81,9 @@ def compute_weekly_report(records: list[dict], week_start_iso: str,
 
     resolved = tp_hit + sl_hit
     win_rate = round(tp_hit / resolved, 4) if resolved else None
-    avg_rr = round(rr_sum / resolved, 4) if resolved else None
+    avg_rr = round(rr_sum / tp_hit, 4) if tp_hit else None  # متوسط R:R للرابحة فقط
     ev = None
-    if resolved and win_rate is not None and avg_rr:
+    if resolved and win_rate is not None and avg_rr is not None:
         ev = round(win_rate * avg_rr - (1.0 - win_rate), 4)
 
     return {
