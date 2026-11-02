@@ -1,22 +1,5 @@
 [
   {
-    "signature": "METISUSDT|rsi50|1793509200000",
-    "symbol": "METISUSDT",
-    "indicator": "rsi50",
-    "entry": "2.89",
-    "sl": "2.82",
-    "tp": "3.03",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793509200000,
-    "signal_close_ms": 1793512799999,
-    "deadline_ms": 1794117599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793563199999,
-    "hit_price": 2.81,
-    "created_ms": 1793513121004,
-    "source": "simulation"
-  },
-  {
     "signature": "MITOUSDT|adx|1793509200000",
     "symbol": "MITOUSDT",
     "indicator": "adx",
@@ -57657,9 +57640,9 @@
     "signal_open_ms": 1793574000000,
     "signal_close_ms": 1793577599999,
     "deadline_ms": 1794182399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793613257436,
+    "hit_price": 0.13999,
     "created_ms": 1793577934818,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793610424754,
+    "source": "simulation"
+  },
+  {
+    "signature": "MRNABUSDT|adx|1793606400000",
+    "symbol": "MRNABUSDT",
+    "indicator": "adx",
+    "entry": "222.41",
+    "sl": "220.74",
+    "tp": "225.75",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793606400000,
+    "signal_close_ms": 1793609999999,
+    "deadline_ms": 1794214799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793613357926,
     "source": "simulation"
   }
 ]
