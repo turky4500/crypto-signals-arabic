@@ -37,7 +37,7 @@
     },
     "signature": "LISTAUSDT|ai|BUY|1793451600000"
   },
-  "last_check": 1793653451699,
+  "last_check": 1793653749276,
   "data_date": "2026-11-03",
   "filter_meta": {
     "enabled": true,
@@ -81,11 +81,11 @@
       },
       "bollinger": {
         "total": 751,
-        "tp_hit": 31,
+        "tp_hit": 32,
         "sl_hit": 404,
-        "pending": 316,
+        "pending": 315,
         "expired": 0,
-        "win_rate": 7.1
+        "win_rate": 7.3
       },
       "rsi50": {
         "total": 690,
@@ -97,9 +97,9 @@
       },
       "adx": {
         "total": 2423,
-        "tp_hit": 365,
+        "tp_hit": 366,
         "sl_hit": 1365,
-        "pending": 693,
+        "pending": 692,
         "expired": 0,
         "win_rate": 21.1
       }
@@ -107,17 +107,17 @@
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 95,
+    "added_this_run": 0,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 4096,
-      "pending": 883,
+      "resolved": 4097,
+      "pending": 882,
       "expired": 21,
-      "tp_hit": 1038,
+      "tp_hit": 1039,
       "sl_hit": 3058,
-      "win_rate": 0.2534,
-      "ev_per_trade": -0.24
+      "win_rate": 0.2536,
+      "ev_per_trade": -0.2397
     },
     "with_filter": {
       "total": 12,
@@ -141,12 +141,12 @@
     },
     "blocked": {
       "total": 4988,
-      "resolved": 4085,
-      "pending": 882,
+      "resolved": 4086,
+      "pending": 881,
       "expired": 21,
-      "tp_hit": 1035,
+      "tp_hit": 1036,
       "sl_hit": 3050,
-      "win_rate": 0.2534,
+      "win_rate": 0.2535,
       "ev_per_trade": -0.24
     },
     "by_reason": {
@@ -182,13 +182,13 @@
       },
       "low_confidence": {
         "total": 204,
-        "resolved": 4,
-        "pending": 200,
+        "resolved": 5,
+        "pending": 199,
         "expired": 0,
-        "tp_hit": 0,
+        "tp_hit": 1,
         "sl_hit": 4,
-        "win_rate": 0.0,
-        "ev_per_trade": -1.0
+        "win_rate": 0.2,
+        "ev_per_trade": -0.6
       },
       "supertrend_confidence_cap": {
         "total": 3,
