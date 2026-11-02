@@ -1,22 +1,5 @@
 [
   {
-    "signature": "PENGUUSDT|rsi50|1793516400000",
-    "symbol": "PENGUUSDT",
-    "indicator": "rsi50",
-    "entry": "0.007301",
-    "sl": "0.007175",
-    "tp": "0.007553",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793516400000,
-    "signal_close_ms": 1793519999999,
-    "deadline_ms": 1794124799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793613599999,
-    "hit_price": 0.00716,
-    "created_ms": 1793520340924,
-    "source": "simulation"
-  },
-  {
     "signature": "PHAUSDT|adx|1793516400000",
     "symbol": "PHAUSDT",
     "indicator": "adx",
@@ -44244,9 +44227,9 @@
     "signal_open_ms": 1793566800000,
     "signal_close_ms": 1793570399999,
     "deadline_ms": 1794175199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793620799999,
+    "hit_price": 0.1829,
     "created_ms": 1793570667878,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793625314515,
+    "source": "simulation"
+  },
+  {
+    "signature": "AGLDUSDT|bollinger|1793620800000",
+    "symbol": "AGLDUSDT",
+    "indicator": "bollinger",
+    "entry": "0.1838",
+    "sl": "0.1804",
+    "tp": "0.1906",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793620800000,
+    "signal_close_ms": 1793624399999,
+    "deadline_ms": 1794229199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793626167429,
     "source": "simulation"
   }
 ]
