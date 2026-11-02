@@ -1,22 +1,5 @@
 [
   {
-    "signature": "LAUSDT|adx|1793534400000",
-    "symbol": "LAUSDT",
-    "indicator": "adx",
-    "entry": "0.0584",
-    "sl": "0.0559",
-    "tp": "0.0634",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793534400000,
-    "signal_close_ms": 1793537999999,
-    "deadline_ms": 1794142799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793538329183,
-    "source": "simulation"
-  },
-  {
     "signature": "LAZIOUSDT|adx|1793534400000",
     "symbol": "LAZIOUSDT",
     "indicator": "adx",
@@ -24201,9 +24184,9 @@
     "signal_open_ms": 1793563200000,
     "signal_close_ms": 1793566799999,
     "deadline_ms": 1794171599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793602799999,
+    "hit_price": 0.0583,
     "created_ms": 1793567149279,
     "source": "simulation"
   },
@@ -31392,9 +31375,9 @@
     "signal_open_ms": 1793574000000,
     "signal_close_ms": 1793577599999,
     "deadline_ms": 1794182399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793602799999,
+    "hit_price": 0.0583,
     "created_ms": 1793577939725,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793653589107,
+    "source": "simulation"
+  },
+  {
+    "signature": "LAYERUSDT|bollinger|1793649600000",
+    "symbol": "LAYERUSDT",
+    "indicator": "bollinger",
+    "entry": "0.0570",
+    "sl": "0.0561",
+    "tp": "0.0579",
+    "rr_ratio": 1.0,
+    "signal_open_ms": 1793649600000,
+    "signal_close_ms": 1793653199999,
+    "deadline_ms": 1794257999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793654724089,
     "source": "simulation"
   }
 ]
