@@ -1,25 +1,5 @@
 [
   {
-    "signature": "USTCUSDT|supertrend|BUY|1792767600000",
-    "symbol": "USTCUSDT",
-    "indicator": "supertrend",
-    "entry": "0.00491",
-    "sl": "0.00473",
-    "tp": "0.00527",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792767600000,
-    "signal_close_ms": 1792771199999,
-    "deadline_ms": 1793375999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792796399999,
-    "hit_price": 0.0047,
-    "created_ms": 1792771607859,
-    "consensus": 1,
-    "verdict": "blocked",
-    "reason": "filter",
-    "source": "candidate"
-  },
-  {
     "signature": "USUALUSDT|supertrend|BUY|1792767600000",
     "symbol": "USUALUSDT",
     "indicator": "supertrend",
@@ -99997,6 +99977,26 @@
     "consensus": 1,
     "verdict": "blocked",
     "reason": "filter",
+    "source": "candidate"
+  },
+  {
+    "signature": "CTSIUSDT|bollinger|BUY|1793574000000",
+    "symbol": "CTSIUSDT",
+    "indicator": "bollinger",
+    "entry": "0.02715",
+    "sl": "0.02668",
+    "tp": "0.02809",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793574000000,
+    "signal_close_ms": 1793577599999,
+    "deadline_ms": 1794182399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793578494709,
+    "consensus": 1,
+    "verdict": "blocked",
+    "reason": "bollinger_live_off",
     "source": "candidate"
   }
 ]
