@@ -1,22 +1,5 @@
 [
   {
-    "signature": "REUSDT|ichimoku|1793480400000",
-    "symbol": "REUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.3666",
-    "sl": "0.3533",
-    "tp": "0.3932",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793480400000,
-    "signal_close_ms": 1793483999999,
-    "deadline_ms": 1794088799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793530799999,
-    "hit_price": 0.353,
-    "created_ms": 1793484361952,
-    "source": "simulation"
-  },
-  {
     "signature": "REZUSDT|adx|1793480400000",
     "symbol": "REZUSDT",
     "indicator": "adx",
@@ -80947,9 +80930,9 @@
     "signal_open_ms": 1793570400000,
     "signal_close_ms": 1793573999999,
     "deadline_ms": 1794178799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793578159702,
+    "hit_price": 0.00476,
     "created_ms": 1793574380026,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793578023221,
+    "source": "simulation"
+  },
+  {
+    "signature": "AAOIBUSDT|rsi50|1793574000000",
+    "symbol": "AAOIBUSDT",
+    "indicator": "rsi50",
+    "entry": "70.04",
+    "sl": "69.04",
+    "tp": "72.04",
+    "rr_ratio": 2.0,
+    "signal_open_ms": 1793574000000,
+    "signal_close_ms": 1793577599999,
+    "deadline_ms": 1794182399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793578162539,
     "source": "simulation"
   }
 ]
