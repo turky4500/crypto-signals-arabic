@@ -113,8 +113,8 @@ def test_compute_stats():
     assert st["expired"] == 1
     assert st["resolved"] == 4
     assert st["win_rate"] == pytest.approx(0.75)
-    assert st["avg_rr"] == pytest.approx(2.25)
-    assert st["ev_per_trade"] == pytest.approx(1.4375)
+    assert st["avg_rr"] == pytest.approx(7 / 3, abs=1e-4)  # متوسط الرابحة فقط (2,2,3)
+    assert st["ev_per_trade"] == pytest.approx(0.75 * (7 / 3) - 0.25, abs=1e-4)
 
 
 def test_compute_stats_empty_and_win_rate():

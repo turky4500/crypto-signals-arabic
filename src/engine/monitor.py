@@ -35,6 +35,7 @@ from .duplicates import DuplicateGuard
 from .candidate_study import build_candidate, compute_candidate_stats, seed_candidates
 from .indicators_panel import build_paper_records, compute_panel, panel_brief
 from .momentum_filter import evaluate_filter
+from .quality_gate import evaluate_quality
 from .performance import (compute_stats, evaluate_candles, mark_expired,
                           prune_old, seed_from_signals, sl_touch_event)
 
@@ -713,10 +714,13 @@ class Monitor:
             h1_src = self.client.kline_series(symbol, self.history_candles)
             h4 = self.client.kline_series(symbol, 120, interval="4h")
             d1 = self.client.kline_series(symbol, 120, interval="1d")
+            raw_ret5 = cfg.get("h4_ret5_min", 2.0)
             return evaluate_filter(
                 _closed(h1_src), _closed(h4), _closed(d1),
-                h4_ret5_min=float(cfg.get("h4_ret5_min", 2.0)),
+                h4_ret5_min=None if raw_ret5 is None else float(raw_ret5),
                 h1_rsi_max=float(cfg.get("h1_rsi_max", 70.0)),
+                require_d1_above=bool(cfg.get("require_d1_above", True)),
+                require_h4_uptrend=bool(cfg.get("require_h4_uptrend", True)),
             )
         except Exception as exc:
             return {"accepted": False, "error": str(exc)}
@@ -817,9 +821,23 @@ class Monitor:
         candidates_out: list = []
         filter_info = None
         if sources:
-            filter_info = self._evaluate_momentum_filter(
-                symbol_info.symbol, server_now
-            )
+            # ---- بوّابة الجودة: قرار مستقل عن فلتر الزخم ----
+            # أهم قاعدة (مُتحقَّقة على مجموعتَي بيانات مستقلتين): لا ننشر
+            # supertrend وحدها بلا تأكيد القارئ الذكي — كانت الأسوأ بفارق
+            # واضح (8.1% مقابل 22.0% في المنشور، و16.5% مقابل 23.3% في
+            # المرشّحات). التفاصيل في src/engine/quality_gate.py.
+            qcfg = self.settings.get("quality_gate", {})
+            quality = {id(src): evaluate_quality(src.to_dict(), qcfg)
+                       for src in sources}
+            # فلتر الزخم يستدعي 3 مكالمات API — لا نُجرّبه إن كانت كل المصادر
+            # محجوبة بالجودة أصلًا (توفير حصة بلا أثر على القرار).
+            if any(q["passed"] for q in quality.values()):
+                filter_info = self._evaluate_momentum_filter(
+                    symbol_info.symbol, server_now
+                )
+            else:
+                filter_info = {"accepted": False, "reason": "quality_gate",
+                               "skipped": True}
             if filter_info.get("accepted") and consensus_gate and panel is not None \
                     and panel["consensus"] < min_consensus:
                 filter_info = dict(filter_info)
@@ -832,40 +850,39 @@ class Monitor:
             mf_cfg = self.settings.get("momentum_filter", {})
             st_cap = float(mf_cfg.get("h4_ret5_max_supertrend", 5.0))
             st_conf_cap = float(mf_cfg.get("supertrend_confidence_max", 0.99))
+            publish_bollinger = bool(
+                self.settings.get("indicators_study", {}).get("publish_bollinger", False)
+            )
             for src in sources:
-                fi = filter_info
-                # سياسة خاصة بالعرض فقط (دون تغيير قياسات الفلتر):
-                # 1) سقف زخم لـ supertrend — الملاحقة عالية الزخم كانت
-                #    خاسرة 100% هذا الأسبوع (0/6 عند r5>=6)، بينما ai
-                #    يستفيد من الزخم فلا يُقيَّد هنا.
-                if src.indicator == "supertrend" and fi.get("accepted") \
+                fi = dict(filter_info)
+                q = quality[id(src)]
+                # 1) بوّابة الجودة أولًا: سبب الحجب الأكثر جوهرية.
+                if not q["passed"]:
+                    fi["accepted"] = False
+                    fi["reason"] = q["reason"]
+                # 2) إيقاف نشر bollinger الحية — تُسجَّل كمرشّح مرفوض فقط
+                #    لاستمرار الدراسة دون إرسال.
+                elif src.indicator == "bollinger" and not publish_bollinger:
+                    fi["accepted"] = False
+                    fi["reason"] = "bollinger_live_off"
+                # 3) سقف زخم لـ supertrend — الملاحقة عالية الزخم كانت خاسرة،
+                #    بينما ai يستفيد من الزخم فلا يُقيَّد هنا.
+                elif src.indicator == "supertrend" and fi.get("accepted") \
                         and fi.get("h4_ret5") is not None \
                         and float(fi["h4_ret5"]) > st_cap:
-                    fi = dict(fi)
                     fi["accepted"] = False
                     fi["reason"] = "supertrend_momentum_cap"
                     fi["h4_ret5_max"] = st_cap
-                # 2) إيقاف نشر bollinger الحية — تُسجَّل كمرشّح مرفوض فقط
-                #    لاستمرار الدراسة دون إرسال (WR=0/2 هذا الأسبوع).
-                elif src.indicator == "bollinger" \
-                        and not bool(self.settings.get("indicators_study", {})
-                                     .get("publish_bollinger", False)):
-                    fi = dict(fi)
-                    fi["accepted"] = False
-                    fi["reason"] = "bollinger_live_off"
-                # 3) سقف ثقة supertrend: `confidence` هي احتمال القارئ الذكي
-                #    صعودًا محسوب لكل المؤشرات، وثقة 1.0 على توصية supertrend
-                #    (أي supertrend وحده دون ai) تعني قارئًا 100% صاعدًا لم
-                #    تشترطه بوّابة الشراء — سوق في أقصى امتداد، والدخول متأخر.
-                #    38.6% نجاح مقابل 69.7% لغير المشبع. ai غير مقيَّد.
+                # 4) سقف ثقة supertrend (احتياطي إن أُلغيت قاعدة تأكيد ai).
                 elif src.indicator == "supertrend" and fi.get("accepted") \
                         and src.confidence is not None \
                         and float(src.confidence) >= st_conf_cap:
-                    fi = dict(fi)
                     fi["accepted"] = False
                     fi["reason"] = "supertrend_confidence_cap"
                     fi["confidence"] = round(float(src.confidence), 4)
                     fi["confidence_max"] = st_conf_cap
+                # القرار يُحفظ مع كل مرشّح لمواصلة القياس خارج العينة.
+                fi["quality"] = q
                 src.filter_info = fi
                 src.filter_rejected = not bool(fi.get("accepted"))
                 if fi.get("accepted"):

@@ -95,7 +95,8 @@ def compute_candidate_stats(recs: list[dict]) -> dict:
         win_rate = round(tp / res, 4) if res else None
         ev = None
         if win_rate is not None and res:
-            rr = sum(float(r.get("rr_ratio") or 2.0) for r in rows if r.get("status") in ("tp_hit", "sl_hit")) / res
+            rr = (sum(float(r.get("rr_ratio") or 2.0)
+                      for r in rows if r.get("status") == "tp_hit") / tp) if tp else 2.0
             ev = round(win_rate * rr - (1.0 - win_rate), 4)
         return {
             "total": len(rows), "resolved": res,

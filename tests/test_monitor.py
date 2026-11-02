@@ -147,6 +147,9 @@ def _make_monitor(tmp_path, candles, server=None, filter_enabled=False,
                 "min_consensus": 3,
                 "en_consensus_gate": False,
             },
+            # بوّابة الجودة تُختبَر وحدها في test_quality_gate_* — هنا معطّلة
+            # حتى تبقى هذه الاختبارات مركّزة على منطق الإرسال/التكرار.
+            "quality_gate": {"enabled": False},
         }),
         encoding="utf-8",
     )
@@ -420,6 +423,15 @@ def _make_filter_monitor(tmp_path, h1_candles, d1_candles, consensus_gate=False)
                                   filter_enabled=True)
     settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
     settings["indicators_study"]["en_consensus_gate"] = consensus_gate
+    # هذه الاختبارات تختبر آلية الفلتر (شروط الاتجاه) لا القيم الافتراضية
+    # الإنتاجية، فنُثبّت هنا شروط الاتجاه صراحةً بدل الاعتماد على الافتراضي
+    # الجديد (RSI<50 بلا شروط اتجاه) — انظر test_default_* لقياس الافتراضي.
+    settings["momentum_filter"].update({
+        "h4_ret5_min": 2.25,
+        "h1_rsi_max": 70.0,
+        "require_d1_above": True,
+        "require_h4_uptrend": True,
+    })
     (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
     mon.settings = load_settings(str(data_dir / "settings.json"))
     mon.client = FilterAwareBinance(candles, d1_by_symbol={"BTCUSDT": d1_candles})
@@ -1014,3 +1026,41 @@ def test_two_sources_same_symbol_same_run_sends_only_first(tmp_path):
     assert len(_signals(data_dir)) == 1
     blocked = _blocked_candidates(data_dir)
     assert len(blocked) == 1 and blocked[0]["indicator"] == "bollinger"
+
+
+# ------------------------- بوّابة الجودة ------------------------- #
+def _enable_quality_gate(mon, data_dir, **overrides):
+    settings = json.loads((data_dir / "settings.json").read_text(encoding="utf-8"))
+    gate = {"enabled": True, "require_ai_confirmation": True, "min_confidence": 0.6}
+    gate.update(overrides)
+    settings["quality_gate"] = gate
+    (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
+    mon.settings = load_settings(str(data_dir / "settings.json"))
+
+
+def test_quality_gate_blocks_supertrend_only_signal(tmp_path):
+    """إشارة supertrend وحدها (بلا تأكيد القارئ الذكي) لا تُنشر — تُسجَّل بسبب الحجب."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles)
+    _enable_quality_gate(mon, data_dir)
+    summary = mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+
+    assert summary["ok"] is True
+    signals = json.loads((data_dir / "signals.json").read_text(encoding="utf-8")) \
+        if (data_dir / "signals.json").exists() else []
+    assert signals == []
+    cands = json.loads((data_dir / "candidate_study.json").read_text(encoding="utf-8"))
+    assert cands, "يجب أن يُسجَّل المرشّح المحجوب للقياس"
+    assert cands[0]["verdict"] == "blocked"
+    assert cands[0]["reason"] == "no_ai_confirmation"
+
+
+def test_quality_gate_records_reason_in_dashboard_row(tmp_path):
+    """لوحة التحكم لا تُظهر دخولًا/هدفًا لإشارة محجوبة بالجودة."""
+    candles = {"BTCUSDT": make_flip_candles()}
+    mon, data_dir = _make_monitor(tmp_path, candles)
+    _enable_quality_gate(mon, data_dir)
+    mon.run(env={}, limit_symbols=1, no_whatsapp=True)
+    rows = json.loads((data_dir / "current_signals.json").read_text(encoding="utf-8"))
+    assert rows[0]["entry"] == "—"
+    assert rows[0]["sl"] == "—"

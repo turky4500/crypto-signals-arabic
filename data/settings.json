@@ -8,18 +8,20 @@
   "supertrend": {
     "atr_period": 10,
     "factor": 3.0,
-    "rr_ratio": 2.0
+    "rr_ratio": 1.0
   },
   "momentum_filter": {
     "enabled": true,
-    "h4_ret5_min": 2.25,
-    "h1_rsi_max": 70.0
+    "h4_ret5_min": null,
+    "h1_rsi_max": 50.0,
+    "require_d1_above": false,
+    "require_h4_uptrend": false
   },
   "indicators_study": {
     "enabled": true,
     "min_consensus": 3,
     "en_consensus_gate": false,
-    "rr_ratio": 2.0,
+    "rr_ratio": 1.0,
     "atr_sl_multiplier": 1.5,
     "paper_tracking": true,
     "max_log": 5000,
@@ -35,7 +37,7 @@
     "ema_slow_len": 50,
     "use_vol_filter": true,
     "vol_threshold": 1.12,
-    "rr_ratio": 2.0,
+    "rr_ratio": 1.0,
     "atr_sl_multiplier": 1.5
   },
   "whatsapp": {
@@ -77,5 +79,8 @@
     "enabled": true,
     "refresh_hours": 6,
     "vendor": "cryptohalal.cc"
+  },
+  "quality_gate": {
+    "require_ai_confirmation": false
   }
 }

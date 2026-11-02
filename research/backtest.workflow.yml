@@ -1,0 +1,74 @@
+name: Research Backtest
+
+# باك-تست بحثي على بيانات السوق الحقيقية من Binance.
+# يعمل على فروق البحث فقط (arena/**) وينشر النتائج داخل المجلد research/results
+# على نفس الفرع، لأن بيئة التطوير المحلية قد لا تصل إلى Binance.
+on:
+  workflow_dispatch:
+    inputs:
+      symbols:
+        description: 'عدد الأزواج (أعلى سيولة)'
+        type: string
+        default: '250'
+      candles:
+        description: 'عدد شموع 1H لكل زوج (1000 = ~41 يومًا)'
+        type: string
+        default: '3500'
+  push:
+    branches: ['arena/**']
+    paths:
+      - 'research/*.py'
+      - 'tests/test_research_backtest.py'
+      - 'src/indicators/**'
+      - '.github/workflows/backtest.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: backtest-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run backtest
+        env:
+          SYMBOLS: ${{ github.event.inputs.symbols || '250' }}
+          CANDLES: ${{ github.event.inputs.candles || '3500' }}
+        run: |
+          python -m research.backtest \
+            --symbols "$SYMBOLS" \
+            --candles "$CANDLES" \
+            --out research/results
+
+      - name: Publish results to branch
+        run: |
+          git config user.name "research-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git add research/results
+          if git diff --cached --quiet; then
+            echo "no results to publish"; exit 0
+          fi
+          git commit -q -m "chore(research): نتائج باك-تست [skip ci]"
+          for i in 1 2 3; do
+            if git push origin HEAD:${GITHUB_REF_NAME}; then exit 0; fi
+            git fetch origin "${GITHUB_REF_NAME}" -q
+            git pull --rebase origin "${GITHUB_REF_NAME}" -q || { git rebase --abort || true; sleep 5; }
+          done
+          echo "::error::فشل نشر نتائج الباك-تست"; exit 1

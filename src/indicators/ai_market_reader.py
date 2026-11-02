@@ -184,6 +184,12 @@ def compute(high, low, close, open_, volume, cfg: dict):
         "bull_prob_rec": bull_prob_rec,
         "ema_bull": bool(ema_bull_rec[-1]) if n > 0 else False,
         "vol_ok": bool(vol_ok_rec[-1]) if n > 0 else False,
+        # متسلسلات كاملة (تُستخدم في الباك-تست والدراسات التاريخية؛ الإنتاج
+        # يقرأ القيمة الأخيرة فقط فالإضافة متوافقة للخلف).
+        "ema_bull_rec": ema_bull_rec,
+        "vol_ok_rec": vol_ok_rec,
+        "ema_fast_rec": ema_fast,
+        "ema_slow_rec": ema_slow,
         "ema_fast": float(ema_fast[-1]) if np.isfinite(ema_fast[-1]) else None,
         "ema_slow": float(ema_slow[-1]) if np.isfinite(ema_slow[-1]) else None,
         "atr": float(atr_v[-1]) if np.isfinite(atr_v[-1]) else None,

@@ -1,0 +1,1502 @@
+{
+ "generated_at": "2026-11-02T09:33:03+00:00",
+ "datasets": [
+  {
+   "label": "مجموعة المرشّحات (كل ما كُشف، منشورًا أو محجوبًا)",
+   "dataset": "candidates",
+   "rows": 3870,
+   "split_ts": 1793249999999,
+   "gates": {
+    "current_production": {
+     "train": {
+      "n": 2709,
+      "wins": 750,
+      "losses": 1959,
+      "win_rate": 27.7,
+      "wr_ci": [
+       26.0,
+       29.4
+      ],
+      "ev_r": -0.169,
+      "ev_ci": [
+       -0.221,
+       -0.12
+      ],
+      "profit_factor": 0.766
+     },
+     "test": {
+      "n": 1161,
+      "wins": 311,
+      "losses": 850,
+      "win_rate": 26.8,
+      "wr_ci": [
+       24.3,
+       29.4
+      ],
+      "ev_r": -0.196,
+      "ev_ci": [
+       -0.271,
+       -0.121
+      ],
+      "profit_factor": 0.732
+     },
+     "share_of_all": 100.0
+    },
+    "drop_supertrend_only": {
+     "train": {
+      "n": 2114,
+      "wins": 639,
+      "losses": 1475,
+      "win_rate": 30.2,
+      "wr_ci": [
+       28.3,
+       32.2
+      ],
+      "ev_r": -0.093,
+      "ev_ci": [
+       -0.151,
+       -0.034
+      ],
+      "profit_factor": 0.866
+     },
+     "test": {
+      "n": 780,
+      "wins": 261,
+      "losses": 519,
+      "win_rate": 33.5,
+      "wr_ci": [
+       30.2,
+       36.8
+      ],
+      "ev_r": 0.004,
+      "ev_ci": [
+       -0.096,
+       0.104
+      ],
+      "profit_factor": 1.006
+     },
+     "share_of_all": 74.8
+    },
+    "ai_and_strong_only": {
+     "train": {
+      "n": 357,
+      "wins": 74,
+      "losses": 283,
+      "win_rate": 20.7,
+      "wr_ci": [
+       16.8,
+       25.2
+      ],
+      "ev_r": -0.378,
+      "ev_ci": [
+       -0.496,
+       -0.244
+      ],
+      "profit_factor": 0.523
+     },
+     "test": {
+      "n": 137,
+      "wins": 41,
+      "losses": 96,
+      "win_rate": 29.9,
+      "wr_ci": [
+       22.9,
+       38.1
+      ],
+      "ev_r": -0.102,
+      "ev_ci": [
+       -0.321,
+       0.139
+      ],
+      "profit_factor": 0.854
+     },
+     "share_of_all": 12.8
+    },
+    "confidence_ge_060": {
+     "train": {
+      "n": 0
+     },
+     "test": {
+      "n": 0
+     },
+     "share_of_all": 0.0
+    },
+    "ai_strong_conf060": {
+     "train": {
+      "n": 357,
+      "wins": 74,
+      "losses": 283,
+      "win_rate": 20.7,
+      "wr_ci": [
+       16.8,
+       25.2
+      ],
+      "ev_r": -0.378,
+      "ev_ci": [
+       -0.496,
+       -0.244
+      ],
+      "profit_factor": 0.523
+     },
+     "test": {
+      "n": 137,
+      "wins": 41,
+      "losses": 96,
+      "win_rate": 29.9,
+      "wr_ci": [
+       22.9,
+       38.1
+      ],
+      "ev_r": -0.102,
+      "ev_ci": [
+       -0.321,
+       0.139
+      ],
+      "profit_factor": 0.854
+     },
+     "share_of_all": 12.8
+    },
+    "quality_gate_recommended": {
+     "train": {
+      "n": 357,
+      "wins": 74,
+      "losses": 283,
+      "win_rate": 20.7,
+      "wr_ci": [
+       16.8,
+       25.2
+      ],
+      "ev_r": -0.378,
+      "ev_ci": [
+       -0.496,
+       -0.244
+      ],
+      "profit_factor": 0.523
+     },
+     "test": {
+      "n": 137,
+      "wins": 41,
+      "losses": 96,
+      "win_rate": 29.9,
+      "wr_ci": [
+       22.9,
+       38.1
+      ],
+      "ev_r": -0.102,
+      "ev_ci": [
+       -0.321,
+       0.139
+      ],
+      "profit_factor": 0.854
+     },
+     "share_of_all": 12.8
+    },
+    "risk_le_3": {
+     "train": {
+      "n": 1399,
+      "wins": 459,
+      "losses": 940,
+      "win_rate": 32.8,
+      "wr_ci": [
+       30.4,
+       35.3
+      ],
+      "ev_r": -0.016,
+      "ev_ci": [
+       -0.091,
+       0.057
+      ],
+      "profit_factor": 0.977
+     },
+     "test": {
+      "n": 416,
+      "wins": 100,
+      "losses": 316,
+      "win_rate": 24.0,
+      "wr_ci": [
+       20.2,
+       28.4
+      ],
+      "ev_r": -0.279,
+      "ev_ci": [
+       -0.401,
+       -0.156
+      ],
+      "profit_factor": 0.633
+     },
+     "share_of_all": 46.9
+    },
+    "ai_strong_risk3": {
+     "train": {
+      "n": 214,
+      "wins": 36,
+      "losses": 178,
+      "win_rate": 16.8,
+      "wr_ci": [
+       12.4,
+       22.4
+      ],
+      "ev_r": -0.495,
+      "ev_ci": [
+       -0.65,
+       -0.341
+      ],
+      "profit_factor": 0.404
+     },
+     "test": {
+      "n": 63,
+      "wins": 21,
+      "losses": 42,
+      "win_rate": 33.3,
+      "wr_ci": [
+       22.9,
+       45.6
+      ],
+      "ev_r": -0.0,
+      "ev_ci": [
+       -0.333,
+       0.381
+      ],
+      "profit_factor": 1.0
+     },
+     "share_of_all": 7.2
+    },
+    "rsi_below_65": {
+     "train": {
+      "n": 2266,
+      "wins": 674,
+      "losses": 1592,
+      "win_rate": 29.7,
+      "wr_ci": [
+       27.9,
+       31.7
+      ],
+      "ev_r": -0.108,
+      "ev_ci": [
+       -0.166,
+       -0.052
+      ],
+      "profit_factor": 0.847
+     },
+     "test": {
+      "n": 861,
+      "wins": 258,
+      "losses": 603,
+      "win_rate": 30.0,
+      "wr_ci": [
+       27.0,
+       33.1
+      ],
+      "ev_r": -0.101,
+      "ev_ci": [
+       -0.192,
+       -0.01
+      ],
+      "profit_factor": 0.856
+     },
+     "share_of_all": 80.8
+    },
+    "drop_supertrend_rsi65": {
+     "train": {
+      "n": 1925,
+      "wins": 602,
+      "losses": 1323,
+      "win_rate": 31.3,
+      "wr_ci": [
+       29.2,
+       33.4
+      ],
+      "ev_r": -0.062,
+      "ev_ci": [
+       -0.123,
+       0.004
+      ],
+      "profit_factor": 0.91
+     },
+     "test": {
+      "n": 689,
+      "wins": 236,
+      "losses": 453,
+      "win_rate": 34.3,
+      "wr_ci": [
+       30.8,
+       37.9
+      ],
+      "ev_r": 0.028,
+      "ev_ci": [
+       -0.077,
+       0.132
+      ],
+      "profit_factor": 1.042
+     },
+     "share_of_all": 67.5
+    },
+    "drop_supertrend_risk3": {
+     "train": {
+      "n": 1242,
+      "wins": 424,
+      "losses": 818,
+      "win_rate": 34.1,
+      "wr_ci": [
+       31.6,
+       36.8
+      ],
+      "ev_r": 0.024,
+      "ev_ci": [
+       -0.053,
+       0.101
+      ],
+      "profit_factor": 1.037
+     },
+     "test": {
+      "n": 357,
+      "wins": 89,
+      "losses": 268,
+      "win_rate": 24.9,
+      "wr_ci": [
+       20.7,
+       29.7
+      ],
+      "ev_r": -0.252,
+      "ev_ci": [
+       -0.378,
+       -0.118
+      ],
+      "profit_factor": 0.664
+     },
+     "share_of_all": 41.3
+    },
+    "bollinger_only": {
+     "train": {
+      "n": 1757,
+      "wins": 565,
+      "losses": 1192,
+      "win_rate": 32.2,
+      "wr_ci": [
+       30.0,
+       34.4
+      ],
+      "ev_r": -0.035,
+      "ev_ci": [
+       -0.102,
+       0.028
+      ],
+      "profit_factor": 0.948
+     },
+     "test": {
+      "n": 643,
+      "wins": 220,
+      "losses": 423,
+      "win_rate": 34.2,
+      "wr_ci": [
+       30.7,
+       38.0
+      ],
+      "ev_r": 0.026,
+      "ev_ci": [
+       -0.081,
+       0.138
+      ],
+      "profit_factor": 1.04
+     },
+     "share_of_all": 62.0
+    }
+   },
+   "by_indicator": {
+    "ai": {
+     "n": 447,
+     "wins": 104,
+     "losses": 343,
+     "win_rate": 23.3,
+     "wr_ci": [
+      19.6,
+      27.4
+     ],
+     "ev_r": -0.302,
+     "ev_ci": [
+      -0.423,
+      -0.188
+     ],
+     "profit_factor": 0.606
+    },
+    "bollinger": {
+     "n": 2400,
+     "wins": 785,
+     "losses": 1615,
+     "win_rate": 32.7,
+     "wr_ci": [
+      30.9,
+      34.6
+     ],
+     "ev_r": -0.019,
+     "ev_ci": [
+      -0.074,
+      0.036
+     ],
+     "profit_factor": 0.972
+    },
+    "strong": {
+     "n": 47,
+     "wins": 11,
+     "losses": 36,
+     "win_rate": 23.4,
+     "wr_ci": [
+      13.6,
+      37.2
+     ],
+     "ev_r": -0.298,
+     "ev_ci": [
+      -0.681,
+      0.085
+     ],
+     "profit_factor": 0.611
+    },
+    "supertrend": {
+     "n": 976,
+     "wins": 161,
+     "losses": 815,
+     "win_rate": 16.5,
+     "wr_ci": [
+      14.3,
+      19.0
+     ],
+     "ev_r": -0.505,
+     "ev_ci": [
+      -0.573,
+      -0.438
+     ],
+     "profit_factor": 0.395
+    }
+   },
+   "buckets": [
+    [
+     "risk_pct",
+     "المخاطرة (بعد الوقف عن الدخول %)",
+     [
+      {
+       "from": 0,
+       "to": 1,
+       "n": 207,
+       "wins": 110,
+       "losses": 97,
+       "win_rate": 53.1,
+       "wr_ci": [
+        46.3,
+        59.8
+       ],
+       "ev_r": 0.594,
+       "ev_ci": [
+        0.377,
+        0.797
+       ],
+       "profit_factor": 2.268
+      },
+      {
+       "from": 1,
+       "to": 2,
+       "n": 595,
+       "wins": 178,
+       "losses": 417,
+       "win_rate": 29.9,
+       "wr_ci": [
+        26.4,
+        33.7
+       ],
+       "ev_r": -0.103,
+       "ev_ci": [
+        -0.213,
+        0.008
+       ],
+       "profit_factor": 0.854
+      },
+      {
+       "from": 2,
+       "to": 3,
+       "n": 1013,
+       "wins": 271,
+       "losses": 742,
+       "win_rate": 26.8,
+       "wr_ci": [
+        24.1,
+        29.6
+       ],
+       "ev_r": -0.197,
+       "ev_ci": [
+        -0.277,
+        -0.115
+       ],
+       "profit_factor": 0.73
+      },
+      {
+       "from": 3,
+       "to": 5,
+       "n": 1450,
+       "wins": 327,
+       "losses": 1123,
+       "win_rate": 22.6,
+       "wr_ci": [
+        20.5,
+        24.8
+       ],
+       "ev_r": -0.323,
+       "ev_ci": [
+        -0.386,
+        -0.259
+       ],
+       "profit_factor": 0.582
+      },
+      {
+       "from": 5,
+       "to": 10,
+       "n": 547,
+       "wins": 156,
+       "losses": 391,
+       "win_rate": 28.5,
+       "wr_ci": [
+        24.9,
+        32.4
+       ],
+       "ev_r": -0.144,
+       "ev_ci": [
+        -0.254,
+        -0.029
+       ],
+       "profit_factor": 0.798
+      },
+      {
+       "from": 10,
+       "to": 100,
+       "n": 58,
+       "wins": 19,
+       "losses": 39,
+       "win_rate": 32.8,
+       "wr_ci": [
+        22.1,
+        45.6
+       ],
+       "ev_r": -0.017,
+       "ev_ci": [
+        -0.379,
+        0.345
+       ],
+       "profit_factor": 0.974
+      }
+     ]
+    ],
+    [
+     "h4_ret5",
+     "زخم 4H (آخر 5 شموع %)",
+     [
+      {
+       "from": -50,
+       "to": 0,
+       "n": 2708,
+       "wins": 805,
+       "losses": 1903,
+       "win_rate": 29.7,
+       "wr_ci": [
+        28.0,
+        31.5
+       ],
+       "ev_r": -0.108,
+       "ev_ci": [
+        -0.16,
+        -0.056
+       ],
+       "profit_factor": 0.846
+      },
+      {
+       "from": 0,
+       "to": 1,
+       "n": 489,
+       "wins": 117,
+       "losses": 372,
+       "win_rate": 23.9,
+       "wr_ci": [
+        20.4,
+        27.9
+       ],
+       "ev_r": -0.282,
+       "ev_ci": [
+        -0.399,
+        -0.16
+       ],
+       "profit_factor": 0.629
+      },
+      {
+       "from": 1,
+       "to": 2,
+       "n": 281,
+       "wins": 48,
+       "losses": 233,
+       "win_rate": 17.1,
+       "wr_ci": [
+        13.1,
+        21.9
+       ],
+       "ev_r": -0.488,
+       "ev_ci": [
+        -0.616,
+        -0.349
+       ],
+       "profit_factor": 0.412
+      },
+      {
+       "from": 2,
+       "to": 3,
+       "n": 144,
+       "wins": 31,
+       "losses": 113,
+       "win_rate": 21.5,
+       "wr_ci": [
+        15.6,
+        28.9
+       ],
+       "ev_r": -0.354,
+       "ev_ci": [
+        -0.542,
+        -0.146
+       ],
+       "profit_factor": 0.549
+      },
+      {
+       "from": 3,
+       "to": 5,
+       "n": 151,
+       "wins": 33,
+       "losses": 118,
+       "win_rate": 21.9,
+       "wr_ci": [
+        16.0,
+        29.1
+       ],
+       "ev_r": -0.344,
+       "ev_ci": [
+        -0.543,
+        -0.146
+       ],
+       "profit_factor": 0.559
+      },
+      {
+       "from": 5,
+       "to": 8,
+       "n": 69,
+       "wins": 21,
+       "losses": 48,
+       "win_rate": 30.4,
+       "wr_ci": [
+        20.8,
+        42.1
+       ],
+       "ev_r": -0.087,
+       "ev_ci": [
+        -0.391,
+        0.217
+       ],
+       "profit_factor": 0.875
+      },
+      {
+       "from": 8,
+       "to": 100,
+       "n": 28,
+       "wins": 6,
+       "losses": 22,
+       "win_rate": 21.4,
+       "wr_ci": [
+        10.2,
+        39.5
+       ],
+       "ev_r": -0.357,
+       "ev_ci": [
+        -0.786,
+        0.071
+       ],
+       "profit_factor": 0.545
+      }
+     ]
+    ],
+    [
+     "h1_rsi",
+     "RSI 1H",
+     [
+      {
+       "from": 0,
+       "to": 40,
+       "n": 1739,
+       "wins": 613,
+       "losses": 1126,
+       "win_rate": 35.3,
+       "wr_ci": [
+        33.0,
+        37.5
+       ],
+       "ev_r": 0.058,
+       "ev_ci": [
+        -0.01,
+        0.127
+       ],
+       "profit_factor": 1.089
+      },
+      {
+       "from": 40,
+       "to": 50,
+       "n": 709,
+       "wins": 184,
+       "losses": 525,
+       "win_rate": 26.0,
+       "wr_ci": [
+        22.9,
+        29.3
+       ],
+       "ev_r": -0.221,
+       "ev_ci": [
+        -0.319,
+        -0.124
+       ],
+       "profit_factor": 0.701
+      },
+      {
+       "from": 50,
+       "to": 60,
+       "n": 381,
+       "wins": 71,
+       "losses": 310,
+       "win_rate": 18.6,
+       "wr_ci": [
+        15.0,
+        22.9
+       ],
+       "ev_r": -0.441,
+       "ev_ci": [
+        -0.551,
+        -0.323
+       ],
+       "profit_factor": 0.458
+      },
+      {
+       "from": 60,
+       "to": 65,
+       "n": 298,
+       "wins": 64,
+       "losses": 234,
+       "win_rate": 21.5,
+       "wr_ci": [
+        17.2,
+        26.5
+       ],
+       "ev_r": -0.356,
+       "ev_ci": [
+        -0.497,
+        -0.215
+       ],
+       "profit_factor": 0.547
+      },
+      {
+       "from": 65,
+       "to": 70,
+       "n": 276,
+       "wins": 45,
+       "losses": 231,
+       "win_rate": 16.3,
+       "wr_ci": [
+        12.4,
+        21.1
+       ],
+       "ev_r": -0.511,
+       "ev_ci": [
+        -0.641,
+        -0.37
+       ],
+       "profit_factor": 0.39
+      },
+      {
+       "from": 70,
+       "to": 80,
+       "n": 373,
+       "wins": 61,
+       "losses": 312,
+       "win_rate": 16.4,
+       "wr_ci": [
+        12.9,
+        20.4
+       ],
+       "ev_r": -0.509,
+       "ev_ci": [
+        -0.622,
+        -0.397
+       ],
+       "profit_factor": 0.391
+      },
+      {
+       "from": 80,
+       "to": 101,
+       "n": 94,
+       "wins": 23,
+       "losses": 71,
+       "win_rate": 24.5,
+       "wr_ci": [
+        16.9,
+        34.0
+       ],
+       "ev_r": -0.266,
+       "ev_ci": [
+        -0.521,
+        0.021
+       ],
+       "profit_factor": 0.648
+      }
+     ]
+    ]
+   ],
+   "period": "2026-10-23 → 2026-11-02"
+  },
+  {
+   "label": "مجموعة الإشارات المنشورة فعليًا",
+   "dataset": "published",
+   "rows": 377,
+   "split_ts": 1791871199999,
+   "gates": {
+    "current_production": {
+     "train": {
+      "n": 263,
+      "wins": 37,
+      "losses": 226,
+      "win_rate": 14.1,
+      "wr_ci": [
+       10.4,
+       18.8
+      ],
+      "ev_r": -0.578,
+      "ev_ci": [
+       -0.703,
+       -0.441
+      ],
+      "profit_factor": 0.327
+     },
+     "test": {
+      "n": 114,
+      "wins": 15,
+      "losses": 99,
+      "win_rate": 13.2,
+      "wr_ci": [
+       8.1,
+       20.6
+      ],
+      "ev_r": -0.605,
+      "ev_ci": [
+       -0.789,
+       -0.395
+      ],
+      "profit_factor": 0.303
+     },
+     "share_of_all": 100.0
+    },
+    "drop_supertrend_only": {
+     "train": {
+      "n": 134,
+      "wins": 23,
+      "losses": 111,
+      "win_rate": 17.2,
+      "wr_ci": [
+       11.7,
+       24.4
+      ],
+      "ev_r": -0.485,
+      "ev_ci": [
+       -0.664,
+       -0.284
+      ],
+      "profit_factor": 0.414
+     },
+     "test": {
+      "n": 32,
+      "wins": 12,
+      "losses": 20,
+      "win_rate": 37.5,
+      "wr_ci": [
+       22.9,
+       54.7
+      ],
+      "ev_r": 0.125,
+      "ev_ci": [
+       -0.344,
+       0.688
+      ],
+      "profit_factor": 1.2
+     },
+     "share_of_all": 44.0
+    },
+    "ai_and_strong_only": {
+     "train": {
+      "n": 134,
+      "wins": 23,
+      "losses": 111,
+      "win_rate": 17.2,
+      "wr_ci": [
+       11.7,
+       24.4
+      ],
+      "ev_r": -0.485,
+      "ev_ci": [
+       -0.664,
+       -0.284
+      ],
+      "profit_factor": 0.414
+     },
+     "test": {
+      "n": 32,
+      "wins": 12,
+      "losses": 20,
+      "win_rate": 37.5,
+      "wr_ci": [
+       22.9,
+       54.7
+      ],
+      "ev_r": 0.125,
+      "ev_ci": [
+       -0.344,
+       0.688
+      ],
+      "profit_factor": 1.2
+     },
+     "share_of_all": 44.0
+    },
+    "confidence_ge_060": {
+     "train": {
+      "n": 233,
+      "wins": 35,
+      "losses": 198,
+      "win_rate": 15.0,
+      "wr_ci": [
+       11.0,
+       20.2
+      ],
+      "ev_r": -0.549,
+      "ev_ci": [
+       -0.678,
+       -0.408
+      ],
+      "profit_factor": 0.354
+     },
+     "test": {
+      "n": 72,
+      "wins": 13,
+      "losses": 59,
+      "win_rate": 18.1,
+      "wr_ci": [
+       10.9,
+       28.5
+      ],
+      "ev_r": -0.458,
+      "ev_ci": [
+       -0.708,
+       -0.167
+      ],
+      "profit_factor": 0.441
+     },
+     "share_of_all": 80.9
+    },
+    "ai_strong_conf060": {
+     "train": {
+      "n": 134,
+      "wins": 23,
+      "losses": 111,
+      "win_rate": 17.2,
+      "wr_ci": [
+       11.7,
+       24.4
+      ],
+      "ev_r": -0.485,
+      "ev_ci": [
+       -0.664,
+       -0.284
+      ],
+      "profit_factor": 0.414
+     },
+     "test": {
+      "n": 32,
+      "wins": 12,
+      "losses": 20,
+      "win_rate": 37.5,
+      "wr_ci": [
+       22.9,
+       54.7
+      ],
+      "ev_r": 0.125,
+      "ev_ci": [
+       -0.344,
+       0.688
+      ],
+      "profit_factor": 1.2
+     },
+     "share_of_all": 44.0
+    },
+    "quality_gate_recommended": {
+     "train": {
+      "n": 134,
+      "wins": 23,
+      "losses": 111,
+      "win_rate": 17.2,
+      "wr_ci": [
+       11.7,
+       24.4
+      ],
+      "ev_r": -0.485,
+      "ev_ci": [
+       -0.664,
+       -0.284
+      ],
+      "profit_factor": 0.414
+     },
+     "test": {
+      "n": 32,
+      "wins": 12,
+      "losses": 20,
+      "win_rate": 37.5,
+      "wr_ci": [
+       22.9,
+       54.7
+      ],
+      "ev_r": 0.125,
+      "ev_ci": [
+       -0.344,
+       0.688
+      ],
+      "profit_factor": 1.2
+     },
+     "share_of_all": 44.0
+    },
+    "risk_le_3": {
+     "train": {
+      "n": 113,
+      "wins": 14,
+      "losses": 99,
+      "win_rate": 12.4,
+      "wr_ci": [
+       7.5,
+       19.7
+      ],
+      "ev_r": -0.628,
+      "ev_ci": [
+       -0.788,
+       -0.442
+      ],
+      "profit_factor": 0.283
+     },
+     "test": {
+      "n": 8,
+      "wins": 2,
+      "losses": 6,
+      "win_rate": 25.0,
+      "wr_ci": [
+       7.1,
+       59.1
+      ],
+      "ev_r": -0.25,
+      "ev_ci": [
+       -1.0,
+       0.875
+      ],
+      "profit_factor": 0.667
+     },
+     "share_of_all": 32.1
+    },
+    "ai_strong_risk3": {
+     "train": {
+      "n": 73,
+      "wins": 11,
+      "losses": 62,
+      "win_rate": 15.1,
+      "wr_ci": [
+       8.6,
+       25.0
+      ],
+      "ev_r": -0.548,
+      "ev_ci": [
+       -0.795,
+       -0.301
+      ],
+      "profit_factor": 0.355
+     },
+     "test": {
+      "n": 5,
+      "wins": 2,
+      "losses": 3,
+      "win_rate": 40.0,
+      "wr_ci": [
+       11.8,
+       76.9
+      ],
+      "ev_r": 0.2,
+      "ev_ci": [
+       -1.0,
+       1.4
+      ],
+      "profit_factor": 1.333
+     },
+     "share_of_all": 20.7
+    },
+    "rsi_below_65": {
+     "train": {
+      "n": 16,
+      "wins": 5,
+      "losses": 11,
+      "win_rate": 31.2,
+      "wr_ci": [
+       14.2,
+       55.6
+      ],
+      "ev_r": -0.062,
+      "ev_ci": [
+       -0.625,
+       0.688
+      ],
+      "profit_factor": 0.909
+     },
+     "test": {
+      "n": 21,
+      "wins": 10,
+      "losses": 11,
+      "win_rate": 47.6,
+      "wr_ci": [
+       28.3,
+       67.6
+      ],
+      "ev_r": 0.429,
+      "ev_ci": [
+       -0.143,
+       1.143
+      ],
+      "profit_factor": 1.818
+     },
+     "share_of_all": 9.8
+    },
+    "drop_supertrend_rsi65": {
+     "train": {
+      "n": 124,
+      "wins": 22,
+      "losses": 102,
+      "win_rate": 17.7,
+      "wr_ci": [
+       12.0,
+       25.4
+      ],
+      "ev_r": -0.468,
+      "ev_ci": [
+       -0.661,
+       -0.25
+      ],
+      "profit_factor": 0.431
+     },
+     "test": {
+      "n": 19,
+      "wins": 9,
+      "losses": 10,
+      "win_rate": 47.4,
+      "wr_ci": [
+       27.3,
+       68.3
+      ],
+      "ev_r": 0.421,
+      "ev_ci": [
+       -0.211,
+       1.053
+      ],
+      "profit_factor": 1.8
+     },
+     "share_of_all": 37.9
+    },
+    "drop_supertrend_risk3": {
+     "train": {
+      "n": 73,
+      "wins": 11,
+      "losses": 62,
+      "win_rate": 15.1,
+      "wr_ci": [
+       8.6,
+       25.0
+      ],
+      "ev_r": -0.548,
+      "ev_ci": [
+       -0.795,
+       -0.301
+      ],
+      "profit_factor": 0.355
+     },
+     "test": {
+      "n": 5,
+      "wins": 2,
+      "losses": 3,
+      "win_rate": 40.0,
+      "wr_ci": [
+       11.8,
+       76.9
+      ],
+      "ev_r": 0.2,
+      "ev_ci": [
+       -1.0,
+       1.4
+      ],
+      "profit_factor": 1.333
+     },
+     "share_of_all": 20.7
+    },
+    "bollinger_only": {
+     "train": {
+      "n": 0
+     },
+     "test": {
+      "n": 0
+     },
+     "share_of_all": 0.0
+    }
+   },
+   "by_indicator": {
+    "ai": {
+     "n": 150,
+     "wins": 33,
+     "losses": 117,
+     "win_rate": 22.0,
+     "wr_ci": [
+      16.1,
+      29.3
+     ],
+     "ev_r": -0.34,
+     "ev_ci": [
+      -0.52,
+      -0.12
+     ],
+     "profit_factor": 0.564
+    },
+    "strong": {
+     "n": 16,
+     "wins": 2,
+     "losses": 14,
+     "win_rate": 12.5,
+     "wr_ci": [
+      3.5,
+      36.0
+     ],
+     "ev_r": -0.625,
+     "ev_ci": [
+      -1.0,
+      -0.062
+     ],
+     "profit_factor": 0.286
+    },
+    "supertrend": {
+     "n": 211,
+     "wins": 17,
+     "losses": 194,
+     "win_rate": 8.1,
+     "wr_ci": [
+      5.1,
+      12.5
+     ],
+     "ev_r": -0.758,
+     "ev_ci": [
+      -0.872,
+      -0.645
+     ],
+     "profit_factor": 0.175
+    }
+   },
+   "buckets": [
+    [
+     "confidence",
+     "ثقة القارئ الذكي",
+     [
+      {
+       "from": 0,
+       "to": 0.6,
+       "n": 72,
+       "wins": 4,
+       "losses": 68,
+       "win_rate": 5.6,
+       "wr_ci": [
+        2.2,
+        13.4
+       ],
+       "ev_r": -0.833,
+       "ev_ci": [
+        -0.958,
+        -0.667
+       ],
+       "profit_factor": 0.118
+      },
+      {
+       "from": 0.6,
+       "to": 0.8,
+       "n": 119,
+       "wins": 18,
+       "losses": 101,
+       "win_rate": 15.1,
+       "wr_ci": [
+        9.8,
+        22.6
+       ],
+       "ev_r": -0.546,
+       "ev_ci": [
+        -0.723,
+        -0.345
+       ],
+       "profit_factor": 0.356
+      },
+      {
+       "from": 0.8,
+       "to": 0.95,
+       "n": 111,
+       "wins": 15,
+       "losses": 96,
+       "win_rate": 13.5,
+       "wr_ci": [
+        8.4,
+        21.1
+       ],
+       "ev_r": -0.595,
+       "ev_ci": [
+        -0.784,
+        -0.378
+       ],
+       "profit_factor": 0.312
+      },
+      {
+       "from": 0.99,
+       "to": 1.01,
+       "n": 75,
+       "wins": 15,
+       "losses": 60,
+       "win_rate": 20.0,
+       "wr_ci": [
+        12.5,
+        30.4
+       ],
+       "ev_r": -0.4,
+       "ev_ci": [
+        -0.68,
+        -0.12
+       ],
+       "profit_factor": 0.5
+      }
+     ]
+    ],
+    [
+     "risk_pct",
+     "المخاطرة (بعد الوقف عن الدخول %)",
+     [
+      {
+       "from": 0,
+       "to": 1,
+       "n": 25,
+       "wins": 5,
+       "losses": 20,
+       "win_rate": 20.0,
+       "wr_ci": [
+        8.9,
+        39.1
+       ],
+       "ev_r": -0.4,
+       "ev_ci": [
+        -0.88,
+        0.08
+       ],
+       "profit_factor": 0.5
+      },
+      {
+       "from": 1,
+       "to": 2,
+       "n": 38,
+       "wins": 5,
+       "losses": 33,
+       "win_rate": 13.2,
+       "wr_ci": [
+        5.8,
+        27.3
+       ],
+       "ev_r": -0.605,
+       "ev_ci": [
+        -0.921,
+        -0.289
+       ],
+       "profit_factor": 0.303
+      },
+      {
+       "from": 2,
+       "to": 3,
+       "n": 58,
+       "wins": 6,
+       "losses": 52,
+       "win_rate": 10.3,
+       "wr_ci": [
+        4.8,
+        20.8
+       ],
+       "ev_r": -0.69,
+       "ev_ci": [
+        -0.897,
+        -0.431
+       ],
+       "profit_factor": 0.231
+      },
+      {
+       "from": 3,
+       "to": 5,
+       "n": 151,
+       "wins": 18,
+       "losses": 133,
+       "win_rate": 11.9,
+       "wr_ci": [
+        7.7,
+        18.1
+       ],
+       "ev_r": -0.642,
+       "ev_ci": [
+        -0.781,
+        -0.483
+       ],
+       "profit_factor": 0.271
+      },
+      {
+       "from": 5,
+       "to": 10,
+       "n": 96,
+       "wins": 17,
+       "losses": 79,
+       "win_rate": 17.7,
+       "wr_ci": [
+        11.4,
+        26.5
+       ],
+       "ev_r": -0.469,
+       "ev_ci": [
+        -0.688,
+        -0.219
+       ],
+       "profit_factor": 0.43
+      },
+      {
+       "from": 10,
+       "to": 100,
+       "n": 9,
+       "wins": 1,
+       "losses": 8,
+       "win_rate": 11.1,
+       "wr_ci": [
+        2.0,
+        43.5
+       ],
+       "ev_r": -0.667,
+       "ev_ci": [
+        -1.0,
+        0.0
+       ],
+       "profit_factor": 0.25
+      }
+     ]
+    ]
+   ],
+   "period": "2026-10-03 → 2026-10-31"
+  }
+ ],
+ "verdict": "- **مجموعة المرشّحات (كل ما كُشف، منشورًا أو محجوبًا)** (خارج العينة): خط الأساس 26.8% نجاح وEV -0.20R ← بعد بوّابة الجودة 29.9% وEV -0.10R (n=137).\n- **مجموعة الإشارات المنشورة فعليًا** (خارج العينة): خط الأساس 13.2% نجاح وEV -0.60R ← بعد بوّابة الجودة 37.5% وEV +0.12R (n=32).\n- **البوّابة المعتمدة**: لا تُنشر إشارة supertrend وحدها (بلا تأكيد القارئ الذكي) ولا إشارة بثقة < 0.60. الفارق بين المصادر ثابت في كل التقسيمات (8.1% مقابل 22.0% في المنشور، 16.5% مقابل 23.3% في المرشّحات) وفواصل الثقة لا تتقاطع.\n- الحدّ الأدنى للربحية عند هدف 2R هو **33.3%** نجاح. البوّابة ترفع الجودة لكنها لا تضمن ربحية، وبعض البوّابات الأخرى التي تبدو أفضل خارج العينة فواصل ثقتها تتقاطع مع الصفر (لا دليل إحصائي).\n- **القيد الأهم**: كل الاختبارات أعلاه بهندسة خروج ثابتة (هدف 2R، وقف −1R، مهلة 7 أيام). تحسين الخروج (1R/1.5R/3R، وقف باللمسة، مهلة أقصر) يحتاج مسار الشموع، وهو ما يوفّره `research/backtest.py` على بيانات OHLCV كاملة."
+}
