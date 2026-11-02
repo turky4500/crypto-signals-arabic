@@ -37,7 +37,7 @@
     },
     "signature": "LISTAUSDT|ai|BUY|1793451600000"
   },
-  "last_check": 1793613548955,
+  "last_check": 1793613861443,
   "data_date": "2026-11-02",
   "filter_meta": {
     "enabled": true,
@@ -56,68 +56,68 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 640,
-        "tp_hit": 44,
-        "sl_hit": 343,
-        "pending": 253,
+        "total": 638,
+        "tp_hit": 43,
+        "sl_hit": 358,
+        "pending": 237,
         "expired": 0,
-        "win_rate": 11.4
+        "win_rate": 10.7
       },
       "awesome": {
-        "total": 218,
-        "tp_hit": 18,
-        "sl_hit": 110,
-        "pending": 90,
+        "total": 214,
+        "tp_hit": 17,
+        "sl_hit": 116,
+        "pending": 81,
         "expired": 0,
-        "win_rate": 14.1
+        "win_rate": 12.8
       },
       "macd": {
-        "total": 413,
-        "tp_hit": 22,
-        "sl_hit": 189,
-        "pending": 202,
+        "total": 400,
+        "tp_hit": 21,
+        "sl_hit": 195,
+        "pending": 184,
         "expired": 0,
-        "win_rate": 10.4
+        "win_rate": 9.7
       },
       "bollinger": {
-        "total": 436,
+        "total": 448,
         "tp_hit": 22,
-        "sl_hit": 105,
-        "pending": 309,
+        "sl_hit": 125,
+        "pending": 301,
         "expired": 0,
-        "win_rate": 17.3
+        "win_rate": 15.0
       },
       "rsi50": {
-        "total": 690,
+        "total": 683,
         "tp_hit": 49,
-        "sl_hit": 268,
-        "pending": 373,
+        "sl_hit": 278,
+        "pending": 356,
         "expired": 0,
-        "win_rate": 15.5
+        "win_rate": 15.0
       },
       "adx": {
-        "total": 2603,
-        "tp_hit": 282,
-        "sl_hit": 947,
-        "pending": 1374,
+        "total": 2617,
+        "tp_hit": 271,
+        "sl_hit": 988,
+        "pending": 1358,
         "expired": 0,
-        "win_rate": 22.9
+        "win_rate": 21.5
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
+    "added_this_run": 16,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 3872,
-      "pending": 1113,
+      "resolved": 3892,
+      "pending": 1093,
       "expired": 15,
       "tp_hit": 1063,
-      "sl_hit": 2809,
-      "win_rate": 0.2745,
-      "ev_per_trade": -0.1765
+      "sl_hit": 2829,
+      "win_rate": 0.2731,
+      "ev_per_trade": -0.1807
     },
     "with_filter": {
       "total": 13,
@@ -131,44 +131,44 @@
     },
     "with_consensus_ge3": {
       "total": 99,
-      "resolved": 76,
-      "pending": 22,
+      "resolved": 77,
+      "pending": 21,
       "expired": 1,
       "tp_hit": 19,
-      "sl_hit": 57,
-      "win_rate": 0.25,
-      "ev_per_trade": -0.25
+      "sl_hit": 58,
+      "win_rate": 0.2468,
+      "ev_per_trade": -0.2596
     },
     "blocked": {
       "total": 4987,
-      "resolved": 3862,
-      "pending": 1110,
+      "resolved": 3882,
+      "pending": 1090,
       "expired": 15,
       "tp_hit": 1060,
-      "sl_hit": 2802,
-      "win_rate": 0.2745,
-      "ev_per_trade": -0.1765
+      "sl_hit": 2822,
+      "win_rate": 0.2731,
+      "ev_per_trade": -0.1807
     },
     "by_reason": {
       "bollinger_live_off": {
-        "total": 3158,
-        "resolved": 2401,
-        "pending": 748,
+        "total": 3156,
+        "resolved": 2414,
+        "pending": 733,
         "expired": 9,
         "tp_hit": 786,
-        "sl_hit": 1615,
-        "win_rate": 0.3274,
-        "ev_per_trade": -0.0178
+        "sl_hit": 1628,
+        "win_rate": 0.3256,
+        "ev_per_trade": -0.0232
       },
       "filter": {
-        "total": 1821,
-        "resolved": 1453,
-        "pending": 362,
+        "total": 1823,
+        "resolved": 1460,
+        "pending": 357,
         "expired": 6,
         "tp_hit": 273,
-        "sl_hit": 1180,
-        "win_rate": 0.1879,
-        "ev_per_trade": -0.4363
+        "sl_hit": 1187,
+        "win_rate": 0.187,
+        "ev_per_trade": -0.439
       },
       "filter_ok": {
         "total": 13,
