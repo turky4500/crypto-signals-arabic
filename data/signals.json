@@ -22121,5 +22121,48 @@
       }
     },
     "signature": "YGGUSDT|ai|BUY|1793703600000"
+  },
+  {
+    "symbol": "SOMIUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793710800000,
+    "candle_close_ms": 1793714399999,
+    "signal_price": 0.1642,
+    "entry": "0.1642",
+    "sl": "0.1566",
+    "tp": "0.1718",
+    "rr_ratio": 1.0,
+    "confidence": 0.626,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "4:59 مساءً",
+    "created_at_ms": 1793714574102,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793714574102,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -3.03,
+      "h4_ret5_min": null,
+      "h1_rsi": 46.1,
+      "h1_rsi_max": 50.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.626,
+          "risk_pct": 4.629
+        }
+      }
+    },
+    "signature": "SOMIUSDT|supertrend|BUY|1793710800000"
   }
 ]
