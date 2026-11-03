@@ -1,22 +1,5 @@
 [
   {
-    "signature": "LISTAUSDT|macd|1793674800000",
-    "symbol": "LISTAUSDT",
-    "indicator": "macd",
-    "entry": "0.0745",
-    "sl": "0.0720",
-    "tp": "0.0770",
-    "rr_ratio": 1.0,
-    "signal_open_ms": 1793674800000,
-    "signal_close_ms": 1793678399999,
-    "deadline_ms": 1794283199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793678736893,
-    "source": "simulation"
-  },
-  {
     "signature": "LPTUSDT|macd|1793674800000",
     "symbol": "LPTUSDT",
     "indicator": "macd",
@@ -50024,9 +50007,9 @@
     "signal_open_ms": 1793721600000,
     "signal_close_ms": 1793725199999,
     "deadline_ms": 1794329999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793748863312,
+    "hit_price": 0.3047,
     "created_ms": 1793725508555,
     "source": "simulation"
   },
@@ -61057,9 +61040,9 @@
     "signal_open_ms": 1793728800000,
     "signal_close_ms": 1793732399999,
     "deadline_ms": 1794337199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793748863312,
+    "hit_price": 0.0404,
     "created_ms": 1793732719435,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793747188520,
+    "source": "simulation"
+  },
+  {
+    "signature": "FTTUSDT|adx|1793743200000",
+    "symbol": "FTTUSDT",
+    "indicator": "adx",
+    "entry": "0.2368",
+    "sl": "0.2309",
+    "tp": "0.2427",
+    "rr_ratio": 1.0,
+    "signal_open_ms": 1793743200000,
+    "signal_close_ms": 1793746799999,
+    "deadline_ms": 1794351599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793748907381,
     "source": "simulation"
   }
 ]
