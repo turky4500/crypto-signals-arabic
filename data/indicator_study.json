@@ -1,22 +1,5 @@
 [
   {
-    "signature": "IOTAUSDT|adx|1793635200000",
-    "symbol": "IOTAUSDT",
-    "indicator": "adx",
-    "entry": "0.0397",
-    "sl": "0.0388",
-    "tp": "0.0415",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793635200000,
-    "signal_close_ms": 1793638799999,
-    "deadline_ms": 1794243599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793674799999,
-    "hit_price": 0.0387,
-    "created_ms": 1793639141710,
-    "source": "simulation"
-  },
-  {
     "signature": "IOTXUSDT|adx|1793635200000",
     "symbol": "IOTXUSDT",
     "indicator": "adx",
@@ -23657,9 +23640,9 @@
     "signal_open_ms": 1793678400000,
     "signal_close_ms": 1793681999999,
     "deadline_ms": 1794286799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793714399999,
+    "hit_price": 0.01307,
     "created_ms": 1793682361799,
     "source": "simulation"
   },
@@ -30559,9 +30542,9 @@
     "signal_open_ms": 1793692800000,
     "signal_close_ms": 1793696399999,
     "deadline_ms": 1794301199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793734461814,
+    "hit_price": 0.324,
     "created_ms": 1793696772033,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793732788295,
+    "source": "simulation"
+  },
+  {
+    "signature": "PORTALUSDT|adx|1793728800000",
+    "symbol": "PORTALUSDT",
+    "indicator": "adx",
+    "entry": "0.01293",
+    "sl": "0.01270",
+    "tp": "0.01316",
+    "rr_ratio": 1.0,
+    "signal_open_ms": 1793728800000,
+    "signal_close_ms": 1793732399999,
+    "deadline_ms": 1794337199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793734549446,
     "source": "simulation"
   }
 ]
