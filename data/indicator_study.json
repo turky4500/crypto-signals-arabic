@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BLURUSDT|macd|1793653200000",
-    "symbol": "BLURUSDT",
-    "indicator": "macd",
-    "entry": "0.00752",
-    "sl": "0.00730",
-    "tp": "0.00774",
-    "rr_ratio": 1.0,
-    "signal_open_ms": 1793653200000,
-    "signal_close_ms": 1793656799999,
-    "deadline_ms": 1794261599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793689199999,
-    "hit_price": 0.00729,
-    "created_ms": 1793657086253,
-    "source": "simulation"
-  },
-  {
     "signature": "BMNRBUSDT|bollinger|1793653200000",
     "symbol": "BMNRBUSDT",
     "indicator": "bollinger",
@@ -74929,9 +74912,9 @@
     "signal_open_ms": 1793728800000,
     "signal_close_ms": 1793732399999,
     "deadline_ms": 1794337199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793742572676,
+    "hit_price": 0.000551,
     "created_ms": 1793732779197,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": 1793741377587,
     "hit_price": 208.6,
     "created_ms": 1793741074965,
+    "source": "simulation"
+  },
+  {
+    "signature": "USARBUSDT|bollinger|1793736000000",
+    "symbol": "USARBUSDT",
+    "indicator": "bollinger",
+    "entry": "8.71",
+    "sl": "8.43",
+    "tp": "8.99",
+    "rr_ratio": 1.0,
+    "signal_open_ms": 1793736000000,
+    "signal_close_ms": 1793739599999,
+    "deadline_ms": 1794344399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793742708443,
     "source": "simulation"
   }
 ]
