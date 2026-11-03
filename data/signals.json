@@ -22035,5 +22035,91 @@
       "accepted": true
     },
     "signature": "LISTAUSDT|ai|BUY|1793451600000"
+  },
+  {
+    "symbol": "OPUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793703600000,
+    "candle_close_ms": 1793707199999,
+    "signal_price": 0.111,
+    "entry": "0.1110",
+    "sl": "0.1069",
+    "tp": "0.1151",
+    "rr_ratio": 1.0,
+    "confidence": 0.8809,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "2:59 مساءً",
+    "created_at_ms": 1793707626846,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793707626846,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -1.16,
+      "h4_ret5_min": null,
+      "h1_rsi": 49.4,
+      "h1_rsi_max": 50.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.8809,
+          "risk_pct": 3.694
+        }
+      }
+    },
+    "signature": "OPUSDT|supertrend|BUY|1793703600000"
+  },
+  {
+    "symbol": "YGGUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793703600000,
+    "candle_close_ms": 1793707199999,
+    "signal_price": 0.02421,
+    "entry": "0.02421",
+    "sl": "0.02364",
+    "tp": "0.02478",
+    "rr_ratio": 1.0,
+    "confidence": 0.8954,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "2:59 مساءً",
+    "created_at_ms": 1793707628461,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793707628461,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 2.02,
+      "h4_ret5_min": null,
+      "h1_rsi": 46.9,
+      "h1_rsi_max": 50.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.8954,
+          "risk_pct": 2.354
+        }
+      }
+    },
+    "signature": "YGGUSDT|ai|BUY|1793703600000"
   }
 ]
