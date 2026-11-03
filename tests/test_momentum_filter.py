@@ -158,3 +158,33 @@ def test_filter_reporting_stats():
     res = evaluate_filter(h1, h4, d1)
     assert set(["accepted", "h4_ret5", "h4_ret5_min", "h1_rsi", "h1_rsi_max",
                 "d1_above_ema50", "h4_in_uptrend", "h4_ret5_ok", "h1_rsi_ok"]).issubset(res)
+
+def test_require_d1_below_accepts_only_below_ema50():
+    """require_d1_below=True: يُقبل فقط عند إغلاق يومي تحت EMA50.
+
+   ificial باك-تست 2026-11-02: RSI<50 + تحت EMA50 اليومي = EV +0.255R
+    ونسبة نجاح 64.6% خارج العينة (n=156) مقابل +0.166R بدونه.
+    """
+    h1 = _series(_zigzag_uptrend(120, 90.0, 0.5, dip=0.6))  # RSI منخفض
+    h4 = _series(_uptrend(120, 80.0, 1.0))
+    d1_down = _series([200.0 - i * 1.5 for i in range(120)])  # هابط → تحت EMA50
+    d1_up = _series(_uptrend(120, 70.0, 1.5))                  # صاعد → فوق EMA50
+
+    res_down = evaluate_filter(h1, h4, d1_down, require_d1_below=True,
+                               require_d1_above=False, h4_ret5_min=None,
+                               h1_rsi_max=70.0)
+    assert res_down["accepted"] is True
+    assert res_down["d1_above_ema50"] is False
+    assert res_down["require_d1_below"] is True
+
+    res_up = evaluate_filter(h1, h4, d1_up, require_d1_below=True,
+                             require_d1_above=False, h4_ret5_min=None,
+                             h1_rsi_max=70.0)
+    assert res_up["accepted"] is False
+    assert res_up["d1_above_ema50"] is True
+
+    # بدون الشرط remains accepted regardless
+    res_up_free = evaluate_filter(h1, h4, d1_up, require_d1_below=False,
+                                  require_d1_above=False, h4_ret5_min=None,
+                                  h1_rsi_max=70.0)
+    assert res_up_free["accepted"] is True

@@ -47,6 +47,7 @@ def _filter(h1, h4, d1):
         h1, h4, d1,
         h4_ret5_min=cfg["h4_ret5_min"], h1_rsi_max=cfg["h1_rsi_max"],
         require_d1_above=cfg["require_d1_above"],
+        require_d1_below=cfg["require_d1_below"],
         require_h4_uptrend=cfg["require_h4_uptrend"],
     )
 
@@ -105,7 +106,8 @@ def test_shipped_settings_match_backtested_defaults():
     shipped = json.loads((ROOT / "data" / "settings.json").read_text(encoding="utf-8"))
     for key in ("supertrend", "ai_reader", "indicators_study"):
         assert shipped[key]["rr_ratio"] == DEFAULT_SETTINGS[key]["rr_ratio"] == 1.0
-    for key in ("h4_ret5_min", "h1_rsi_max", "require_d1_above", "require_h4_uptrend"):
+    for key in ("h4_ret5_min", "h1_rsi_max", "require_d1_above",
+                "require_d1_below", "require_h4_uptrend"):
         assert shipped["momentum_filter"][key] == DEFAULT_SETTINGS["momentum_filter"][key]
     assert shipped["quality_gate"]["require_ai_confirmation"] is False
     assert DEFAULT_SETTINGS["quality_gate"]["require_ai_confirmation"] is False

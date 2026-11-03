@@ -23,6 +23,8 @@ import urllib.parse
 import urllib.request
 from typing import Iterable, Optional
 
+from .halal_academy import load_academy, refresh_academy_if_stale
+
 HALAL_API_URL = "https://api.cryptohalal.cc/api/coins"
 HALAL_CACHE_FILE = "halal_verdicts.json"
 
@@ -184,8 +186,23 @@ def refresh_if_stale(data_dir: str, max_age_hours: int = 6,
         fresh = fetch_verdicts(symbols=symbols)
         if fresh is not None:
             _save_cache(data_dir, fresh, int(time.time() * 1000))
-            return fresh
-    return cached or {}
+            cached = fresh
+
+    # المصدر الأساسي: btcacademy.online (halal_academy.json) — له الأولوية على
+    # cryptohalal.cc. الملف يُحدَّث كل max_age_hours (best-effort: فشل السحب
+    # لا يكسر النظام — نستخدم الملف القديم).
+    try:
+        primary = refresh_academy_if_stale(data_dir, max_age_hours=max_age_hours)
+    except Exception:
+        primary = load_academy(data_dir)
+    return merge_with_primary(cached or {}, primary)
+
+
+def merge_with_primary(base: dict, primary: dict) -> dict:
+    """المصدر الأساسي (btcacademy.online) يتقدم على الثانوي (cryptohalal.cc)."""
+    merged = dict(base)
+    merged.update(primary or {})
+    return merged
 
 
 def search_judgement(symbol: str, timeout: int = 8) -> Optional[int]:

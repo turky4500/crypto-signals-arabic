@@ -73,10 +73,16 @@ def _h4_in_uptrend(h4: dict) -> bool:
 
 def evaluate_filter(h1: dict, h4: dict, d1: dict, *, h4_ret5_min: float | None = 2.0,
                     h1_rsi_max: float = 70.0, require_d1_above: bool = True,
-                    require_h4_uptrend: bool = True) -> dict:
+                    require_h4_uptrend: bool = True,
+                    require_d1_below: bool = False) -> dict:
     """تقييم فلتر الزخم الموحّد. يرجع القرار + القياسات للتقييم المستقبلي.
 
     h1/h4/d1: متسلسلات شموع مغلقة (open/high/low/close/...).
+
+    require_d1_below: عند true يُشترط أن يكون الإغلاق اليومي **تحت** EMA50 —
+    باك-تست 2026-11-02 أظهر أن RSI<50 مع الدخول تحت EMA50 اليومي حقق
+    EV +0.255R ونسبة نجاح 64.6% خارج العينة (n=156) مقابل +0.166R للقاعدة
+    بدون هذا الشرط — أي أن الإشارة الرابحة تصحيح في اتجاه هابط، لا ملاحقة.
     """
     h1_close = h1.get("close", [])
     h4_close = h4.get("close", [])
@@ -96,6 +102,7 @@ def evaluate_filter(h1: dict, h4: dict, d1: dict, *, h4_ret5_min: float | None =
         "d1_above_ema50": trend_up,
         "h4_in_uptrend": h4_up,
         "require_d1_above": bool(require_d1_above),
+        "require_d1_below": bool(require_d1_below),
         "require_h4_uptrend": bool(require_h4_uptrend),
         "h4_ret5_ok": (not require_h4_ret5)
         or (h4_ret5 is not None and h4_ret5 >= h4_ret5_min),
@@ -105,6 +112,7 @@ def evaluate_filter(h1: dict, h4: dict, d1: dict, *, h4_ret5_min: float | None =
         conditions["h4_ret5_ok"]
         and conditions["h1_rsi_ok"]
         and (trend_up or not require_d1_above)
+        and (not trend_up or not require_d1_below)
         and (h4_up or not require_h4_uptrend)
     )
     conditions["accepted"] = accepted

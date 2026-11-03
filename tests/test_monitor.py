@@ -430,6 +430,7 @@ def _make_filter_monitor(tmp_path, h1_candles, d1_candles, consensus_gate=False)
         "h4_ret5_min": 2.25,
         "h1_rsi_max": 70.0,
         "require_d1_above": True,
+        "require_d1_below": False,
         "require_h4_uptrend": True,
     })
     (data_dir / "settings.json").write_text(json.dumps(settings), encoding="utf-8")

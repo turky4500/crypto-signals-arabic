@@ -52,10 +52,13 @@ function renderStatus(status) {
       ${pill(status.market_data_connected, "Market Data Connected")}
       ${pill(status.monitoring_active, "Monitoring Active")}
       ${pill(status.whatsapp_connected, "WhatsApp Connected")}
+      ${pill(status.telegram_connected, "Telegram Connected")}
+      ${pill(status.delivery_failed_this_run === 0 && status.delivery_channel, `Delivery: ${esc(status.delivery_channel || "—")}`)}
       <span class="pill live ${binanceLive ? "ok" : "bad"}"><span class="dot"></span>${binanceLive ? "Live Prices" : "Live Prices"}</span>
     </div>
     <div class="last-update">
       آخر تحديث: <strong>${status.last_update ? formatTime12h(status.last_update) + " بتوقيت السعودية" : "—"}</strong>
+      ${status.delivery_last_error ? `<span class="err">· فشل إرسال: ${esc(String(status.delivery_last_error).slice(0, 120))}</span>` : ""}
       ${status.last_error ? `<span class="err">· خطأ: ${esc(status.last_error)}</span>` : ""}
     </div>
     ${staleNotice(status.last_update)}`;

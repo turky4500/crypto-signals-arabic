@@ -88,6 +88,10 @@ def _empty_status():
         "last_update": None,
         "last_error": None,
         "run_id": None,
+        # صحة قناة إيصال الإشارات — وتُعرض في لوحة الويب وتنبّه المالك عند الفشل
+        "delivery_channel": None,
+        "delivery_failed_this_run": 0,
+        "delivery_last_error": None,
     }
 
 
@@ -720,6 +724,7 @@ class Monitor:
                 h4_ret5_min=None if raw_ret5 is None else float(raw_ret5),
                 h1_rsi_max=float(cfg.get("h1_rsi_max", 70.0)),
                 require_d1_above=bool(cfg.get("require_d1_above", True)),
+                require_d1_below=bool(cfg.get("require_d1_below", False)),
                 require_h4_uptrend=bool(cfg.get("require_h4_uptrend", True)),
             )
         except Exception as exc:
@@ -1021,8 +1026,25 @@ class Monitor:
         else:
             status["telegram_connected"] = False
 
-        # عميل المعاينات الاستكشافية الخاص بالمالك — منفصل عن القناة تمامًا
+        # عميل المعاينات الاستكشافية الخاص بالمالک — منفصل عن القناة تمامًا
         tg_owner = None if no_whatsapp else self._telegram_owner(env)
+
+        # تنبيه فوري للمالك إن كانت قناة الإرسال الرئيسية غير مهيأة —
+        # وإلا ستُكتشف «الإشارات لا تصل» بعد فوات الأوان. دفتر منع التكرار
+        # (نافذة 90 دقيقة) يمنع تكرار هذا التنبيه كل 5 دقائق.
+        if (not no_whatsapp and tg_owner is not None and tg is None
+                and self._channel_mode() == "telegram"):
+            tg_owner.send(
+                "⚠️ قناة إرسال الإشارات (تلغرام) غير مهيأة في هذا التشغيل —\n"
+                "لن تصل أي إشعارات جديدة إلى القناة.\n"
+                "تحقق من TELEGRAM_BOT_TOKEN و TELEGRAM_CHAT_ID في GitHub Secrets."
+            )
+        if (not no_whatsapp and tg_owner is not None and tg is not None
+                and not status.get("telegram_connected")):
+            tg_owner.send(
+                "⚠️ بوت تلغرام لا يستجيب (فشل ping) — الإشارات قد لا تصل إلى القناة.\n"
+                "غالبًا التوكن غير صالح (HTTP 401): راجع TELEGRAM_BOT_TOKEN."
+            )
 
         errors: list[str] = []
         binance_ok = False
@@ -1274,6 +1296,8 @@ class Monitor:
                     time.sleep(0.3)  # لطفٌ مع Telegram
             save_state(self.data_dir, pv_state)
 
+        delivery_failed = 0
+        delivery_last_error = None
         for sig in new_signals:
             msg = build_alert_message(
                 sig.to_dict(),
@@ -1312,6 +1336,9 @@ class Monitor:
                             500,
                         )
             res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"))
+            if not delivered(res):
+                delivery_failed += 1
+                delivery_last_error = res.get("error") or "unknown"
             sig.whatsapp_status = "sent" if delivered(res) else "failed"
             sig.whatsapp_sent_at = int(time.time() * 1000) if delivered(res) else None
             sig.created_at_ms = int(time.time() * 1000)
@@ -1334,6 +1361,16 @@ class Monitor:
             )
             max_hist = int(self.settings.get("whatsapp", {}).get("max_history_signals", 2000))
             signals = append_capped(signals, sig.to_dict(), max_hist)
+
+        # ---- صحة قناة الإيصال في الحالة + تنبيه المالك عند فشل تسليم إشارات ----
+        status["delivery_channel"] = self._channel_mode()
+        status["delivery_failed_this_run"] = delivery_failed
+        status["delivery_last_error"] = delivery_last_error
+        if new_signals and delivery_failed and tg_owner is not None:
+            tg_owner.send(
+                f"🚨 فشل تسليم {delivery_failed} من {len(new_signals)} إشارة جديدة — "
+                f"الإشارات لن تصل إلى القناة.\nآخر خطأ: {delivery_last_error}"
+            )
         if tg_owner is not None:
             save_state(self.data_dir, pv_state)
             status["previews_sent"] = pv_stats["sent"]
@@ -1506,6 +1543,9 @@ class Monitor:
             "open_position_blocked": open_blocked,
             "whatsapp_connected": status["whatsapp_connected"],
             "telegram_connected": status.get("telegram_connected", False),
+            "delivery_channel": status.get("delivery_channel"),
+            "delivery_failed_this_run": status.get("delivery_failed_this_run", 0),
+            "delivery_last_error": status.get("delivery_last_error"),
             "duration_s": round(time.time() - started, 2),
             "server_time_ms": server_now,
             "daily_report": daily_report,

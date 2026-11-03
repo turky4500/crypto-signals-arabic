@@ -15,7 +15,8 @@
     "h4_ret5_min": null,
     "h1_rsi_max": 50.0,
     "require_d1_above": false,
-    "require_h4_uptrend": false
+    "require_h4_uptrend": false,
+    "require_d1_below": true
   },
   "indicators_study": {
     "enabled": true,
@@ -78,7 +79,10 @@
   "halal": {
     "enabled": true,
     "refresh_hours": 6,
-    "vendor": "cryptohalal.cc"
+    "vendor": "btcacademy.online",
+    "primary_source": "btcacademy.online",
+    "primary_file": "halal_academy.json",
+    "fallback_vendor": "cryptohalal.cc"
   },
   "quality_gate": {
     "require_ai_confirmation": false
