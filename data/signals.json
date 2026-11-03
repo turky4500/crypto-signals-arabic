@@ -22164,5 +22164,48 @@
       }
     },
     "signature": "SOMIUSDT|supertrend|BUY|1793710800000"
+  },
+  {
+    "symbol": "HUMAUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793714400000,
+    "candle_close_ms": 1793717999999,
+    "signal_price": 0.02197,
+    "entry": "0.02197",
+    "sl": "0.01842",
+    "tp": "0.02552",
+    "rr_ratio": 1.0,
+    "confidence": 0.7028,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "5:59 مساءً",
+    "created_at_ms": 1793719034586,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793719034586,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -13.25,
+      "h4_ret5_min": null,
+      "h1_rsi": 48.5,
+      "h1_rsi_max": 50.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7028,
+          "risk_pct": 16.158
+        }
+      }
+    },
+    "signature": "HUMAUSDT|supertrend|BUY|1793714400000"
   }
 ]
