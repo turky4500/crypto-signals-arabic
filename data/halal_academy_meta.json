@@ -1,16 +1,13 @@
 {
   "source": "btcacademy.online",
   "source_url": "https://btcacademy.online/عملات-رقمية-حلال-أم-حرام/",
-  "fetched_at": "2026-11-02",
-  "methodology": "الموقع: إن لم يجد خدمات حرام أو مشبوهة ⇒ حلال. الحكم يُقرأ من جملة «فإن عملة X …» في المقال؛ وإن لم توجد تُستخدم جملة «جميع الخدمات التي تقدمها حرام أو مشبوهة» ⇒ حرام، أو وسم الموقع «عملة X حلال».",
-  "total": 766,
-  "halal": 428,
-  "haram": 329,
-  "doubtful": 7,
-  "unknown": [
-    "AKRO",
-    "GPS"
-  ],
-  "note": "هذا الملف مصدر الحكم الأساسي للبوت (الأولوية على cryptohalal.cc). القيمة: 0=مباح، 1=غير مباح، 2=مشبوه.",
-  "precedence": "halal_academy.json > halal_extra.json > data/zigzag/halal_verdicts.json"
+  "fetched_at": "2026-11-03",
+  "fetched_at_ms": 1793731822393,
+  "methodology": "POST admin-ajax.php (action=crypto_halal_search) مع كوكي hc_js_gate=1؛ الحكم يُقرأ من صف الجدول مباشرة: حلال=0، حرام=1، مشبوهة/قيد المراجعة=2.",
+  "total": 220,
+  "halal": 102,
+  "haram": 94,
+  "doubtful": 24,
+  "note": "هذا الملف هو مصدر الحكم الأساسي للبوت (الأولوية على cryptohalal.cc).",
+  "precedence": "halal_academy.json > halal_verdicts.json (cryptohalal.cc)"
 }
