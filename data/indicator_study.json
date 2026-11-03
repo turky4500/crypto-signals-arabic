@@ -1,22 +1,5 @@
 [
   {
-    "signature": "STRAXUSDT|adx|1793610000000",
-    "symbol": "STRAXUSDT",
-    "indicator": "adx",
-    "entry": "0.01041",
-    "sl": "0.01016",
-    "tp": "0.01091",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793610000000,
-    "signal_close_ms": 1793613599999,
-    "deadline_ms": 1794218399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793613984158,
-    "source": "simulation"
-  },
-  {
     "signature": "STXUSDT|adx|1793610000000",
     "symbol": "STXUSDT",
     "indicator": "adx",
@@ -76561,9 +76544,9 @@
     "signal_open_ms": 1793714400000,
     "signal_close_ms": 1793717999999,
     "deadline_ms": 1794322799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793723358628,
+    "hit_price": 0.01772,
     "created_ms": 1793718992256,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793722012141,
+    "source": "simulation"
+  },
+  {
+    "signature": "YBUSDT|adx|1793718000000",
+    "symbol": "YBUSDT",
+    "indicator": "adx",
+    "entry": "0.0602",
+    "sl": "0.0593",
+    "tp": "0.0611",
+    "rr_ratio": 1.0,
+    "signal_open_ms": 1793718000000,
+    "signal_close_ms": 1793721599999,
+    "deadline_ms": 1794326399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793723511582,
     "source": "simulation"
   }
 ]
