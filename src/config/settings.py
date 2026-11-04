@@ -22,7 +22,7 @@ DEFAULT_SETTINGS = {
         # الخسارة الأصغر (-0.072R) مقابل -0.204R لهدف 2R و-0.277R لهدف 3R،
         # وفي النصف الأول ربح 1R (+0.136R) أقل من 2R (+0.245R) لكنه موجب.
         # أي أن 2R+ مقامرة على نظام سوق صاعد؛ 1R ينجو في الحالتين.
-        "rr_ratio": 1.0,
+        "rr_ratio": 0.75,
     },
     "momentum_filter": {
         "enabled": True,
@@ -33,7 +33,7 @@ DEFAULT_SETTINGS = {
         # قلب الاتجاه: RSI(1H) < 50 هو أقوى فصل ثابت في كل الشرائح، موجب في
         # النصفين معًا (train +0.150R / test +0.128R عند هدف 1R، n=283 خارج
         # العينة، فاصل ثقة EV = [0.029, 0.254] لا يشمل الصفر). كان 70.0.
-        "h1_rsi_max": 50.0,
+        "h1_rsi_max": 55.0,
         # شروط اتجاه H4/D1 كانت إلزامية؛ الباك-تست يُظهر أن الدخول فوق
         # EMA50 اليومي كان أسوأ خارج العينة (-0.054R) من الدخول تحته
         # (+0.255R عند هدف 1R) — أي أن الإشارة الرابحة تصحيح لا ملاحقة.
@@ -79,7 +79,7 @@ DEFAULT_SETTINGS = {
         "enabled": True,
         "min_consensus": 3,
         "en_consensus_gate": False,
-        "rr_ratio": 1.0,  # انظر تعليل supertrend.rr_ratio أعلاه
+        "rr_ratio": 0.75,  # انظر تعليل supertrend.rr_ratio أعلاه
         "atr_sl_multiplier": 1.5,
         "paper_tracking": True,
         "max_log": 5000,
@@ -98,7 +98,7 @@ DEFAULT_SETTINGS = {
         "ema_slow_len": 50,
         "use_vol_filter": True,
         "vol_threshold": 1.12,
-        "rr_ratio": 1.0,  # انظر تعليل supertrend.rr_ratio أعلاه
+        "rr_ratio": 0.75,  # انظر تعليل supertrend.rr_ratio أعلاه
         "atr_sl_multiplier": 1.5,
     },
     "whatsapp": {
