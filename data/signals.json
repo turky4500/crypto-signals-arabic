@@ -25727,5 +25727,49 @@
       }
     },
     "signature": "XLMUSDT|supertrend|BUY|1793779200000"
+  },
+  {
+    "symbol": "MSFTBUSDT",
+    "indicator": "strong",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793782800000,
+    "candle_close_ms": 1793786399999,
+    "signal_price": 524.08,
+    "entry": "524.08",
+    "sl": "515.49",
+    "tp": "530.52",
+    "rr_ratio": 0.75,
+    "confidence": 0.8825,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "12:59 مساءً",
+    "created_at_ms": 1793787113943,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793787113943,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 2.57,
+      "h4_ret5_min": null,
+      "h1_rsi": 52.4,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "strong",
+          "confidence": 0.8825,
+          "risk_pct": 1.639
+        }
+      }
+    },
+    "signature": "MSFTBUSDT|strong|BUY|1793782800000"
   }
 ]
