@@ -196,6 +196,50 @@ class Monitor:
         return mode
 
     # ------------------------------------------------------------------ #
+    def _persist_data_best_effort(self, env: dict) -> None:
+        """حفظ فوري لـ data/ في GitHub Actions بعد إرسال الرسائل (best-effort).
+
+        السبب: إذا أُرسلت إشارة على تلغرام بنجاح ثم فشل الـ push في خطوة
+        الـ workflow اللاحقة، يضيع سجل الإشارة (signals.json) ودفتر منع
+        التكرار — فتُعاد الرسالة في الجولات التالية (تكرار) ولا يُرسل
+        إشعار حسم للصفقة. هذا الإجراء يحفظ البيانات مباشرة بعد الإرسال
+        لتقليل نافذة الضياع إلى الصفر تقريبًا.
+        """
+        if os.environ.get("GITHUB_ACTIONS") != "true" and not env.get("GITHUB_ACTIONS"):
+            return
+        token = env.get("GITHUB_TOKEN") or os.environ.get("GITHUB_TOKEN")
+        if not token:
+            return
+        repo = env.get("GITHUB_REPOSITORY") or os.environ.get("GITHUB_REPOSITORY")
+        if not repo:
+            return
+        try:
+            import subprocess
+            def run_git(*args):
+                return subprocess.run(["git", *args], cwd=self.base_dir,
+                                      capture_output=True, text=True)
+            run_git("config", "user.name", "crypto-monitor[bot]")
+            run_git("config", "user.email", "crypto-monitor@users.noreply.github.com")
+            run_git("add", "data/")
+            if run_git("diff", "--cached", "--quiet").returncode == 0:
+                return
+            run_git("commit", "-q", "-m", "chore(data): حفظ فوري بعد إرسال الإشعارات")
+            run_git("remote", "set-url", "origin",
+                    f"https://x-access-token:{token}@github.com/{repo}.git")
+            for i in range(1, 4):
+                r = run_git("push", "origin", "HEAD:main")
+                if r.returncode == 0:
+                    logger.info("حُفظت data/ فوريًا بعد الإرسال")
+                    return
+                run_git("fetch", "origin", "main")
+                run_git("pull", "--rebase", "origin", "main")
+                import time as _t
+                _t.sleep(i * 5)
+            logger.warning("فشل الحفظ الفوري لـ data/ — ستعيد خطوة الـ workflow المحاولة")
+        except Exception as exc:
+            logger.warning("الحفظ الفوري لـ data/ فشل: %s", exc)
+
+    # ------------------------------------------------------------------ #
     def _deliver(self, msg: str, wa, tg, wa_ok: bool) -> tuple[dict, str | None]:
         """اختيار قناة الإرسال الفعلية لرسالة (إشارة أو تقرير) عبر
         delivery.channel_mode:
@@ -1497,6 +1541,11 @@ class Monitor:
         status["last_update"] = now_ms
         status["last_error"] = errors[-1] if errors else None
         save_json(os.path.join(self.data_dir, "status.json"), status)
+
+        # حفظ فوري best-effort: extrêmes الأولوية لـ data/ (و especialmente
+        # signals.json + telegram_sent.json) بعد إرسال الرسائل — حتى لو فشلت
+        # أي خطوة لاحقة في الـ workflow، لا يضيع سجل linen ولا تتكرر الرسائل.
+        self._persist_data_best_effort(env)
 
         # ---- تقرير نهاية اليوم (بعد منتصف الليل بتوقيت الرياض) ----
         daily_report = self._maybe_send_daily_report(
