@@ -22207,5 +22207,49 @@
       }
     },
     "signature": "HUMAUSDT|supertrend|BUY|1793714400000"
+  },
+  {
+    "symbol": "MSTRBUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793761200000,
+    "candle_close_ms": 1793764799999,
+    "signal_price": 131.8,
+    "entry": "131.80",
+    "sl": "126.55",
+    "tp": "137.05",
+    "rr_ratio": 1.0,
+    "confidence": 0.6505,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "6:59 صباحًا",
+    "created_at_ms": 1793765204172,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793765204172,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 1.22,
+      "h4_ret5_min": null,
+      "h1_rsi": 47.0,
+      "h1_rsi_max": 50.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.6505,
+          "risk_pct": 3.983
+        }
+      }
+    },
+    "signature": "MSTRBUSDT|ai|BUY|1793761200000"
   }
 ]
