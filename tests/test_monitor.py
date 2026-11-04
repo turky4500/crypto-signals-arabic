@@ -723,7 +723,7 @@ class FakeNotifyClient:
     def ping(self, timeout=8.0):
         return self.connected, "ok" if self.connected else "down"
 
-    def send(self, msg):
+    def send(self, msg, dedup_key=None):
         self.sent.append(msg)
         return {"ok": True, "attempts": 1}
 

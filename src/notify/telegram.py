@@ -13,6 +13,7 @@ WhatsApp. البيانات تأتي من Environment Variables.
 """
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import logging
@@ -22,10 +23,17 @@ import time
 
 import requests
 
+try:  # قفل الملفات (Linux/macOS)؛ غير متاح على Windows
+    import fcntl
+except ImportError:  # pragma: no cover
+    fcntl = None
+
 logger = logging.getLogger(__name__)
 
 DEDUP_CAP = 3000
 DEDUP_WINDOW_MINUTES = 90.0
+PERMANENT_HTTP = (400, 401, 403, 404)
+MAX_RETRY_AFTER = 30.0
 
 
 class TelegramError(RuntimeError):
@@ -99,10 +107,36 @@ class TelegramClient:
     def _method_url(self, method: str) -> str:
         return f"https://api.telegram.org/bot{self.token}/{method}"
 
-    # ------------------ دفتر المحتوى (منع التكرار) ------------------ #
+    # ------------------ دفتر الإرسال (منع التكرار) ------------------ #
+    #
+    # الدفتر ملف JSON دائم داخل data/ (يُحفظ في git بين الجولات). كل إدخال:
+    #   {ts, chat_id, text_hash, key?, state}
+    # state: "pending"   → حُجز قبل الاتصال بـ Telegram (كتابة مسبقة WAL)
+    #        "sent"      → أكّد Telegram القبول (ok:true)
+    #        "ambiguous" → انقطع الاتصال بعد الإرسال: قد تكون وصلت
+    # (الإدخالات القديمة بلا state تُعامَل كـ "sent").
+    # الإدخالات pending/ambiguous/sent كلها تمنع إعادة الإرسال (الأولوية لعدم
+    # التكرار: لا تُرسَل مرتين). فشل مؤكد (لم تصل) يحذف الحجز فتُعاد لاحقًا.
+    # key = معرّف الإشارة الفريد (العملة|المؤشر|النوع|وقت الشمعة) ولا يُنهي
+    # صلاحيته الزمن؛ إشارة جديدة على شمعة جديدة لها key مختلف فتُرسل طبيعيًا.
+    # الحجز والفحص يتمّان تحت قفل ملف (flock) فلا تُرسل عمليتان نفس الإشارة.
 
-    def _load_sent(self) -> list:
-        if self._sent_cache is not None:
+    @contextlib.contextmanager
+    def _ledger_lock(self):
+        if not self.dedup_file or fcntl is None:
+            yield
+            return
+        path = os.path.abspath(self.dedup_file) + ".lock"
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "a+") as fh:
+            fcntl.flock(fh, fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                fcntl.flock(fh, fcntl.LOCK_UN)
+
+    def _load_sent(self, force: bool = False) -> list:
+        if self._sent_cache is not None and not force:
             return self._sent_cache
         entries: list = []
         if self.dedup_file:
@@ -123,61 +157,103 @@ class TelegramClient:
             tmp = path + ".tmp"
             with open(tmp, "w", encoding="utf-8") as fh:
                 json.dump({"sent": entries[-DEDUP_CAP:]}, fh, ensure_ascii=False)
+                fh.flush()
+                os.fsync(fh.fileno())
             os.replace(tmp, path)
         except OSError as exc:
             logger.warning("Telegram دفتر منع التكرار لم يُحفظ: %s", exc)
 
-    def _record_sent(self, text: str) -> None:
-        if not self.dedup_file:
-            return
-        entries = self._load_sent()
-        entries.append({
-            "ts": int(time.time() * 1000),
-            "chat_id": self.chat_id,
-            "text_hash": _text_hash(self.chat_id, text),
-        })
-        # نجمع الأحدث فقط لكل مفتاح (chat,text) — نحتفظ بآخر زمن
-        seen: dict = {}
-        for e in reversed(entries):
-            key = (e.get("chat_id"), e.get("text_hash"))
-            if key not in seen:
-                seen[key] = e
-        unique = list(reversed(list(seen.values())))
-        self._sent_cache = unique
-        self._save_sent(unique)
-
-    def _is_duplicate(self, text: str) -> bool:
-        """نفس الرسالة لنفس المحادثة أُرسلت خلال النافذة؟"""
-        if not self.dedup_file:
-            return False
+    def _find_blocker(self, entries: list, hsh: str, key: str | None) -> dict | None:
         now = int(time.time() * 1000)
         chat = self.chat_id
-        hsh = _text_hash(chat, text)
-        for e in reversed(self._load_sent()):
-            if e.get("chat_id") != chat or e.get("text_hash") != hsh:
+        for e in reversed(entries):
+            if e.get("chat_id") != chat:
                 continue
-            if now - (e.get("ts") or 0) <= self.dedup_window_ms:
-                return True
-            return False  # الإدخال أقدم من النافذة → المنع انتهى
-        return False
+            if key and e.get("key") == key:
+                return e  # نفس الإشارة بالضبط — بلا نافذة زمنية
+            if e.get("text_hash") == hsh and now - (e.get("ts") or 0) <= self.dedup_window_ms:
+                return e  # نفس النص خلال النافذة
+        return None
+
+    def _is_duplicate(self, text: str, key: str | None = None) -> bool:
+        if not self.dedup_file:
+            return False
+        with self._ledger_lock():
+            return self._find_blocker(
+                self._load_sent(force=True), _text_hash(self.chat_id, text), key
+            ) is not None
+
+    def _reserve(self, text: str, key: str | None) -> bool:
+        """فحص + حجز ذريّان (كتابة مسبقة). False = مكرر فلا يُرسَل."""
+        if not self.dedup_file:
+            return True
+        hsh = _text_hash(self.chat_id, text)
+        with self._ledger_lock():
+            entries = self._load_sent(force=True)
+            if self._find_blocker(entries, hsh, key) is not None:
+                return False
+            entries.append({"ts": int(time.time() * 1000), "chat_id": self.chat_id,
+                            "text_hash": hsh, "key": key, "state": "pending"})
+            self._sent_cache = entries
+            self._save_sent(entries)
+            return True
+
+    def _finish(self, text: str, key: str | None, state: str | None) -> None:
+        """state: "sent" | "ambiguous" | None (فشل مؤكد → حذف الحجز)."""
+        if not self.dedup_file:
+            return
+        hsh = _text_hash(self.chat_id, text)
+        with self._ledger_lock():
+            entries = self._load_sent(force=True)
+            idx = None
+            for i in range(len(entries) - 1, -1, -1):
+                e = entries[i]
+                if (e.get("chat_id") == self.chat_id and e.get("text_hash") == hsh
+                        and e.get("key") == key and e.get("state") == "pending"):
+                    idx = i
+                    break
+            if state is None:
+                if idx is not None:
+                    entries.pop(idx)
+            elif idx is not None:
+                entries[idx]["state"] = state
+                entries[idx]["ts"] = int(time.time() * 1000)
+            else:
+                entries.append({"ts": int(time.time() * 1000), "chat_id": self.chat_id,
+                                "text_hash": hsh, "key": key, "state": state})
+            self._sent_cache = entries
+            self._save_sent(entries)
+
+    def _record_sent(self, text: str, key: str | None = None) -> None:
+        self._finish(text, key, "sent")
 
     # ------------------------------ الإرسال ------------------------------ #
 
-    def send(self, message: str) -> dict:
-        """إرسال رسالة واحدة مؤكدة — بلا تكرار لدى المستلم إطلاقًا.
+    def send(self, message: str, dedup_key: str | None = None) -> dict:
+        """إرسال رسالة واحدة مؤكدة — بلا تكرار لدى المستلم قدر الإمكان.
 
-        القاعدة الجوهرية: لا نُرسل نفس الرسالة لنفس المحادثة مرتين خلال النافذة.
-        - منع قبلي عبر دفتر المحتوى (نفس chat_id + نفس النص) → deduped=True.
-        - HTTP 2xx مع ok:true → نجاح (وصلت مرة واحدة) وسُجّلت في الدفتر.
-        - HTTP غير 2xx أو ok:false → لم تصل أصلًا → إعادة آمنة.
-        - فشل TCP قبل الإرسال (DNS/رفض/مهلة اتصال) → إعادة آمنة.
-        - أي غموض (مهلة قراءة، انقطاع أثناء قراءة الاستجابة...) → AMBIGUOUS
-          بلا إعادة، وتسجيل الرسالة كمرسلة في الدفتر لمنع إعادة لاحقة.
+        dedup_key: معرّف فريد للإشارة؛ نفس المفتاح لا يُرسل مرتين أبدًا (حتى لو
+        تغيّر النص أو مرّ وقت طويل). بدونه يُعتمد على بصمة النص خلال النافذة.
+
+        - فحص + حجز ذريّان قبل الاتصال → لا يرسل عمليتان نفس الإشارة.
+        - HTTP 2xx مع ok:true → نجاح وتسجَّل "sent".
+        - 400/401/403/404 → خطأ دائم (توكن/صلاحيات/تنسيق): بلا إعادة، يُحذف الحجز.
+        - 429 → ننتظر retry_after (حتى 30ث) ثم نعيد؛ أكثر من ذلك يُعدّ فشلًا مؤكدًا.
+        - 5xx / ok:false / فشل قبل الإرسال (DNS، رفض اتصال، مهلة اتصال) → لم تصل
+          → إعادة آمنة.
+        - أي غموض (مهلة قراءة، انقطاع بعد الإرسال) → AMBIGUOUS بلا إعادة وتسجَّل
+          "ambiguous".
+
+        حدّ الضمان: إن انقطع التنفيذ (قتل العملية/انقطاع الجهاز) بعد قبول Telegram
+        للرسالة وقبل تسجيل "sent" يبقى الحجز "pending" فيمنع إعادة الإرسال في
+        الجولات التالية (ضمان «مرة واحدة على الأكثر»): قد تضيع إشارة نادرًا لكنها
+        لا تتكرر. لا يمكن لأي نظام يعتمد Bot API (بلا معرّف رسالة من جهة العميل)
+        ضمان «مرة واحدة بالضبط» في هذه الحالة.
         """
-        if self._is_duplicate(message):
-            logger.info("Telegram تخطّى إرسالًا مكرر المحتوى (dedup)")
+        if not self._reserve(message, dedup_key):
+            logger.info("Telegram تخطّى إرسالًا مكررًا (dedup)")
             return {"ok": True, "deduped": True, "attempts": 0,
-                    "error": "dedup: نفس الرسالة أُرسلت مؤخرًا لنفس المحادثة"}
+                    "error": "dedup: نفس الإشارة/الرسالة أُرسلت من قبل"}
         payload = {"chat_id": self.chat_id, "text": message}
         last_error = "unknown"
         for attempt in range(1, self.max_retries + 1):
@@ -189,27 +265,41 @@ class TelegramClient:
                 )
                 body = resp.text[:500]
                 ok_json = None
+                parsed = None
                 try:
-                    ok_json = bool(resp.json().get("ok", False))
+                    parsed = resp.json()
+                    ok_json = bool(parsed.get("ok", False))
                 except Exception:
                     ok_json = None  # لا جسم JSON (وسيط/اختبار) — نتعامل كنجاح مع 2xx
                 if resp.status_code < 300 and ok_json is not False:
                     logger.info("Telegram sent (attempt %s): HTTP %s", attempt, resp.status_code)
-                    self._record_sent(message)
+                    self._finish(message, dedup_key, "sent")
                     return {"ok": True, "attempts": attempt, "code": resp.status_code, "body": body}
-                # HTTP 2xx لكن ok:false (نادر) أو HTTP خطأ: لم تصل أصلًا → إعادة آمنة
                 if resp.status_code < 300:
                     last_error = f"Telegram ok=false: {body}"
                     logger.warning("Telegram ok=false (attempt %s)", attempt)
                 else:
                     last_error = f"HTTP {resp.status_code}: {body}"
                     logger.warning("Telegram HTTP %s (attempt %s)", resp.status_code, attempt)
+                    if resp.status_code in PERMANENT_HTTP:
+                        break  # توكن/صلاحيات/تنسيق: الإعادة لا تفيد
+                    if resp.status_code == 429:
+                        wait = 0.0
+                        try:
+                            wait = float(((parsed or {}).get("parameters") or {}).get("retry_after") or 0)
+                        except (TypeError, ValueError, AttributeError):
+                            wait = 0.0
+                        if wait > MAX_RETRY_AFTER:
+                            break  # انتظار طويل: نفشل بوضوح بدل حجز الجولة
+                        if wait and attempt < self.max_retries:
+                            time.sleep(wait + 0.5)
+                            continue
             except requests.exceptions.Timeout as exc:
                 if _safe_retry(exc):
                     last_error = str(exc)
                     logger.warning("Telegram connect timeout (attempt %s)", attempt)
                 else:
-                    self._record_sent(message)  # قد تكون وصلت فعلًا
+                    self._finish(message, dedup_key, "ambiguous")  # قد تكون وصلت فعلًا
                     logger.error("Telegram read timeout — غامض، لا إعادة لتجنّب التكرار")
                     return {"ok": False, "attempts": attempt,
                             "error": "AMBIGUOUS_READ_TIMEOUT_NO_RETRY: قد تكون الرسالة وصلت"}
@@ -218,14 +308,15 @@ class TelegramClient:
                     last_error = str(exc)
                     logger.warning("Telegram فشل قبل الإرسال (attempt %s): %s", attempt, exc)
                 else:
-                    self._record_sent(message)  # قد تكون وصلت فعلًا
+                    self._finish(message, dedup_key, "ambiguous")  # قد تكون وصلت فعلًا
                     logger.error("Telegram غموض — لا إعادة لتجنّب التكرار: %s", exc)
                     return {"ok": False, "attempts": attempt,
                             "error": f"AMBIGUOUS_NO_RETRY: قد تكون الرسالة وصلت ({type(exc).__name__})"}
             if attempt < self.max_retries:
                 time.sleep(self.backoff * attempt)
-        logger.error("Telegram فشل بعد %s محاولة: %s", self.max_retries, last_error)
-        return {"ok": False, "attempts": self.max_retries, "error": last_error}
+        logger.error("Telegram فشل نهائيًا: %s", last_error)
+        self._finish(message, dedup_key, None)  # فشل مؤكد: لم تصل → أفرج عن الحجز
+        return {"ok": False, "attempts": attempt, "error": last_error}
 
     def ping(self, timeout: float = 8.0) -> tuple[bool, str]:
         """فحص حي: التحقق من صحة توكن البوت عبر getMe.

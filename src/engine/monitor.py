@@ -232,7 +232,12 @@ class Monitor:
                     logger.info("حُفظت data/ فوريًا بعد الإرسال")
                     return
                 run_git("fetch", "origin", "main")
-                run_git("pull", "--rebase", "origin", "main")
+                # بياناتنا (data/) هي الأحدث دائمًا؛ وأي تعارض عالق يُلغى فلا يبقى
+                # المستودع في منتصف rebase.
+                rb = run_git("pull", "--rebase", "--autostash", "-X", "theirs",
+                             "origin", "main")
+                if rb.returncode != 0:
+                    run_git("rebase", "--abort")
                 import time as _t
                 _t.sleep(i * 5)
             logger.warning("فشل الحفظ الفوري لـ data/ — ستعيد خطوة الـ workflow المحاولة")
@@ -240,7 +245,8 @@ class Monitor:
             logger.warning("الحفظ الفوري لـ data/ فشل: %s", exc)
 
     # ------------------------------------------------------------------ #
-    def _deliver(self, msg: str, wa, tg, wa_ok: bool) -> tuple[dict, str | None]:
+    def _deliver(self, msg: str, wa, tg, wa_ok: bool,
+                 dedup_key: str | None = None) -> tuple[dict, str | None]:
         """اختيار قناة الإرسال الفعلية لرسالة (إشارة أو تقرير) عبر
         delivery.channel_mode:
 
@@ -257,7 +263,7 @@ class Monitor:
         if mode == "whatsapp_first" and wa is not None and wa_ok:
             return wa.send(msg), "whatsapp"
         if tg is not None:
-            return tg.send(msg), "telegram"
+            return tg.send(msg, dedup_key=dedup_key), "telegram"
         if mode == "telegram":
             return ({"ok": False, "attempts": 0,
                      "error": "تلغرام غير مهيأ (telegram_connected=false)"}, None)
@@ -1379,7 +1385,8 @@ class Monitor:
                             },
                             500,
                         )
-            res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"))
+            res, channel = self._deliver(msg, wa, tg, status.get("whatsapp_connected"),
+                                         dedup_key=sig.signature())
             if not delivered(res):
                 delivery_failed += 1
                 delivery_last_error = res.get("error") or "unknown"
@@ -1405,6 +1412,11 @@ class Monitor:
             )
             max_hist = int(self.settings.get("whatsapp", {}).get("max_history_signals", 2000))
             signals = append_capped(signals, sig.to_dict(), max_hist)
+            # حفظ دائم فوري لهذه الإشارة + دفتر Telegram قبل معالجة التالية:
+            # إن انقطعت الجولة لاحقًا لا يضيع سجلها فلا تتكرر في الجولة التالية.
+            save_json(signals_path, signals)
+            save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
+            self._persist_data_best_effort(env)
 
         # ---- صحة قناة الإيصال في الحالة + تنبيه المالك عند فشل تسليم إشارات ----
         status["delivery_channel"] = self._channel_mode()
