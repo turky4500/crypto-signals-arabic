@@ -7806,7 +7806,10 @@
     "hit_price": null,
     "created_ms": 1793707626846,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1793757599999,
+    "sl_touch_low": 0.1068,
+    "sl_touch_notified": true
   },
   {
     "signature": "YGGUSDT|ai|BUY|1793703600000",
@@ -7819,9 +7822,9 @@
     "signal_open_ms": 1793703600000,
     "signal_close_ms": 1793707199999,
     "deadline_ms": 1794311999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793757599999,
+    "hit_price": 0.02358,
     "created_ms": 1793707628461,
     "filtered": true,
     "whatsapp_status": "sent",
