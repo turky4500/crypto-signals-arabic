@@ -1,22 +1,5 @@
 [
   {
-    "signature": "USD1USDT|adx|1793703600000",
-    "symbol": "USD1USDT",
-    "indicator": "adx",
-    "entry": "0.99971",
-    "sl": "0.99883",
-    "tp": "1.00059",
-    "rr_ratio": 1.0,
-    "signal_open_ms": 1793703600000,
-    "signal_close_ms": 1793707199999,
-    "deadline_ms": 1794311999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793707609390,
-    "source": "simulation"
-  },
-  {
     "signature": "USDCUSDT|adx|1793703600000",
     "symbol": "USDCUSDT",
     "indicator": "adx",
@@ -43479,9 +43462,9 @@
     "signal_open_ms": 1793728800000,
     "signal_close_ms": 1793732399999,
     "deadline_ms": 1794337199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793769257380,
+    "hit_price": 0.00453,
     "created_ms": 1793732775065,
     "source": "simulation"
   },
@@ -48137,9 +48120,9 @@
     "signal_open_ms": 1793732400000,
     "signal_close_ms": 1793735999999,
     "deadline_ms": 1794340799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793769257380,
+    "hit_price": 0.00453,
     "created_ms": 1793736392806,
     "source": "simulation"
   },
@@ -52217,9 +52200,9 @@
     "signal_open_ms": 1793736000000,
     "signal_close_ms": 1793739599999,
     "deadline_ms": 1794344399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793769257380,
+    "hit_price": 0.001449,
     "created_ms": 1793739960823,
     "source": "simulation"
   },
@@ -72090,9 +72073,9 @@
     "signal_open_ms": 1793750400000,
     "signal_close_ms": 1793753999999,
     "deadline_ms": 1794358799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793769257380,
+    "hit_price": 0.00453,
     "created_ms": 1793754382823,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793768791029,
+    "source": "simulation"
+  },
+  {
+    "signature": "LAYERUSDT|bollinger|1793764800000",
+    "symbol": "LAYERUSDT",
+    "indicator": "bollinger",
+    "entry": "0.0560",
+    "sl": "0.0544",
+    "tp": "0.0576",
+    "rr_ratio": 1.0,
+    "signal_open_ms": 1793764800000,
+    "signal_close_ms": 1793768399999,
+    "deadline_ms": 1794373199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793769334401,
     "source": "simulation"
   }
 ]
