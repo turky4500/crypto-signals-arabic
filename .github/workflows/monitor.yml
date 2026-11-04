@@ -105,14 +105,17 @@ jobs:
           git diff --cached --quiet && { echo "no data changes"; exit 0; }
           git commit -q -m "chore(data): تحديث بيانات المراقبة والإشارات" || true
           PUSHED=false
-          for i in 1 2 3; do
+          # 5 محاولات مع backoff متزايد: فشل الدفع بعد إرسال الرسائل يسبب
+          # تكرارها في Runde التالية (دفتر منع التكرار لم يُحفظ) —
+          # لذلك الأولوية القصوى here لحفظ دفتر منع التكرار.
+          for i in 1 2 3 4 5; do
             if git push origin HEAD:main -q; then echo "data committed"; PUSHED=true; break; fi
             echo "push race — pull --rebase ثم إعادة المحاولة ($i)"
             git fetch origin main -q
             if ! git pull --rebase origin main -q; then
               git rebase --abort 2>/dev/null || true
-              sleep 5
             fi
+            sleep $(( i * 7 ))
           done
           if [ "$PUSHED" != "true" ]; then
             echo "::error::فشل دفع بيانات data/ بعد 3 محاولات — البيانات غير محفوظة!"
