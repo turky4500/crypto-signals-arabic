@@ -1,22 +1,5 @@
 [
   {
-    "signature": "DUSKUSDT|macd|1793696400000",
-    "symbol": "DUSKUSDT",
-    "indicator": "macd",
-    "entry": "0.0774",
-    "sl": "0.0759",
-    "tp": "0.0789",
-    "rr_ratio": 1.0,
-    "signal_open_ms": 1793696400000,
-    "signal_close_ms": 1793699999999,
-    "deadline_ms": 1794304799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1793709558863,
-    "hit_price": 0.0789,
-    "created_ms": 1793700312068,
-    "source": "simulation"
-  },
-  {
     "signature": "EDENUSDT|macd|1793696400000",
     "symbol": "EDENUSDT",
     "indicator": "macd",
@@ -62366,9 +62349,9 @@
     "signal_open_ms": 1793736000000,
     "signal_close_ms": 1793739599999,
     "deadline_ms": 1794344399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793764477737,
+    "hit_price": 1.0,
     "created_ms": 1793739983070,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793761593316,
+    "source": "simulation"
+  },
+  {
+    "signature": "AMCBUSDT|adx|1793757600000",
+    "symbol": "AMCBUSDT",
+    "indicator": "adx",
+    "entry": "3.23",
+    "sl": "3.18",
+    "tp": "3.28",
+    "rr_ratio": 1.0,
+    "signal_open_ms": 1793757600000,
+    "signal_close_ms": 1793761199999,
+    "deadline_ms": 1794365999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793764486830,
     "source": "simulation"
   }
 ]
