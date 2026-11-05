@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ETCUSDT|adx|1793736000000",
-    "symbol": "ETCUSDT",
-    "indicator": "adx",
-    "entry": "7.06",
-    "sl": "6.97",
-    "tp": "7.15",
-    "rr_ratio": 1.0,
-    "signal_open_ms": 1793736000000,
-    "signal_close_ms": 1793739599999,
-    "deadline_ms": 1794344399999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793761199999,
-    "hit_price": 6.91,
-    "created_ms": 1793739907026,
-    "source": "simulation"
-  },
-  {
     "signature": "ETHUSDT|adx|1793736000000",
     "symbol": "ETHUSDT",
     "indicator": "adx",
@@ -66956,9 +66939,9 @@
     "signal_open_ms": 1793822400000,
     "signal_close_ms": 1793825999999,
     "deadline_ms": 1794430799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793864606225,
+    "hit_price": 2.643,
     "created_ms": 1793827806731,
     "source": "simulation"
   },
@@ -76629,9 +76612,9 @@
     "signal_open_ms": 1793854800000,
     "signal_close_ms": 1793858399999,
     "deadline_ms": 1794463199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793864606225,
+    "hit_price": 0.0251,
     "created_ms": 1793861925480,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793862950921,
+    "source": "simulation"
+  },
+  {
+    "signature": "GASUSDT|rsi50|1793858400000",
+    "symbol": "GASUSDT",
+    "indicator": "rsi50",
+    "entry": "1.168",
+    "sl": "1.149",
+    "tp": "1.182",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1793858400000,
+    "signal_close_ms": 1793861999999,
+    "deadline_ms": 1794466799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793864655203,
     "source": "simulation"
   }
 ]
