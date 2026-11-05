@@ -1,22 +1,5 @@
 [
   {
-    "signature": "NEWTUSDT|rsi50|1793764800000",
-    "symbol": "NEWTUSDT",
-    "indicator": "rsi50",
-    "entry": "0.04245",
-    "sl": "0.04053",
-    "tp": "0.04437",
-    "rr_ratio": 1.0,
-    "signal_open_ms": 1793764800000,
-    "signal_close_ms": 1793768399999,
-    "deadline_ms": 1794373199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793894399999,
-    "hit_price": 0.03982,
-    "created_ms": 1793768739099,
-    "source": "simulation"
-  },
-  {
     "signature": "NFLXBUSDT|ichimoku|1793764800000",
     "symbol": "NFLXBUSDT",
     "indicator": "ichimoku",
@@ -13848,9 +13831,9 @@
     "signal_open_ms": 1793772000000,
     "signal_close_ms": 1793775599999,
     "deadline_ms": 1794380399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793883599999,
+    "hit_price": 0.1435,
     "created_ms": 1793775906560,
     "source": "simulation"
   },
@@ -13865,9 +13848,9 @@
     "signal_open_ms": 1793772000000,
     "signal_close_ms": 1793775599999,
     "deadline_ms": 1794380399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1793883599999,
+    "hit_price": 0.1435,
     "created_ms": 1793775906560,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793906197100,
+    "source": "simulation"
+  },
+  {
+    "signature": "DIAUSDT|bollinger|1793901600000",
+    "symbol": "DIAUSDT",
+    "indicator": "bollinger",
+    "entry": "0.1370",
+    "sl": "0.1305",
+    "tp": "0.1418",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1793901600000,
+    "signal_close_ms": 1793905199999,
+    "deadline_ms": 1794509999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793907603948,
     "source": "simulation"
   }
 ]
