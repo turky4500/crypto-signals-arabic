@@ -1,22 +1,5 @@
 [
   {
-    "signature": "EWYBUSDT|adx|1793746800000",
-    "symbol": "EWYBUSDT",
-    "indicator": "adx",
-    "entry": "156.35",
-    "sl": "154.28",
-    "tp": "158.42",
-    "rr_ratio": 1.0,
-    "signal_open_ms": 1793746800000,
-    "signal_close_ms": 1793750399999,
-    "deadline_ms": 1794355199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793757599999,
-    "hit_price": 151.27,
-    "created_ms": 1793750710428,
-    "source": "simulation"
-  },
-  {
     "signature": "FETUSDT|awesome|1793746800000",
     "symbol": "FETUSDT",
     "indicator": "awesome",
@@ -48205,9 +48188,9 @@
     "signal_open_ms": 1793822400000,
     "signal_close_ms": 1793825999999,
     "deadline_ms": 1794430799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793851199999,
+    "hit_price": 0.01014,
     "created_ms": 1793827760771,
     "source": "simulation"
   },
@@ -76187,9 +76170,9 @@
     "signal_open_ms": 1793872800000,
     "signal_close_ms": 1793876399999,
     "deadline_ms": 1794481199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793886261300,
+    "hit_price": 111.82,
     "created_ms": 1793876627687,
     "source": "simulation"
   },
@@ -83956,9 +83939,9 @@
     "signal_open_ms": 1793880000000,
     "signal_close_ms": 1793883599999,
     "deadline_ms": 1794488399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793886261300,
+    "hit_price": 0.363,
     "created_ms": 1793883934632,
     "source": "simulation"
   },
@@ -84840,9 +84823,9 @@
     "signal_open_ms": 1793880000000,
     "signal_close_ms": 1793883599999,
     "deadline_ms": 1794488399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793886261300,
+    "hit_price": 1.0004,
     "created_ms": 1793883997995,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793884008942,
+    "source": "simulation"
+  },
+  {
+    "signature": "ARPAUSDT|macd|1793880000000",
+    "symbol": "ARPAUSDT",
+    "indicator": "macd",
+    "entry": "0.01015",
+    "sl": "0.00995",
+    "tp": "0.01030",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1793880000000,
+    "signal_close_ms": 1793883599999,
+    "deadline_ms": 1794488399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793886274261,
     "source": "simulation"
   }
 ]
