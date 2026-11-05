@@ -1,22 +1,5 @@
 [
   {
-    "signature": "NMRUSDT|adx|1793739600000",
-    "symbol": "NMRUSDT",
-    "indicator": "adx",
-    "entry": "9.65",
-    "sl": "9.52",
-    "tp": "9.78",
-    "rr_ratio": 1.0,
-    "signal_open_ms": 1793739600000,
-    "signal_close_ms": 1793743199999,
-    "deadline_ms": 1794347999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793757599999,
-    "hit_price": 9.43,
-    "created_ms": 1793743547699,
-    "source": "simulation"
-  },
-  {
     "signature": "NOKBUSDT|adx|1793739600000",
     "symbol": "NOKBUSDT",
     "indicator": "adx",
@@ -59714,9 +59697,9 @@
     "signal_open_ms": 1793822400000,
     "signal_close_ms": 1793825999999,
     "deadline_ms": 1794430799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793874202293,
+    "hit_price": 0.14816,
     "created_ms": 1793827807804,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793873548369,
+    "source": "simulation"
+  },
+  {
+    "signature": "IBMBUSDT|adx|1793869200000",
+    "symbol": "IBMBUSDT",
+    "indicator": "adx",
+    "entry": "254.95",
+    "sl": "253.48",
+    "tp": "256.05",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1793869200000,
+    "signal_close_ms": 1793872799999,
+    "deadline_ms": 1794477599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793874267528,
     "source": "simulation"
   }
 ]
