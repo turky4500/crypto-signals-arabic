@@ -24099,5 +24099,49 @@
       }
     },
     "signature": "AIGENSYNUSDT|ai|BUY|1793854800000"
+  },
+  {
+    "symbol": "PHAUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793876400000,
+    "candle_close_ms": 1793879999999,
+    "signal_price": 0.0391,
+    "entry": "0.0391",
+    "sl": "0.0377",
+    "tp": "0.0401",
+    "rr_ratio": 0.75,
+    "confidence": 0.6632,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "2:59 مساءً",
+    "created_at_ms": 1793880409266,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793880409266,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.77,
+      "h4_ret5_min": null,
+      "h1_rsi": 52.5,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.6632,
+          "risk_pct": 3.581
+        }
+      }
+    },
+    "signature": "PHAUSDT|ai|BUY|1793876400000"
   }
 ]
