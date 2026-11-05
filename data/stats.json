@@ -49,7 +49,7 @@
     },
     "signature": "AIGENSYNUSDT|ai|BUY|1793854800000"
   },
-  "last_check": 1793865495061,
+  "last_check": 1793865792414,
   "data_date": "2026-11-05",
   "filter_meta": {
     "enabled": true,
@@ -68,68 +68,68 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 371,
+        "total": 385,
         "tp_hit": 114,
-        "sl_hit": 58,
-        "pending": 199,
+        "sl_hit": 57,
+        "pending": 214,
         "expired": 0,
-        "win_rate": 66.3
+        "win_rate": 66.7
       },
       "awesome": {
-        "total": 193,
+        "total": 194,
         "tp_hit": 104,
-        "sl_hit": 56,
-        "pending": 33,
+        "sl_hit": 60,
+        "pending": 30,
         "expired": 0,
-        "win_rate": 65.0
+        "win_rate": 63.4
       },
       "macd": {
-        "total": 407,
-        "tp_hit": 252,
-        "sl_hit": 37,
-        "pending": 118,
+        "total": 412,
+        "tp_hit": 250,
+        "sl_hit": 38,
+        "pending": 124,
         "expired": 0,
-        "win_rate": 87.2
+        "win_rate": 86.8
       },
       "bollinger": {
-        "total": 258,
-        "tp_hit": 211,
-        "sl_hit": 11,
-        "pending": 36,
+        "total": 255,
+        "tp_hit": 207,
+        "sl_hit": 10,
+        "pending": 38,
         "expired": 0,
-        "win_rate": 95.0
+        "win_rate": 95.4
       },
       "rsi50": {
-        "total": 896,
-        "tp_hit": 373,
-        "sl_hit": 153,
-        "pending": 370,
+        "total": 865,
+        "tp_hit": 364,
+        "sl_hit": 132,
+        "pending": 369,
         "expired": 0,
-        "win_rate": 70.9
+        "win_rate": 73.4
       },
       "adx": {
-        "total": 2875,
-        "tp_hit": 1068,
-        "sl_hit": 914,
-        "pending": 893,
+        "total": 2889,
+        "tp_hit": 1033,
+        "sl_hit": 835,
+        "pending": 1021,
         "expired": 0,
-        "win_rate": 53.9
+        "win_rate": 55.3
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
+    "added_this_run": 3,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 4381,
-      "pending": 603,
+      "resolved": 4379,
+      "pending": 605,
       "expired": 16,
       "tp_hit": 1521,
-      "sl_hit": 2860,
-      "win_rate": 0.3472,
-      "ev_per_trade": -0.1382
+      "sl_hit": 2858,
+      "win_rate": 0.3473,
+      "ev_per_trade": -0.138
     },
     "with_filter": {
       "total": 56,
@@ -142,24 +142,24 @@
       "ev_per_trade": 0.4999
     },
     "with_consensus_ge3": {
-      "total": 94,
-      "resolved": 75,
+      "total": 93,
+      "resolved": 74,
       "pending": 17,
       "expired": 2,
       "tp_hit": 20,
-      "sl_hit": 55,
-      "win_rate": 0.2667,
-      "ev_per_trade": -0.3333
+      "sl_hit": 54,
+      "win_rate": 0.2703,
+      "ev_per_trade": -0.3243
     },
     "blocked": {
       "total": 4944,
-      "resolved": 4344,
-      "pending": 584,
+      "resolved": 4342,
+      "pending": 586,
       "expired": 16,
       "tp_hit": 1494,
-      "sl_hit": 2850,
-      "win_rate": 0.3439,
-      "ev_per_trade": -0.1438
+      "sl_hit": 2848,
+      "win_rate": 0.3441,
+      "ev_per_trade": -0.1433
     },
     "by_reason": {
       "bollinger_live_off": {
@@ -173,14 +173,14 @@
         "ev_per_trade": -0.1903
       },
       "filter": {
-        "total": 1978,
-        "resolved": 1692,
+        "total": 1976,
+        "resolved": 1690,
         "pending": 281,
         "expired": 5,
         "tp_hit": 408,
-        "sl_hit": 1284,
-        "win_rate": 0.2411,
-        "ev_per_trade": -0.3999
+        "sl_hit": 1282,
+        "win_rate": 0.2414,
+        "ev_per_trade": -0.3992
       },
       "filter_ok": {
         "total": 56,
@@ -193,9 +193,9 @@
         "ev_per_trade": 0.4999
       },
       "low_confidence": {
-        "total": 749,
+        "total": 751,
         "resolved": 676,
-        "pending": 73,
+        "pending": 75,
         "expired": 0,
         "tp_hit": 553,
         "sl_hit": 123,
