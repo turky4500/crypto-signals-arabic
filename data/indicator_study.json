@@ -1,22 +1,5 @@
 [
   {
-    "signature": "UVXYBUSDT|adx|1793898000000",
-    "symbol": "UVXYBUSDT",
-    "indicator": "adx",
-    "entry": "22.37",
-    "sl": "19.42",
-    "tp": "24.58",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1793898000000,
-    "signal_close_ms": 1793901599999,
-    "deadline_ms": 1794506399999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1793923199999,
-    "hit_price": 24.58,
-    "created_ms": 1793901984988,
-    "source": "simulation"
-  },
-  {
     "signature": "WOOUSDT|bollinger|1793898000000",
     "symbol": "WOOUSDT",
     "indicator": "bollinger",
@@ -77955,9 +77938,9 @@
     "signal_open_ms": 1793984400000,
     "signal_close_ms": 1793987999999,
     "deadline_ms": 1794592799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1793992164277,
+    "hit_price": 0.03822,
     "created_ms": 1793988294086,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793991996912,
+    "source": "simulation"
+  },
+  {
+    "signature": "EGLDUSDT|adx|1793988000000",
+    "symbol": "EGLDUSDT",
+    "indicator": "adx",
+    "entry": "3.279",
+    "sl": "3.214",
+    "tp": "3.327",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1793988000000,
+    "signal_close_ms": 1793991599999,
+    "deadline_ms": 1794596399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793992205015,
     "source": "simulation"
   }
 ]
