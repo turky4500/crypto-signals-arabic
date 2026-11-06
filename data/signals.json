@@ -24495,5 +24495,49 @@
       }
     },
     "signature": "WALUSDT|supertrend|BUY|1793934000000"
+  },
+  {
+    "symbol": "ASTSBUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793980800000,
+    "candle_close_ms": 1793984399999,
+    "signal_price": 32.35,
+    "entry": "32.35",
+    "sl": "27.62",
+    "tp": "35.89",
+    "rr_ratio": 0.75,
+    "confidence": 0.9176,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "7:59 مساءً",
+    "created_at_ms": 1793984895266,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793984895266,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.83,
+      "h4_ret5_min": null,
+      "h1_rsi": 54.9,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.9176,
+          "risk_pct": 14.621
+        }
+      }
+    },
+    "signature": "ASTSBUSDT|supertrend|BUY|1793980800000"
   }
 ]
