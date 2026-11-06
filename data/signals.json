@@ -24187,5 +24187,49 @@
       }
     },
     "signature": "TKOUSDT|supertrend|BUY|1793905200000"
+  },
+  {
+    "symbol": "SCUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793923200000,
+    "candle_close_ms": 1793926799999,
+    "signal_price": 0.000719,
+    "entry": "0.000719",
+    "sl": "0.000662",
+    "tp": "0.000761",
+    "rr_ratio": 0.75,
+    "confidence": 0.7653,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "3:59 صباحًا",
+    "created_at_ms": 1793927197169,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793927197169,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -8.06,
+      "h4_ret5_min": null,
+      "h1_rsi": 50.5,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7653,
+          "risk_pct": 7.928
+        }
+      }
+    },
+    "signature": "SCUSDT|supertrend|BUY|1793923200000"
   }
 ]
