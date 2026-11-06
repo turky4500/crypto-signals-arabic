@@ -39,6 +39,8 @@ from .quality_gate import evaluate_quality
 from .performance import (compute_stats, evaluate_candles, mark_expired,
                           prune_old, seed_from_signals, sl_touch_event)
 
+FAILED_RETRY_WINDOW_MS = 2 * 60 * 60 * 1000  # إعادة محاولة الإشارات الفاشلة خلال ساعتين فقط
+
 logger = logging.getLogger("monitor")
 
 MIN_HISTORY = 100  # حد أدنى من الشموع المغلقة لإجراء الحساب
@@ -1417,6 +1419,39 @@ class Monitor:
             save_json(signals_path, signals)
             save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
             self._persist_data_best_effort(env)
+
+        # ---- إعادة إرسال إشارة حديثة فشل تسليمها فشلًا مؤكدًا (لم تصل) ----
+        # كانت الإشارة الفاشلة تُسجَّل "failed" ولا تُعاد أبدًا فتضيع. الآن تُعاد
+        # فقط إن كانت شمعتها حديثة (FAILED_RETRY_WINDOW_MS) — لا إشارات قديمة
+        # أبدًا — وبمفتاحها الفريد فلا تتكرر إن كانت قد وصلت.
+        retried_ok = 0
+        for rec in signals:
+            if (rec.get("whatsapp_status") != "failed" or rec.get("filter_rejected")
+                    or now_ms - int(rec.get("candle_close_ms") or 0) > FAILED_RETRY_WINDOW_MS):
+                continue
+            rmsg = build_alert_message(rec, halal_verdict=get_verdict(rec.get("symbol")))
+            rkey = (f"{rec.get('symbol')}|{rec.get('indicator')}|"
+                    f"{rec.get('signal_type')}|{rec.get('candle_open_ms')}")
+            rres, rchannel = self._deliver(rmsg, wa, tg, status.get("whatsapp_connected"),
+                                           dedup_key=rkey)
+            if delivered(rres):
+                rec["whatsapp_status"] = "sent"
+                rec["whatsapp_sent_at"] = int(time.time() * 1000)
+                rec["time_text"] = format_time_12h(ts_to_riyadh(int(rec["candle_close_ms"])))
+                retried_ok += 1
+            notifications = append_capped(
+                notifications,
+                {"ts": int(time.time() * 1000), "symbol": rec.get("symbol"),
+                 "indicator": rec.get("indicator"), "kind": "retry_failed",
+                 "message": rmsg, "ok": rres.get("ok"), "error": rres.get("error"),
+                 "attempts": rres.get("attempts"), "channel": rchannel},
+                500,
+            )
+        if retried_ok:
+            save_json(signals_path, signals)
+            save_json(os.path.join(self.data_dir, "notification_logs.json"), notifications)
+            self._persist_data_best_effort(env)
+        status["failed_signals_retried_ok"] = retried_ok
 
         # ---- صحة قناة الإيصال في الحالة + تنبيه المالك عند فشل تسليم إشارات ----
         status["delivery_channel"] = self._channel_mode()

@@ -1065,3 +1065,52 @@ def test_quality_gate_records_reason_in_dashboard_row(tmp_path):
     rows = json.loads((data_dir / "current_signals.json").read_text(encoding="utf-8"))
     assert rows[0]["entry"] == "—"
     assert rows[0]["sl"] == "—"
+
+
+class _FlakyTelegram(FakeNotifyClient):
+    def __init__(self, ok):
+        super().__init__(connected=True)
+        self.ok = ok
+
+    def send(self, msg, dedup_key=None):
+        self.sent.append((msg, dedup_key))
+        return {"ok": self.ok, "attempts": 1, "error": None if self.ok else "HTTP 401"}
+
+
+def _run_with_tg(mon, tg):
+    mon.settings.setdefault("delivery", {})["channel_mode"] = "telegram"  # عزل عن اختبارات سابقة
+    mon._whatsapp = lambda env: FakeNotifyClient(connected=False)
+    mon._telegram = lambda env: tg
+    return mon.run(env={}, limit_symbols=1, no_whatsapp=False)
+
+
+def test_recent_failed_signal_is_retried_once_and_old_ones_are_not(tmp_path):
+    mon, data_dir = _fallback_monitor(tmp_path)
+    _run_with_tg(mon, _FlakyTelegram(ok=False))
+    path = data_dir / "signals.json"
+    sigs = json.loads(path.read_text(encoding="utf-8"))
+    assert sigs and all(s["whatsapp_status"] == "failed" for s in sigs)
+
+    # إشارة قديمة (شمعتها قبل 5 ساعات) لا تُعاد أبدًا
+    import time as _t
+    sigs[0]["candle_close_ms"] = int(_t.time() * 1000) - 5 * 3_600_000
+    path.write_text(json.dumps(sigs, ensure_ascii=False), encoding="utf-8")
+    tg_old = _FlakyTelegram(ok=True)
+    _run_with_tg(mon, tg_old)
+    assert tg_old.sent == []
+    assert json.loads(path.read_text(encoding="utf-8"))[0]["whatsapp_status"] == "failed"
+
+    # إشارة حديثة فاشلة تُعاد مرة واحدة بمفتاحها الفريد ثم لا تتكرر
+    sigs[0]["candle_close_ms"] = int(_t.time() * 1000) - 600_000
+    path.write_text(json.dumps(sigs, ensure_ascii=False), encoding="utf-8")
+    tg = _FlakyTelegram(ok=True)
+    _run_with_tg(mon, tg)
+    keys = [k for _, k in tg.sent]
+    expected = (f"{sigs[0]['symbol']}|{sigs[0]['indicator']}|"
+                f"{sigs[0]['signal_type']}|{sigs[0]['candle_open_ms']}")
+    assert expected in keys
+    assert json.loads(path.read_text(encoding="utf-8"))[0]["whatsapp_status"] == "sent"
+
+    tg2 = _FlakyTelegram(ok=True)
+    _run_with_tg(mon, tg2)
+    assert expected not in [k for _, k in tg2.sent]
