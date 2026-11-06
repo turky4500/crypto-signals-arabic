@@ -24231,5 +24231,93 @@
       }
     },
     "signature": "SCUSDT|supertrend|BUY|1793923200000"
+  },
+  {
+    "symbol": "ARBUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793926800000,
+    "candle_close_ms": 1793930399999,
+    "signal_price": 0.1643,
+    "entry": "0.1643",
+    "sl": "0.1528",
+    "tp": "0.1729",
+    "rr_ratio": 0.75,
+    "confidence": 0.8803,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "4:59 صباحًا",
+    "created_at_ms": 1793930823174,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793930823174,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -4.28,
+      "h4_ret5_min": null,
+      "h1_rsi": 51.2,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.8803,
+          "risk_pct": 6.999
+        }
+      }
+    },
+    "signature": "ARBUSDT|supertrend|BUY|1793926800000"
+  },
+  {
+    "symbol": "IRENBUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793926800000,
+    "candle_close_ms": 1793930399999,
+    "signal_price": 20.45,
+    "entry": "20.45",
+    "sl": "16.92",
+    "tp": "23.09",
+    "rr_ratio": 0.75,
+    "confidence": 0.7801,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "4:59 صباحًا",
+    "created_at_ms": 1793930824939,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793930824939,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -11.88,
+      "h4_ret5_min": null,
+      "h1_rsi": 46.2,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7801,
+          "risk_pct": 17.262
+        }
+      }
+    },
+    "signature": "IRENBUSDT|supertrend|BUY|1793926800000"
   }
 ]
