@@ -24319,5 +24319,93 @@
       }
     },
     "signature": "IRENBUSDT|supertrend|BUY|1793926800000"
+  },
+  {
+    "symbol": "ALLOUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793930400000,
+    "candle_close_ms": 1793933999999,
+    "signal_price": 0.1493,
+    "entry": "0.1493",
+    "sl": "0.1392",
+    "tp": "0.1568",
+    "rr_ratio": 0.75,
+    "confidence": 0.7542,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "5:59 صباحًا",
+    "created_at_ms": 1793934400430,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793934400430,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -7.64,
+      "h4_ret5_min": null,
+      "h1_rsi": 43.7,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7542,
+          "risk_pct": 6.765
+        }
+      }
+    },
+    "signature": "ALLOUSDT|supertrend|BUY|1793930400000"
+  },
+  {
+    "symbol": "EWYBUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1793930400000,
+    "candle_close_ms": 1793933999999,
+    "signal_price": 139.31,
+    "entry": "139.31",
+    "sl": "129.63",
+    "tp": "146.57",
+    "rr_ratio": 0.75,
+    "confidence": 0.7067,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "5:59 صباحًا",
+    "created_at_ms": 1793934402029,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1793934402029,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -10.69,
+      "h4_ret5_min": null,
+      "h1_rsi": 36.9,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7067,
+          "risk_pct": 6.949
+        }
+      }
+    },
+    "signature": "EWYBUSDT|supertrend|BUY|1793930400000"
   }
 ]
