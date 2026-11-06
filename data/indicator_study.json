@@ -1,22 +1,5 @@
 [
   {
-    "signature": "FLOWUSDT|bollinger|1793883600000",
-    "symbol": "FLOWUSDT",
-    "indicator": "bollinger",
-    "entry": "0.02207",
-    "sl": "0.02173",
-    "tp": "0.02232",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1793883600000,
-    "signal_close_ms": 1793887199999,
-    "deadline_ms": 1794491999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1793890799999,
-    "hit_price": 0.02147,
-    "created_ms": 1793887510936,
-    "source": "simulation"
-  },
-  {
     "signature": "FOGOUSDT|adx|1793883600000",
     "symbol": "FOGOUSDT",
     "indicator": "adx",
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1793984893909,
+    "source": "simulation"
+  },
+  {
+    "signature": "USDEBUSDT|rsi50|1793980800000",
+    "symbol": "USDEBUSDT",
+    "indicator": "rsi50",
+    "entry": "6.98",
+    "sl": "6.43",
+    "tp": "7.39",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1793980800000,
+    "signal_close_ms": 1793984399999,
+    "deadline_ms": 1794589199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1793987853407,
     "source": "simulation"
   }
 ]
