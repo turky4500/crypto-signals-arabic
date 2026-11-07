@@ -24583,5 +24583,49 @@
       }
     },
     "signature": "ZILUSDT|ai|BUY|1794027600000"
+  },
+  {
+    "symbol": "ARUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794031200000,
+    "candle_close_ms": 1794034799999,
+    "signal_price": 3.202,
+    "entry": "3.202",
+    "sl": "3.114",
+    "tp": "3.268",
+    "rr_ratio": 0.75,
+    "confidence": 0.8788,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "9:59 صباحًا",
+    "created_at_ms": 1794035193957,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794035193957,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 2.55,
+      "h4_ret5_min": null,
+      "h1_rsi": 50.2,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.8788,
+          "risk_pct": 2.748
+        }
+      }
+    },
+    "signature": "ARUSDT|ai|BUY|1794031200000"
   }
 ]
