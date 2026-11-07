@@ -24539,5 +24539,49 @@
       }
     },
     "signature": "ASTSBUSDT|supertrend|BUY|1793980800000"
+  },
+  {
+    "symbol": "ZILUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794027600000,
+    "candle_close_ms": 1794031199999,
+    "signal_price": 0.00179,
+    "entry": "0.001790",
+    "sl": "0.001722",
+    "tp": "0.001841",
+    "rr_ratio": 0.75,
+    "confidence": 0.7631,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "8:59 صباحًا",
+    "created_at_ms": 1794031593177,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794031593177,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 3.49,
+      "h4_ret5_min": null,
+      "h1_rsi": 24.7,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.7631,
+          "risk_pct": 3.799
+        }
+      }
+    },
+    "signature": "ZILUSDT|ai|BUY|1794027600000"
   }
 ]
