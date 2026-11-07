@@ -24627,5 +24627,49 @@
       }
     },
     "signature": "ARUSDT|ai|BUY|1794031200000"
+  },
+  {
+    "symbol": "TIAUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794034800000,
+    "candle_close_ms": 1794038399999,
+    "signal_price": 0.4423,
+    "entry": "0.4423",
+    "sl": "0.4309",
+    "tp": "0.4508",
+    "rr_ratio": 0.75,
+    "confidence": 0.712,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "10:59 صباحًا",
+    "created_at_ms": 1794038555208,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794038555208,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 2.1,
+      "h4_ret5_min": null,
+      "h1_rsi": 51.6,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.712,
+          "risk_pct": 2.577
+        }
+      }
+    },
+    "signature": "TIAUSDT|ai|BUY|1794034800000"
   }
 ]
