@@ -1,22 +1,5 @@
 [
   {
-    "signature": "PLTRBUSDT|rsi50|1793973600000",
-    "symbol": "PLTRBUSDT",
-    "indicator": "rsi50",
-    "entry": "162.86",
-    "sl": "154.04",
-    "tp": "169.47",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1793973600000,
-    "signal_close_ms": 1793977199999,
-    "deadline_ms": 1794581999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793977592887,
-    "source": "simulation"
-  },
-  {
     "signature": "PLTRBUSDT|adx|1793973600000",
     "symbol": "PLTRBUSDT",
     "indicator": "adx",
@@ -76153,9 +76136,9 @@
     "signal_open_ms": 1794070800000,
     "signal_close_ms": 1794074399999,
     "deadline_ms": 1794679199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794088404281,
+    "hit_price": 0.6176,
     "created_ms": 1794074665304,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794085868147,
+    "source": "simulation"
+  },
+  {
+    "signature": "XNOUSDT|adx|1794081600000",
+    "symbol": "XNOUSDT",
+    "indicator": "adx",
+    "entry": "0.315",
+    "sl": "0.305",
+    "tp": "0.322",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794081600000,
+    "signal_close_ms": 1794085199999,
+    "deadline_ms": 1794689999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794088497125,
     "source": "simulation"
   }
 ]
