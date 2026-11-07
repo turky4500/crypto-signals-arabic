@@ -1,22 +1,5 @@
 [
   {
-    "signature": "CBRSBUSDT|adx|1793962800000",
-    "symbol": "CBRSBUSDT",
-    "indicator": "adx",
-    "entry": "86.26",
-    "sl": "82.94",
-    "tp": "88.75",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1793962800000,
-    "signal_close_ms": 1793966399999,
-    "deadline_ms": 1794571199999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1793991260021,
-    "hit_price": 88.75,
-    "created_ms": 1793966696786,
-    "source": "simulation"
-  },
-  {
     "signature": "CELOUSDT|rsi50|1793962800000",
     "symbol": "CELOUSDT",
     "indicator": "rsi50",
@@ -43428,9 +43411,9 @@
     "signal_open_ms": 1793991600000,
     "signal_close_ms": 1793995199999,
     "deadline_ms": 1794599999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794056002796,
+    "hit_price": 0.047,
     "created_ms": 1793995600060,
     "source": "simulation"
   },
@@ -52353,9 +52336,9 @@
     "signal_open_ms": 1794002400000,
     "signal_close_ms": 1794005999999,
     "deadline_ms": 1794610799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794056002796,
+    "hit_price": 0.047,
     "created_ms": 1794006390064,
     "source": "simulation"
   },
@@ -79910,9 +79893,9 @@
     "signal_open_ms": 1794042000000,
     "signal_close_ms": 1794045599999,
     "deadline_ms": 1794650399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794056002796,
+    "hit_price": 0.00804,
     "created_ms": 1794045926140,
     "source": "simulation"
   },
@@ -83939,9 +83922,9 @@
     "signal_open_ms": 1794049200000,
     "signal_close_ms": 1794052799999,
     "deadline_ms": 1794657599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794056002796,
+    "hit_price": 0.00802,
     "created_ms": 1794053082119,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794055831317,
+    "source": "simulation"
+  },
+  {
+    "signature": "BIGTIMEUSDT|bollinger|1794049200000",
+    "symbol": "BIGTIMEUSDT",
+    "indicator": "bollinger",
+    "entry": "0.00586",
+    "sl": "0.00578",
+    "tp": "0.00592",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794049200000,
+    "signal_close_ms": 1794052799999,
+    "deadline_ms": 1794657599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794056030157,
     "source": "simulation"
   }
 ]
