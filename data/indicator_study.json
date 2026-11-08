@@ -1,22 +1,5 @@
 [
   {
-    "signature": "1000CATUSDT|ichimoku|1794024000000",
-    "symbol": "1000CATUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.001764",
-    "sl": "0.001692",
-    "tp": "0.001818",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794024000000,
-    "signal_close_ms": 1794027599999,
-    "deadline_ms": 1794632399999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1794056399999,
-    "hit_price": 0.001691,
-    "created_ms": 1794027859826,
-    "source": "simulation"
-  },
-  {
     "signature": "1000CATUSDT|adx|1794024000000",
     "symbol": "1000CATUSDT",
     "indicator": "adx",
@@ -8969,9 +8952,9 @@
     "signal_open_ms": 1794034800000,
     "signal_close_ms": 1794038399999,
     "deadline_ms": 1794643199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794162257925,
+    "hit_price": 56.81,
     "created_ms": 1794038483427,
     "source": "simulation"
   },
@@ -65443,9 +65426,9 @@
     "signal_open_ms": 1794128400000,
     "signal_close_ms": 1794131999999,
     "deadline_ms": 1794736799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794162257925,
+    "hit_price": 56.81,
     "created_ms": 1794132306853,
     "source": "simulation"
   },
@@ -67228,9 +67211,9 @@
     "signal_open_ms": 1794132000000,
     "signal_close_ms": 1794135599999,
     "deadline_ms": 1794740399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794162257925,
+    "hit_price": 541.06,
     "created_ms": 1794135914341,
     "source": "simulation"
   },
@@ -69880,9 +69863,9 @@
     "signal_open_ms": 1794135600000,
     "signal_close_ms": 1794139199999,
     "deadline_ms": 1794743999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794162257925,
+    "hit_price": 541.33,
     "created_ms": 1794139508238,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794161167544,
+    "source": "simulation"
+  },
+  {
+    "signature": "METISUSDT|bollinger|1794157200000",
+    "symbol": "METISUSDT",
+    "indicator": "bollinger",
+    "entry": "2.54",
+    "sl": "2.48",
+    "tp": "2.58",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794157200000,
+    "signal_close_ms": 1794160799999,
+    "deadline_ms": 1794765599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794162313121,
     "source": "simulation"
   }
 ]
