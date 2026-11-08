@@ -1,22 +1,5 @@
 [
   {
-    "signature": "TSMBUSDT|rsi50|1793988000000",
-    "symbol": "TSMBUSDT",
-    "indicator": "rsi50",
-    "entry": "375.72",
-    "sl": "361.70",
-    "tp": "386.23",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1793988000000,
-    "signal_close_ms": 1793991599999,
-    "deadline_ms": 1794596399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1793991980434,
-    "source": "simulation"
-  },
-  {
     "signature": "TSTUSDT|rsi50|1793988000000",
     "symbol": "TSTUSDT",
     "indicator": "rsi50",
@@ -57606,9 +57589,9 @@
     "signal_open_ms": 1794070800000,
     "signal_close_ms": 1794074399999,
     "deadline_ms": 1794679199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794119659178,
+    "hit_price": 698.18,
     "created_ms": 1794074680030,
     "source": "simulation"
   },
@@ -82970,9 +82953,9 @@
     "signal_open_ms": 1794114000000,
     "signal_close_ms": 1794117599999,
     "deadline_ms": 1794722399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794119659178,
+    "hit_price": 0.227,
     "created_ms": 1794117876770,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794118822333,
+    "source": "simulation"
+  },
+  {
+    "signature": "FLOWUSDT|bollinger|1794114000000",
+    "symbol": "FLOWUSDT",
+    "indicator": "bollinger",
+    "entry": "0.02056",
+    "sl": "0.02026",
+    "tp": "0.02078",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794114000000,
+    "signal_close_ms": 1794117599999,
+    "deadline_ms": 1794722399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794119703349,
     "source": "simulation"
   }
 ]
