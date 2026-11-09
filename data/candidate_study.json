@@ -1,25 +1,5 @@
 [
   {
-    "signature": "LAZIOUSDT|bollinger|BUY|1793325600000",
-    "symbol": "LAZIOUSDT",
-    "indicator": "bollinger",
-    "entry": "0.348",
-    "sl": "0.332",
-    "tp": "0.380",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1793325600000,
-    "signal_close_ms": 1793329199999,
-    "deadline_ms": 1793933999999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1793347199999,
-    "hit_price": 0.38,
-    "created_ms": 1793329647033,
-    "consensus": 1,
-    "verdict": "blocked",
-    "reason": "bollinger_live_off",
-    "source": "candidate"
-  },
-  {
     "signature": "LDOUSDT|bollinger|BUY|1793325600000",
     "symbol": "LDOUSDT",
     "indicator": "bollinger",
@@ -99997,6 +99977,26 @@
     "consensus": 1,
     "verdict": "blocked",
     "reason": "low_confidence",
+    "source": "candidate"
+  },
+  {
+    "signature": "AGPUBUSDT|strong|BUY|1794193200000",
+    "symbol": "AGPUBUSDT",
+    "indicator": "strong",
+    "entry": "7.02",
+    "sl": "6.70",
+    "tp": "7.26",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794193200000,
+    "signal_close_ms": 1794196799999,
+    "deadline_ms": 1794801599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794197668012,
+    "consensus": 1,
+    "verdict": "blocked",
+    "reason": "filter",
     "source": "candidate"
   }
 ]
