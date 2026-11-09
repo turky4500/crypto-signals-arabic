@@ -1,15 +1,5 @@
 [
   {
-    "ts": 1791867992268,
-    "symbol": "SUSHIUSDT",
-    "indicator": "supertrend",
-    "message": "🚨 إشارة شراء جديدة\n🪙 العملة: SUSHIUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.2370\n🎯 سعر الدخول: 0.2370\n🛑 وقف الخسارة: 0.2243\n🎯 الهدف: 0.2624\n📈 R:R: 1:2\n🕐 وقت الإشارة: 7:59 صباحًا\n─────────────\nالحكم الشرعي: ℹ️ لا يوجد حكم",
-    "ok": false,
-    "error": "تلغرام غير مهيأ (telegram_connected=false)",
-    "attempts": 0,
-    "channel": null
-  },
-  {
     "ts": 1791867992269,
     "symbol": "TRUMPUSDT",
     "indicator": "supertrend",
@@ -5466,6 +5456,18 @@
     "indicator": "supertrend",
     "status": "sl_hit",
     "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: AMPUSDT\n💰 سعر الدخول: 0.000666\n🛑 الوقف: ضُرب عند 0.000626\n📉 الخسارة: -1R (-6.01%)\n⏱ المدة: يوم واحد و3 ساعات\n🕐 وقت الإشارة: 7:59 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1794213848456,
+    "kind": "sl_touch",
+    "symbol": "UVXYBUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: UVXYBUSDT\nوصلت العملة إلى سعر الوقف (21.04) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 21.02\n🎯 سعر الدخول: 22.12\n🛑 سعر الوقف: 21.04\n🎯 الهدف: 22.93\n🕐 وقت اللمسة: 11:44 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
