@@ -26255,5 +26255,93 @@
       }
     },
     "signature": "MOVRUSDT|ai|BUY|1794290400000"
+  },
+  {
+    "symbol": "CATIUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794294000000,
+    "candle_close_ms": 1794297599999,
+    "signal_price": 0.03839,
+    "entry": "0.03839",
+    "sl": "0.03752",
+    "tp": "0.03904",
+    "rr_ratio": 0.75,
+    "confidence": 1.0,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "10:59 صباحًا",
+    "created_at_ms": 1794298015545,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794298015545,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 2.18,
+      "h4_ret5_min": null,
+      "h1_rsi": 47.8,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 1.0,
+          "risk_pct": 2.266
+        }
+      }
+    },
+    "signature": "CATIUSDT|ai|BUY|1794294000000"
+  },
+  {
+    "symbol": "TLMUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794294000000,
+    "candle_close_ms": 1794297599999,
+    "signal_price": 0.001072,
+    "entry": "0.001072",
+    "sl": "0.001053",
+    "tp": "0.001086",
+    "rr_ratio": 0.75,
+    "confidence": 0.6455,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "10:59 صباحًا",
+    "created_at_ms": 1794298016731,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794298016731,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 1.32,
+      "h4_ret5_min": null,
+      "h1_rsi": 46.7,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.6455,
+          "risk_pct": 1.772
+        }
+      }
+    },
+    "signature": "TLMUSDT|ai|BUY|1794294000000"
   }
 ]
