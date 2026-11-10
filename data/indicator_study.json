@@ -1,22 +1,5 @@
 [
   {
-    "signature": "WINUSDT|ichimoku|1794207600000",
-    "symbol": "WINUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.00006674",
-    "sl": "0.00006491",
-    "tp": "0.00006811",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794207600000,
-    "signal_close_ms": 1794211199999,
-    "deadline_ms": 1794815999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1794221999999,
-    "hit_price": 6.482e-05,
-    "created_ms": 1794211577708,
-    "source": "simulation"
-  },
-  {
     "signature": "WINUSDT|adx|1794207600000",
     "symbol": "WINUSDT",
     "indicator": "adx",
@@ -74147,9 +74130,9 @@
     "signal_open_ms": 1794258000000,
     "signal_close_ms": 1794261599999,
     "deadline_ms": 1794866399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794272358942,
+    "hit_price": 1.041,
     "created_ms": 1794261918713,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794269214062,
+    "source": "simulation"
+  },
+  {
+    "signature": "NOKBUSDT|adx|1794265200000",
+    "symbol": "NOKBUSDT",
+    "indicator": "adx",
+    "entry": "8.21",
+    "sl": "8.10",
+    "tp": "8.29",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794265200000,
+    "signal_close_ms": 1794268799999,
+    "deadline_ms": 1794873599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794272448334,
     "source": "simulation"
   }
 ]
