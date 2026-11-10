@@ -26079,5 +26079,49 @@
       }
     },
     "signature": "SYRUPUSDT|supertrend|BUY|1794236400000"
+  },
+  {
+    "symbol": "PIXELUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794279600000,
+    "candle_close_ms": 1794283199999,
+    "signal_price": 0.0041,
+    "entry": "0.00410",
+    "sl": "0.00402",
+    "tp": "0.00416",
+    "rr_ratio": 0.75,
+    "confidence": 0.6704,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "6:59 صباحًا",
+    "created_at_ms": 1794283603014,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794283603014,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 5.4,
+      "h4_ret5_min": null,
+      "h1_rsi": 37.5,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.6704,
+          "risk_pct": 1.951
+        }
+      }
+    },
+    "signature": "PIXELUSDT|ai|BUY|1794279600000"
   }
 ]
