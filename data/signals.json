@@ -26343,5 +26343,49 @@
       }
     },
     "signature": "TLMUSDT|ai|BUY|1794294000000"
+  },
+  {
+    "symbol": "WUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794297600000,
+    "candle_close_ms": 1794301199999,
+    "signal_price": 0.0109,
+    "entry": "0.01090",
+    "sl": "0.01066",
+    "tp": "0.01108",
+    "rr_ratio": 0.75,
+    "confidence": 0.6492,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "11:59 صباحًا",
+    "created_at_ms": 1794301595444,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794301595444,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.93,
+      "h4_ret5_min": null,
+      "h1_rsi": 45.1,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.6492,
+          "risk_pct": 2.202
+        }
+      }
+    },
+    "signature": "WUSDT|ai|BUY|1794297600000"
   }
 ]
