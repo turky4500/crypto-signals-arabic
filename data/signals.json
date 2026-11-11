@@ -26827,5 +26827,49 @@
       }
     },
     "signature": "NBISBUSDT|ai|BUY|1794319200000"
+  },
+  {
+    "symbol": "PLTRBUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794351600000,
+    "candle_close_ms": 1794355199999,
+    "signal_price": 170.03,
+    "entry": "170.03",
+    "sl": "165.75",
+    "tp": "173.24",
+    "rr_ratio": 0.75,
+    "confidence": 0.7569,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "2:59 صباحًا",
+    "created_at_ms": 1794355595905,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794355595905,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.93,
+      "h4_ret5_min": null,
+      "h1_rsi": 52.1,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7569,
+          "risk_pct": 2.517
+        }
+      }
+    },
+    "signature": "PLTRBUSDT|supertrend|BUY|1794351600000"
   }
 ]
