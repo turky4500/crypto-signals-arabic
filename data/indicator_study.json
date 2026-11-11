@@ -1,22 +1,5 @@
 [
   {
-    "signature": "RKLBBUSDT|adx|1794326400000",
-    "symbol": "RKLBBUSDT",
-    "indicator": "adx",
-    "entry": "59.43",
-    "sl": "56.62",
-    "tp": "61.53",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794326400000,
-    "signal_close_ms": 1794329999999,
-    "deadline_ms": 1794934799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1794343757615,
-    "hit_price": 61.53,
-    "created_ms": 1794330654801,
-    "source": "simulation"
-  },
-  {
     "signature": "RWUSDUSDT|bollinger|1794326400000",
     "symbol": "RWUSDUSDT",
     "indicator": "bollinger",
@@ -12352,9 +12335,9 @@
     "signal_open_ms": 1794340800000,
     "signal_close_ms": 1794344399999,
     "deadline_ms": 1794949199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794402563017,
+    "hit_price": 0.1765,
     "created_ms": 1794344752799,
     "source": "simulation"
   },
@@ -12369,9 +12352,9 @@
     "signal_open_ms": 1794340800000,
     "signal_close_ms": 1794344399999,
     "deadline_ms": 1794949199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794402563017,
+    "hit_price": 0.1765,
     "created_ms": 1794344752799,
     "source": "simulation"
   },
@@ -63063,9 +63046,9 @@
     "signal_open_ms": 1794384000000,
     "signal_close_ms": 1794387599999,
     "deadline_ms": 1794992399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794402563017,
+    "hit_price": 0.1762,
     "created_ms": 1794387955776,
     "source": "simulation"
   },
@@ -77768,9 +77751,9 @@
     "signal_open_ms": 1794394800000,
     "signal_close_ms": 1794398399999,
     "deadline_ms": 1795003199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794402563017,
+    "hit_price": 0.1762,
     "created_ms": 1794398765112,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794402399468,
+    "source": "simulation"
+  },
+  {
+    "signature": "LQTYUSDT|macd|1794398400000",
+    "symbol": "LQTYUSDT",
+    "indicator": "macd",
+    "entry": "0.1680",
+    "sl": "0.1652",
+    "tp": "0.1701",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794398400000,
+    "signal_close_ms": 1794401999999,
+    "deadline_ms": 1795006799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794402633963,
     "source": "simulation"
   }
 ]
