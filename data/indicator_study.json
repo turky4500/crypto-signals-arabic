@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SKHYBUSDT|adx|1794261600000",
-    "symbol": "SKHYBUSDT",
-    "indicator": "adx",
-    "entry": "134.84",
-    "sl": "131.71",
-    "tp": "137.18",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794261600000,
-    "signal_close_ms": 1794265199999,
-    "deadline_ms": 1794869999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1794319199999,
-    "hit_price": 129.94,
-    "created_ms": 1794265569896,
-    "source": "simulation"
-  },
-  {
     "signature": "SKUUBUSDT|ichimoku|1794261600000",
     "symbol": "SKUUBUSDT",
     "indicator": "ichimoku",
@@ -62655,9 +62638,9 @@
     "signal_open_ms": 1794330000000,
     "signal_close_ms": 1794333599999,
     "deadline_ms": 1794938399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794356961044,
+    "hit_price": 336.12,
     "created_ms": 1794333881477,
     "source": "simulation"
   },
@@ -62672,9 +62655,9 @@
     "signal_open_ms": 1794330000000,
     "signal_close_ms": 1794333599999,
     "deadline_ms": 1794938399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794356961044,
+    "hit_price": 336.12,
     "created_ms": 1794333881477,
     "source": "simulation"
   },
@@ -71631,9 +71614,9 @@
     "signal_open_ms": 1794337200000,
     "signal_close_ms": 1794340799999,
     "deadline_ms": 1794945599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794356961044,
+    "hit_price": 10.67,
     "created_ms": 1794341138192,
     "source": "simulation"
   },
@@ -78771,9 +78754,9 @@
     "signal_open_ms": 1794348000000,
     "signal_close_ms": 1794351599999,
     "deadline_ms": 1794956399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794356961044,
+    "hit_price": 0.2553,
     "created_ms": 1794351930111,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794355593847,
+    "source": "simulation"
+  },
+  {
+    "signature": "STEEMUSDT|rsi50|1794351600000",
+    "symbol": "STEEMUSDT",
+    "indicator": "rsi50",
+    "entry": "0.04670",
+    "sl": "0.04575",
+    "tp": "0.04741",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794351600000,
+    "signal_close_ms": 1794355199999,
+    "deadline_ms": 1794959999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794357068485,
     "source": "simulation"
   }
 ]
