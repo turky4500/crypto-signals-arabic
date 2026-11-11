@@ -27135,5 +27135,49 @@
       }
     },
     "signature": "MMTUSDT|ai|BUY|1794409200000"
+  },
+  {
+    "symbol": "SKDDBUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794434400000,
+    "candle_close_ms": 1794437999999,
+    "signal_price": 9.31,
+    "entry": "9.31",
+    "sl": "8.31",
+    "tp": "10.06",
+    "rr_ratio": 0.75,
+    "confidence": 0.6488,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "1:59 صباحًا",
+    "created_at_ms": 1794438388489,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794438388489,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -18.88,
+      "h4_ret5_min": null,
+      "h1_rsi": 46.7,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.6488,
+          "risk_pct": 10.741
+        }
+      }
+    },
+    "signature": "SKDDBUSDT|supertrend|BUY|1794434400000"
   }
 ]
