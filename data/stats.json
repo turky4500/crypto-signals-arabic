@@ -49,7 +49,7 @@
     },
     "signature": "TSMBUSDT|supertrend|BUY|1794495600000"
   },
-  "last_check": 1794506352402,
+  "last_check": 1794506646617,
   "data_date": "2026-11-12",
   "filter_meta": {
     "enabled": true,
@@ -68,68 +68,68 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 1279,
-        "tp_hit": 279,
-        "sl_hit": 835,
-        "pending": 165,
+        "total": 1239,
+        "tp_hit": 261,
+        "sl_hit": 820,
+        "pending": 158,
         "expired": 0,
-        "win_rate": 25.0
+        "win_rate": 24.1
       },
       "awesome": {
-        "total": 182,
-        "tp_hit": 38,
-        "sl_hit": 97,
-        "pending": 47,
+        "total": 178,
+        "tp_hit": 31,
+        "sl_hit": 98,
+        "pending": 49,
         "expired": 0,
-        "win_rate": 28.1
+        "win_rate": 24.0
       },
       "macd": {
-        "total": 342,
-        "tp_hit": 63,
-        "sl_hit": 104,
-        "pending": 175,
+        "total": 377,
+        "tp_hit": 62,
+        "sl_hit": 103,
+        "pending": 212,
+        "expired": 0,
+        "win_rate": 37.6
+      },
+      "bollinger": {
+        "total": 508,
+        "tp_hit": 89,
+        "sl_hit": 145,
+        "pending": 274,
+        "expired": 0,
+        "win_rate": 38.0
+      },
+      "rsi50": {
+        "total": 556,
+        "tp_hit": 109,
+        "sl_hit": 180,
+        "pending": 267,
         "expired": 0,
         "win_rate": 37.7
       },
-      "bollinger": {
-        "total": 498,
-        "tp_hit": 87,
-        "sl_hit": 145,
-        "pending": 266,
-        "expired": 0,
-        "win_rate": 37.5
-      },
-      "rsi50": {
-        "total": 552,
-        "tp_hit": 108,
-        "sl_hit": 193,
-        "pending": 251,
-        "expired": 0,
-        "win_rate": 35.9
-      },
       "adx": {
-        "total": 2147,
-        "tp_hit": 682,
-        "sl_hit": 964,
-        "pending": 501,
+        "total": 2142,
+        "tp_hit": 663,
+        "sl_hit": 958,
+        "pending": 521,
         "expired": 0,
-        "win_rate": 41.4
+        "win_rate": 40.9
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
+    "added_this_run": 15,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 4520,
-      "pending": 471,
-      "expired": 9,
-      "tp_hit": 2372,
-      "sl_hit": 2148,
-      "win_rate": 0.5248,
-      "ev_per_trade": -0.0543
+      "resolved": 4511,
+      "pending": 478,
+      "expired": 11,
+      "tp_hit": 2360,
+      "sl_hit": 2151,
+      "win_rate": 0.5232,
+      "ev_per_trade": -0.0578
     },
     "with_filter": {
       "total": 123,
@@ -153,24 +153,24 @@
     },
     "blocked": {
       "total": 4877,
-      "resolved": 4411,
-      "pending": 457,
-      "expired": 9,
-      "tp_hit": 2310,
-      "sl_hit": 2101,
-      "win_rate": 0.5237,
-      "ev_per_trade": -0.0568
+      "resolved": 4402,
+      "pending": 464,
+      "expired": 11,
+      "tp_hit": 2298,
+      "sl_hit": 2104,
+      "win_rate": 0.522,
+      "ev_per_trade": -0.0605
     },
     "by_reason": {
       "filter": {
-        "total": 1511,
-        "resolved": 1378,
+        "total": 1515,
+        "resolved": 1381,
         "pending": 126,
-        "expired": 7,
+        "expired": 8,
         "tp_hit": 567,
-        "sl_hit": 811,
-        "win_rate": 0.4115,
-        "ev_per_trade": -0.2492
+        "sl_hit": 814,
+        "win_rate": 0.4106,
+        "ev_per_trade": -0.2509
       },
       "filter_ok": {
         "total": 123,
@@ -183,14 +183,14 @@
         "ev_per_trade": 0.0482
       },
       "low_confidence": {
-        "total": 3351,
-        "resolved": 3019,
-        "pending": 330,
-        "expired": 2,
-        "tp_hit": 1736,
+        "total": 3347,
+        "resolved": 3007,
+        "pending": 337,
+        "expired": 3,
+        "tp_hit": 1724,
         "sl_hit": 1283,
-        "win_rate": 0.575,
-        "ev_per_trade": 0.0313
+        "win_rate": 0.5733,
+        "ev_per_trade": 0.0272
       },
       "open_position": {
         "total": 4,
