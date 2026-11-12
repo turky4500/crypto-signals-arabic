@@ -27355,5 +27355,49 @@
       }
     },
     "signature": "ALLOUSDT|ai|BUY|1794474000000"
+  },
+  {
+    "symbol": "ASMLBUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794477600000,
+    "candle_close_ms": 1794481199999,
+    "signal_price": 1526.48,
+    "entry": "1526.48",
+    "sl": "1487.62",
+    "tp": "1555.62",
+    "rr_ratio": 0.75,
+    "confidence": 0.7555,
+    "ema_trend": "bullish",
+    "volume_ok": false,
+    "time_text": "1:59 مساءً",
+    "created_at_ms": 1794481615028,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794481615028,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -3.65,
+      "h4_ret5_min": null,
+      "h1_rsi": 45.6,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7555,
+          "risk_pct": 2.546
+        }
+      }
+    },
+    "signature": "ASMLBUSDT|supertrend|BUY|1794477600000"
   }
 ]
