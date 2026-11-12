@@ -1,22 +1,5 @@
 [
   {
-    "signature": "FLOWUSDT|rsi50|1794394800000",
-    "symbol": "FLOWUSDT",
-    "indicator": "rsi50",
-    "entry": "0.02041",
-    "sl": "0.02000",
-    "tp": "0.02071",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794394800000,
-    "signal_close_ms": 1794398399999,
-    "deadline_ms": 1795003199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1794437999999,
-    "hit_price": 0.01993,
-    "created_ms": 1794398713719,
-    "source": "simulation"
-  },
-  {
     "signature": "FLUXUSDT|rsi50|1794394800000",
     "symbol": "FLUXUSDT",
     "indicator": "rsi50",
@@ -73705,9 +73688,9 @@
     "signal_open_ms": 1794448800000,
     "signal_close_ms": 1794452399999,
     "deadline_ms": 1795057199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794474560409,
+    "hit_price": 0.00135,
     "created_ms": 1794452755693,
     "source": "simulation"
   },
@@ -84993,10 +84976,27 @@
     "signal_open_ms": 1794470400000,
     "signal_close_ms": 1794473999999,
     "deadline_ms": 1795078799999,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794474560409,
+    "hit_price": 1.001,
+    "created_ms": 1794474380074,
+    "source": "simulation"
+  },
+  {
+    "signature": "SQQQBUSDT|adx|1794470400000",
+    "symbol": "SQQQBUSDT",
+    "indicator": "adx",
+    "entry": "41.66",
+    "sl": "40.99",
+    "tp": "42.16",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794470400000,
+    "signal_close_ms": 1794473999999,
+    "deadline_ms": 1795078799999,
     "status": "pending",
     "resolved_at_ms": null,
     "hit_price": null,
-    "created_ms": 1794474380074,
+    "created_ms": 1794474675351,
     "source": "simulation"
   }
 ]
