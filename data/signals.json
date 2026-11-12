@@ -27223,5 +27223,93 @@
       }
     },
     "signature": "SOXSBUSDT|supertrend|BUY|1794456000000"
+  },
+  {
+    "symbol": "MEGAUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794470400000,
+    "candle_close_ms": 1794473999999,
+    "signal_price": 0.04581,
+    "entry": "0.04581",
+    "sl": "0.04113",
+    "tp": "0.04932",
+    "rr_ratio": 0.75,
+    "confidence": 0.8848,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "11:59 صباحًا",
+    "created_at_ms": 1794474386311,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794474386311,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -7.42,
+      "h4_ret5_min": null,
+      "h1_rsi": 49.6,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.8848,
+          "risk_pct": 10.216
+        }
+      }
+    },
+    "signature": "MEGAUSDT|supertrend|BUY|1794470400000"
+  },
+  {
+    "symbol": "OPENUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794470400000,
+    "candle_close_ms": 1794473999999,
+    "signal_price": 0.094,
+    "entry": "0.0940",
+    "sl": "0.0890",
+    "tp": "0.0977",
+    "rr_ratio": 0.75,
+    "confidence": 0.6082,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "11:59 صباحًا",
+    "created_at_ms": 1794474388002,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794474388002,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -2.21,
+      "h4_ret5_min": null,
+      "h1_rsi": 50.0,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.6082,
+          "risk_pct": 5.319
+        }
+      }
+    },
+    "signature": "OPENUSDT|supertrend|BUY|1794470400000"
   }
 ]
