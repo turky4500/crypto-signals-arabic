@@ -27487,5 +27487,93 @@
       }
     },
     "signature": "SKYUSDT|supertrend|BUY|1794510000000"
+  },
+  {
+    "symbol": "MOVRUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794517200000,
+    "candle_close_ms": 1794520799999,
+    "signal_price": 1.021,
+    "entry": "1.021",
+    "sl": "0.975",
+    "tp": "1.055",
+    "rr_ratio": 0.75,
+    "confidence": 0.6185,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "12:59 صباحًا",
+    "created_at_ms": 1794521212487,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794521212487,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -1.07,
+      "h4_ret5_min": null,
+      "h1_rsi": 53.3,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.6185,
+          "risk_pct": 4.505
+        }
+      }
+    },
+    "signature": "MOVRUSDT|supertrend|BUY|1794517200000"
+  },
+  {
+    "symbol": "SNXUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794517200000,
+    "candle_close_ms": 1794520799999,
+    "signal_price": 0.1618,
+    "entry": "0.1618",
+    "sl": "0.1570",
+    "tp": "0.1654",
+    "rr_ratio": 0.75,
+    "confidence": 0.7948,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "12:59 صباحًا",
+    "created_at_ms": 1794521212735,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794521212735,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -0.74,
+      "h4_ret5_min": null,
+      "h1_rsi": 52.9,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7948,
+          "risk_pct": 2.967
+        }
+      }
+    },
+    "signature": "SNXUSDT|supertrend|BUY|1794517200000"
   }
 ]
