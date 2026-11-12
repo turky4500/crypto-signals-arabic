@@ -27443,5 +27443,49 @@
       }
     },
     "signature": "TSMBUSDT|supertrend|BUY|1794495600000"
+  },
+  {
+    "symbol": "SKYUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794510000000,
+    "candle_close_ms": 1794513599999,
+    "signal_price": 0.0583,
+    "entry": "0.05830",
+    "sl": "0.05650",
+    "tp": "0.05965",
+    "rr_ratio": 0.75,
+    "confidence": 0.7938,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "10:59 مساءً",
+    "created_at_ms": 1794514011081,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794514011081,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -0.8,
+      "h4_ret5_min": null,
+      "h1_rsi": 52.9,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7938,
+          "risk_pct": 3.087
+        }
+      }
+    },
+    "signature": "SKYUSDT|supertrend|BUY|1794510000000"
   }
 ]
