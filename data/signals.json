@@ -27707,5 +27707,137 @@
       }
     },
     "signature": "AVAUSDT|ai|BUY|1794546000000"
+  },
+  {
+    "symbol": "DGBUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794549600000,
+    "candle_close_ms": 1794553199999,
+    "signal_price": 0.00305,
+    "entry": "0.00305",
+    "sl": "0.00292",
+    "tp": "0.00314",
+    "rr_ratio": 0.75,
+    "confidence": 0.778,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "9:59 صباحًا",
+    "created_at_ms": 1794553621217,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794553621217,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.33,
+      "h4_ret5_min": null,
+      "h1_rsi": 45.5,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.778,
+          "risk_pct": 4.262
+        }
+      }
+    },
+    "signature": "DGBUSDT|ai|BUY|1794549600000"
+  },
+  {
+    "symbol": "PARTIUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794549600000,
+    "candle_close_ms": 1794553199999,
+    "signal_price": 0.0367,
+    "entry": "0.0367",
+    "sl": "0.0342",
+    "tp": "0.0385",
+    "rr_ratio": 0.75,
+    "confidence": 0.8734,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "9:59 صباحًا",
+    "created_at_ms": 1794553621370,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794553621370,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -1.39,
+      "h4_ret5_min": null,
+      "h1_rsi": 54.0,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.8734,
+          "risk_pct": 6.812
+        }
+      }
+    },
+    "signature": "PARTIUSDT|supertrend|BUY|1794549600000"
+  },
+  {
+    "symbol": "TUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794549600000,
+    "candle_close_ms": 1794553199999,
+    "signal_price": 0.00441,
+    "entry": "0.00441",
+    "sl": "0.00419",
+    "tp": "0.00457",
+    "rr_ratio": 0.75,
+    "confidence": 0.6202,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "9:59 صباحًا",
+    "created_at_ms": 1794553623377,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794553623377,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -4.75,
+      "h4_ret5_min": null,
+      "h1_rsi": 48.0,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.6202,
+          "risk_pct": 4.989
+        }
+      }
+    },
+    "signature": "TUSDT|supertrend|BUY|1794549600000"
   }
 ]
