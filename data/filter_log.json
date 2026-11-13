@@ -1,14 +1,5 @@
 [
   {
-    "symbol": "SNDKBUSDT",
-    "sig": "SNDKBUSDT|1793768399999",
-    "ts": 1793768648001,
-    "signal": "—",
-    "accepted": false,
-    "reason": "quality_gate",
-    "skipped": true
-  },
-  {
     "symbol": "SNXXBUSDT",
     "sig": "SNXXBUSDT|1793768399999",
     "ts": 1793768648001,
@@ -59348,6 +59339,24 @@
     "h1_rsi_max": 55.0,
     "d1_above_ema50": true,
     "h4_in_uptrend": false,
+    "require_d1_above": false,
+    "require_d1_below": true,
+    "require_h4_uptrend": false,
+    "h4_ret5_ok": true,
+    "h1_rsi_ok": false
+  },
+  {
+    "symbol": "NFLXBUSDT",
+    "sig": "NFLXBUSDT|1794581999999",
+    "ts": 1794583447324,
+    "signal": "BUY",
+    "accepted": false,
+    "h4_ret5": -0.43,
+    "h4_ret5_min": null,
+    "h1_rsi": 77.1,
+    "h1_rsi_max": 55.0,
+    "d1_above_ema50": false,
+    "h4_in_uptrend": true,
     "require_d1_above": false,
     "require_d1_below": true,
     "require_h4_uptrend": false,
