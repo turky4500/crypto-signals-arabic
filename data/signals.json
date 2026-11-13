@@ -29027,5 +29027,49 @@
       }
     },
     "signature": "XLMUSDT|supertrend|BUY|1794574800000"
+  },
+  {
+    "symbol": "FWDIBUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794574800000,
+    "candle_close_ms": 1794578399999,
+    "signal_price": 5.11,
+    "entry": "5.11",
+    "sl": "4.87",
+    "tp": "5.29",
+    "rr_ratio": 0.75,
+    "confidence": 0.8691,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "4:59 مساءً",
+    "created_at_ms": 1794581273446,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794581273446,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -1.95,
+      "h4_ret5_min": null,
+      "h1_rsi": 49.1,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.8691,
+          "risk_pct": 4.697
+        }
+      }
+    },
+    "signature": "FWDIBUSDT|supertrend|BUY|1794574800000"
   }
 ]

@@ -1,14 +1,5 @@
 [
   {
-    "symbol": "PORTOUSDT",
-    "sig": "PORTOUSDT|1793768399999",
-    "ts": 1793768648001,
-    "signal": "—",
-    "accepted": false,
-    "reason": "quality_gate",
-    "skipped": true
-  },
-  {
     "symbol": "PROVEUSDT",
     "sig": "PROVEUSDT|1793768399999",
     "ts": 1793768648001,
@@ -59254,5 +59245,23 @@
     "require_h4_uptrend": false,
     "h4_ret5_ok": true,
     "h1_rsi_ok": false
+  },
+  {
+    "symbol": "FWDIBUSDT",
+    "sig": "FWDIBUSDT|1794578399999",
+    "ts": 1794581047394,
+    "signal": "BUY",
+    "accepted": true,
+    "h4_ret5": -1.95,
+    "h4_ret5_min": null,
+    "h1_rsi": 49.1,
+    "h1_rsi_max": 55.0,
+    "d1_above_ema50": false,
+    "h4_in_uptrend": false,
+    "require_d1_above": false,
+    "require_d1_below": true,
+    "require_h4_uptrend": false,
+    "h4_ret5_ok": true,
+    "h1_rsi_ok": true
   }
 ]
