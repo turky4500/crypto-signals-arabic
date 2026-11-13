@@ -1,22 +1,5 @@
 [
   {
-    "signature": "币安人生USDT|bollinger|1794495600000",
-    "symbol": "币安人生USDT",
-    "indicator": "bollinger",
-    "entry": "0.4734",
-    "sl": "0.4637",
-    "tp": "0.4806",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794495600000,
-    "signal_close_ms": 1794499199999,
-    "deadline_ms": 1795103999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1794545999999,
-    "hit_price": 0.4615,
-    "created_ms": 1794499605787,
-    "source": "simulation"
-  },
-  {
     "signature": "0GUSDT|rsi50|1794499200000",
     "symbol": "0GUSDT",
     "indicator": "rsi50",
@@ -16398,9 +16381,9 @@
     "signal_open_ms": 1794517200000,
     "signal_close_ms": 1794520799999,
     "deadline_ms": 1795125599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794581999999,
+    "hit_price": 247.03,
     "created_ms": 1794521134592,
     "source": "simulation"
   },
@@ -60394,9 +60377,9 @@
     "signal_open_ms": 1794564000000,
     "signal_close_ms": 1794567599999,
     "deadline_ms": 1795172399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794581999999,
+    "hit_price": 246.46,
     "created_ms": 1794567918374,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794585997540,
+    "source": "simulation"
+  },
+  {
+    "signature": "IBMBUSDT|adx|1794582000000",
+    "symbol": "IBMBUSDT",
+    "indicator": "adx",
+    "entry": "246.51",
+    "sl": "243.81",
+    "tp": "248.53",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794582000000,
+    "signal_close_ms": 1794585599999,
+    "deadline_ms": 1795190399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794588618270,
     "source": "simulation"
   }
 ]

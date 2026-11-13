@@ -1,14 +1,5 @@
 [
   {
-    "symbol": "SYRUPUSDT",
-    "sig": "SYRUPUSDT|1793768399999",
-    "ts": 1793768648001,
-    "signal": "—",
-    "accepted": false,
-    "reason": "quality_gate",
-    "skipped": true
-  },
-  {
     "symbol": "TQQQBUSDT",
     "sig": "TQQQBUSDT|1793768399999",
     "ts": 1793768648001,
@@ -59428,6 +59419,24 @@
     "h1_rsi": 59.5,
     "h1_rsi_max": 55.0,
     "d1_above_ema50": false,
+    "h4_in_uptrend": false,
+    "require_d1_above": false,
+    "require_d1_below": true,
+    "require_h4_uptrend": false,
+    "h4_ret5_ok": true,
+    "h1_rsi_ok": false
+  },
+  {
+    "symbol": "IBMBUSDT",
+    "sig": "IBMBUSDT|1794585599999",
+    "ts": 1794588551219,
+    "signal": "BUY",
+    "accepted": false,
+    "h4_ret5": 0.46,
+    "h4_ret5_min": null,
+    "h1_rsi": 64.0,
+    "h1_rsi_max": 55.0,
+    "d1_above_ema50": true,
     "h4_in_uptrend": false,
     "require_d1_above": false,
     "require_d1_below": true,
