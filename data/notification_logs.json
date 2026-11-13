@@ -1,27 +1,5 @@
 [
   {
-    "ts": 1792625350111,
-    "kind": "daily_report",
-    "day": "2026-10-21",
-    "message": "📊 *التقرير اليومي للإشارات*\n\n🗓️ 2026-10-21 (الأربعاء)\n\n🚨 إجمالي الإشارات: 5\n✅ تحقق الهدف: 2\n❌ ضرب الوقف: 1\n⏳ لم تُحسم بعد: 2\n📭 انتهت المهلة (7 أيام): 0\n\n📈 نسبة النجاح: 66.7% (من أصل 3 محسومة)",
-    "ok": false,
-    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
-    "attempts": 3,
-    "channel": "telegram"
-  },
-  {
-    "ts": 1792625350111,
-    "kind": "resolution",
-    "symbol": "ZKUSDT",
-    "indicator": "ai",
-    "status": "sl_hit",
-    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
-    "ok": false,
-    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
-    "attempts": 3,
-    "channel": "telegram"
-  },
-  {
     "ts": 1792625648107,
     "kind": "daily_report",
     "day": "2026-10-21",
@@ -5565,6 +5543,30 @@
     "symbol": "ROBOUSDT",
     "indicator": "ai",
     "message": "🚨 إشارة شراء جديدة\n🪙 العملة: ROBOUSDT\n📊 الفريم: 1H\n🟢 الإشارة: BUY / LONG\n💰 سعر رصد الإشارة: 0.00438\n🎯 سعر الدخول: 0.00438\n🛑 وقف الخسارة: 0.00422\n🎯 الهدف: 0.00450\n📈 R:R: 1:0.75\n🕐 وقت الإشارة: 12:59 صباحًا\n─────────────\nالحكم الشرعي: ℹ️ لا يوجد حكم",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1794607455638,
+    "kind": "resolution",
+    "symbol": "SOLUSDT",
+    "indicator": "supertrend",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: SOLUSDT\n💰 سعر الدخول: 81.49\n🛑 الوقف: ضُرب عند 78.63\n📉 الخسارة: -1R (-3.51%)\n⏱ المدة: 8 ساعات\n🕐 وقت الإشارة: 4:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1794607455638,
+    "kind": "sl_touch",
+    "symbol": "COMPUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: COMPUSDT\nوصلت العملة إلى سعر الوقف (19.28) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 19.23\n🎯 سعر الدخول: 20.12\n🛑 سعر الوقف: 19.28\n🎯 الهدف: 20.75\n🕐 وقت اللمسة: 1:04 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
