@@ -1,22 +1,5 @@
 [
   {
-    "signature": "STOUSDT|macd|1794499200000",
-    "symbol": "STOUSDT",
-    "indicator": "macd",
-    "entry": "0.0254",
-    "sl": "0.0247",
-    "tp": "0.0259",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794499200000,
-    "signal_close_ms": 1794502799999,
-    "deadline_ms": 1795107599999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1794534565872,
-    "hit_price": 0.0259,
-    "created_ms": 1794503183165,
-    "source": "simulation"
-  },
-  {
     "signature": "STRAXUSDT|rsi50|1794499200000",
     "symbol": "STRAXUSDT",
     "indicator": "rsi50",
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794589595265,
+    "source": "simulation"
+  },
+  {
+    "signature": "SKUUBUSDT|bollinger|1794585600000",
+    "symbol": "SKUUBUSDT",
+    "indicator": "bollinger",
+    "entry": "12.66",
+    "sl": "11.75",
+    "tp": "13.34",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794585600000,
+    "signal_close_ms": 1794589199999,
+    "deadline_ms": 1795193999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794589882182,
     "source": "simulation"
   }
 ]
