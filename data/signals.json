@@ -27839,5 +27839,49 @@
       }
     },
     "signature": "TUSDT|supertrend|BUY|1794549600000"
+  },
+  {
+    "symbol": "MAVUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794560400000,
+    "candle_close_ms": 1794563999999,
+    "signal_price": 0.00736,
+    "entry": "0.00736",
+    "sl": "0.00708",
+    "tp": "0.00757",
+    "rr_ratio": 0.75,
+    "confidence": 0.9108,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "12:59 مساءً",
+    "created_at_ms": 1794564400431,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794564400431,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -0.95,
+      "h4_ret5_min": null,
+      "h1_rsi": 52.8,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.9108,
+          "risk_pct": 3.804
+        }
+      }
+    },
+    "signature": "MAVUSDT|supertrend|BUY|1794560400000"
   }
 ]
