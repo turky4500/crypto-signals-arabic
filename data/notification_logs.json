@@ -1,17 +1,5 @@
 [
   {
-    "ts": 1792623849918,
-    "kind": "resolution",
-    "symbol": "ZKUSDT",
-    "indicator": "ai",
-    "status": "sl_hit",
-    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
-    "ok": false,
-    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
-    "attempts": 3,
-    "channel": "telegram"
-  },
-  {
     "ts": 1792624152526,
     "kind": "daily_report",
     "day": "2026-10-21",
@@ -5561,6 +5549,18 @@
     "indicator": "supertrend",
     "status": "tp_hit",
     "message": "✅ تحقق الهدف — التوصية نجحت\n🪙 العملة: SOXSBUSDT\n💰 سعر الدخول: 48.82\n🎯 الهدف: تحقق عند 53.06\n📈 الأرباح: +0.75R (+8.68%)\n⏱ المدة: يوم واحد و10 ساعات\n🕐 وقت الإشارة: 7:59 صباحًا",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1794583749775,
+    "kind": "sl_touch",
+    "symbol": "FWDIBUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: FWDIBUSDT\nوصلت العملة إلى سعر الوقف (4.87) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 4.87\n🎯 سعر الدخول: 5.11\n🛑 سعر الوقف: 4.87\n🎯 الهدف: 5.29\n🕐 وقت اللمسة: 6:29 مساءً",
     "ok": true,
     "error": null,
     "attempts": 1,
