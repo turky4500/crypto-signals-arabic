@@ -1,31 +1,5 @@
 [
   {
-    "symbol": "GMTUSDT",
-    "sig": "GMTUSDT|1793710799999",
-    "ts": 1793711049915,
-    "signal": "BUY",
-    "accepted": false,
-    "h4_ret5": -0.94,
-    "h4_ret5_min": null,
-    "h1_rsi": 65.9,
-    "h1_rsi_max": 50.0,
-    "d1_above_ema50": false,
-    "h4_in_uptrend": false,
-    "require_d1_above": false,
-    "require_h4_uptrend": false,
-    "h4_ret5_ok": true,
-    "h1_rsi_ok": false
-  },
-  {
-    "symbol": "HEMIUSDT",
-    "sig": "HEMIUSDT|1793710799999",
-    "ts": 1793711049915,
-    "signal": "BUY",
-    "accepted": false,
-    "reason": "quality_gate",
-    "skipped": true
-  },
-  {
     "symbol": "ICPUSDT",
     "sig": "ICPUSDT|1793710799999",
     "ts": 1793711049915,
@@ -59833,5 +59807,32 @@
     "require_h4_uptrend": false,
     "h4_ret5_ok": true,
     "h1_rsi_ok": false
+  },
+  {
+    "symbol": "BEAMXUSDT",
+    "sig": "BEAMXUSDT|1794538799999",
+    "ts": 1794539047060,
+    "signal": "—",
+    "accepted": false,
+    "reason": "quality_gate",
+    "skipped": true
+  },
+  {
+    "symbol": "RWUSDUSDT",
+    "sig": "RWUSDUSDT|1794538799999",
+    "ts": 1794539047060,
+    "signal": "BUY",
+    "accepted": true,
+    "h4_ret5": 0.01,
+    "h4_ret5_min": null,
+    "h1_rsi": 50.0,
+    "h1_rsi_max": 55.0,
+    "d1_above_ema50": false,
+    "h4_in_uptrend": false,
+    "require_d1_above": false,
+    "require_d1_below": true,
+    "require_h4_uptrend": false,
+    "h4_ret5_ok": true,
+    "h1_rsi_ok": true
   }
 ]
