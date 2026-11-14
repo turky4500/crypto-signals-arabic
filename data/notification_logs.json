@@ -1,17 +1,5 @@
 [
   {
-    "ts": 1792630818665,
-    "kind": "resolution",
-    "symbol": "MANAUSDT",
-    "indicator": "ai",
-    "status": "sl_hit",
-    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: MANAUSDT\n💰 سعر الدخول: 0.0893\n🛑 الوقف: ضُرب عند 0.0875\n📉 الخسارة: -1R (-2.02%)\n⏱ المدة: 8 ساعات\n🕐 وقت الإشارة: 6:59 مساءً",
-    "ok": false,
-    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
-    "attempts": 3,
-    "channel": "telegram"
-  },
-  {
     "ts": 1792631061588,
     "kind": "resolution",
     "symbol": "CRVUSDT",
@@ -5583,6 +5571,18 @@
     "indicator": "ai",
     "status": "pending",
     "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: RWUSDUSDT\nوصلت العملة إلى سعر الوقف (0.9997) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.9997\n🎯 سعر الدخول: 1.0000\n🛑 سعر الوقف: 0.9997\n🎯 الهدف: 1.0002\n🕐 وقت اللمسة: 6:49 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1794673450586,
+    "kind": "sl_touch",
+    "symbol": "JUPUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: JUPUSDT\nوصلت العملة إلى سعر الوقف (0.2508) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.2497\n🎯 سعر الدخول: 0.2683\n🛑 سعر الوقف: 0.2508\n🎯 الهدف: 0.2814\n🕐 وقت اللمسة: 7:24 مساءً",
     "ok": true,
     "error": null,
     "attempts": 1,
