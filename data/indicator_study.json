@@ -1,22 +1,5 @@
 [
   {
-    "signature": "0GUSDT|ichimoku|1794556800000",
-    "symbol": "0GUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.1576",
-    "sl": "0.1503",
-    "tp": "0.1630",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794556800000,
-    "signal_close_ms": 1794560399999,
-    "deadline_ms": 1795165199999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1794569062081,
-    "hit_price": 0.163,
-    "created_ms": 1794560662180,
-    "source": "simulation"
-  },
-  {
     "signature": "1000CHEEMSUSDT|macd|1794556800000",
     "symbol": "1000CHEEMSUSDT",
     "indicator": "macd",
@@ -60768,9 +60751,9 @@
     "signal_open_ms": 1794632400000,
     "signal_close_ms": 1794635999999,
     "deadline_ms": 1795240799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794689957470,
+    "hit_price": 0.0986,
     "created_ms": 1794636272910,
     "source": "simulation"
   },
@@ -60785,9 +60768,9 @@
     "signal_open_ms": 1794632400000,
     "signal_close_ms": 1794635999999,
     "deadline_ms": 1795240799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794689957470,
+    "hit_price": 0.0986,
     "created_ms": 1794636272910,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794686785287,
+    "source": "simulation"
+  },
+  {
+    "signature": "COHRBUSDT|bollinger|1794682800000",
+    "symbol": "COHRBUSDT",
+    "indicator": "bollinger",
+    "entry": "210.21",
+    "sl": "207.97",
+    "tp": "211.89",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794682800000,
+    "signal_close_ms": 1794686399999,
+    "deadline_ms": 1795291199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794689989782,
     "source": "simulation"
   }
 ]
