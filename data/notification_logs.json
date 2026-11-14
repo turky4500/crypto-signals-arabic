@@ -1,17 +1,5 @@
 [
   {
-    "ts": 1792630451511,
-    "kind": "resolution",
-    "symbol": "MANAUSDT",
-    "indicator": "ai",
-    "status": "sl_hit",
-    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: MANAUSDT\n💰 سعر الدخول: 0.0893\n🛑 الوقف: ضُرب عند 0.0875\n📉 الخسارة: -1R (-2.02%)\n⏱ المدة: 8 ساعات\n🕐 وقت الإشارة: 6:59 مساءً",
-    "ok": false,
-    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
-    "attempts": 3,
-    "channel": "telegram"
-  },
-  {
     "ts": 1792630818665,
     "kind": "resolution",
     "symbol": "CRVUSDT",
@@ -5583,6 +5571,18 @@
     "indicator": "supertrend",
     "status": "pending",
     "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: TUSDT\nوصلت العملة إلى سعر الوقف (0.00419) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.00418\n🎯 سعر الدخول: 0.00441\n🛑 سعر الوقف: 0.00419\n🎯 الهدف: 0.00457\n🕐 وقت اللمسة: 4:04 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1794664993462,
+    "kind": "resolution",
+    "symbol": "TUSDT",
+    "indicator": "supertrend",
+    "status": "sl_hit",
+    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: TUSDT\n💰 سعر الدخول: 0.00441\n🛑 الوقف: ضُرب عند 0.00418\n📉 الخسارة: -1R (-5.22%)\n⏱ المدة: يوم واحد و7 ساعات\n🕐 وقت الإشارة: 9:59 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
