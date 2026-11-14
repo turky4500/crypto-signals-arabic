@@ -1,22 +1,5 @@
 [
   {
-    "signature": "VTHOUSDT|bollinger|1794542400000",
-    "symbol": "VTHOUSDT",
-    "indicator": "bollinger",
-    "entry": "0.000494",
-    "sl": "0.000482",
-    "tp": "0.000503",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794542400000,
-    "signal_close_ms": 1794545999999,
-    "deadline_ms": 1795150799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1794550758809,
-    "hit_price": 0.000503,
-    "created_ms": 1794546403241,
-    "source": "simulation"
-  },
-  {
     "signature": "WINUSDT|adx|1794542400000",
     "symbol": "WINUSDT",
     "indicator": "adx",
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": 1794659656412,
     "hit_price": 0.0461,
     "created_ms": 1794659456953,
+    "source": "simulation"
+  },
+  {
+    "signature": "FRAXUSDT|bollinger|1794654000000",
+    "symbol": "FRAXUSDT",
+    "indicator": "bollinger",
+    "entry": "0.2125",
+    "sl": "0.2089",
+    "tp": "0.2152",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794654000000,
+    "signal_close_ms": 1794657599999,
+    "deadline_ms": 1795262399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794661208506,
     "source": "simulation"
   }
 ]
