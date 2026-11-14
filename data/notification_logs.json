@@ -1,18 +1,6 @@
 [
   {
     "ts": 1792627150571,
-    "kind": "resolution",
-    "symbol": "ZKUSDT",
-    "indicator": "ai",
-    "status": "sl_hit",
-    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
-    "ok": false,
-    "error": "HTTP 401: {\"ok\":false,\"error_code\":401,\"description\":\"Unauthorized\"}",
-    "attempts": 3,
-    "channel": "telegram"
-  },
-  {
-    "ts": 1792627150571,
     "kind": "sl_touch",
     "symbol": "MANAUSDT",
     "indicator": "ai",
@@ -5575,6 +5563,18 @@
     "indicator": "supertrend",
     "status": "sl_hit",
     "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: UMAUSDT\n💰 سعر الدخول: 0.304\n🛑 الوقف: ضُرب عند 0.293\n📉 الخسارة: -1R (-3.62%)\n⏱ المدة: 12 ساعة\n🕐 وقت الإشارة: 4:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1794622453053,
+    "kind": "sl_touch",
+    "symbol": "TRBUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: TRBUSDT\nوصلت العملة إلى سعر الوقف (14.28) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 14.26\n🎯 سعر الدخول: 14.86\n🛑 سعر الوقف: 14.28\n🎯 الهدف: 15.29\n🕐 وقت اللمسة: 5:14 صباحًا",
     "ok": true,
     "error": null,
     "attempts": 1,
