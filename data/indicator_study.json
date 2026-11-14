@@ -1,22 +1,5 @@
 [
   {
-    "signature": "CTSIUSDT|adx|1794553200000",
-    "symbol": "CTSIUSDT",
-    "indicator": "adx",
-    "entry": "0.02452",
-    "sl": "0.02398",
-    "tp": "0.02492",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794553200000,
-    "signal_close_ms": 1794556799999,
-    "deadline_ms": 1795161599999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1794594858552,
-    "hit_price": 0.02492,
-    "created_ms": 1794557096554,
-    "source": "simulation"
-  },
-  {
     "signature": "CUSDT|macd|1794553200000",
     "symbol": "CUSDT",
     "indicator": "macd",
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794679579115,
+    "source": "simulation"
+  },
+  {
+    "signature": "WOOUSDT|bollinger|1794675600000",
+    "symbol": "WOOUSDT",
+    "indicator": "bollinger",
+    "entry": "0.00943",
+    "sl": "0.00917",
+    "tp": "0.00962",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794675600000,
+    "signal_close_ms": 1794679199999,
+    "deadline_ms": 1795283999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794682299682,
     "source": "simulation"
   }
 ]
