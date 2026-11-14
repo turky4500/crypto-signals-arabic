@@ -2,18 +2,6 @@
   {
     "ts": 1792631649639,
     "kind": "resolution",
-    "symbol": "ZKUSDT",
-    "indicator": "ai",
-    "status": "sl_hit",
-    "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: ZKUSDT\n💰 سعر الدخول: 0.01543\n🛑 الوقف: ضُرب عند 0.01467\n📉 الخسارة: -1R (-4.93%)\n⏱ المدة: 15 ساعة\n🕐 وقت الإشارة: 10:59 صباحًا",
-    "ok": false,
-    "error": "AMBIGUOUS_NO_RETRY: قد تكون الرسالة وصلت (ConnectionError)",
-    "attempts": 1,
-    "channel": "telegram"
-  },
-  {
-    "ts": 1792631649639,
-    "kind": "resolution",
     "symbol": "MANAUSDT",
     "indicator": "ai",
     "status": "sl_hit",
@@ -5583,6 +5571,18 @@
     "indicator": "supertrend",
     "status": "sl_hit",
     "message": "❌ ضرب الوقف — التوصية خسرت\n🪙 العملة: SLPUSDT\n💰 سعر الدخول: 0.000458\n🛑 الوقف: ضُرب عند 0.000436\n📉 الخسارة: -1R (-4.80%)\n⏱ المدة: 14 ساعة\n🕐 وقت الإشارة: 4:59 مساءً",
+    "ok": true,
+    "error": null,
+    "attempts": 1,
+    "channel": "telegram"
+  },
+  {
+    "ts": 1794689649530,
+    "kind": "sl_touch",
+    "symbol": "HAEDALUSDT",
+    "indicator": "supertrend",
+    "status": "pending",
+    "message": "⚠️ تنبيه: لمسة سعر الوقف\n🪙 العملة: HAEDALUSDT\nوصلت العملة إلى سعر الوقف (0.02060) داخل شمعة 1H\nلكنها لم تُغلق تحته — ولا تُعتبر خسارة حتى الإغلاق تحت سعر الوقف\n📊 السعر الحالي: 0.02045\n🎯 سعر الدخول: 0.02264\n🛑 سعر الوقف: 0.02060\n🎯 الهدف: 0.02417\n🕐 وقت اللمسة: 11:54 مساءً",
     "ok": true,
     "error": null,
     "attempts": 1,
