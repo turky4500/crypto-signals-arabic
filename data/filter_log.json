@@ -1,14 +1,5 @@
 [
   {
-    "symbol": "LAUSDT",
-    "sig": "LAUSDT|1794160799999",
-    "ts": 1794161046775,
-    "signal": "—",
-    "accepted": false,
-    "reason": "quality_gate",
-    "skipped": true
-  },
-  {
     "symbol": "LAYERUSDT",
     "sig": "LAYERUSDT|1794160799999",
     "ts": 1794161046775,
@@ -56527,5 +56518,23 @@
     "require_h4_uptrend": false,
     "h4_ret5_ok": true,
     "h1_rsi_ok": true
+  },
+  {
+    "symbol": "PDDBUSDT",
+    "sig": "PDDBUSDT|1794841199999",
+    "ts": 1794844457290,
+    "signal": "BUY",
+    "accepted": false,
+    "h4_ret5": 0.41,
+    "h4_ret5_min": null,
+    "h1_rsi": 60.8,
+    "h1_rsi_max": 55.0,
+    "d1_above_ema50": false,
+    "h4_in_uptrend": false,
+    "require_d1_above": false,
+    "require_d1_below": true,
+    "require_h4_uptrend": false,
+    "h4_ret5_ok": true,
+    "h1_rsi_ok": false
   }
 ]

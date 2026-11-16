@@ -1,25 +1,5 @@
 [
   {
-    "signature": "LINEAUSDT|bollinger|BUY|1794157200000",
-    "symbol": "LINEAUSDT",
-    "indicator": "bollinger",
-    "entry": "0.002090",
-    "sl": "0.002047",
-    "tp": "0.002122",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794157200000,
-    "signal_close_ms": 1794160799999,
-    "deadline_ms": 1794765599999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1794175199999,
-    "hit_price": 0.001992,
-    "created_ms": 1794161113927,
-    "consensus": 1,
-    "verdict": "blocked",
-    "reason": "low_confidence",
-    "source": "candidate"
-  },
-  {
     "signature": "LQTYUSDT|bollinger|BUY|1794157200000",
     "symbol": "LQTYUSDT",
     "indicator": "bollinger",
@@ -100001,6 +99981,26 @@
     "consensus": 1,
     "verdict": "accepted",
     "reason": "filter_ok",
+    "source": "candidate"
+  },
+  {
+    "signature": "PDDBUSDT|supertrend|BUY|1794837600000",
+    "symbol": "PDDBUSDT",
+    "indicator": "supertrend",
+    "entry": "78.97",
+    "sl": "78.23",
+    "tp": "79.52",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794837600000,
+    "signal_close_ms": 1794841199999,
+    "deadline_ms": 1795445999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794844569303,
+    "consensus": 3,
+    "verdict": "blocked",
+    "reason": "filter",
     "source": "candidate"
   }
 ]
