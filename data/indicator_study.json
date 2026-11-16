@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SUPERUSDT|bollinger|1794690000000",
-    "symbol": "SUPERUSDT",
-    "indicator": "bollinger",
-    "entry": "0.1318",
-    "sl": "0.1240",
-    "tp": "0.1376",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794690000000,
-    "signal_close_ms": 1794693599999,
-    "deadline_ms": 1795298399999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1794735561161,
-    "hit_price": 0.1376,
-    "created_ms": 1794693974736,
-    "source": "simulation"
-  },
-  {
     "signature": "SUSDT|bollinger|1794690000000",
     "symbol": "SUSDT",
     "indicator": "bollinger",
@@ -79230,9 +79213,9 @@
     "signal_open_ms": 1794801600000,
     "signal_close_ms": 1794805199999,
     "deadline_ms": 1795409999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794812960100,
+    "hit_price": 0.0337,
     "created_ms": 1794805537961,
     "source": "simulation"
   },
@@ -84840,9 +84823,9 @@
     "signal_open_ms": 1794808800000,
     "signal_close_ms": 1794812399999,
     "deadline_ms": 1795417199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794812960100,
+    "hit_price": 1.0003,
     "created_ms": 1794812780647,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794812792886,
+    "source": "simulation"
+  },
+  {
+    "signature": "AGPUBUSDT|ichimoku|1794808800000",
+    "symbol": "AGPUBUSDT",
+    "indicator": "ichimoku",
+    "entry": "8.25",
+    "sl": "8.17",
+    "tp": "8.31",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794808800000,
+    "signal_close_ms": 1794812399999,
+    "deadline_ms": 1795417199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794812966491,
     "source": "simulation"
   }
 ]
