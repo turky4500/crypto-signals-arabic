@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BNBUSDT|bollinger|1794675600000",
-    "symbol": "BNBUSDT",
-    "indicator": "bollinger",
-    "entry": "590.41",
-    "sl": "573.14",
-    "tp": "603.36",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794675600000,
-    "signal_close_ms": 1794679199999,
-    "deadline_ms": 1795283999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1794707999999,
-    "hit_price": 571.54,
-    "created_ms": 1794679482087,
-    "source": "simulation"
-  },
-  {
     "signature": "BNSOLUSDT|bollinger|1794675600000",
     "symbol": "BNSOLUSDT",
     "indicator": "bollinger",
@@ -36356,9 +36339,9 @@
     "signal_open_ms": 1794744000000,
     "signal_close_ms": 1794747599999,
     "deadline_ms": 1795352399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794798860576,
+    "hit_price": 0.01505,
     "created_ms": 1794747886812,
     "source": "simulation"
   },
@@ -36373,9 +36356,9 @@
     "signal_open_ms": 1794744000000,
     "signal_close_ms": 1794747599999,
     "deadline_ms": 1795352399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794798860576,
+    "hit_price": 0.01505,
     "created_ms": 1794747886812,
     "source": "simulation"
   },
@@ -73280,9 +73263,9 @@
     "signal_open_ms": 1794787200000,
     "signal_close_ms": 1794790799999,
     "deadline_ms": 1795395599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794798860576,
+    "hit_price": 0.013,
     "created_ms": 1794791085760,
     "source": "simulation"
   },
@@ -75779,9 +75762,9 @@
     "signal_open_ms": 1794787200000,
     "signal_close_ms": 1794790799999,
     "deadline_ms": 1795395599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794797999999,
+    "hit_price": 0.268,
     "created_ms": 1794791172489,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794798402589,
+    "source": "simulation"
+  },
+  {
+    "signature": "UMAUSDT|rsi50|1794794400000",
+    "symbol": "UMAUSDT",
+    "indicator": "rsi50",
+    "entry": "0.267",
+    "sl": "0.259",
+    "tp": "0.273",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794794400000,
+    "signal_close_ms": 1794797999999,
+    "deadline_ms": 1795402799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794798982813,
     "source": "simulation"
   }
 ]
