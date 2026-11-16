@@ -1,23 +1,5 @@
 [
   {
-    "symbol": "MMTUSDT",
-    "sig": "MMTUSDT|1794110399999",
-    "ts": 1794110652253,
-    "signal": "—",
-    "accepted": false,
-    "reason": "quality_gate",
-    "skipped": true
-  },
-  {
-    "symbol": "NEOUSDT",
-    "sig": "NEOUSDT|1794110399999",
-    "ts": 1794110652253,
-    "signal": "—",
-    "accepted": false,
-    "reason": "quality_gate",
-    "skipped": true
-  },
-  {
     "symbol": "OPNUSDT",
     "sig": "OPNUSDT|1794110399999",
     "ts": 1794110652253,
@@ -56374,5 +56356,41 @@
     "require_h4_uptrend": false,
     "h4_ret5_ok": true,
     "h1_rsi_ok": false
+  },
+  {
+    "symbol": "MSTRBUSDT",
+    "sig": "MSTRBUSDT|1794794399999",
+    "ts": 1794794648259,
+    "signal": "BUY",
+    "accepted": false,
+    "h4_ret5": 1.43,
+    "h4_ret5_min": null,
+    "h1_rsi": 66.0,
+    "h1_rsi_max": 55.0,
+    "d1_above_ema50": false,
+    "h4_in_uptrend": false,
+    "require_d1_above": false,
+    "require_d1_below": true,
+    "require_h4_uptrend": false,
+    "h4_ret5_ok": true,
+    "h1_rsi_ok": false
+  },
+  {
+    "symbol": "SOXSBUSDT",
+    "sig": "SOXSBUSDT|1794794399999",
+    "ts": 1794794648259,
+    "signal": "BUY",
+    "accepted": false,
+    "h4_ret5": -4.51,
+    "h4_ret5_min": null,
+    "h1_rsi": 53.5,
+    "h1_rsi_max": 55.0,
+    "d1_above_ema50": true,
+    "h4_in_uptrend": false,
+    "require_d1_above": false,
+    "require_d1_below": true,
+    "require_h4_uptrend": false,
+    "h4_ret5_ok": true,
+    "h1_rsi_ok": true
   }
 ]
