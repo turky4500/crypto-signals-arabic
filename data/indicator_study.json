@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SOXSBUSDT|adx|1794816000000",
-    "symbol": "SOXSBUSDT",
-    "indicator": "adx",
-    "entry": "55.13",
-    "sl": "52.71",
-    "tp": "56.94",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794816000000,
-    "signal_close_ms": 1794819599999,
-    "deadline_ms": 1795424399999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1794832102805,
-    "hit_price": 56.94,
-    "created_ms": 1794819859950,
-    "source": "simulation"
-  },
-  {
     "signature": "SPCXBUSDT|macd|1794816000000",
     "symbol": "SPCXBUSDT",
     "indicator": "macd",
@@ -54597,9 +54580,9 @@
     "signal_open_ms": 1794870000000,
     "signal_close_ms": 1794873599999,
     "deadline_ms": 1795478399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794901467023,
+    "hit_price": 0.00161,
     "created_ms": 1794873949327,
     "source": "simulation"
   },
@@ -62145,9 +62128,9 @@
     "signal_open_ms": 1794877200000,
     "signal_close_ms": 1794880799999,
     "deadline_ms": 1795485599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794898799999,
+    "hit_price": 1.0016,
     "created_ms": 1794881195618,
     "source": "simulation"
   },
@@ -76102,9 +76085,9 @@
     "signal_open_ms": 1794888000000,
     "signal_close_ms": 1794891599999,
     "deadline_ms": 1795496399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794901467023,
+    "hit_price": 0.33,
     "created_ms": 1794891951794,
     "source": "simulation"
   },
@@ -76221,9 +76204,9 @@
     "signal_open_ms": 1794888000000,
     "signal_close_ms": 1794891599999,
     "deadline_ms": 1795496399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794901467023,
+    "hit_price": 0.001607,
     "created_ms": 1794891953809,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794899206363,
+    "source": "simulation"
+  },
+  {
+    "signature": "USDSUSDT|adx|1794895200000",
+    "symbol": "USDSUSDT",
+    "indicator": "adx",
+    "entry": "1.0007",
+    "sl": "0.9992",
+    "tp": "1.0018",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794895200000,
+    "signal_close_ms": 1794898799999,
+    "deadline_ms": 1795503599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794901577261,
     "source": "simulation"
   }
 ]
