@@ -30787,5 +30787,49 @@
       }
     },
     "signature": "ROBOUSDT|ai|BUY|1794895200000"
+  },
+  {
+    "symbol": "GMTUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794898800000,
+    "candle_close_ms": 1794902399999,
+    "signal_price": 0.00556,
+    "entry": "0.00556",
+    "sl": "0.00544",
+    "tp": "0.00565",
+    "rr_ratio": 0.75,
+    "confidence": 0.6784,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "10:59 صباحًا",
+    "created_at_ms": 1794902790978,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794902790978,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.91,
+      "h4_ret5_min": null,
+      "h1_rsi": 53.8,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.6784,
+          "risk_pct": 2.158
+        }
+      }
+    },
+    "signature": "GMTUSDT|ai|BUY|1794898800000"
   }
 ]
