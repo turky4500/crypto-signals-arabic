@@ -3724,9 +3724,9 @@
     "signal_open_ms": 1794578400000,
     "signal_close_ms": 1794581999999,
     "deadline_ms": 1795186799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1794931199999,
+    "hit_price": 501.04,
     "created_ms": 1794582401054,
     "filtered": true,
     "whatsapp_status": "sent",
@@ -4290,7 +4290,10 @@
     "hit_price": null,
     "created_ms": 1794848811319,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1794931199999,
+    "sl_touch_low": 149.98,
+    "sl_touch_notified": true
   },
   {
     "signature": "PORTALUSDT|supertrend|BUY|1794852000000",
