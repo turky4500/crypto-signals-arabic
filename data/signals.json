@@ -30831,5 +30831,49 @@
       }
     },
     "signature": "GMTUSDT|ai|BUY|1794898800000"
+  },
+  {
+    "symbol": "NILUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794906000000,
+    "candle_close_ms": 1794909599999,
+    "signal_price": 0.05177,
+    "entry": "0.05177",
+    "sl": "0.05036",
+    "tp": "0.05282",
+    "rr_ratio": 0.75,
+    "confidence": 1.0,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "12:59 مساءً",
+    "created_at_ms": 1794909951413,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794909951413,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -1.15,
+      "h4_ret5_min": null,
+      "h1_rsi": 50.7,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 1.0,
+          "risk_pct": 2.724
+        }
+      }
+    },
+    "signature": "NILUSDT|ai|BUY|1794906000000"
   }
 ]
