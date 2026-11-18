@@ -31403,5 +31403,49 @@
       }
     },
     "signature": "SHAZBUSDT|ai|BUY|1795010400000"
+  },
+  {
+    "symbol": "CITYUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795024800000,
+    "candle_close_ms": 1795028399999,
+    "signal_price": 0.229,
+    "entry": "0.229",
+    "sl": "0.222",
+    "tp": "0.234",
+    "rr_ratio": 0.75,
+    "confidence": 0.7012,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "9:59 مساءً",
+    "created_at_ms": 1795028811848,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795028811848,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.88,
+      "h4_ret5_min": null,
+      "h1_rsi": 50.0,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.7012,
+          "risk_pct": 3.057
+        }
+      }
+    },
+    "signature": "CITYUSDT|ai|BUY|1795024800000"
   }
 ]
