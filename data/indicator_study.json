@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SAHARAUSDT|adx|1794902400000",
-    "symbol": "SAHARAUSDT",
-    "indicator": "adx",
-    "entry": "0.00547",
-    "sl": "0.00541",
-    "tp": "0.00551",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794902400000,
-    "signal_close_ms": 1794905999999,
-    "deadline_ms": 1795510799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1794914611375,
-    "hit_price": 0.00551,
-    "created_ms": 1794906362055,
-    "source": "simulation"
-  },
-  {
     "signature": "SANTOSUSDT|adx|1794902400000",
     "symbol": "SANTOSUSDT",
     "indicator": "adx",
@@ -1999,9 +1982,9 @@
     "signal_open_ms": 1794906000000,
     "signal_close_ms": 1794909599999,
     "deadline_ms": 1795514399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1794969857789,
+    "hit_price": 0.0751,
     "created_ms": 1794909854328,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1794967602305,
+    "source": "simulation"
+  },
+  {
+    "signature": "BANANAUSDT|ichimoku|1794963600000",
+    "symbol": "BANANAUSDT",
+    "indicator": "ichimoku",
+    "entry": "2.716",
+    "sl": "2.672",
+    "tp": "2.749",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1794963600000,
+    "signal_close_ms": 1794967199999,
+    "deadline_ms": 1795571999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1794969877870,
     "source": "simulation"
   }
 ]
