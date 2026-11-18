@@ -31315,5 +31315,49 @@
       }
     },
     "signature": "FIDAUSDT|ai|BUY|1795003200000"
+  },
+  {
+    "symbol": "CRDOBUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795006800000,
+    "candle_close_ms": 1795010399999,
+    "signal_price": 128.48,
+    "entry": "128.48",
+    "sl": "123.94",
+    "tp": "131.88",
+    "rr_ratio": 0.75,
+    "confidence": 0.8072,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "4:59 مساءً",
+    "created_at_ms": 1795010785828,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795010785828,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 8.28,
+      "h4_ret5_min": null,
+      "h1_rsi": 38.0,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.8072,
+          "risk_pct": 3.534
+        }
+      }
+    },
+    "signature": "CRDOBUSDT|ai|BUY|1795006800000"
   }
 ]
