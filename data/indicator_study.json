@@ -1,22 +1,5 @@
 [
   {
-    "signature": "AMDBUSDT|rsi50|1794967200000",
-    "symbol": "AMDBUSDT",
-    "indicator": "rsi50",
-    "entry": "510.18",
-    "sl": "487.97",
-    "tp": "526.83",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794967200000,
-    "signal_close_ms": 1794970799999,
-    "deadline_ms": 1795575599999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1795034659831,
-    "hit_price": 526.83,
-    "created_ms": 1794971070250,
-    "source": "simulation"
-  },
-  {
     "signature": "AMPUSDT|ichimoku|1794967200000",
     "symbol": "AMPUSDT",
     "indicator": "ichimoku",
@@ -80862,9 +80845,9 @@
     "signal_open_ms": 1795028400000,
     "signal_close_ms": 1795031999999,
     "deadline_ms": 1795636799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795036167422,
+    "hit_price": 0.00109,
     "created_ms": 1795032367717,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795035986629,
+    "source": "simulation"
+  },
+  {
+    "signature": "CRWDBUSDT|adx|1795032000000",
+    "symbol": "CRWDBUSDT",
+    "indicator": "adx",
+    "entry": "237.36",
+    "sl": "231.69",
+    "tp": "241.61",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795032000000,
+    "signal_close_ms": 1795035599999,
+    "deadline_ms": 1795640399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795036196570,
     "source": "simulation"
   }
 ]
