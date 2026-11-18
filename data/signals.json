@@ -31227,5 +31227,49 @@
       }
     },
     "signature": "TNSRUSDT|ai|BUY|1794970800000"
+  },
+  {
+    "symbol": "GMXUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1794992400000,
+    "candle_close_ms": 1794995999999,
+    "signal_price": 7.33,
+    "entry": "7.33",
+    "sl": "7.20",
+    "tp": "7.42",
+    "rr_ratio": 0.75,
+    "confidence": 0.6552,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "12:59 مساءً",
+    "created_at_ms": 1794996917412,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1794996917412,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.41,
+      "h4_ret5_min": null,
+      "h1_rsi": 50.0,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.6552,
+          "risk_pct": 1.774
+        }
+      }
+    },
+    "signature": "GMXUSDT|ai|BUY|1794992400000"
   }
 ]
