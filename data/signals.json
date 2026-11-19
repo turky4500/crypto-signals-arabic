@@ -31623,5 +31623,49 @@
       }
     },
     "signature": "ACTUSDT|supertrend|BUY|1795057200000"
+  },
+  {
+    "symbol": "1000CHEEMSUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795060800000,
+    "candle_close_ms": 1795064399999,
+    "signal_price": 0.000307,
+    "entry": "0.000307",
+    "sl": "0.000300",
+    "tp": "0.000312",
+    "rr_ratio": 0.75,
+    "confidence": 0.8927,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "7:59 صباحًا",
+    "created_at_ms": 1795064784125,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795064784125,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.99,
+      "h4_ret5_min": null,
+      "h1_rsi": 53.8,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.8927,
+          "risk_pct": 2.28
+        }
+      }
+    },
+    "signature": "1000CHEEMSUSDT|ai|BUY|1795060800000"
   }
 ]

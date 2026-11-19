@@ -4645,9 +4645,9 @@
     "signal_open_ms": 1795024800000,
     "signal_close_ms": 1795028399999,
     "deadline_ms": 1795633199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795064399999,
+    "hit_price": 0.234,
     "created_ms": 1795028811848,
     "filtered": true,
     "whatsapp_status": "sent"
@@ -4721,6 +4721,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795061225531,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "1000CHEEMSUSDT|ai|BUY|1795060800000",
+    "symbol": "1000CHEEMSUSDT",
+    "indicator": "ai",
+    "entry": "0.000307",
+    "sl": "0.000300",
+    "tp": "0.000312",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795060800000,
+    "signal_close_ms": 1795064399999,
+    "deadline_ms": 1795669199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795064784125,
     "filtered": true,
     "whatsapp_status": "sent"
   }
