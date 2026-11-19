@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ZECUSDT|bollinger|1795042800000",
-    "symbol": "ZECUSDT",
-    "indicator": "bollinger",
-    "entry": "913.66",
-    "sl": "874.41",
-    "tp": "943.09",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795042800000,
-    "signal_close_ms": 1795046399999,
-    "deadline_ms": 1795651199999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1795067999999,
-    "hit_price": 943.09,
-    "created_ms": 1795046795457,
-    "source": "simulation"
-  },
-  {
     "signature": "ZILUSDT|adx|1795042800000",
     "symbol": "ZILUSDT",
     "indicator": "adx",
@@ -83463,9 +83446,9 @@
     "signal_open_ms": 1795122000000,
     "signal_close_ms": 1795125599999,
     "deadline_ms": 1795730399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795127661542,
+    "hit_price": 1.2,
     "created_ms": 1795125900480,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795126000642,
+    "source": "simulation"
+  },
+  {
+    "signature": "PENGBUSDT|bollinger|1795122000000",
+    "symbol": "PENGBUSDT",
+    "indicator": "bollinger",
+    "entry": "42.29",
+    "sl": "40.35",
+    "tp": "43.74",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795122000000,
+    "signal_close_ms": 1795125599999,
+    "deadline_ms": 1795730399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795127747269,
     "source": "simulation"
   }
 ]
