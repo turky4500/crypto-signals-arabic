@@ -1,22 +1,5 @@
 [
   {
-    "signature": "RUNEUSDT|adx|1794978000000",
-    "symbol": "RUNEUSDT",
-    "indicator": "adx",
-    "entry": "0.550",
-    "sl": "0.537",
-    "tp": "0.559",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794978000000,
-    "signal_close_ms": 1794981599999,
-    "deadline_ms": 1795586399999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1795013999999,
-    "hit_price": 0.532,
-    "created_ms": 1794981955977,
-    "source": "simulation"
-  },
-  {
     "signature": "RVNUSDT|ichimoku|1794978000000",
     "symbol": "RVNUSDT",
     "indicator": "ichimoku",
@@ -61482,9 +61465,9 @@
     "signal_open_ms": 1795028400000,
     "signal_close_ms": 1795031999999,
     "deadline_ms": 1795636799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795056560708,
+    "hit_price": 7.17,
     "created_ms": 1795032267457,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795054867294,
+    "source": "simulation"
+  },
+  {
+    "signature": "BIGTIMEUSDT|macd|1795050000000",
+    "symbol": "BIGTIMEUSDT",
+    "indicator": "macd",
+    "entry": "0.00440",
+    "sl": "0.00428",
+    "tp": "0.00449",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795050000000,
+    "signal_close_ms": 1795053599999,
+    "deadline_ms": 1795658399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795056580790,
     "source": "simulation"
   }
 ]
