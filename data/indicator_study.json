@@ -1,22 +1,5 @@
 [
   {
-    "signature": "OPNUSDT|ichimoku|1794992400000",
-    "symbol": "OPNUSDT",
-    "indicator": "ichimoku",
-    "entry": "0.0321",
-    "sl": "0.0312",
-    "tp": "0.0327",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1794992400000,
-    "signal_close_ms": 1794995999999,
-    "deadline_ms": 1795600799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1794996356289,
-    "source": "simulation"
-  },
-  {
     "signature": "OPUSDT|rsi50|1794992400000",
     "symbol": "OPUSDT",
     "indicator": "rsi50",
@@ -30372,9 +30355,9 @@
     "signal_open_ms": 1795021200000,
     "signal_close_ms": 1795024799999,
     "deadline_ms": 1795629599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795073356384,
+    "hit_price": 37.32,
     "created_ms": 1795025077101,
     "source": "simulation"
   },
@@ -35812,9 +35795,9 @@
     "signal_open_ms": 1795021200000,
     "signal_close_ms": 1795024799999,
     "deadline_ms": 1795629599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795064399999,
+    "hit_price": 0.00045,
     "created_ms": 1795025177213,
     "source": "simulation"
   },
@@ -52132,9 +52115,9 @@
     "signal_open_ms": 1795042800000,
     "signal_close_ms": 1795046399999,
     "deadline_ms": 1795651199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795073356384,
+    "hit_price": 140.53,
     "created_ms": 1795046706573,
     "source": "simulation"
   },
@@ -61108,9 +61091,9 @@
     "signal_open_ms": 1795050000000,
     "signal_close_ms": 1795053599999,
     "deadline_ms": 1795658399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795073356384,
+    "hit_price": 37.35,
     "created_ms": 1795053879433,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795072005885,
+    "source": "simulation"
+  },
+  {
+    "signature": "VTHOUSDT|awesome|1795068000000",
+    "symbol": "VTHOUSDT",
+    "indicator": "awesome",
+    "entry": "0.000449",
+    "sl": "0.000442",
+    "tp": "0.000454",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795068000000,
+    "signal_close_ms": 1795071599999,
+    "deadline_ms": 1795676399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795073505043,
     "source": "simulation"
   }
 ]
