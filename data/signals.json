@@ -31667,5 +31667,49 @@
       }
     },
     "signature": "1000CHEEMSUSDT|ai|BUY|1795060800000"
+  },
+  {
+    "symbol": "MOVRUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795071600000,
+    "candle_close_ms": 1795075199999,
+    "signal_price": 0.874,
+    "entry": "0.874",
+    "sl": "0.850",
+    "tp": "0.892",
+    "rr_ratio": 0.75,
+    "confidence": 0.6866,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "10:59 صباحًا",
+    "created_at_ms": 1795075595961,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795075595961,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.92,
+      "h4_ret5_min": null,
+      "h1_rsi": 53.1,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.6866,
+          "risk_pct": 2.746
+        }
+      }
+    },
+    "signature": "MOVRUSDT|ai|BUY|1795071600000"
   }
 ]
