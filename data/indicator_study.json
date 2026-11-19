@@ -1,22 +1,5 @@
 [
   {
-    "signature": "REUSDT|adx|1795035600000",
-    "symbol": "REUSDT",
-    "indicator": "adx",
-    "entry": "0.2338",
-    "sl": "0.2279",
-    "tp": "0.2382",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795035600000,
-    "signal_close_ms": 1795039199999,
-    "deadline_ms": 1795643999999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1795064399999,
-    "hit_price": 0.2382,
-    "created_ms": 1795039562817,
-    "source": "simulation"
-  },
-  {
     "signature": "RKLBBUSDT|bollinger|1795035600000",
     "symbol": "RKLBBUSDT",
     "indicator": "bollinger",
@@ -81542,9 +81525,9 @@
     "signal_open_ms": 1795104000000,
     "signal_close_ms": 1795107599999,
     "deadline_ms": 1795712399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795114759096,
+    "hit_price": 0.315,
     "created_ms": 1795108288736,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795111607236,
+    "source": "simulation"
+  },
+  {
+    "signature": "XNOUSDT|adx|1795107600000",
+    "symbol": "XNOUSDT",
+    "indicator": "adx",
+    "entry": "0.308",
+    "sl": "0.297",
+    "tp": "0.316",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795107600000,
+    "signal_close_ms": 1795111199999,
+    "deadline_ms": 1795715999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795114892321,
     "source": "simulation"
   }
 ]
