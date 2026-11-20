@@ -1,26 +1,5 @@
 [
   {
-    "signature": "PHAUSDT|supertrend|BUY|1792616400000",
-    "symbol": "PHAUSDT",
-    "indicator": "supertrend",
-    "entry": "0.0620",
-    "sl": "0.0562",
-    "tp": "0.0736",
-    "rr_ratio": 2.0,
-    "signal_open_ms": 1792616400000,
-    "signal_close_ms": 1792619999999,
-    "deadline_ms": 1793224799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1792792799999,
-    "hit_price": 0.0561,
-    "created_ms": 1792620414198,
-    "filtered": true,
-    "whatsapp_status": "failed",
-    "sl_touch_ms": 1792792745074,
-    "sl_touch_low": 0.0561,
-    "sl_touch_notified": true
-  },
-  {
     "signature": "GTCUSDT|ai|BUY|1792710000000",
     "symbol": "GTCUSDT",
     "indicator": "ai",
@@ -4814,6 +4793,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795208813187,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "RSRUSDT|supertrend|BUY|1795208400000",
+    "symbol": "RSRUSDT",
+    "indicator": "supertrend",
+    "entry": "0.001251",
+    "sl": "0.001167",
+    "tp": "0.001314",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795208400000,
+    "signal_close_ms": 1795211999999,
+    "deadline_ms": 1795816799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795212407405,
     "filtered": true,
     "whatsapp_status": "sent"
   }
