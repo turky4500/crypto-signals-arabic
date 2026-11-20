@@ -31931,5 +31931,49 @@
       }
     },
     "signature": "SKYUSDT|supertrend|BUY|1795114800000"
+  },
+  {
+    "symbol": "REQUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795136400000,
+    "candle_close_ms": 1795139999999,
+    "signal_price": 0.0436,
+    "entry": "0.0436",
+    "sl": "0.0407",
+    "tp": "0.0457",
+    "rr_ratio": 0.75,
+    "confidence": 0.772,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "4:59 صباحًا",
+    "created_at_ms": 1795140382446,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795140382446,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 1.44,
+      "h4_ret5_min": null,
+      "h1_rsi": 48.2,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.772,
+          "risk_pct": 6.651
+        }
+      }
+    },
+    "signature": "REQUSDT|ai|BUY|1795136400000"
   }
 ]
