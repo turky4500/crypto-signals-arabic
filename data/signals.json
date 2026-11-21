@@ -32283,5 +32283,49 @@
       }
     },
     "signature": "ORCAUSDT|supertrend|BUY|1795222800000"
+  },
+  {
+    "symbol": "FUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795226400000,
+    "candle_close_ms": 1795229999999,
+    "signal_price": 0.002121,
+    "entry": "0.002121",
+    "sl": "0.002028",
+    "tp": "0.002190",
+    "rr_ratio": 0.75,
+    "confidence": 0.7556,
+    "ema_trend": "bearish",
+    "volume_ok": false,
+    "time_text": "5:59 صباحًا",
+    "created_at_ms": 1795230397405,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795230397405,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -4.25,
+      "h4_ret5_min": null,
+      "h1_rsi": 46.7,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.7556,
+          "risk_pct": 4.385
+        }
+      }
+    },
+    "signature": "FUSDT|supertrend|BUY|1795226400000"
   }
 ]
