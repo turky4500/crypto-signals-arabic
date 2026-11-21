@@ -3675,7 +3675,10 @@
     "hit_price": null,
     "created_ms": 1794712001227,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1795237199999,
+    "sl_touch_low": 0.0687,
+    "sl_touch_notified": true
   },
   {
     "signature": "TKOUSDT|supertrend|BUY|1794708000000",
@@ -4864,9 +4867,9 @@
     "signal_open_ms": 1795212000000,
     "signal_close_ms": 1795215599999,
     "deadline_ms": 1795820399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1795237199999,
+    "hit_price": 0.00369,
     "created_ms": 1795216006442,
     "filtered": true,
     "whatsapp_status": "sent",
