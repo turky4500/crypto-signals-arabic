@@ -32415,5 +32415,49 @@
       }
     },
     "signature": "TRXUSDT|supertrend|BUY|1795244400000"
+  },
+  {
+    "symbol": "TAOUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795258800000,
+    "candle_close_ms": 1795262399999,
+    "signal_price": 181.2,
+    "entry": "181.2",
+    "sl": "167.1",
+    "tp": "191.7",
+    "rr_ratio": 0.75,
+    "confidence": 0.611,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "2:59 مساءً",
+    "created_at_ms": 1795263452313,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795263452313,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 3.37,
+      "h4_ret5_min": null,
+      "h1_rsi": 53.7,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.611,
+          "risk_pct": 7.781
+        }
+      }
+    },
+    "signature": "TAOUSDT|supertrend|BUY|1795258800000"
   }
 ]
