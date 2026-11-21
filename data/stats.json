@@ -1,7 +1,7 @@
 {
   "monitored_symbols": 454,
-  "signals_today": 67,
-  "supertrend_today": 67,
+  "signals_today": 0,
+  "supertrend_today": 0,
   "ai_today": 0,
   "strong_today": 0,
   "bollinger_today": 0,
@@ -49,8 +49,8 @@
     },
     "signature": "PEOPLEUSDT|supertrend|BUY|1795273200000"
   },
-  "last_check": 1795294750571,
-  "data_date": "2026-11-21",
+  "last_check": 1795295046197,
+  "data_date": "2026-11-22",
   "filter_meta": {
     "enabled": true,
     "activated_ms": 1789124605224,
@@ -68,98 +68,98 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 171,
-        "tp_hit": 60,
-        "sl_hit": 35,
-        "pending": 76,
+        "total": 172,
+        "tp_hit": 59,
+        "sl_hit": 32,
+        "pending": 81,
         "expired": 0,
-        "win_rate": 63.2
+        "win_rate": 64.8
       },
       "awesome": {
-        "total": 347,
-        "tp_hit": 39,
-        "sl_hit": 16,
-        "pending": 292,
+        "total": 355,
+        "tp_hit": 40,
+        "sl_hit": 15,
+        "pending": 300,
         "expired": 0,
-        "win_rate": 70.9
+        "win_rate": 72.7
       },
       "macd": {
-        "total": 776,
-        "tp_hit": 321,
-        "sl_hit": 244,
-        "pending": 211,
+        "total": 774,
+        "tp_hit": 320,
+        "sl_hit": 245,
+        "pending": 209,
         "expired": 0,
-        "win_rate": 56.8
+        "win_rate": 56.6
       },
       "bollinger": {
-        "total": 572,
-        "tp_hit": 224,
-        "sl_hit": 197,
-        "pending": 151,
+        "total": 391,
+        "tp_hit": 165,
+        "sl_hit": 101,
+        "pending": 125,
         "expired": 0,
-        "win_rate": 53.2
+        "win_rate": 62.0
       },
       "rsi50": {
-        "total": 602,
-        "tp_hit": 109,
-        "sl_hit": 29,
-        "pending": 464,
+        "total": 625,
+        "tp_hit": 111,
+        "sl_hit": 28,
+        "pending": 486,
         "expired": 0,
-        "win_rate": 79.0
+        "win_rate": 79.9
       },
       "adx": {
-        "total": 2532,
-        "tp_hit": 522,
-        "sl_hit": 179,
-        "pending": 1831,
+        "total": 2683,
+        "tp_hit": 510,
+        "sl_hit": 163,
+        "pending": 2010,
         "expired": 0,
-        "win_rate": 74.5
+        "win_rate": 75.8
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
+    "added_this_run": 3,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 4592,
-      "pending": 406,
+      "resolved": 4590,
+      "pending": 408,
       "expired": 2,
-      "tp_hit": 1939,
-      "sl_hit": 2653,
-      "win_rate": 0.4223,
-      "ev_per_trade": -0.261
+      "tp_hit": 1940,
+      "sl_hit": 2650,
+      "win_rate": 0.4227,
+      "ev_per_trade": -0.2603
     },
     "with_filter": {
-      "total": 157,
-      "resolved": 93,
+      "total": 155,
+      "resolved": 91,
       "pending": 64,
       "expired": 0,
       "tp_hit": 35,
-      "sl_hit": 58,
-      "win_rate": 0.3763,
-      "ev_per_trade": -0.3415
+      "sl_hit": 56,
+      "win_rate": 0.3846,
+      "ev_per_trade": -0.3269
     },
     "with_consensus_ge3": {
       "total": 72,
-      "resolved": 62,
-      "pending": 10,
+      "resolved": 63,
+      "pending": 9,
       "expired": 0,
-      "tp_hit": 24,
+      "tp_hit": 25,
       "sl_hit": 38,
-      "win_rate": 0.3871,
-      "ev_per_trade": -0.3226
+      "win_rate": 0.3968,
+      "ev_per_trade": -0.3056
     },
     "blocked": {
-      "total": 4843,
+      "total": 4845,
       "resolved": 4499,
-      "pending": 342,
+      "pending": 344,
       "expired": 2,
-      "tp_hit": 1904,
-      "sl_hit": 2595,
-      "win_rate": 0.4232,
-      "ev_per_trade": -0.2594
+      "tp_hit": 1905,
+      "sl_hit": 2594,
+      "win_rate": 0.4234,
+      "ev_per_trade": -0.2591
     },
     "by_reason": {
       "filter": {
@@ -167,25 +167,25 @@
         "resolved": 930,
         "pending": 137,
         "expired": 0,
-        "tp_hit": 368,
-        "sl_hit": 562,
-        "win_rate": 0.3957,
-        "ev_per_trade": -0.3075
+        "tp_hit": 369,
+        "sl_hit": 561,
+        "win_rate": 0.3968,
+        "ev_per_trade": -0.3056
       },
       "filter_ok": {
-        "total": 157,
-        "resolved": 93,
+        "total": 155,
+        "resolved": 91,
         "pending": 64,
         "expired": 0,
         "tp_hit": 35,
-        "sl_hit": 58,
-        "win_rate": 0.3763,
-        "ev_per_trade": -0.3415
+        "sl_hit": 56,
+        "win_rate": 0.3846,
+        "ev_per_trade": -0.3269
       },
       "low_confidence": {
-        "total": 3757,
+        "total": 3759,
         "resolved": 3556,
-        "pending": 199,
+        "pending": 201,
         "expired": 2,
         "tp_hit": 1535,
         "sl_hit": 2021,
