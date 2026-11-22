@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BARDUSDT|adx|1795280400000",
-    "symbol": "BARDUSDT",
-    "indicator": "adx",
-    "entry": "0.1014",
-    "sl": "0.0881",
-    "tp": "0.1113",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795280400000,
-    "signal_close_ms": 1795283999999,
-    "deadline_ms": 1795888799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1795284278871,
-    "source": "simulation"
-  },
-  {
     "signature": "BARUSDT|adx|1795280400000",
     "symbol": "BARUSDT",
     "indicator": "adx",
@@ -71614,9 +71597,9 @@
     "signal_open_ms": 1795352400000,
     "signal_close_ms": 1795355999999,
     "deadline_ms": 1795960799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795373056646,
+    "hit_price": 1.0016,
     "created_ms": 1795356381669,
     "source": "simulation"
   },
@@ -79077,9 +79060,9 @@
     "signal_open_ms": 1795363200000,
     "signal_close_ms": 1795366799999,
     "deadline_ms": 1795971599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795373056646,
+    "hit_price": 0.0614,
     "created_ms": 1795367089115,
     "source": "simulation"
   },
@@ -79247,9 +79230,9 @@
     "signal_open_ms": 1795363200000,
     "signal_close_ms": 1795366799999,
     "deadline_ms": 1795971599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795373056646,
+    "hit_price": 0.0482,
     "created_ms": 1795367092984,
     "source": "simulation"
   },
@@ -81338,9 +81321,9 @@
     "signal_open_ms": 1795363200000,
     "signal_close_ms": 1795366799999,
     "deadline_ms": 1795971599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795373056646,
+    "hit_price": 1.0016,
     "created_ms": 1795367163889,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795372170350,
+    "source": "simulation"
+  },
+  {
+    "signature": "CUSDT|adx|1795366800000",
+    "symbol": "CUSDT",
+    "indicator": "adx",
+    "entry": "0.0611",
+    "sl": "0.0591",
+    "tp": "0.0626",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795366800000,
+    "signal_close_ms": 1795370399999,
+    "deadline_ms": 1795975199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795373086087,
     "source": "simulation"
   }
 ]
