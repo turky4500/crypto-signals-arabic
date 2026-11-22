@@ -1,22 +1,5 @@
 [
   {
-    "signature": "BANANAUSDT|adx|1795280400000",
-    "symbol": "BANANAUSDT",
-    "indicator": "adx",
-    "entry": "2.488",
-    "sl": "2.433",
-    "tp": "2.529",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795280400000,
-    "signal_close_ms": 1795283999999,
-    "deadline_ms": 1795888799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1795284278089,
-    "source": "simulation"
-  },
-  {
     "signature": "BANDUSDT|adx|1795280400000",
     "symbol": "BANDUSDT",
     "indicator": "adx",
@@ -1319,9 +1302,9 @@
     "signal_open_ms": 1795280400000,
     "signal_close_ms": 1795283999999,
     "deadline_ms": 1795888799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795334399999,
+    "hit_price": 0.0469,
     "created_ms": 1795284306109,
     "source": "simulation"
   },
@@ -15361,9 +15344,9 @@
     "signal_open_ms": 1795291200000,
     "signal_close_ms": 1795294799999,
     "deadline_ms": 1795899599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1795319999999,
+    "hit_price": 0.0455,
     "created_ms": 1795295105851,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795370779046,
+    "source": "simulation"
+  },
+  {
+    "signature": "FLUXUSDT|adx|1795366800000",
+    "symbol": "FLUXUSDT",
+    "indicator": "adx",
+    "entry": "0.0475",
+    "sl": "0.0465",
+    "tp": "0.0482",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795366800000,
+    "signal_close_ms": 1795370399999,
+    "deadline_ms": 1795975199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795371601735,
     "source": "simulation"
   }
 ]
