@@ -35627,5 +35627,49 @@
       }
     },
     "signature": "SSVUSDT|supertrend|BUY|1795352400000"
+  },
+  {
+    "symbol": "BEAMXUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795363200000,
+    "candle_close_ms": 1795366799999,
+    "signal_price": 0.003476,
+    "entry": "0.003476",
+    "sl": "0.003375",
+    "tp": "0.003551",
+    "rr_ratio": 0.75,
+    "confidence": 0.8755,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "7:59 مساءً",
+    "created_at_ms": 1795367174372,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795367174372,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -0.69,
+      "h4_ret5_min": null,
+      "h1_rsi": 49.5,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.8755,
+          "risk_pct": 2.906
+        }
+      }
+    },
+    "signature": "BEAMXUSDT|ai|BUY|1795363200000"
   }
 ]
