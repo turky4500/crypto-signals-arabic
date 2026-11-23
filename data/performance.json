@@ -5281,9 +5281,9 @@
     "signal_open_ms": 1795266000000,
     "signal_close_ms": 1795269599999,
     "deadline_ms": 1795874399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795427999999,
+    "hit_price": 0.00269,
     "created_ms": 1795270108280,
     "filtered": true,
     "whatsapp_status": "sent"
@@ -6527,6 +6527,24 @@
     "resolved_at_ms": 1795425259893,
     "hit_price": 363.93,
     "created_ms": 1795421193008,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "CHIPUSDT|ai|BUY|1795424400000",
+    "symbol": "CHIPUSDT",
+    "indicator": "ai",
+    "entry": "0.02683",
+    "sl": "0.02593",
+    "tp": "0.02750",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795424400000,
+    "signal_close_ms": 1795427999999,
+    "deadline_ms": 1796032799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795428391140,
     "filtered": true,
     "whatsapp_status": "sent"
   }

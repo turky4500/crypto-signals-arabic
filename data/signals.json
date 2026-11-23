@@ -36463,5 +36463,49 @@
       }
     },
     "signature": "TSLABUSDT|ai|BUY|1795417200000"
+  },
+  {
+    "symbol": "CHIPUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795424400000,
+    "candle_close_ms": 1795427999999,
+    "signal_price": 0.02683,
+    "entry": "0.02683",
+    "sl": "0.02593",
+    "tp": "0.02750",
+    "rr_ratio": 0.75,
+    "confidence": 0.7106,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "12:59 مساءً",
+    "created_at_ms": 1795428391140,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795428391140,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 1.95,
+      "h4_ret5_min": null,
+      "h1_rsi": 52.4,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.7106,
+          "risk_pct": 3.354
+        }
+      }
+    },
+    "signature": "CHIPUSDT|ai|BUY|1795424400000"
   }
 ]
