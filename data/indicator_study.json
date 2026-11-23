@@ -1,22 +1,5 @@
 [
   {
-    "signature": "TOWNSUSDT|adx|1795302000000",
-    "symbol": "TOWNSUSDT",
-    "indicator": "adx",
-    "entry": "0.000890",
-    "sl": "0.000859",
-    "tp": "0.000913",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795302000000,
-    "signal_close_ms": 1795305599999,
-    "deadline_ms": 1795910399999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1795323599999,
-    "hit_price": 0.000858,
-    "created_ms": 1795305969700,
-    "source": "simulation"
-  },
-  {
     "signature": "TRBUSDT|adx|1795302000000",
     "symbol": "TRBUSDT",
     "indicator": "adx",
@@ -50772,9 +50755,9 @@
     "signal_open_ms": 1795363200000,
     "signal_close_ms": 1795366799999,
     "deadline_ms": 1795971599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795401258071,
+    "hit_price": 0.0825,
     "created_ms": 1795367079298,
     "source": "simulation"
   },
@@ -65341,9 +65324,9 @@
     "signal_open_ms": 1795377600000,
     "signal_close_ms": 1795381199999,
     "deadline_ms": 1795985999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795401258071,
+    "hit_price": 0.287,
     "created_ms": 1795381515432,
     "source": "simulation"
   },
@@ -74351,9 +74334,9 @@
     "signal_open_ms": 1795388400000,
     "signal_close_ms": 1795391999999,
     "deadline_ms": 1795996799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795401258071,
+    "hit_price": 0.0826,
     "created_ms": 1795392277422,
     "source": "simulation"
   },
@@ -79485,9 +79468,9 @@
     "signal_open_ms": 1795392000000,
     "signal_close_ms": 1795395599999,
     "deadline_ms": 1796000399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795401258071,
+    "hit_price": 1.1001,
     "created_ms": 1795395908069,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795399573154,
+    "source": "simulation"
+  },
+  {
+    "signature": "AXTIBUSDT|adx|1795395600000",
+    "symbol": "AXTIBUSDT",
+    "indicator": "adx",
+    "entry": "32.10",
+    "sl": "31.59",
+    "tp": "32.48",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795395600000,
+    "signal_close_ms": 1795399199999,
+    "deadline_ms": 1796003999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795401276629,
     "source": "simulation"
   }
 ]
