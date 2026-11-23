@@ -36287,5 +36287,93 @@
       }
     },
     "signature": "WALUSDT|supertrend|BUY|1795410000000"
+  },
+  {
+    "symbol": "AVAXUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795413600000,
+    "candle_close_ms": 1795417199999,
+    "signal_price": 6.71,
+    "entry": "6.710",
+    "sl": "6.595",
+    "tp": "6.796",
+    "rr_ratio": 0.75,
+    "confidence": 0.7742,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "9:59 صباحًا",
+    "created_at_ms": 1795417603264,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795417603264,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 2.28,
+      "h4_ret5_min": null,
+      "h1_rsi": 51.2,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.7742,
+          "risk_pct": 1.714
+        }
+      }
+    },
+    "signature": "AVAXUSDT|ai|BUY|1795413600000"
+  },
+  {
+    "symbol": "CRVUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795413600000,
+    "candle_close_ms": 1795417199999,
+    "signal_price": 0.1837,
+    "entry": "0.1837",
+    "sl": "0.1792",
+    "tp": "0.1870",
+    "rr_ratio": 0.75,
+    "confidence": 1.0,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "9:59 صباحًا",
+    "created_at_ms": 1795417603400,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795417603400,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 2.08,
+      "h4_ret5_min": null,
+      "h1_rsi": 51.0,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 1.0,
+          "risk_pct": 2.45
+        }
+      }
+    },
+    "signature": "CRVUSDT|ai|BUY|1795413600000"
   }
 ]
