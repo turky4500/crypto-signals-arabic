@@ -1,22 +1,5 @@
 [
   {
-    "signature": "DODOUSDT|adx|1795388400000",
-    "symbol": "DODOUSDT",
-    "indicator": "adx",
-    "entry": "0.04005",
-    "sl": "0.03814",
-    "tp": "0.04148",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795388400000,
-    "signal_close_ms": 1795391999999,
-    "deadline_ms": 1795996799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
-    "created_ms": 1795392291318,
-    "source": "simulation"
-  },
-  {
     "signature": "DOGEUSDT|macd|1795388400000",
     "symbol": "DOGEUSDT",
     "indicator": "macd",
@@ -67806,9 +67789,9 @@
     "signal_open_ms": 1795438800000,
     "signal_close_ms": 1795442399999,
     "deadline_ms": 1796047199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795448958687,
+    "hit_price": 0.233,
     "created_ms": 1795442721091,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795447874257,
+    "source": "simulation"
+  },
+  {
+    "signature": "SECZBUSDT|adx|1795442400000",
+    "symbol": "SECZBUSDT",
+    "indicator": "adx",
+    "entry": "7.01",
+    "sl": "6.37",
+    "tp": "7.49",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795442400000,
+    "signal_close_ms": 1795445999999,
+    "deadline_ms": 1796050799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795449093252,
     "source": "simulation"
   }
 ]
