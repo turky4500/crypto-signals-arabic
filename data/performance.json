@@ -4638,7 +4638,10 @@
     "hit_price": null,
     "created_ms": 1795118786700,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1795435199999,
+    "sl_touch_low": 0.0362,
+    "sl_touch_notified": true
   },
   {
     "signature": "REQUSDT|ai|BUY|1795136400000",
@@ -6289,9 +6292,9 @@
     "signal_open_ms": 1795402800000,
     "signal_close_ms": 1795406399999,
     "deadline_ms": 1796011199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795435199999,
+    "hit_price": 64.39,
     "created_ms": 1795406807573,
     "filtered": true,
     "whatsapp_status": "sent"
@@ -6566,6 +6569,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795431987275,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "EULUSDT|supertrend|BUY|1795431600000",
+    "symbol": "EULUSDT",
+    "indicator": "supertrend",
+    "entry": "0.787",
+    "sl": "0.767",
+    "tp": "0.802",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795431600000,
+    "signal_close_ms": 1795435199999,
+    "deadline_ms": 1796039999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795435611092,
     "filtered": true,
     "whatsapp_status": "sent"
   }
