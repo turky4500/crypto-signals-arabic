@@ -1,5 +1,5 @@
 {
-  "monitored_symbols": 467,
+  "monitored_symbols": 468,
   "signals_today": 24,
   "supertrend_today": 8,
   "ai_today": 16,
@@ -49,7 +49,7 @@
     },
     "signature": "LQTYUSDT|ai|BUY|1795442400000"
   },
-  "last_check": 1795463896299,
+  "last_check": 1795464203864,
   "data_date": "2026-11-23",
   "filter_meta": {
     "enabled": true,
@@ -68,68 +68,68 @@
     "enabled": true,
     "stats": {
       "ichimoku": {
-        "total": 1206,
-        "tp_hit": 314,
-        "sl_hit": 48,
-        "pending": 844,
+        "total": 1222,
+        "tp_hit": 265,
+        "sl_hit": 124,
+        "pending": 833,
         "expired": 0,
-        "win_rate": 86.7
+        "win_rate": 68.1
       },
       "awesome": {
-        "total": 144,
-        "tp_hit": 76,
-        "sl_hit": 7,
-        "pending": 61,
+        "total": 91,
+        "tp_hit": 25,
+        "sl_hit": 13,
+        "pending": 53,
         "expired": 0,
-        "win_rate": 91.6
+        "win_rate": 65.8
       },
       "macd": {
-        "total": 214,
-        "tp_hit": 84,
+        "total": 184,
+        "tp_hit": 54,
         "sl_hit": 4,
         "pending": 126,
         "expired": 0,
-        "win_rate": 95.5
+        "win_rate": 93.1
       },
       "bollinger": {
-        "total": 35,
-        "tp_hit": 15,
+        "total": 34,
+        "tp_hit": 13,
         "sl_hit": 0,
-        "pending": 20,
+        "pending": 21,
         "expired": 0,
         "win_rate": 100.0
       },
       "rsi50": {
-        "total": 224,
-        "tp_hit": 81,
-        "sl_hit": 7,
-        "pending": 136,
+        "total": 211,
+        "tp_hit": 66,
+        "sl_hit": 5,
+        "pending": 140,
         "expired": 0,
-        "win_rate": 92.0
+        "win_rate": 93.0
       },
       "adx": {
-        "total": 3177,
-        "tp_hit": 1116,
-        "sl_hit": 91,
-        "pending": 1970,
+        "total": 3258,
+        "tp_hit": 877,
+        "sl_hit": 194,
+        "pending": 2187,
         "expired": 0,
-        "win_rate": 92.5
+        "win_rate": 81.9
       }
     }
   },
   "candidate_study": {
     "enabled": true,
-    "added_this_run": 0,
+    "added_this_run": 3,
     "total": 5000,
     "no_filter": {
       "total": 5000,
-      "resolved": 4693,
-      "pending": 292,
-      "expired": 15,
-      "tp_hit": 2682,
-      "sl_hit": 2011,
-      "win_rate": 0.5715,
-      "ev_per_trade": 0.0001
+      "resolved": 4700,
+      "pending": 284,
+      "expired": 16,
+      "tp_hit": 2684,
+      "sl_hit": 2016,
+      "win_rate": 0.5711,
+      "ev_per_trade": -0.0006
     },
     "with_filter": {
       "total": 167,
@@ -153,24 +153,24 @@
     },
     "blocked": {
       "total": 4833,
-      "resolved": 4541,
-      "pending": 277,
-      "expired": 15,
-      "tp_hit": 2566,
-      "sl_hit": 1975,
-      "win_rate": 0.5651,
-      "ev_per_trade": -0.0111
+      "resolved": 4548,
+      "pending": 269,
+      "expired": 16,
+      "tp_hit": 2568,
+      "sl_hit": 1980,
+      "win_rate": 0.5646,
+      "ev_per_trade": -0.012
     },
     "by_reason": {
       "filter": {
-        "total": 1476,
-        "resolved": 1250,
-        "pending": 221,
-        "expired": 5,
+        "total": 1478,
+        "resolved": 1258,
+        "pending": 214,
+        "expired": 6,
         "tp_hit": 752,
-        "sl_hit": 498,
-        "win_rate": 0.6016,
-        "ev_per_trade": 0.0528
+        "sl_hit": 506,
+        "win_rate": 0.5978,
+        "ev_per_trade": 0.0462
       },
       "filter_ok": {
         "total": 167,
@@ -183,14 +183,14 @@
         "ev_per_trade": 0.3356
       },
       "low_confidence": {
-        "total": 3333,
-        "resolved": 3270,
-        "pending": 53,
+        "total": 3331,
+        "resolved": 3269,
+        "pending": 52,
         "expired": 10,
-        "tp_hit": 1803,
-        "sl_hit": 1467,
-        "win_rate": 0.5514,
-        "ev_per_trade": -0.0351
+        "tp_hit": 1805,
+        "sl_hit": 1464,
+        "win_rate": 0.5522,
+        "ev_per_trade": -0.0336
       },
       "open_position": {
         "total": 4,
