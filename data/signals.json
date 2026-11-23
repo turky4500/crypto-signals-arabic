@@ -36595,5 +36595,93 @@
       }
     },
     "signature": "EULUSDT|supertrend|BUY|1795431600000"
+  },
+  {
+    "symbol": "SYRUPUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795438800000,
+    "candle_close_ms": 1795442399999,
+    "signal_price": 0.0904,
+    "entry": "0.0904",
+    "sl": "0.0841",
+    "tp": "0.0951",
+    "rr_ratio": 0.75,
+    "confidence": 0.873,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "4:59 مساءً",
+    "created_at_ms": 1795442888681,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795442888681,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -0.67,
+      "h4_ret5_min": null,
+      "h1_rsi": 51.2,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.873,
+          "risk_pct": 6.969
+        }
+      }
+    },
+    "signature": "SYRUPUSDT|supertrend|BUY|1795438800000"
+  },
+  {
+    "symbol": "WCTUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795438800000,
+    "candle_close_ms": 1795442399999,
+    "signal_price": 0.02963,
+    "entry": "0.02963",
+    "sl": "0.02829",
+    "tp": "0.03063",
+    "rr_ratio": 0.75,
+    "confidence": 0.6897,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "4:59 مساءً",
+    "created_at_ms": 1795442888858,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795442888858,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -3.51,
+      "h4_ret5_min": null,
+      "h1_rsi": 53.5,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.6897,
+          "risk_pct": 4.522
+        }
+      }
+    },
+    "signature": "WCTUSDT|supertrend|BUY|1795438800000"
   }
 ]
