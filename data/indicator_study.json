@@ -1,22 +1,5 @@
 [
   {
-    "signature": "SUIUSDT|adx|1795359600000",
-    "symbol": "SUIUSDT",
-    "indicator": "adx",
-    "entry": "0.6573",
-    "sl": "0.6454",
-    "tp": "0.6662",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795359600000,
-    "signal_close_ms": 1795363199999,
-    "deadline_ms": 1795967999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1795402799999,
-    "hit_price": 0.6435,
-    "created_ms": 1795363555155,
-    "source": "simulation"
-  },
-  {
     "signature": "SUSDT|adx|1795359600000",
     "symbol": "SUSDT",
     "indicator": "adx",
@@ -61873,9 +61856,9 @@
     "signal_open_ms": 1795417200000,
     "signal_close_ms": 1795420799999,
     "deadline_ms": 1796025599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795436658696,
+    "hit_price": 0.0657,
     "created_ms": 1795421073461,
     "source": "simulation"
   },
@@ -67364,9 +67347,9 @@
     "signal_open_ms": 1795420800000,
     "signal_close_ms": 1795424399999,
     "deadline_ms": 1796029199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795427999999,
+    "hit_price": 3.97,
     "created_ms": 1795424697236,
     "source": "simulation"
   },
@@ -84993,10 +84976,27 @@
     "signal_open_ms": 1795431600000,
     "signal_close_ms": 1795435199999,
     "deadline_ms": 1796039999999,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795436658696,
+    "hit_price": 0.9996,
+    "created_ms": 1795436470273,
+    "source": "simulation"
+  },
+  {
+    "signature": "DJTBUSDT|adx|1795431600000",
+    "symbol": "DJTBUSDT",
+    "indicator": "adx",
+    "entry": "3.98",
+    "sl": "3.91",
+    "tp": "4.03",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795431600000,
+    "signal_close_ms": 1795435199999,
+    "deadline_ms": 1796039999999,
     "status": "pending",
     "resolved_at_ms": null,
     "hit_price": null,
-    "created_ms": 1795436470273,
+    "created_ms": 1795436697299,
     "source": "simulation"
   }
 ]
