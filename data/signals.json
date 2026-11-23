@@ -36507,5 +36507,49 @@
       }
     },
     "signature": "CHIPUSDT|ai|BUY|1795424400000"
+  },
+  {
+    "symbol": "AUSDT",
+    "indicator": "ai",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795428000000,
+    "candle_close_ms": 1795431599999,
+    "signal_price": 0.0653,
+    "entry": "0.0653",
+    "sl": "0.0644",
+    "tp": "0.0659",
+    "rr_ratio": 0.75,
+    "confidence": 0.7827,
+    "ema_trend": "bullish",
+    "volume_ok": true,
+    "time_text": "1:59 مساءً",
+    "created_at_ms": 1795431987275,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795431987275,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": -0.31,
+      "h4_ret5_min": null,
+      "h1_rsi": 54.5,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": false,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "ai",
+          "confidence": 0.7827,
+          "risk_pct": 1.378
+        }
+      }
+    },
+    "signature": "AUSDT|ai|BUY|1795428000000"
   }
 ]
