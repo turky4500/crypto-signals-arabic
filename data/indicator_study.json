@@ -1,22 +1,5 @@
 [
   {
-    "signature": "DEXEUSDT|adx|1795388400000",
-    "symbol": "DEXEUSDT",
-    "indicator": "adx",
-    "entry": "1.132",
-    "sl": "1.107",
-    "tp": "1.150",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795388400000,
-    "signal_close_ms": 1795391999999,
-    "deadline_ms": 1795996799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1795404858759,
-    "hit_price": 1.15,
-    "created_ms": 1795392291031,
-    "source": "simulation"
-  },
-  {
     "signature": "DODOUSDT|ichimoku|1795388400000",
     "symbol": "DODOUSDT",
     "indicator": "ichimoku",
@@ -77479,9 +77462,9 @@
     "signal_open_ms": 1795442400000,
     "signal_close_ms": 1795445999999,
     "deadline_ms": 1796050799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795446565140,
+    "hit_price": 0.9995,
     "created_ms": 1795446306364,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795446457427,
+    "source": "simulation"
+  },
+  {
+    "signature": "GNOUSDT|awesome|1795442400000",
+    "symbol": "GNOUSDT",
+    "indicator": "awesome",
+    "entry": "91.27",
+    "sl": "86.21",
+    "tp": "95.06",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795442400000,
+    "signal_close_ms": 1795445999999,
+    "deadline_ms": 1796050799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795446629869,
     "source": "simulation"
   }
 ]
