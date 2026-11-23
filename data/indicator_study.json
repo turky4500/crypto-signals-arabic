@@ -1,22 +1,5 @@
 [
   {
-    "signature": "GRTUSDT|rsi50|1795338000000",
-    "symbol": "GRTUSDT",
-    "indicator": "rsi50",
-    "entry": "0.01591",
-    "sl": "0.01532",
-    "tp": "0.01635",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795338000000,
-    "signal_close_ms": 1795341599999,
-    "deadline_ms": 1795946399999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1795417199999,
-    "hit_price": 0.01635,
-    "created_ms": 1795341922565,
-    "source": "simulation"
-  },
-  {
     "signature": "GRTUSDT|adx|1795338000000",
     "symbol": "GRTUSDT",
     "indicator": "adx",
@@ -76731,9 +76714,9 @@
     "signal_open_ms": 1795410000000,
     "signal_close_ms": 1795413599999,
     "deadline_ms": 1796018399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795420167774,
+    "hit_price": 0.9966,
     "created_ms": 1795413914978,
     "source": "simulation"
   },
@@ -81457,9 +81440,9 @@
     "signal_open_ms": 1795413600000,
     "signal_close_ms": 1795417199999,
     "deadline_ms": 1796021999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795420167774,
+    "hit_price": 2.15e-06,
     "created_ms": 1795417492178,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": 1795419867825,
     "hit_price": 0.01807,
     "created_ms": 1795419304303,
+    "source": "simulation"
+  },
+  {
+    "signature": "GLWBUSDT|adx|1795413600000",
+    "symbol": "GLWBUSDT",
+    "indicator": "adx",
+    "entry": "99.30",
+    "sl": "97.74",
+    "tp": "100.47",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795413600000,
+    "signal_close_ms": 1795417199999,
+    "deadline_ms": 1796021999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795420216714,
     "source": "simulation"
   }
 ]
