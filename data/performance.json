@@ -6786,7 +6786,10 @@
     "hit_price": null,
     "created_ms": 1795504028910,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1795528799999,
+    "sl_touch_low": 0.901,
+    "sl_touch_notified": true
   },
   {
     "signature": "GLMUSDT|supertrend|BUY|1795500000000",
@@ -6799,9 +6802,9 @@
     "signal_open_ms": 1795500000000,
     "signal_close_ms": 1795503599999,
     "deadline_ms": 1796108399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795528799999,
+    "hit_price": 0.0932,
     "created_ms": 1795504029059,
     "filtered": true,
     "whatsapp_status": "sent"
