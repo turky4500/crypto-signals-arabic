@@ -1,22 +1,5 @@
 [
   {
-    "signature": "ASTSBUSDT|adx|1795492800000",
-    "symbol": "ASTSBUSDT",
-    "indicator": "adx",
-    "entry": "25.86",
-    "sl": "25.17",
-    "tp": "26.37",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795492800000,
-    "signal_close_ms": 1795496399999,
-    "deadline_ms": 1796101199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1795517999999,
-    "hit_price": 25.03,
-    "created_ms": 1795496672819,
-    "source": "simulation"
-  },
-  {
     "signature": "ATMUSDT|adx|1795492800000",
     "symbol": "ATMUSDT",
     "indicator": "adx",
@@ -10856,9 +10839,9 @@
     "signal_open_ms": 1795496400000,
     "signal_close_ms": 1795499999999,
     "deadline_ms": 1796104799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795588157545,
+    "hit_price": 0.004748,
     "created_ms": 1795500351586,
     "source": "simulation"
   },
@@ -80862,9 +80845,9 @@
     "signal_open_ms": 1795579200000,
     "signal_close_ms": 1795582799999,
     "deadline_ms": 1796187599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795588157545,
+    "hit_price": 0.01225,
     "created_ms": 1795583166421,
     "source": "simulation"
   },
@@ -82001,9 +81984,9 @@
     "signal_open_ms": 1795582800000,
     "signal_close_ms": 1795586399999,
     "deadline_ms": 1796191199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795588157545,
+    "hit_price": 0.1318,
     "created_ms": 1795586667317,
     "source": "simulation"
   },
@@ -82749,9 +82732,9 @@
     "signal_open_ms": 1795582800000,
     "signal_close_ms": 1795586399999,
     "deadline_ms": 1796191199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795588157545,
+    "hit_price": 0.000778,
     "created_ms": 1795586697648,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795586820580,
+    "source": "simulation"
+  },
+  {
+    "signature": "RONINUSDT|macd|1795582800000",
+    "symbol": "RONINUSDT",
+    "indicator": "macd",
+    "entry": "0.0340",
+    "sl": "0.0334",
+    "tp": "0.0344",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795582800000,
+    "signal_close_ms": 1795586399999,
+    "deadline_ms": 1796191199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795588267152,
     "source": "simulation"
   }
 ]
