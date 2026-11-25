@@ -1,22 +1,5 @@
 [
   {
-    "signature": "RAYUSDT|adx|1795492800000",
-    "symbol": "RAYUSDT",
-    "indicator": "adx",
-    "entry": "1.3263",
-    "sl": "1.2806",
-    "tp": "1.3605",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795492800000,
-    "signal_close_ms": 1795496399999,
-    "deadline_ms": 1796101199999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1795528799999,
-    "hit_price": 1.2651,
-    "created_ms": 1795496759586,
-    "source": "simulation"
-  },
-  {
     "signature": "RIFUSDT|adx|1795492800000",
     "symbol": "RIFUSDT",
     "indicator": "adx",
@@ -78771,9 +78754,9 @@
     "signal_open_ms": 1795582800000,
     "signal_close_ms": 1795586399999,
     "deadline_ms": 1796191199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795591757362,
+    "hit_price": 0.002209,
     "created_ms": 1795586717342,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795590404405,
+    "source": "simulation"
+  },
+  {
+    "signature": "ARPAUSDT|macd|1795586400000",
+    "symbol": "ARPAUSDT",
+    "indicator": "macd",
+    "entry": "0.00762",
+    "sl": "0.00748",
+    "tp": "0.00772",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795586400000,
+    "signal_close_ms": 1795589999999,
+    "deadline_ms": 1796194799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795591774616,
     "source": "simulation"
   }
 ]
