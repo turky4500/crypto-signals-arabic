@@ -6702,7 +6702,10 @@
     "hit_price": null,
     "created_ms": 1795500418351,
     "filtered": true,
-    "whatsapp_status": "sent"
+    "whatsapp_status": "sent",
+    "sl_touch_ms": 1795607999999,
+    "sl_touch_low": 0.1491,
+    "sl_touch_notified": true
   },
   {
     "signature": "ONGUSDT|strong|BUY|1795496400000",
@@ -7006,14 +7009,32 @@
     "signal_open_ms": 1795586400000,
     "signal_close_ms": 1795589999999,
     "deadline_ms": 1796194799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "sl_hit",
+    "resolved_at_ms": 1795607999999,
+    "hit_price": 0.1201,
     "created_ms": 1795590405805,
     "filtered": true,
     "whatsapp_status": "sent",
     "sl_touch_ms": 1795605860524,
     "sl_touch_low": 0.1204,
     "sl_touch_notified": true
+  },
+  {
+    "signature": "ENSOUSDT|supertrend|BUY|1795604400000",
+    "symbol": "ENSOUSDT",
+    "indicator": "supertrend",
+    "entry": "0.409",
+    "sl": "0.381",
+    "tp": "0.430",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795604400000,
+    "signal_close_ms": 1795607999999,
+    "deadline_ms": 1796212799999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795608403114,
+    "filtered": true,
+    "whatsapp_status": "sent"
   }
 ]
