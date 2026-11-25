@@ -1,22 +1,5 @@
 [
   {
-    "signature": "MAVUSDT|awesome|1795503600000",
-    "symbol": "MAVUSDT",
-    "indicator": "awesome",
-    "entry": "0.00670",
-    "sl": "0.00661",
-    "tp": "0.00676",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795503600000,
-    "signal_close_ms": 1795507199999,
-    "deadline_ms": 1796111999999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1795514399999,
-    "hit_price": 0.0066,
-    "created_ms": 1795507784628,
-    "source": "simulation"
-  },
-  {
     "signature": "METABUSDT|ichimoku|1795503600000",
     "symbol": "METABUSDT",
     "indicator": "ichimoku",
@@ -73535,9 +73518,9 @@
     "signal_open_ms": 1795600800000,
     "signal_close_ms": 1795604399999,
     "deadline_ms": 1796209199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795620858185,
+    "hit_price": 0.004855,
     "created_ms": 1795604751241,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795619177971,
+    "source": "simulation"
+  },
+  {
+    "signature": "CTSIUSDT|bollinger|1795615200000",
+    "symbol": "CTSIUSDT",
+    "indicator": "bollinger",
+    "entry": "0.01935",
+    "sl": "0.01854",
+    "tp": "0.01995",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795615200000,
+    "signal_close_ms": 1795618799999,
+    "deadline_ms": 1796223599999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795620898701,
     "source": "simulation"
   }
 ]
