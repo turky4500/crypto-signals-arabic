@@ -1,22 +1,5 @@
 [
   {
-    "signature": "EURUSDT|ichimoku|1795658400000",
-    "symbol": "EURUSDT",
-    "indicator": "ichimoku",
-    "entry": "1.0982",
-    "sl": "1.0966",
-    "tp": "1.0994",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795658400000,
-    "signal_close_ms": 1795661999999,
-    "deadline_ms": 1796266799999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1795700960014,
-    "hit_price": 1.0994,
-    "created_ms": 1795662314923,
-    "source": "simulation"
-  },
-  {
     "signature": "EURUSDT|adx|1795658400000",
     "symbol": "EURUSDT",
     "indicator": "adx",
@@ -65851,9 +65834,9 @@
     "signal_open_ms": 1795690800000,
     "signal_close_ms": 1795694399999,
     "deadline_ms": 1796299199999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795705762641,
+    "hit_price": 11.47,
     "created_ms": 1795694780330,
     "source": "simulation"
   },
@@ -72209,9 +72192,9 @@
     "signal_open_ms": 1795694400000,
     "signal_close_ms": 1795697999999,
     "deadline_ms": 1796302799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795705762641,
+    "hit_price": 11.41,
     "created_ms": 1795698368617,
     "source": "simulation"
   },
@@ -80454,9 +80437,9 @@
     "signal_open_ms": 1795701600000,
     "signal_close_ms": 1795705199999,
     "deadline_ms": 1796309999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795705762641,
+    "hit_price": 0.9995,
     "created_ms": 1795705485906,
     "source": "simulation"
   },
@@ -83599,9 +83582,9 @@
     "signal_open_ms": 1795701600000,
     "signal_close_ms": 1795705199999,
     "deadline_ms": 1796309999999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795705762641,
+    "hit_price": 1.0,
     "created_ms": 1795705553023,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795705582918,
+    "source": "simulation"
+  },
+  {
+    "signature": "OGNUSDT|adx|1795701600000",
+    "symbol": "OGNUSDT",
+    "indicator": "adx",
+    "entry": "0.01910",
+    "sl": "0.01896",
+    "tp": "0.01920",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795701600000,
+    "signal_close_ms": 1795705199999,
+    "deadline_ms": 1796309999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795705845120,
     "source": "simulation"
   }
 ]
