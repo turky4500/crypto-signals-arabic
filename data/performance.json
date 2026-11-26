@@ -6757,9 +6757,9 @@
     "signal_open_ms": 1795500000000,
     "signal_close_ms": 1795503599999,
     "deadline_ms": 1796108399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795658399999,
+    "hit_price": 0.01717,
     "created_ms": 1795504028753,
     "filtered": true,
     "whatsapp_status": "sent"
@@ -8549,6 +8549,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795655213927,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "FTTUSDT|ai|BUY|1795654800000",
+    "symbol": "FTTUSDT",
+    "indicator": "ai",
+    "entry": "0.1854",
+    "sl": "0.1789",
+    "tp": "0.1902",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795654800000,
+    "signal_close_ms": 1795658399999,
+    "deadline_ms": 1796263199999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795658827400,
     "filtered": true,
     "whatsapp_status": "sent"
   }
