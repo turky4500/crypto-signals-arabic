@@ -8299,9 +8299,9 @@
     "signal_open_ms": 1795633200000,
     "signal_close_ms": 1795636799999,
     "deadline_ms": 1796241599999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795759199999,
+    "hit_price": 0.00662,
     "created_ms": 1795637260183,
     "filtered": true,
     "whatsapp_status": "failed"
@@ -9107,6 +9107,24 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795752673602,
+    "filtered": true,
+    "whatsapp_status": "sent"
+  },
+  {
+    "signature": "RIFUSDT|supertrend|BUY|1795755600000",
+    "symbol": "RIFUSDT",
+    "indicator": "supertrend",
+    "entry": "0.0432",
+    "sl": "0.0367",
+    "tp": "0.0480",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795755600000,
+    "signal_close_ms": 1795759199999,
+    "deadline_ms": 1796363999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795759597052,
     "filtered": true,
     "whatsapp_status": "sent"
   }
