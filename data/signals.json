@@ -42843,5 +42843,49 @@
       }
     },
     "signature": "ANIMEUSDT|supertrend|BUY|1795802400000"
+  },
+  {
+    "symbol": "STXUSDT",
+    "indicator": "supertrend",
+    "signal_type": "BUY",
+    "candle_open_ms": 1795813200000,
+    "candle_close_ms": 1795816799999,
+    "signal_price": 0.2653,
+    "entry": "0.2653",
+    "sl": "0.2530",
+    "tp": "0.2745",
+    "rr_ratio": 0.75,
+    "confidence": 0.6555,
+    "ema_trend": "bearish",
+    "volume_ok": true,
+    "time_text": "12:59 صباحًا",
+    "created_at_ms": 1795817177361,
+    "whatsapp_status": "sent",
+    "whatsapp_sent_at": 1795817177361,
+    "filter_rejected": false,
+    "filter_info": {
+      "h4_ret5": 0.39,
+      "h4_ret5_min": null,
+      "h1_rsi": 47.1,
+      "h1_rsi_max": 55.0,
+      "d1_above_ema50": false,
+      "h4_in_uptrend": true,
+      "require_d1_above": false,
+      "require_d1_below": true,
+      "require_h4_uptrend": false,
+      "h4_ret5_ok": true,
+      "h1_rsi_ok": true,
+      "accepted": true,
+      "quality": {
+        "passed": true,
+        "reason": null,
+        "checks": {
+          "indicator": "supertrend",
+          "confidence": 0.6555,
+          "risk_pct": 4.636
+        }
+      }
+    },
+    "signature": "STXUSDT|supertrend|BUY|1795813200000"
   }
 ]
