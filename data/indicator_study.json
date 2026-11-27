@@ -1,22 +1,5 @@
 [
   {
-    "signature": "WBTCUSDT|ichimoku|1795752000000",
-    "symbol": "WBTCUSDT",
-    "indicator": "ichimoku",
-    "entry": "61490.43",
-    "sl": "60819.87",
-    "tp": "61993.35",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795752000000,
-    "signal_close_ms": 1795755599999,
-    "deadline_ms": 1796360399999,
-    "status": "tp_hit",
-    "resolved_at_ms": 1795759199999,
-    "hit_price": 61993.35,
-    "created_ms": 1795755980586,
-    "source": "simulation"
-  },
-  {
     "signature": "WDCBUSDT|adx|1795752000000",
     "symbol": "WDCBUSDT",
     "indicator": "adx",
@@ -72532,9 +72515,9 @@
     "signal_open_ms": 1795784400000,
     "signal_close_ms": 1795787999999,
     "deadline_ms": 1796392799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795792457514,
+    "hit_price": 0.0592,
     "created_ms": 1795788272010,
     "source": "simulation"
   },
@@ -82273,9 +82256,9 @@
     "signal_open_ms": 1795788000000,
     "signal_close_ms": 1795791599999,
     "deadline_ms": 1796396399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795792457514,
+    "hit_price": 0.0128,
     "created_ms": 1795791867912,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": null,
     "hit_price": null,
     "created_ms": 1795791978283,
+    "source": "simulation"
+  },
+  {
+    "signature": "FRAXUSDT|adx|1795788000000",
+    "symbol": "FRAXUSDT",
+    "indicator": "adx",
+    "entry": "0.1923",
+    "sl": "0.1888",
+    "tp": "0.1949",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795788000000,
+    "signal_close_ms": 1795791599999,
+    "deadline_ms": 1796396399999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795792510528,
     "source": "simulation"
   }
 ]
