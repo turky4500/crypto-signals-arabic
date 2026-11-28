@@ -1,22 +1,5 @@
 [
   {
-    "signature": "INTWBUSDT|adx|1795784400000",
-    "symbol": "INTWBUSDT",
-    "indicator": "adx",
-    "entry": "5.17",
-    "sl": "5.00",
-    "tp": "5.29",
-    "rr_ratio": 0.75,
-    "signal_open_ms": 1795784400000,
-    "signal_close_ms": 1795787999999,
-    "deadline_ms": 1796392799999,
-    "status": "sl_hit",
-    "resolved_at_ms": 1795791599999,
-    "hit_price": 4.85,
-    "created_ms": 1795788315625,
-    "source": "simulation"
-  },
-  {
     "signature": "IOSTUSDT|ichimoku|1795784400000",
     "symbol": "IOSTUSDT",
     "indicator": "ichimoku",
@@ -32752,9 +32735,9 @@
     "signal_open_ms": 1795806000000,
     "signal_close_ms": 1795809599999,
     "deadline_ms": 1796414399999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795851259813,
+    "hit_price": 4.639e-05,
     "created_ms": 1795809930710,
     "source": "simulation"
   },
@@ -76986,9 +76969,9 @@
     "signal_open_ms": 1795838400000,
     "signal_close_ms": 1795841999999,
     "deadline_ms": 1796446799999,
-    "status": "pending",
-    "resolved_at_ms": null,
-    "hit_price": null,
+    "status": "tp_hit",
+    "resolved_at_ms": 1795851259813,
+    "hit_price": 4.638e-05,
     "created_ms": 1795842320002,
     "source": "simulation"
   },
@@ -84997,6 +84980,23 @@
     "resolved_at_ms": 1795850958983,
     "hit_price": 0.00267,
     "created_ms": 1795850705547,
+    "source": "simulation"
+  },
+  {
+    "signature": "IQUSDT|bollinger|1795845600000",
+    "symbol": "IQUSDT",
+    "indicator": "bollinger",
+    "entry": "0.000607",
+    "sl": "0.000599",
+    "tp": "0.000613",
+    "rr_ratio": 0.75,
+    "signal_open_ms": 1795845600000,
+    "signal_close_ms": 1795849199999,
+    "deadline_ms": 1796453999999,
+    "status": "pending",
+    "resolved_at_ms": null,
+    "hit_price": null,
+    "created_ms": 1795851330601,
     "source": "simulation"
   }
 ]
